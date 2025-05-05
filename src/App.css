@@ -1,0 +1,72 @@
+/* src/App.css */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7f6;
+  color: #333;
+  line-height: 1.5; /* Default line height */
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+  background-color: #34495e; /* Slightly different dark blue */
+  padding: 12px 25px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.home-link {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 15px 10px; /* Add padding around page content */
+  flex-grow: 1; /* Allow main content to take available space */
+  display: flex; /* Helps center content vertically if needed */
+  flex-direction: column;
+}
+
+.app-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding: 15px;
+  color: #777;
+  font-size: 0.85rem;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa; /* Light footer background */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+/* Accessibility focus outline */
+*:focus-visible {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Basic responsive adjustments */
+@media (min-width: 768px) {
+  .app-header {
+    padding: 15px 40px;
+    text-align: left; /* Align header text left on larger screens */
+  }
+  main {
+    padding: 20px;
+  }
+}

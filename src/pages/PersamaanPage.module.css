@@ -1,0 +1,164 @@
+/* src/pages/PersamaanPage.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 20px;
+  max-width: 650px;
+  margin: 30px auto;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 25px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+}
+
+.label {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.word {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.optionsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; /* Space between option buttons */
+  margin-bottom: 20px;
+}
+
+.instruction {
+  font-size: 1.15rem;
+  margin-bottom: 15px; /* More space below instruction */
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.optionButton {
+  padding: 12px 20px;
+  font-size: 1.05rem;
+  color: #007bff; /* Blue text */
+  background-color: #fff; /* White background */
+  border: 1px solid #007bff; /* Blue border */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  width: 90%; /* Adjust width as needed */
+  text-align: center;
+  box-sizing: border-box;
+  font-weight: 500;
+}
+
+.optionButton:hover:not(:disabled) {
+  background-color: #e7f3ff; /* Light blue hover */
+  border-color: #0056b3;
+}
+
+.optionButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+}
+
+.optionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Styles for answered states */
+.optionButton.correct {
+  background-color: #28a745; /* Green background */
+  border-color: #1e7e34;
+  color: white; /* White text */
+  font-weight: 700;
+  opacity: 1; /* Ensure it's fully visible */
+}
+
+.optionButton.incorrect {
+  background-color: #dc3545; /* Red background */
+  border-color: #bd2130;
+  color: white;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.optionButton.disabled { /* Style for non-selected, incorrect options after answer */
+    background-color: #f8f9fa; /* Light grey background */
+    border-color: #adb5bd;
+    color: #6c757d; /* Grey text */
+    opacity: 0.6; /* Fade out */
+}
+
+
+.feedback {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 15px 0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.correctFeedback { /* Specific styling for feedback text */
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.incorrectFeedback {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  line-height: 1.5; /* Better for longer feedback */
+}
+
+.nextButton {
+    /* Style similar to optionButton but maybe different color */
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #6c757d; /* Grey next button */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.nextButton:hover {
+    background-color: #5a6268;
+}
+
+.loading, .completionMessage {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #555;
+    padding: 40px;
+    text-align: center;
+}
+.completionMessage {
+    color: #28a745;
+    margin-bottom: 20px;
+}

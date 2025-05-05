@@ -1,0 +1,153 @@
+/* src/pages/ImbuhanPage.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 20px; /* Increased padding */
+    max-width: 650px; /* Slightly wider */
+    margin: 30px auto; /* More margin */
+    background-color: #f8f9fa; /* Lighter background */
+    border-radius: 10px; /* More rounded */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08); /* Softer shadow */
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 25px; /* More padding */
+    width: 100%; /* Use full width */
+    box-sizing: border-box;
+    margin-bottom: 25px; /* More space */
+    border: 1px solid #e0e0e0; /* Subtle border */
+  }
+  
+  .label {
+    font-size: 0.95rem; /* Slightly smaller */
+    color: #555; /* Greyer */
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  
+  .rootWord {
+    font-size: 2rem; /* Larger */
+    font-weight: 700; /* Bolder */
+    color: #2c3e50; /* Dark blue */
+    margin-bottom: 18px;
+  }
+  
+  .definition {
+    font-size: 1.05rem; /* Larger definition */
+    color: #444;
+    font-style: normal; /* Remove italic */
+    line-height: 1.6;
+  }
+  
+  .inputSection {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .instruction {
+    font-size: 1.15rem; /* Clearer instruction */
+    margin-bottom: 12px;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .input {
+    width: 85%; /* Wider input */
+    padding: 12px 15px; /* Better padding */
+    font-size: 1.1rem;
+    border: 1px solid #ced4da; /* Standard border color */
+    border-radius: 6px; /* Slightly more rounded */
+    box-sizing: border-box;
+    text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .input:focus {
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+  
+  
+  .feedback {
+    font-size: 1.1rem;
+    font-weight: 600; /* Bold feedback */
+    margin: 20px 0; /* More margin */
+    padding: 12px 18px; /* Better padding */
+    border-radius: 6px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+  }
+  
+  .correct {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+  
+  .incorrect {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    line-height: 1.5;
+  }
+  
+  .completionMessage {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #28a745; /* Green for completion */
+      margin-bottom: 20px;
+  }
+  
+  
+  .buttonRow {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 15px; /* Adjusted margin */
+  }
+  
+  .button {
+    padding: 10px 25px; /* Standardized padding */
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    min-width: 120px; /* Ensure minimum width */
+  }
+  
+  .button:hover:not(:disabled) {
+    background-color: #0056b3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+  }
+  
+  
+  .button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.65;
+  }
+  
+  .loading {
+      font-size: 1.2rem;
+      color: #666;
+      padding: 40px; /* More padding */
+      text-align: center;
+  }

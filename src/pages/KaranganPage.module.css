@@ -1,0 +1,183 @@
+
+/* src/pages/KaranganPage.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 20px;
+  max-width: 700px;
+  margin: 30px auto;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 25px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+}
+
+.word {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2980b9;
+  margin-bottom: 15px; /* Space before synonyms */
+}
+
+/* --- New Styles for Synonyms --- */
+.synonymSection {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ced4da;
+    text-align: left; /* Align synonyms left */
+}
+
+.synonymLabel {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #6c757d; /* Grey label */
+    margin-bottom: 5px;
+}
+
+.synonymText {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    font-style: italic;
+}
+/* --- End New Styles --- */
+
+
+.optionsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.instruction {
+  font-size: 1.15rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.optionButton {
+  padding: 12px 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #adb5bd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  width: 95%;
+  text-align: center;
+  box-sizing: border-box;
+  font-weight: 400;
+}
+
+.optionButton:hover:not(:disabled) {
+  background-color: #f1f3f5;
+  border-color: #868e96;
+}
+
+.optionButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);
+}
+
+.optionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Styles for answered states */
+.optionButton.correct {
+  background-color: #28a745;
+  border-color: #1e7e34;
+  color: white;
+  font-weight: 500;
+  opacity: 1;
+}
+
+.optionButton.incorrect {
+  background-color: #dc3545;
+  border-color: #bd2130;
+  color: white;
+  font-weight: 500;
+  opacity: 1;
+}
+
+.optionButton.disabled {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+    color: #6c757d;
+    opacity: 0.6;
+}
+
+
+.feedback {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 15px 0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.correctFeedback {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.incorrectFeedback {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  line-height: 1.5;
+}
+
+.nextButton {
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.nextButton:hover {
+    background-color: #5a6268;
+}
+
+.loading, .completionMessage {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #555;
+    padding: 40px;
+    text-align: center;
+}
+.completionMessage {
+    color: #28a745;
+    margin-bottom: 20px;
+}

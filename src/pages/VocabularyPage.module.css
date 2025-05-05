@@ -1,0 +1,117 @@
+
+/* src/pages/VocabularyPage.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 20px;
+  max-width: 750px;
+  margin: 30px auto;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+}
+
+.word {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #343a40;
+}
+
+.definition {
+  font-size: 1.15rem;
+  color: #495057;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.exampleSection {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #ced4da;
+    text-align: left;
+}
+
+.exampleLabel {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 8px;
+}
+
+.exampleSentence {
+    font-size: 1.05rem;
+    color: #555;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 15px; /* Add space before translation */
+}
+
+/* --- New Styles for Translation --- */
+.translationSection {
+    padding-top: 10px;
+    border-top: 1px solid #eee; /* Lighter separator */
+}
+
+.translationLabel {
+    font-size: 0.95rem; /* Slightly smaller label */
+    font-weight: 600;
+    color: #6c757d; /* Grey label */
+    margin-bottom: 5px;
+}
+
+.translationText {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    /* font-style: italic; /* Optional: Italicize translation */
+}
+/* --- End New Styles --- */
+
+
+.button {
+  padding: 12px 30px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+}
+
+.loading, .completionMessage {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #555;
+    padding: 40px;
+    text-align: center;
+}
+
+.completionMessage {
+    color: #28a745;
+    margin-bottom: 20px;
+}
