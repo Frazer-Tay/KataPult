@@ -1,14 +1,37 @@
 /* src/App.css */
+
+/* --- Color Palette Variables --- */
+:root {
+  --primary-color: #4a55a2; /* Deep Indigo */
+  --primary-light: #788bff; /* Lighter Indigo/Blue */
+  --secondary-color: #3498db; /* Bright Blue */
+  --accent-color: #f1c40f; /* Yellow Accent */
+  --success-color: #2ecc71; /* Green */
+  --success-light: #eafaf1;
+  --error-color: #e74c3c; /* Red */
+  --error-light: #fdedec;
+  --text-dark: #2c3e50; /* Dark Slate Blue */
+  --text-light: #7f8c8d; /* Grey */
+  --background-light: #f8f9fc; /* Very light grey/blue */
+  --background-medium: #eef2f7; /* Light blue-grey */
+  --card-background: #ffffff;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.08); /* Softened shadow */
+  --progress-bar-background: #e9ecef;
+}
+
+/* --- Base Styles --- */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f7f6;
-  color: #333;
-  line-height: 1.5;
+  background-color: var(--background-medium);
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 #root {
@@ -17,27 +40,32 @@ body {
     min-height: 100vh;
 }
 
+/* --- Layout Components --- */
 .app-header {
-  background-color: #34495e;
-  padding: 12px 25px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  padding: 14px 25px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px var(--shadow-color);
   flex-shrink: 0;
+  border-bottom: 4px solid var(--secondary-color);
 }
 
 .home-link {
   color: white;
-  font-size: 1.4rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 700;
   text-decoration: none;
+  transition: opacity 0.2s ease;
+  letter-spacing: 0.5px;
 }
 
 .home-link:hover {
-  text-decoration: underline;
+  opacity: 0.9;
+  text-decoration: none;
 }
 
 main {
-  padding: 15px 10px;
+  padding: 30px 15px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -45,38 +73,131 @@ main {
 
 .app-footer {
   text-align: center;
-  margin-top: 30px;
-  padding: 15px;
-  color: #777;
-  font-size: 0.85rem;
-  border-top: 1px solid #e0e0e0;
-  background-color: #f8f9fa;
+  margin-top: 50px; /* More space */
+  padding: 20px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--card-background);
   flex-shrink: 0;
 }
 
-/* --- Added loading style --- */
-.loading-page {
+/* --- Utility & Global Element Styles --- */
+.loading-page,
+.loading,
+.error,
+.completionMessage {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 50vh;
-    font-size: 1.5rem;
-    color: #666;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-light);
+    padding: 40px 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.error {
+    color: var(--error-color);
+}
+.completionMessage {
+    color: var(--success-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem; /* Larger completion message */
+    font-weight: 600;
+}
+.completionSubMessage { /* New style for sub-messages */
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 25px;
 }
 
-/* Accessibility focus outline */
+
+/* General Button Styling */
+button, .button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  display: inline-flex; /* Align icons if needed */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button:hover:not(:disabled), .button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+button:active:not(:disabled), .button:active:not(:disabled) {
+    transform: translateY(0px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Primary Button Style (used for reshuffle/check) */
+.primaryButton {
+  background-color: var(--primary-color);
+  color: white;
+}
+.primaryButton:hover:not(:disabled) {
+  background-color: var(--primary-light);
+}
+
+/* Secondary Button Style (used for review mistakes) */
+.secondaryButton {
+    background-color: var(--accent-color); /* Yellow */
+    color: var(--text-dark);
+}
+.secondaryButton:hover:not(:disabled) {
+    background-color: #eecd4f; /* Darker yellow */
+}
+
+/* Next Button Style */
+.nextButton {
+    background-color: var(--secondary-color); /* Blue */
+    color: white;
+}
+.nextButton:hover:not(:disabled) {
+    background-color: #2980b9; /* Darker blue */
+}
+.arrowIcon {
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+.nextButton:hover:not(:disabled) .arrowIcon {
+    transform: translateX(3px);
+}
+
+/* Focus visible style */
 *:focus-visible {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
+    outline: 3px solid var(--secondary-color);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 /* Basic responsive adjustments */
 @media (min-width: 768px) {
   .app-header {
-    padding: 15px 40px;
+    padding: 18px 40px;
     text-align: left;
   }
   main {
-    padding: 20px;
+    padding: 40px;
+  }
+  button, .button {
+      padding: 14px 30px;
+      font-size: 1.05rem;
   }
 }

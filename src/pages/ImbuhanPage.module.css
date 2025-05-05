@@ -3,160 +3,170 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px 20px;
-  max-width: 650px;
+  padding: 25px 20px 40px 20px;
+  max-width: 700px;
   margin: 30px auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px var(--shadow-color);
+  border: 1px solid var(--border-color);
 }
 
+/* --- Progress Bar Placeholder Style --- */
+.progressBarContainer {
+    width: 95%;
+    margin-bottom: 25px;
+}
+
+/* --- Card Styling --- */
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 25px;
+  background-color: #f8f9fc;
+  border-radius: 10px;
+  padding: 30px 35px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 25px;
-  border: 1px solid #e0e0e0;
+  margin-bottom: 30px;
+  border: 1px solid #e9ecef;
+  text-align: center; /* Center card content */
 }
 
 .label {
-  font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 4px;
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 6px;
   font-weight: 500;
 }
 
 .rootWord {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 18px;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  display: inline-block; /* Prevent taking full width */
+  border-bottom: 3px solid var(--primary-light); /* Accent underline */
+  padding-bottom: 5px;
 }
 
 .definition {
-  font-size: 1.05rem;
-  color: #444;
-  font-style: normal;
+  font-size: 1.1rem;
+  color: var(--text-dark);
   line-height: 1.6;
+  font-style: italic;
 }
 
+/* --- Input Section --- */
 .inputSection {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* More space */
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .instruction {
-  font-size: 1.15rem;
-  margin-bottom: 12px;
-  color: #333;
-  font-weight: 500;
+  font-size: 1.2rem; /* Larger instruction */
+  margin-bottom: 18px; /* More space */
+  color: var(--text-dark);
+  font-weight: 600;
 }
 
 .input {
-  width: 85%;
-  padding: 12px 15px;
-  font-size: 1.1rem;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
+  width: 90%;
+  max-width: 450px;
+  padding: 15px 20px; /* Increased padding */
+  font-size: 1.2rem; /* Larger input text */
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
   box-sizing: border-box;
   text-align: center;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  background-color: #fff; /* Ensure white background */
 }
 
 .input:focus {
-    border-color: #80bdff;
+    border-color: var(--primary-light);
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25);
 }
 
+.inputCorrect {
+    border-color: var(--success-color);
+    background-color: #f0fff4; /* Very light green */
+}
+.inputCorrect:focus {
+     box-shadow: 0 0 0 0.25rem rgba(46, 204, 113, 0.25);
+}
 
+.inputIncorrect {
+    border-color: var(--error-color);
+    background-color: #fff0f1; /* Very light red */
+}
+.inputIncorrect:focus {
+     box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+}
+
+/* Feedback Area */
 .feedback {
   font-size: 1.1rem;
-  font-weight: 600;
-  margin: 20px 0;
+  font-weight: 500; /* Normal weight for readability */
+  margin: 10px 0 20px 0; /* Adjust margin */
   padding: 12px 18px;
-  border-radius: 6px;
-  width: 100%;
+  border-radius: 8px;
+  width: 95%;
+  max-width: 550px; /* Limit feedback width */
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
   border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1.6; /* Better multi-line */
 }
-
-.correct {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-}
-
-.incorrect {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  line-height: 1.5;
-}
-
-.completionMessage {
+.feedback::before {
+    font-family: 'Segoe UI Symbol', sans-serif;
     font-size: 1.3rem;
-    font-weight: 600;
-    color: #28a745;
-    margin-bottom: 20px;
+    line-height: 1;
+}
+.correctFeedback {
+  color: #0f5132;
+  background-color: var(--success-light);
+  border-color: #badbcc;
+}
+.correctFeedback::before {
+    content: '✓';
+}
+.incorrectFeedback {
+  color: #842029;
+  background-color: var(--error-light);
+  border-color: #f5c2c7;
+}
+.incorrectFeedback::before {
+    content: '✗';
 }
 
-
+/* Buttons */
 .buttonRow {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 20px;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 15px; /* Space above buttons */
+  flex-wrap: wrap;
 }
 
-.button {
-  padding: 10px 25px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  min-width: 120px;
+/* --- Completion State Styles --- */
+.completionActions {
+    display: flex;
+    gap: 20px; /* Space between completion buttons */
+    margin-top: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.button:hover:not(:disabled) {
-  background-color: #0056b3;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.button:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
-}
-
-
-.button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.65;
-}
-
-.loading {
-    font-size: 1.2rem;
-    color: #666;
-    padding: 40px;
-    text-align: center;
-}
-
-/* --- Added Error Style --- */
-.error {
-    font-size: 1.1rem;
-    color: #dc3545; /* Red for errors */
-    padding: 40px 20px;
-    text-align: center;
-    font-weight: 500;
+/* General loading/error styles inherited from App.css */
+.loading, .error {
+    min-height: 300px; /* Ensure space while loading/error */
 }

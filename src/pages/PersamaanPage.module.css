@@ -5,70 +5,74 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px 20px 40px 20px; /* More bottom padding */
-  max-width: 700px; /* Allow slightly wider */
-  min-height: 70vh; /* Ensure it takes significant height */
+  padding: 20px 20px 40px 20px; /* Adjusted padding */
+  max-width: 720px; /* Wider */
+  min-height: 75vh;
   margin: 30px auto;
-  background-color: #ffffff; /* White background */
-  border-radius: 16px; /* More rounded */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
+  background-color: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
   border: 1px solid #e9ecef;
+  position: relative;
 }
 
-/* Progress Indicator */
-.progressIndicator {
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-bottom: 20px; /* More space below */
-    font-weight: 500;
-    width: 100%;
-    text-align: right;
-    padding-right: 15px; /* More spacing */
-    opacity: 0.8;
+/* --- Progress Bar Container --- */
+/* Wrap the ProgressBar component in this div */
+.progressBarContainer {
+    width: 95%;
+    margin: 15px 0 30px 0; /* Position below header, above card */
 }
+
 
 /* Card holding the main word */
 .card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient background */
-  border-radius: 10px;
-  padding: 30px 35px; /* Generous padding */
+  /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Purple to Blue Gradient */
+  background-color: #f8f9fc; /* Light background */
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Slightly more rounded */
+  padding: 30px 35px;
   width: 100%;
   text-align: center;
-  margin-bottom: 35px; /* More space */
+  margin-bottom: 35px;
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  color: white; /* White text on gradient */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .label {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+  color: var(--text-light);
   margin-bottom: 8px;
-  font-weight: 400; /* Lighter weight for label */
+  font-weight: 500;
 }
 
 .word {
-  font-size: 3rem; /* Larger main word */
+  font-size: 2.5rem; /* Large main word */
   font-weight: 700;
-  color: #ffffff; /* Pure white */
+  color: var(--primary-color); /* Use primary color */
   margin-top: 5px;
   letter-spacing: 0.5px;
+  word-wrap: break-word;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--primary-light);
+  display: inline-block; /* Fit content */
 }
 
 /* Options container */
 .optionsContainer {
   width: 100%;
+  max-width: 580px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px; /* Increased gap */
+  gap: 16px;
   margin-bottom: 30px; /* Space before feedback */
 }
 
+/* Instruction Text */
 .instruction {
-    font-size: 1.1rem;
+    font-size: 1.15rem; /* Clearer instruction */
     margin-bottom: 20px;
-    color: #495057; /* Dark grey text */
+    color: var(--text-dark);
     font-weight: 500;
     text-align: center;
 }
@@ -76,87 +80,88 @@
 /* --- Option Button Styling --- */
 .optionButton {
   position: relative;
-  padding: 15px 25px 15px 55px; /* Increased padding, more space left for icon */
-  font-size: 1.1rem; /* Larger option text */
-  color: #343a40; /* Default text color */
-  background-color: #f8f9fa; /* Light grey background */
-  border: 2px solid #dee2e6; /* Default border */
-  border-radius: 8px;
+  padding: 15px 25px 15px 60px; /* Adjusted padding */
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  background-color: #ffffff; /* White */
+  border: 2px solid #e0e0e0; /* Slightly darker border */
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.25s ease-in-out; /* Slightly longer transition */
-  width: 95%;
-  max-width: 500px; /* Max width for buttons */
+  transition: all 0.20s ease-in-out;
+  width: 100%; /* Full width within container */
   text-align: left;
   box-sizing: border-box;
-  font-weight: 500; /* Medium weight */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .optionButton:hover:not(:disabled) {
-  background-color: #e9ecef; /* Darker grey hover */
-  border-color: #adb5bd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  background-color: #f1f3f5;
+  border-color: var(--primary-color); /* Highlight border on hover */
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
 .optionButton:focus {
     outline: none;
-    border-color: #80bdff; /* Blue focus border */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 85, 162, 0.25); /* Indigo focus */
 }
 
 .optionButton:disabled {
   cursor: not-allowed;
 }
 
-/* Base style for icon pseudo-elements */
+/* Icon Styling */
 .optionButton::before {
     content: '';
-    font-family: 'Segoe UI Symbol', sans-serif; /* Use a common symbol font */
+    font-family: 'Segoe UI Symbol', sans-serif;
     position: absolute;
-    left: 18px; /* Position icon */
+    left: 20px;
     top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5rem; /* Larger icon */
+    transform: translateY(-50%) scale(0.8);
+    font-size: 1.6rem;
     font-weight: bold;
     transition: all 0.25s ease-in-out;
-    opacity: 0; /* Hidden initially */
+    opacity: 0;
 }
 
-/* Styles for answered states */
+/* Correct State */
 .optionButton.correct {
-  background-color: #d1e7dd; /* Bootstrap success light */
-  border-color: #198754; /* Bootstrap success */
+  background-color: var(--success-light);
+  border-color: var(--success-color);
   color: #0a3622;
-  font-weight: 600; /* Bolder */
+  font-weight: 600;
   opacity: 1 !important;
 }
 .optionButton.correct::before {
-    content: '✓'; /* Checkmark */
-    color: #198754;
+    content: '✓';
+    color: var(--success-color);
     opacity: 1;
-    transform: translateY(-50%) scale(1.1); /* Make icon slightly bigger */
+    transform: translateY(-50%) scale(1.15); /* Make icon prominent */
 }
 
+/* Incorrect State (Selected) */
 .optionButton.incorrect {
-  background-color: #f8d7da; /* Bootstrap danger light */
-  border-color: #dc3545; /* Bootstrap danger */
+  background-color: var(--error-light);
+  border-color: var(--error-color);
   color: #58151c;
   font-weight: 600;
   opacity: 1 !important;
 }
 .optionButton.incorrect::before {
-    content: '✗'; /* Cross mark */
-    color: #dc3545;
+    content: '✗';
+    color: var(--error-color);
     opacity: 1;
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(-50%) scale(1.15);
 }
 
+/* Disabled State (non-selected incorrect) */
 .optionButton.disabled {
-    background-color: #f1f3f5; /* Lighter disabled background */
+    background-color: #f8f9fa;
     border-color: #e9ecef;
-    color: #adb5bd; /* More muted text */
-    opacity: 0.6;
+    color: #adb5bd;
+    opacity: 0.5; /* More faded */
     box-shadow: none;
     transform: none;
 }
@@ -165,12 +170,12 @@
     box-shadow: none;
 }
 .optionButton.disabled::before {
-    display: none; /* Hide icon placeholders on disabled */
+    display: none;
 }
 .optionButton.correct.disabled::before {
-    display: block; /* Ensure correct icon shows even when others are disabled */
+    display: block;
     opacity: 1;
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(-50%) scale(1.15);
 }
 
 .optionText {
@@ -179,98 +184,75 @@
 
 /* Feedback Area */
 .feedback {
-  font-size: 1.15rem; /* Slightly larger */
-  font-weight: 600;
-  margin: 15px 0; /* Adjusted margin */
-  padding: 12px 20px;
-  border-radius: 8px; /* Match buttons */
+  font-size: 1.05rem; /* Slightly smaller feedback text */
+  font-weight: 500;
+  margin: 15px 0 20px 0; /* Adjusted margin */
+  padding: 15px 20px;
+  border-radius: 8px;
   width: 95%;
-  max-width: 500px;
+  max-width: 550px;
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
   border-style: solid;
-  line-height: 1.6; /* Better spacing for longer feedback */
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
-
+.feedback::before {
+    font-family: 'Segoe UI Symbol', sans-serif;
+    font-size: 1.2rem; /* Slightly smaller icon */
+    line-height: 1;
+}
 .correctFeedback {
   color: #0f5132;
-  background-color: #d1e7dd;
+  background-color: var(--success-light);
   border-color: #badbcc;
 }
+.correctFeedback::before { content: '✓'; }
 
 .incorrectFeedback {
   color: #842029;
-  background-color: #f8d7da;
+  background-color: var(--error-light);
   border-color: #f5c2c7;
 }
+.incorrectFeedback::before { content: '✗'; }
 
-/* Next Button */
+
+/* Next/Completion Buttons */
+/* General button styles from App.css are inherited */
 .nextButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px; /* More space above */
-    padding: 12px 30px; /* Match primary button */
-    font-size: 1rem;
-    font-weight: 500;
-    color: white;
-    background-color: #6c757d; /* Secondary grey */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 10px; /* Space above next */
+}
+.completionActions {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.nextButton:hover {
-    background-color: #5a6268;
-    transform: translateY(-1px);
-}
-.nextButton:active {
-    transform: translateY(0px);
-}
-
-
-.arrowIcon {
-    font-size: 1.3rem;
-    line-height: 1;
-}
 
 /* Loading, Completion, Error States */
-.loading, .completionMessage, .error {
-    font-size: 1.4rem; /* Larger text */
-    font-weight: 600;
-    color: #555;
-    padding: 50px 20px; /* More padding */
+.loading, .error {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-light);
+    padding: 50px 20px;
     text-align: center;
     width: 100%;
     box-sizing: border-box;
 }
 .completionMessage {
-    color: #198754;
+    font-size: 1.6rem; /* Larger completion */
+    font-weight: 600;
+    color: var(--text-dark); /* Darker completion text */
+    margin-bottom: 15px;
+}
+.completionSubMessage {
+     font-size: 1rem;
+    color: var(--text-light);
     margin-bottom: 25px;
-}
-.error {
-    color: #dc3545;
-}
-
-/* Reshuffle/Primary Button */
-.primaryButton {
-  padding: 12px 30px;
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: white;
-  background-color: #0d6efd;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
-.primaryButton:hover {
-  background-color: #0b5ed7;
-  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
-  transform: translateY(-1px);
-}
-.primaryButton:active {
-    transform: translateY(0px);
 }

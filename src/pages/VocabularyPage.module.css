@@ -3,114 +3,141 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px 20px;
-  max-width: 750px;
+  padding: 25px 20px 40px 20px;
+  max-width: 800px;
   margin: 30px auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  position: relative; /* For progress bar potentially */
+}
+
+/* --- Progress Bar Placeholder Style --- */
+/* Actual progress bar styles would be in ProgressBar.module.css */
+/* Add some spacing if using a progress bar component */
+.progressBarContainer { /* Wrap the ProgressBar component in this */
+    width: 90%;
+    margin-bottom: 25px;
+}
+
+
+.progressIndicator { /* Can be removed if using ProgressBar component */
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    font-weight: 500;
+    width: 100%;
+    text-align: right;
+    padding-right: 15px;
+    opacity: 0.8;
 }
 
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 30px;
+  background-color: #f8f9fc;
+  border-radius: 10px;
+  padding: 35px 40px;
   width: 100%;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   box-sizing: border-box;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e9ecef;
 }
 
 .word {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: 700;
   margin-bottom: 15px;
-  color: #343a40;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
 }
 
 .definition {
-  font-size: 1.15rem;
-  color: #495057;
+  font-size: 1.1rem;
+  color: var(--text-dark);
   line-height: 1.7;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-style: italic;
 }
 
 .exampleSection {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed #ced4da;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
     text-align: left;
 }
 
-.exampleLabel {
-    font-size: 1rem;
+.exampleLabel, .translationLabel {
+    font-size: 0.95rem;
     font-weight: 600;
-    color: #007bff;
+    color: var(--secondary-color);
     margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.exampleSentence {
+.exampleSentence, .translationText {
     font-size: 1.05rem;
-    color: #555;
-    line-height: 1.6;
-    font-style: italic;
-    margin-bottom: 15px; /* Add space before translation */
+    color: var(--text-dark);
+    line-height: 1.65;
+    margin-bottom: 15px;
 }
 
-/* --- Styles for Translation --- */
 .translationSection {
-    padding-top: 10px;
-    border-top: 1px solid #eee; /* Lighter separator */
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f1f3f5;
 }
 
 .translationLabel {
-    font-size: 0.95rem; /* Slightly smaller label */
-    font-weight: 600;
-    color: #6c757d; /* Grey label */
-    margin-bottom: 5px;
+    color: var(--text-light);
 }
 
 .translationText {
-    font-size: 1rem;
+    font-style: italic;
     color: #555;
-    line-height: 1.6;
-    /* font-style: italic; /* Optional: Italicize translation */
-}
-/* --- End Styles --- */
-
-
-.button {
-  padding: 12px 30px;
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: white;
-  background-color: #28a745;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.button:hover {
-  background-color: #218838;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.nextButton {
+    /* Inherits from App.css */
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+}
+.arrowIcon {
+    font-size: 1.4rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+.nextButton:hover .arrowIcon {
+    transform: translateX(3px);
 }
 
-.button:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
-}
-
-.loading, .completionMessage {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #555;
-    padding: 40px;
+.loading, .completionMessage, .error {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-light);
+    padding: 50px 20px;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.completionMessage {
+    color: var(--success-color);
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.error {
+    color: var(--error-color);
 }
 
-.completionMessage {
-    color: #28a745;
-    margin-bottom: 20px;
+/* Primary button style for reshuffle */
+.primaryButton {
+  /* Inherits from App.css */
+  background-color: var(--primary-color);
+  color: white;
+  margin-top: 10px; /* Add space */
+}
+.primaryButton:hover {
+  background-color: var(--primary-light);
 }

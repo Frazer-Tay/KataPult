@@ -1,39 +1,54 @@
-
 /* src/pages/KaranganPage.module.css */
+/* Styles adapted from PersamaanPage.module.css */
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px 20px;
-  max-width: 700px;
+  padding: 25px 20px 40px 20px;
+  max-width: 720px;
+  min-height: 75vh;
   margin: 30px auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  background-color: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+/* Progress Bar */
+.progressBarContainer {
+    width: 95%;
+    margin-bottom: 30px; /* Space below progress */
 }
 
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 25px;
+  background-color: #f8f9fc; /* Light card background */
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px 35px;
   width: 100%;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   box-sizing: border-box;
-  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
 }
 
 .word {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2980b9;
-  margin-bottom: 15px; /* Space before synonyms */
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--primary-light);
+  display: inline-block;
 }
 
-/* --- New Styles for Synonyms --- */
+/* Synonym Section */
 .synonymSection {
-    margin-top: 15px;
-    padding-top: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
     border-top: 1px dashed #ced4da;
     text-align: left; /* Align synonyms left */
 }
@@ -41,143 +56,201 @@
 .synonymLabel {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #6c757d; /* Grey label */
+    color: var(--text-light); /* Grey label */
     margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .synonymText {
     font-size: 1rem;
-    color: #555;
+    color: var(--text-dark);
     line-height: 1.6;
     font-style: italic;
 }
-/* --- End New Styles --- */
 
-
+/* Options */
 .optionsContainer {
   width: 100%;
+  max-width: 600px; /* Slightly wider for definitions */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 30px;
 }
 
 .instruction {
   font-size: 1.15rem;
-  margin-bottom: 15px;
-  color: #333;
-  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+  font-weight: 600;
   text-align: center;
 }
 
+/* Option Buttons */
 .optionButton {
-  padding: 12px 20px;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  border: 1px solid #adb5bd;
-  border-radius: 6px;
+  position: relative;
+  padding: 15px 25px 15px 60px;
+  font-size: 1.05rem; /* Adjust for definition length */
+  line-height: 1.5; /* Better for longer text */
+  color: var(--text-dark);
+  background-color: #ffffff;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  width: 95%;
-  text-align: center;
+  transition: all 0.20s ease-in-out;
+  width: 100%;
+  text-align: left;
   box-sizing: border-box;
-  font-weight: 400;
+  font-weight: 400; /* Normal weight for definitions */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.04);
 }
 
 .optionButton:hover:not(:disabled) {
   background-color: #f1f3f5;
-  border-color: #868e96;
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .optionButton:focus {
     outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 85, 162, 0.25);
 }
 
 .optionButton:disabled {
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
-/* Styles for answered states */
+/* Button Icons */
+.optionButton::before {
+    content: '';
+    font-family: 'Segoe UI Symbol', sans-serif;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    font-size: 1.6rem;
+    font-weight: bold;
+    transition: all 0.25s ease-in-out;
+    opacity: 0;
+}
+
 .optionButton.correct {
-  background-color: #28a745;
-  border-color: #1e7e34;
-  color: white;
-  font-weight: 500;
-  opacity: 1;
+  background-color: var(--success-light);
+  border-color: var(--success-color);
+  color: #0a3622;
+  font-weight: 500; /* Slightly bolder correct */
+  opacity: 1 !important;
+}
+.optionButton.correct::before {
+    content: '✓';
+    color: var(--success-color);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15);
 }
 
 .optionButton.incorrect {
-  background-color: #dc3545;
-  border-color: #bd2130;
-  color: white;
+  background-color: var(--error-light);
+  border-color: var(--error-color);
+  color: #58151c;
   font-weight: 500;
-  opacity: 1;
+  opacity: 1 !important;
+}
+.optionButton.incorrect::before {
+    content: '✗';
+    color: var(--error-color);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15);
 }
 
 .optionButton.disabled {
     background-color: #f8f9fa;
-    border-color: #adb5bd;
-    color: #6c757d;
+    border-color: #e9ecef;
+    color: #adb5bd;
     opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+}
+.optionButton.disabled:hover { transform: none; box-shadow: none; }
+.optionButton.disabled::before { display: none; }
+.optionButton.correct.disabled::before {
+    display: block;
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15);
 }
 
+.optionText { display: inline-block; }
 
+/* Feedback Area */
 .feedback {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 15px 0;
-  padding: 10px 15px;
-  border-radius: 6px;
-  width: 100%;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin: 10px 0 20px 0;
+  padding: 15px 20px;
+  border-radius: 8px;
+  width: 95%;
+  max-width: 600px; /* Wider for definition feedback */
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
   border-style: solid;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
-
+.feedback::before {
+    font-family: 'Segoe UI Symbol', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1;
+}
 .correctFeedback {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+  color: #0f5132;
+  background-color: var(--success-light);
+  border-color: #badbcc;
 }
-
+.correctFeedback::before { content: '✓'; }
 .incorrectFeedback {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  line-height: 1.5;
+  color: #842029;
+  background-color: var(--error-light);
+  border-color: #f5c2c7;
 }
+.incorrectFeedback::before { content: '✗'; }
 
-.nextButton {
+/* Next/Completion Buttons - Inherited from App.css */
+.completionActions {
+    display: flex;
+    gap: 15px;
     margin-top: 15px;
-    padding: 10px 25px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: white;
-    background-color: #6c757d;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.nextButton:hover {
-    background-color: #5a6268;
-}
-
-.loading, .completionMessage {
+/* Loading, Completion, Error States */
+.loading, .error {
     font-size: 1.3rem;
-    font-weight: 600;
-    color: #555;
-    padding: 40px;
+    font-weight: 500;
+    color: var(--text-light);
+    padding: 50px 20px;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 .completionMessage {
-    color: #28a745;
-    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+.completionSubMessage {
+     font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+.error {
+    color: var(--error-color);
 }

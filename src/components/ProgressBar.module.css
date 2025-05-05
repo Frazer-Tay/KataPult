@@ -1,0 +1,42 @@
+/* src/components/ProgressBar.module.css */
+.progressBarContainer {
+    width: 95%;
+    max-width: 600px; /* Match content width */
+    margin-bottom: 30px; /* Space below progress bar */
+    padding: 0 5px; /* Small horizontal padding */
+    box-sizing: border-box;
+}
+
+.progressLabels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.progressLabel {
+    text-align: left;
+}
+
+.progressText {
+    text-align: right;
+}
+
+.progressBarBackground {
+    width: 100%;
+    height: 12px; /* Increased height */
+    background-color: var(--progress-bar-background); /* Use CSS Variable */
+    border-radius: 10px; /* Rounded ends */
+    overflow: hidden; /* Ensure fill stays inside */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+}
+
+.progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%); /* Gradient fill */
+    border-radius: 10px; /* Match background */
+    transition: width 0.4s ease-in-out; /* Smooth transition */
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.2); /* Slight inner highlight */
+}
