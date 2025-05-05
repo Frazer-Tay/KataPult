@@ -14,13 +14,45 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Function to get N unique distractors from other items
+const getDistractors = (allItems, currentItem, count = 2) => {
+    const distractors = new Set(); // Use a Set to ensure uniqueness
+    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id);
+    const shuffledPool = shuffleArray([...potentialDistractorItems]);
+
+    for (const item of shuffledPool) {
+        if (distractors.size >= count) break;
+        if (item.synonyms && item.synonyms.length > 0) {
+            const potentialDistractor = item.synonyms[0]; // Simple strategy: take the first synonym
+            // Ensure it's not one of the actual answers for the current item
+            if (!currentItem.synonyms.map(s => s.toLowerCase()).includes(potentialDistractor.toLowerCase())) {
+                distractors.add(potentialDistractor);
+            }
+        }
+    }
+
+    // Fallback if not enough unique distractors found
+    let fallbackCounter = 1;
+    while (distractors.size < count) {
+        const fallback = `[Opsi ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`; // Placeholder like [Opsi B]
+        if (!currentItem.synonyms.map(s => s.toLowerCase()).includes(fallback.toLowerCase())) {
+            distractors.add(fallback);
+        }
+        fallbackCounter++;
+        if (fallbackCounter > 10) break; // Safety break
+    }
+
+    return Array.from(distractors);
+};
+
+
 const PersamaanPage = () => {
   const [validItems, setValidItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [options, setOptions] = useState([]);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // The string value of the selected option
   const [feedback, setFeedback] = useState('');
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false); // Flag to lock buttons and show feedback
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -37,9 +69,9 @@ const PersamaanPage = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const filteredData = persamaanData.filter(item => item.synonyms && item.synonyms.length > 0);
+      const filteredData = persamaanData.filter(item => item.synonyms && item.synonyms.length > 0 && item.word);
        if (filteredData.length === 0) {
-           throw new Error("No valid synonym data found.");
+           throw new Error("Tidak ada data persamaan yang valid ditemukan.");
        }
       setValidItems(shuffleArray([...filteredData]));
       setCurrentIndex(0);
@@ -53,60 +85,28 @@ const PersamaanPage = () => {
 
   // Function to generate MCQ options
   const generateOptions = useCallback(() => {
-    if (!currentItem || validItems.length === 0) {
-        setOptions([]); // Clear options if no item or no valid items
+    if (!currentItem || !validItems || validItems.length < 1) {
+        setOptions([]);
         return;
     }
-     // Ensure we have enough items for distractors, otherwise handle gracefully
-    const potentialDistractorItems = validItems.filter(item => item.id !== currentItem.id);
-    if (potentialDistractorItems.length < 2 && validItems.length >= 3) {
-        // This case is tricky, might reuse distractors or show fewer options
-        console.warn("Not enough unique items for 2 distractors. Options might repeat.");
-    }
 
-
-    // Get the correct answer
+    // Pick one correct synonym randomly
     const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
 
     // Get distractors
-    const distractors = [];
-    const shuffledDistractors = shuffleArray([...potentialDistractorItems]);
+    const distractors = getDistractors(validItems, currentItem, 2); // Get 2 distractors
 
-    for (let i = 0; distractors.length < 2 && i < shuffledDistractors.length; i++) {
-      const distractorItem = shuffledDistractors[i];
-      if (distractorItem.synonyms && distractorItem.synonyms.length > 0) {
-          const potentialDistractor = distractorItem.synonyms[0];
-          if (potentialDistractor.toLowerCase() !== correctSynonym.toLowerCase() &&
-              !currentItem.synonyms.map(s => s.toLowerCase()).includes(potentialDistractor.toLowerCase()) &&
-              !distractors.includes(potentialDistractor))
-          {
-            distractors.push(potentialDistractor);
-          }
-      }
-    }
-     // Fallback if still not enough unique distractors
-     let fallbackCounter = 1;
-     while (distractors.length < 2) {
-        const fallbackDistractor = `Opsi ${fallbackCounter++}`; // Simple placeholder
-        if (fallbackDistractor.toLowerCase() !== correctSynonym.toLowerCase()) {
-             distractors.push(fallbackDistractor);
-        } else {
-             // Avoid adding the correct answer as a fallback distractor
-             fallbackCounter++;
-             distractors.push(`Opsi ${fallbackCounter++}`);
-        }
-    }
-
-
+    // Combine and shuffle
     const allOptions = shuffleArray([correctSynonym, ...distractors]);
     setOptions(allOptions);
 
-  }, [currentItem, validItems]); // Add validItems dependency
+  }, [currentItem, validItems]);
 
   // Generate options when currentItem changes
   useEffect(() => {
     if (!isLoading && currentItem) {
         generateOptions();
+        // Reset state for the new question
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
@@ -117,9 +117,9 @@ const PersamaanPage = () => {
      setIsLoading(true);
      setError(null);
      try {
-        const filteredData = persamaanData.filter(item => item.synonyms && item.synonyms.length > 0);
+        const filteredData = persamaanData.filter(item => item.synonyms && item.synonyms.length > 0 && item.word);
         if (filteredData.length === 0) {
-           throw new Error("No valid synonym data found for reshuffle.");
+           throw new Error("Tidak ada data persamaan yang valid untuk diulang.");
         }
         setValidItems(shuffleArray([...filteredData]));
         setCurrentIndex(0);
@@ -132,7 +132,6 @@ const PersamaanPage = () => {
   };
 
   const loadNextItem = useCallback(() => {
-     // Ensure validItems exists and has items before proceeding
      if (!validItems || validItems.length === 0) return;
      if (currentIndex < validItems.length - 1) {
         setCurrentIndex(prevIndex => prevIndex + 1);
@@ -151,13 +150,11 @@ const PersamaanPage = () => {
     const isCorrect = correctSynonymsLower.includes(selectedOption.toLowerCase());
 
     if (isCorrect) {
-      setFeedback('Benar!');
-      // Optionally add a class or state for animation
-      setTimeout(loadNextItem, 1500); // Auto-advance after delay
+      setFeedback('Tepat! Jawaban Benar.'); // More engaging feedback
+      setTimeout(loadNextItem, 1500);
     } else {
       const allAnswers = currentItem.synonyms.join(', ');
-      setFeedback(`Salah. Jawaban: ${allAnswers}`);
-      // No auto-advance on incorrect
+      setFeedback(`Kurang Tepat. Sinonim yang benar: ${allAnswers}`); // Clearer incorrect feedback
     }
   };
 
@@ -176,7 +173,7 @@ const PersamaanPage = () => {
   if (isCompleted) {
     return (
       <div className={styles.container}>
-          <p className={styles.completionMessage}>Latihan Persamaan Selesai!</p>
+          <p className={styles.completionMessage}>✨ Latihan Persamaan Selesai! ✨</p>
           <button className={styles.primaryButton} onClick={handleReshuffle}>
               Ulangi Latihan
           </button>
@@ -185,63 +182,68 @@ const PersamaanPage = () => {
   }
 
   if (!currentItem) {
-     return <div className={styles.loading}>Tidak ada data persamaan yang valid.</div>;
+     // This might happen if filtering results in empty array initially
+     return <div className={styles.loading}>Tidak ada data persamaan untuk ditampilkan.</div>;
   }
 
   return (
     <div className={styles.container}>
-        {/* Progress Indicator */}
         <p className={styles.progressIndicator}>
             Kata {currentIndex + 1} / {totalItems}
         </p>
 
         <div className={styles.card}>
-            <p className={styles.label}>Kata:</p>
+            <p className={styles.label}>Carikan persamaan kata untuk:</p>
             <h2 className={styles.word}>{currentItem.word}</h2>
         </div>
 
         <div className={styles.optionsContainer}>
-            <p className={styles.instruction}>Pilih salah satu persamaannya (sinonim):</p>
             {options.map((option, index) => {
-            let buttonClassName = styles.optionButton; // Default
-            const isCorrectOption = currentItem.synonyms.map(s => s.toLowerCase()).includes(option.toLowerCase());
+              const isCorrectOption = currentItem.synonyms.map(s => s.toLowerCase()).includes(option.toLowerCase());
+              let buttonClassName = styles.optionButton;
 
-            if (isAnswered) {
+              if (isAnswered) {
                 if (isCorrectOption) {
-                    buttonClassName += ` ${styles.correct}`; // Correct answer style
+                    // Always highlight correct answer green
+                    buttonClassName += ` ${styles.correct}`;
                 } else if (selectedAnswer === option) {
-                    buttonClassName += ` ${styles.incorrect}`; // Incorrectly selected answer style
+                    // Highlight the user's wrong choice red
+                    buttonClassName += ` ${styles.incorrect}`;
                 } else {
-                    buttonClassName += ` ${styles.disabled}`; // Other incorrect options disabled
+                    // Fade out other incorrect options
+                    buttonClassName += ` ${styles.disabled}`;
                 }
-            }
+              }
 
-            return (
+              return (
                 <button
-                key={`${currentItem.id}-${index}-${option}`} // More unique key
-                className={buttonClassName}
-                onClick={() => checkAnswer(option)}
-                disabled={isAnswered}
+                  // Use a more robust key combining item id and option
+                  key={`${currentItem.id}-option-${index}`}
+                  className={buttonClassName}
+                  onClick={() => checkAnswer(option)}
+                  disabled={isAnswered} // Disable all after one is chosen
+                  aria-pressed={selectedAnswer === option} // Accessibility hint
                 >
-                <span className={styles.optionText}>{option}</span>
-                {/* Icons will be added via CSS pseudo-elements */}
+                  <span className={styles.optionText}>{option}</span>
+                  {/* Icons are added via CSS :before pseudo-elements */}
                 </button>
-            );
+              );
             })}
         </div>
 
-        {/* Feedback Area */}
+        {/* Feedback Area - only show after answer */}
         {isAnswered && feedback && (
-            <p className={`${styles.feedback} ${feedback === 'Benar!' ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
-            {feedback}
-            </p>
+            <div className={`${styles.feedback} ${feedback.startsWith('Tepat') ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
+                 {/* Optionally add icon here too if not using pseudo-elements */}
+                 {feedback}
+            </div>
         )}
 
-        {/* Explicit Next Button for incorrect answers */}
-        {isAnswered && feedback.startsWith('Salah') && (
+        {/* Explicit Next Button ONLY for incorrect answers */}
+        {isAnswered && feedback.startsWith('Kurang Tepat') && (
             <button className={styles.nextButton} onClick={loadNextItem}>
             Lanjut
-            <span className={styles.arrowIcon}>→</span> {/* Right arrow */}
+            <span className={styles.arrowIcon}>→</span>
             </button>
         )}
     </div>

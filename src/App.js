@@ -15,7 +15,6 @@ function App() {
         <Link to="/" className="home-link">KataPult Bahasa Prep</Link>
       </header>
       <main>
-        {/* Using Suspense for potential future lazy loading */}
         <React.Suspense fallback={<div className="loading-page">Loading Page...</div>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -23,7 +22,6 @@ function App() {
             <Route path="/imbuhan" element={<ImbuhanPage />} />
             <Route path="/persamaan" element={<PersamaanPage />} />
             <Route path="/karangan" element={<KaranganPage />} />
-            {/* Catch-all route */}
             <Route path="*" element={
               <div style={{ padding: '20px', textAlign: 'center' }}>
                 <h2>404 - Halaman Tidak Ditemukan</h2>
