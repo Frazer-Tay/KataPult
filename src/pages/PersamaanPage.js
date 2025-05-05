@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
-import ProgressBar from '../components/ProgressBar'; // Assuming ProgressBar component exists
+import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -15,32 +15,42 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Moved getDistractors outside, ensuring it receives necessary data as arguments
 const getDistractors = (allItems, currentItem, count = 2) => {
     const distractors = new Set();
-    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) return [];
+    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) {
+        console.error("Invalid input to getDistractors in Persamaan");
+        return [];
+    }
     const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.word && item.synonyms && item.synonyms.length > 0);
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
     const currentSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
 
     for (const item of shuffledPool) {
         if (distractors.size >= count) break;
-        const potentialDistractor = item.synonyms[0];
-        const potentialDistractorLower = potentialDistractor.toLowerCase();
-        if (!currentSynonymsLower.includes(potentialDistractorLower) && ![...distractors].map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
-            distractors.add(potentialDistractor);
+        // Ensure synonyms array exists and has items
+        if (item.synonyms && item.synonyms.length > 0) {
+            const potentialDistractor = item.synonyms[0]; // Simple strategy
+            const potentialDistractorLower = potentialDistractor.toLowerCase();
+             // Check against current answers and already added distractors
+            if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
+                distractors.add(potentialDistractor);
+            }
         }
     }
+    // Fallback
     let fallbackCounter = 1;
     while (distractors.size < count) {
         const fallback = `[Opsi ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-         if (!currentSynonymsLower.includes(fallback.toLowerCase()) && ![...distractors].map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
-            distractors.add(fallback);
+         if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
+           distractors.add(fallback);
         }
         fallbackCounter++;
         if (fallbackCounter > 10 + count) break;
     }
     return Array.from(distractors);
 };
+
 
 const PersamaanPage = () => {
   const [allItems, setAllItems] = useState([]);
@@ -54,7 +64,7 @@ const PersamaanPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
-  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0); // Track mistakes for end screen
+  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0);
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
       const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
@@ -72,64 +82,69 @@ const PersamaanPage = () => {
           }
           setDisplayItems(shuffleArray([...itemsToLoad]));
           setCurrentIndex(0);
-          setMissedItems(new Set()); // Reset for this run
-          setMistakesMadeCountDuringRun(0); // Reset count for this run
+          setMissedItems(new Set());
+          setMistakesMadeCountDuringRun(0);
+          setIsAnswered(false); // Ensure reset on load/reload
       } catch (err) {
           console.error("Error loading Persamaan data:", err);
           setError("Gagal memuat data Persamaan.");
-          setDisplayItems([]); // Clear display items on error
+          setDisplayItems([]);
       } finally {
           setIsLoading(false);
       }
-  }, []); // No dependencies, only called manually or on mount
+  }, []);
 
-
+  // Initial Load
   useEffect(() => {
     const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
-    setAllItems(filteredData); // Store original filtered data
-    loadData(filteredData); // Load initial full set
-  }, [loadData]); // Depend on loadData
+    setAllItems(filteredData);
+    loadData(filteredData);
+  }, [loadData]);
 
 
+  // Generate options when currentItem or *allItems* change
   const generateOptions = useCallback(() => {
-    if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(validItems) || validItems.length === 0) {
+      // Use allItems to get distractors, ensuring it's available
+    if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
         return;
     }
     const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
-    const distractors = getDistractors(validItems, currentItem, 2);
+    // Pass allItems here explicitly
+    const distractors = getDistractors(allItems, currentItem, 2);
     const allOptions = shuffleArray([correctSynonym, ...distractors]);
     setOptions(allOptions);
 
-  }, [currentItem, validItems]);
+  }, [currentItem, allItems]); // Depend on allItems now
 
+  // Regenerate options when dependencies change
   useEffect(() => {
     if (!isLoading && currentItem) {
         generateOptions();
+        // Reset answer state for the new question
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
+    } else if (!currentItem) {
+       setOptions([]);
     }
-     else if (!currentItem) {
-        setOptions([]);
-     }
-  }, [currentItem, isLoading, generateOptions]);
+  }, [currentItem, isLoading, generateOptions]); // generateOptions now depends on allItems too
 
   const handleReshuffleAll = () => {
     setIsReviewing(false);
-    loadData(allItems); // Reload all items
+    loadData(allItems);
   };
 
   const handleReviewMistakes = () => {
-    if (mistakesMadeCountDuringRun === 0) return;
-    const itemsToReview = allItems.filter(item => missedItems.has(item.id));
-    if (itemsToReview.length > 0) {
+    const mistakeIds = Array.from(missedItems);
+    if (mistakeIds.length === 0) return;
+    const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
+     if (itemsToReview.length > 0) {
         setIsReviewing(true);
-        loadData(itemsToReview); // Load only missed items
+        loadData(itemsToReview);
     } else {
-        // Handle case where somehow missedItems has IDs but no items match
-         console.warn("Mistake IDs found, but no matching items in allItems.");
-         setError("Tidak dapat memulai review kesalahan.");
+         console.warn("Mistake IDs found, but no matching items in allItems for Persamaan review.");
+         setError("Tidak dapat memulai review kesalahan Persamaan.");
     }
   };
 
@@ -153,22 +168,19 @@ const PersamaanPage = () => {
 
     if (isCorrect) {
       setFeedback('Tepat! Jawaban Benar.');
-      // If reviewing, remove from missed set if now correct
-      // Note: For simplicity, we don't track misses during the REVIEW round itself.
-      // The review is just one pass through items missed in the MAIN round.
       setTimeout(loadNextItem, 1500);
     } else {
       const allAnswers = currentItem.synonyms.join(', ');
       setFeedback(`Kurang Tepat. Sinonim: ${allAnswers}`);
-      // Add to missed items Set ONLY if not already in review mode
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
-            setMistakesMadeCountDuringRun(prev => prev + 1); // Increment mistake count
+            setMistakesMadeCountDuringRun(prev => prev + 1);
       }
     }
   };
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
+  const finalMistakeCount = missedItems.size; // Use this for completion button logic
 
   // --- Render Logic ---
   if (isLoading) {
@@ -183,19 +195,20 @@ const PersamaanPage = () => {
       const completionText = isReviewing
         ? "✨ Sesi Review Selesai! ✨"
         : "✨ Latihan Persamaan Selesai! ✨";
+      const mistakesToShow = isReviewing ? 0 : mistakesMadeCountDuringRun;
     return (
       <div className={styles.container}>
           <p className={styles.completionMessage}>{completionText}</p>
-          {!isReviewing && mistakesMadeCountDuringRun > 0 && (
+          {mistakesToShow > 0 && (
              <p className={styles.completionSubMessage}>
-                 Anda membuat {mistakesMadeCountDuringRun} kesalahan pada putaran ini.
+                 Anda membuat {mistakesToShow} kesalahan pada putaran ini.
              </p>
           )}
           <div className={styles.completionActions}>
-              {/* Show Review Mistakes button only if mistakes were made in the last full run */}
-              {!isReviewing && mistakesMadeCountDuringRun > 0 && (
+              {/* Use finalMistakeCount (from the Set) to decide if Review button shows */}
+              {finalMistakeCount > 0 && (
                    <button className="secondaryButton" onClick={handleReviewMistakes}>
-                      🔁 Ulangi Kesalahan ({mistakesMadeCountDuringRun})
+                      🔁 Ulangi Kesalahan ({finalMistakeCount})
                    </button>
               )}
               <button className="primaryButton" onClick={handleReshuffleAll}>
@@ -208,7 +221,7 @@ const PersamaanPage = () => {
 
    // --- Active Question Screen ---
    if (!currentItem) {
-     return <div className={styles.loading}>Memuat kata berikutnya...</div>; // Should be rare
+     return <div className={styles.loading}>Memuat kata berikutnya...</div>;
    }
 
   return (
@@ -221,11 +234,12 @@ const PersamaanPage = () => {
 
         <div className={styles.card}>
             <p className={styles.label}>Carikan persamaan kata untuk:</p>
-            <h2 className={styles.word}>{currentItem.word || '[Kata tidak tersedia]'}</h2>
+            <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
         </div>
 
         <div className={styles.optionsContainer}>
             {options.map((option, index) => {
+              // Ensure currentItem and synonyms exist before checking
               const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
               let buttonClassName = styles.optionButton;
 

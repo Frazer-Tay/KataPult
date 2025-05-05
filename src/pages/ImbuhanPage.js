@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { imbuhanData } from '../data/imbuhan';
 import styles from './ImbuhanPage.module.css';
-import ProgressBar from '../components/ProgressBar'; // Assuming ProgressBar component exists
+import ProgressBar from '../components/ProgressBar'; // Import ProgressBar
 
 const shuffleArray = (array) => {
     if (!Array.isArray(array)) return [];
@@ -16,8 +16,8 @@ const shuffleArray = (array) => {
 };
 
 const ImbuhanPage = () => {
-  const [allItems, setAllItems] = useState([]); // Holds the original full list
-  const [displayItems, setDisplayItems] = useState([]); // Holds the items currently being practiced (full or missed)
+  const [allItems, setAllItems] = useState([]);
+  const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -25,8 +25,11 @@ const ImbuhanPage = () => {
   const [showNextButton, setShowNextButton] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [missedItems, setMissedItems] = useState(new Set()); // Track IDs of missed items in the current round
-  const [isReviewing, setIsReviewing] = useState(false); // Are we in review mode?
+  const [missedItems, setMissedItems] = useState(new Set());
+  const [isReviewing, setIsReviewing] = useState(false);
+  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0);
+  // --- ADD isAnswered STATE ---
+  const [isAnswered, setIsAnswered] = useState(false); // Track if current question was answered
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
     const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
@@ -44,66 +47,83 @@ const ImbuhanPage = () => {
         throw new Error("No valid Imbuhan data found.");
       }
       const initialData = shuffleArray([...imbuhanData]);
-      setAllItems([...imbuhanData]); // Store original
+      setAllItems([...imbuhanData]);
       setDisplayItems(initialData);
       setCurrentIndex(0);
-      setMissedItems(new Set()); // Reset missed items
+      setMissedItems(new Set());
       setIsReviewing(false);
+      setIsAnswered(false); // Reset on load
     } catch (err) {
       console.error("Error loading/shuffling Imbuhan data:", err);
       setError("Gagal memuat data Imbuhan.");
     } finally {
       setIsLoading(false);
     }
-  }, []); // Run only on mount
+  }, []);
 
-  // Effect to reset input/feedback for the next item
+  // Effect to reset state for the next item
   useEffect(() => {
     if (!isLoading && currentItem) {
       setUserInput('');
       setFeedback('');
       setIsCorrect(false);
       setShowNextButton(false);
+      setIsAnswered(false); // Reset answered state for new item
     }
   }, [currentItem, isLoading]);
 
-  // Function to start over with all items
+
   const handleReshuffleAll = () => {
     if (allItems.length === 0) return;
     setIsLoading(true);
     setError(null);
-    setDisplayItems(shuffleArray([...allItems]));
+    setIsReviewing(false); // Ensure not in review mode
+    const reshuffled = shuffleArray([...allItems]);
+    setDisplayItems(reshuffled);
     setCurrentIndex(0);
-    setMissedItems(new Set()); // Clear missed items
-    setIsReviewing(false);
+    setMissedItems(new Set());
+    setMistakesMadeCountDuringRun(0);
+    setIsAnswered(false);
     setIsLoading(false);
   };
 
-  // Function to start review of missed items
   const handleReviewMistakes = () => {
-    if (missedItems.size === 0) return; // Nothing to review
+    // Use mistakesMadeCountDuringRun to check if review is possible
+    const mistakeIds = Array.from(missedItems);
+    if (mistakeIds.length === 0) return;
+
     setIsLoading(true);
     setError(null);
-    // Find the actual items from allItems based on missed IDs
-    const itemsToReview = allItems.filter(item => missedItems.has(item.id));
-    setDisplayItems(shuffleArray(itemsToReview)); // Shuffle the missed items
-    setCurrentIndex(0);
-    setMissedItems(new Set()); // Clear missed items for the *next* round
-    setIsReviewing(true); // Set review mode flag
-    setIsLoading(false);
+    const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
+    if (itemsToReview.length > 0) {
+        setDisplayItems(shuffleArray(itemsToReview));
+        setCurrentIndex(0);
+        setMissedItems(new Set()); // Clear for the next *full* run
+        setIsReviewing(true);
+        setMistakesMadeCountDuringRun(0); // Reset count for the review session
+        setIsAnswered(false);
+    } else {
+         console.warn("Mistake IDs found, but no matching items in allItems.");
+         setError("Tidak dapat memulai review kesalahan.");
+    }
+     setIsLoading(false);
   };
 
   const loadNextItem = useCallback(() => {
     if (!displayItems || displayItems.length === 0) return;
     if (currentIndex < displayItems.length - 1) {
       setCurrentIndex(prevIndex => prevIndex + 1);
+      // State resets (input, feedback, isAnswered) handled by useEffect [currentItem]
     } else {
-      setCurrentIndex(displayItems.length); // Go beyond bounds for completion
+      setCurrentIndex(displayItems.length);
     }
   }, [currentIndex, displayItems]);
 
   const checkAnswer = useCallback(() => {
-    if (!currentItem || isCorrect) return;
+    // Use isAnswered state to prevent re-checking
+    if (!currentItem || isAnswered) return;
+    setIsAnswered(true); // Mark as answered
+
     const correctAnswer = currentItem.targetWord ? currentItem.targetWord.toLowerCase() : '';
     const userAnswer = userInput.trim().toLowerCase();
 
@@ -111,77 +131,75 @@ const ImbuhanPage = () => {
       setFeedback('Tepat! Jawaban Benar.');
       setIsCorrect(true);
       setShowNextButton(false);
-      // If reviewing, remove from potential future review if now correct
-      // Note: This logic might be simpler if we just clear missedItems on starting review
-      // missedItems.delete(currentItem.id); // Optional: Refine this later if needed
       setTimeout(loadNextItem, 1500);
     } else {
       setFeedback(`Kurang Tepat. Jawaban: ${currentItem.targetWord || '[N/A]'}`);
       setIsCorrect(false);
       setShowNextButton(true);
-      // Add to missed items Set (IDs ensure uniqueness)
-      setMissedItems(prev => new Set(prev).add(currentItem.id));
+      // Add to missed items only if NOT currently reviewing
+      if (!isReviewing) {
+            setMissedItems(prev => new Set(prev).add(currentItem.id));
+            setMistakesMadeCountDuringRun(prev => prev + 1);
+      }
     }
-  }, [currentItem, isCorrect, userInput, loadNextItem]); // Removed missedItems from deps
+  }, [currentItem, isAnswered, isReviewing, userInput, loadNextItem]); // Add isAnswered, isReviewing
 
   const handleKeyPress = useCallback((event) => {
-    if (event.key === 'Enter' && !isCorrect && userInput.trim()) {
+    // Use isAnswered state here too
+    if (event.key === 'Enter' && !isAnswered && userInput.trim()) {
       checkAnswer();
     }
-  }, [checkAnswer, isCorrect, userInput]);
+  }, [checkAnswer, isAnswered, userInput]); // Add isAnswered
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
-  const mistakesMadeCount = missedItems.size; // Count mistakes *before* review starts
-
+  const finalMistakeCount = missedItems.size; // Use this for the completion screen button
 
   // --- Render Logic ---
   if (isLoading) {
-    return <div className={styles.loading}>Memuat pertanyaan...</div>;
+       return <div className={styles.loading}>Memuat pertanyaan...</div>;
   }
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+       return <div className={styles.error}>{error}</div>;
   }
 
-  // Completion Screen
+  // --- Completion Screen ---
   if (isCompleted) {
-    // Determine message based on whether it was a review session
-    const completionText = isReviewing
-      ? "✨ Sesi Review Selesai! ✨"
-      : "✨ Latihan Imbuhan Selesai! ✨";
+      const completionText = isReviewing
+        ? "✨ Sesi Review Selesai! ✨"
+        : "✨ Latihan Imbuhan Selesai! ✨";
+      // Use mistakesMadeCountDuringRun for the message after the *initial* run
+      const mistakesToShow = isReviewing ? 0 : mistakesMadeCountDuringRun;
 
     return (
       <div className={styles.container}>
         <p className={styles.completionMessage}>{completionText}</p>
-        {/* Show mistakes only after the initial run, not after review */}
-        {!isReviewing && mistakesMadeCount > 0 && (
+        {mistakesToShow > 0 && (
            <p className={styles.completionSubMessage}>
-             Anda membuat {mistakesMadeCount} kesalahan.
+             Anda membuat {mistakesToShow} kesalahan pada putaran ini.
            </p>
         )}
         <div className={styles.completionActions}>
-            {/* Only show "Review Mistakes" if there were mistakes in the last FULL run */}
-            {!isReviewing && mistakesMadeCount > 0 && (
+            {/* Use finalMistakeCount (from the Set) to decide if Review button shows */}
+            {finalMistakeCount > 0 && (
                  <button className="secondaryButton" onClick={handleReviewMistakes}>
-                    🔁 Ulangi Kesalahan ({mistakesMadeCount})
+                    🔁 Ulangi Kesalahan ({finalMistakeCount})
                  </button>
             )}
             <button className="primaryButton" onClick={handleReshuffleAll}>
-                {!isReviewing ? 'Ulangi Semua' : 'Mulai Lagi Semua'}
+                 Ulangi Semua
             </button>
         </div>
       </div>
     );
   }
 
-  // Active Question
-  if (!currentItem) {
-      // Should generally not happen if loading/error/completion are handled
+   // --- Active Question Screen ---
+   if (!currentItem) {
      return <div className={styles.loading}>Memuat soal berikutnya...</div>;
    }
 
   return (
     <div className={styles.container}>
-        {/* Progress Bar */}
         <ProgressBar
             current={currentIndex + 1}
             total={totalItemsInSet}
@@ -201,18 +219,21 @@ const ImbuhanPage = () => {
             <input
             id="imbuhanInput"
             type="text"
+            // Use isAnswered state for conditional styling
             className={`${styles.input} ${isAnswered ? (isCorrect ? styles.inputCorrect : styles.inputIncorrect) : ''}`}
             placeholder="Jawaban Anda..."
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            disabled={isCorrect}
+            // Use isAnswered state to disable after check, not just isCorrect
+            disabled={isAnswered}
             autoCapitalize="none"
             aria-describedby="feedbackArea"
             aria-invalid={isAnswered && !isCorrect}
             />
         </div>
 
+        {/* Use isAnswered state to show feedback */}
         {isAnswered && feedback && (
         <p id="feedbackArea" className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
             {feedback}
@@ -220,15 +241,17 @@ const ImbuhanPage = () => {
         )}
 
         <div className={styles.buttonRow}>
+        {/* Use isAnswered state to show Check button */}
         {!isAnswered && (
             <button
-            className="primaryButton" // Use global style
+            className="primaryButton"
             onClick={checkAnswer}
             disabled={!userInput.trim()}
             >
             Periksa Jawaban
             </button>
         )}
+        {/* Use showNextButton state (set only on incorrect) */}
         {showNextButton && (
             <button className="nextButton" onClick={loadNextItem}>
             Lanjut <span className="arrowIcon">→</span>
