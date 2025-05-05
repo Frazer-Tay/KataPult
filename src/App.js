@@ -1,43 +1,22 @@
-// src/App.js
+// src/App.js (Temporary Test)
 import React from 'react';
-// Change BrowserRouter to HashRouter
-import { HashRouter, Routes, Route, Link } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import VocabularyPage from './pages/VocabularyPage';
-import ImbuhanPage from './pages/ImbuhanPage';
-import PersamaanPage from './pages/PersamaanPage';
-import KaranganPage from './pages/KaranganPage';
-import './App.css'; // Import the global styles
+import { HashRouter, Link } from 'react-router-dom'; // Keep HashRouter
+import './App.css';
 
 function App() {
-  // No basename needed when using HashRouter for GitHub Pages subdirectories
+  console.log("Rendering Simple Test App"); // Add a console log
   return (
-    // Use HashRouter instead of BrowserRouter
     <HashRouter>
       <header className="app-header">
-        {/* Link to "/" works correctly with HashRouter for the root */}
-        <Link to="/" className="home-link">KataPult Bahasa Prep</Link>
+         <Link to="/" className="home-link">KataPult Test Header</Link>
       </header>
-      <main>
-        <React.Suspense fallback={<div className="loading-page">Loading Page...</div>}> {/* Added Suspense */}
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/vocabulary" element={<VocabularyPage />} />
-            <Route path="/imbuhan" element={<ImbuhanPage />} />
-            <Route path="/persamaan" element={<PersamaanPage />} />
-            <Route path="/karangan" element={<KaranganPage />} />
-            {/* Catch-all route */}
-            <Route path="*" element={
-              <div style={{ padding: '20px', textAlign: 'center' }}>
-                <h2>404 - Halaman Tidak Ditemukan</h2>
-                <Link to="/">Kembali ke Beranda</Link>
-              </div>
-            } />
-          </Routes>
-        </React.Suspense>
+      <main style={{ padding: '20px', textAlign: 'center' }}> {/* Added style */}
+        <h1>App Component is Rendering! It Should Be Visible.</h1>
+        <p>If you see this, the basic setup is working.</p>
+        <Link to="/test-nonexistent">Test 404 Link</Link> {/* Added for testing */}
       </main>
       <footer className="app-footer">
-        <p>© {new Date().getFullYear()} KataPult</p>
+         <p>© {new Date().getFullYear()} Test Footer</p>
       </footer>
     </HashRouter>
   );
