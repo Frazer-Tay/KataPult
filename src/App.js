@@ -1,6 +1,7 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+// Change BrowserRouter to HashRouter
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import VocabularyPage from './pages/VocabularyPage';
 import ImbuhanPage from './pages/ImbuhanPage';
@@ -9,41 +10,36 @@ import KaranganPage from './pages/KaranganPage';
 import './App.css'; // Import the global styles
 
 function App() {
-  // IMPORTANT: Set the basename for GitHub Pages deployment.
-  // Replace 'bahasa-web-app' with YOUR GitHub repository name.
-  // If deploying to the root (e.g., your-username.github.io), use just '/'
-  const repoName = 'bahasa-web-app'; // <-- CHANGE THIS TO YOUR REPO NAME
-  const basename = process.env.NODE_ENV === 'production' ? `/${repoName}` : '/';
-
-
+  // No basename needed when using HashRouter for GitHub Pages subdirectories
   return (
-    // Use `HashRouter` instead of `BrowserRouter` for simpler GitHub Pages config sometimes
-    // Or stick with BrowserRouter and ensure server config (like gh-pages does) handles paths
-    <BrowserRouter basename={basename}>
+    // Use HashRouter instead of BrowserRouter
+    <HashRouter>
       <header className="app-header">
-        <Link to="/" className="home-link">Bahasa Indonesia Prep</Link>
+        {/* Link to "/" works correctly with HashRouter for the root */}
+        <Link to="/" className="home-link">KataPult Bahasa Prep</Link>
       </header>
       <main>
-        <Routes>
-          {/* Ensure paths start without a leading slash if using basename */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/vocabulary" element={<VocabularyPage />} />
-          <Route path="/imbuhan" element={<ImbuhanPage />} />
-          <Route path="/persamaan" element={<PersamaanPage />} />
-          <Route path="/karangan" element={<KaranganPage />} />
-          {/* Optional: Add a catch-all route for 404 */}
-          <Route path="*" element={
-            <div>
-              <h2>404 - Halaman Tidak Ditemukan</h2>
-              <Link to="/">Kembali ke Beranda</Link>
-            </div>
-          } />
-        </Routes>
+        <React.Suspense fallback={<div className="loading-page">Loading Page...</div>}> {/* Added Suspense */}
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/vocabulary" element={<VocabularyPage />} />
+            <Route path="/imbuhan" element={<ImbuhanPage />} />
+            <Route path="/persamaan" element={<PersamaanPage />} />
+            <Route path="/karangan" element={<KaranganPage />} />
+            {/* Catch-all route */}
+            <Route path="*" element={
+              <div style={{ padding: '20px', textAlign: 'center' }}>
+                <h2>404 - Halaman Tidak Ditemukan</h2>
+                <Link to="/">Kembali ke Beranda</Link>
+              </div>
+            } />
+          </Routes>
+        </React.Suspense>
       </main>
       <footer className="app-footer">
-        <p>© {new Date().getFullYear()} Belajar Bahasa Indonesia</p>
+        <p>© {new Date().getFullYear()} KataPult</p>
       </footer>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

@@ -1,9 +1,15 @@
 // src/pages/ImbuhanPage.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+// Correct the import path if your data file is named differently or in another location
 import { imbuhanData } from '../data/imbuhan';
-import styles from './ImbuhanPage.module.css'; // Ensure CSS Module is imported
+import styles from './ImbuhanPage.module.css';
 
 const shuffleArray = (array) => {
+    // Ensure input is an array before trying to shuffle
+    if (!Array.isArray(array)) {
+        console.error("shuffleArray received non-array:", array);
+        return []; // Return empty array or handle error appropriately
+    }
     let currentIndex = array.length, randomIndex;
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -17,87 +23,100 @@ const ImbuhanPage = () => {
   const [shuffledItems, setShuffledItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
-  const [feedback, setFeedback] = useState(''); // '', 'Benar!', 'Salah. Jawaban: ...'
+  const [feedback, setFeedback] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
-  const [showNextButton, setShowNextButton] = useState(false); // Control next button visibility
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [showNextButton, setShowNextButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null); // State for loading errors
 
-  // Memoize current item to prevent unnecessary recalculations
+  // Memoize current item
   const currentItem = useMemo(() => {
-    if (shuffledItems.length > 0 && currentIndex < shuffledItems.length) {
+    if (shuffledItems && shuffledItems.length > 0 && currentIndex < shuffledItems.length) {
       return shuffledItems[currentIndex];
     }
     return null;
   }, [shuffledItems, currentIndex]);
 
-  // Initial shuffle and setup on mount
+  // Initial data loading and shuffling
   useEffect(() => {
+    setIsLoading(true);
+    setError(null); // Reset error on load
     try {
+      // --- CRITICAL CHECK ---
+      if (!imbuhanData || !Array.isArray(imbuhanData)) {
+          throw new Error("Imbuhan data is not loaded correctly or is not an array.");
+      }
+      // --- END CRITICAL CHECK ---
+
       const initialItems = shuffleArray([...imbuhanData]);
       setShuffledItems(initialItems);
       setCurrentIndex(0);
-      setIsLoading(false); // Mark loading as complete
-    } catch (error) {
-       console.error("Error shuffling or setting initial data:", error);
-       setIsLoading(false); // Also stop loading on error
-       // Optionally set an error message state to display to the user
+    } catch (err) {
+       console.error("Error loading/shuffling Imbuhan data:", err);
+       setError("Gagal memuat data Imbuhan. Periksa konsol untuk detail."); // User-friendly error
+    } finally {
+        setIsLoading(false);
     }
-    // Reset other states on initial load or reshuffle
-    setUserInput('');
-    setFeedback('');
-    setIsCorrect(false);
-    setShowNextButton(false);
-  }, []); // Empty dependency array: run only once on mount
+  }, []); // Empty dependency array ensures this runs only once on mount
 
-   // Effect to reset state when currentItem changes *after* initial load
+
+  // Effect to reset state for the *next* item *after* currentItem changes
    useEffect(() => {
-       if (!isLoading) { // Only run after initial load/shuffle
+       // Only reset if not loading, not the initial state, and currentItem is valid
+       if (!isLoading && currentItem) {
          setUserInput('');
          setFeedback('');
          setIsCorrect(false);
          setShowNextButton(false);
        }
-   }, [currentItem, isLoading]); // Depend on currentItem and isLoading
+   }, [currentItem, isLoading]); // Depend on currentItem
 
 
   const handleReshuffle = () => {
-    setIsLoading(true); // Show loading briefly during reshuffle
+    setIsLoading(true);
+    setError(null);
     try {
+        if (!imbuhanData || !Array.isArray(imbuhanData)) {
+            throw new Error("Imbuhan data is not available for reshuffle.");
+        }
         const reshuffled = shuffleArray([...imbuhanData]);
         setShuffledItems(reshuffled);
         setCurrentIndex(0);
-        setIsLoading(false);
-    } catch (error) {
-        console.error("Error reshuffling data:", error);
-        setIsLoading(false);
+    } catch (err) {
+        console.error("Error reshuffling Imbuhan data:", err);
+        setError("Gagal memulai ulang latihan.");
+    } finally {
+      setIsLoading(false);
     }
-    // Reset other states handled by the useEffect above depending on currentItem
   };
 
   const loadNextItem = useCallback(() => {
+    // Check if shuffledItems is valid before proceeding
+    if (!shuffledItems || shuffledItems.length === 0) {
+        console.warn("Attempted to load next item, but shuffledItems is empty or invalid.");
+        return;
+    }
     if (currentIndex < shuffledItems.length - 1) {
       setCurrentIndex(prevIndex => prevIndex + 1);
-      // State resets (like input, feedback) are handled by the useEffect watching currentItem
     } else {
-      // Handle completion - set index beyond bounds
-      setCurrentIndex(shuffledItems.length);
+      setCurrentIndex(shuffledItems.length); // Go beyond bounds for completion
     }
-  }, [currentIndex, shuffledItems.length]);
+  }, [currentIndex, shuffledItems]);
 
 
   const checkAnswer = useCallback(() => {
     if (!currentItem || isCorrect) return;
 
-    const correctAnswer = currentItem.targetWord.toLowerCase();
+    const correctAnswer = currentItem.targetWord ? currentItem.targetWord.toLowerCase() : '';
     const userAnswer = userInput.trim().toLowerCase();
 
-    if (userAnswer === correctAnswer) {
+    if (correctAnswer && userAnswer === correctAnswer) { // Check if correctAnswer exists
       setFeedback('Benar!');
       setIsCorrect(true);
       setShowNextButton(false);
       setTimeout(loadNextItem, 1200);
     } else {
-      setFeedback(`Salah. Jawaban yang benar: ${currentItem.targetWord}`);
+      setFeedback(`Salah. Jawaban yang benar: ${currentItem.targetWord || '[Tidak Ada]'}`);
       setIsCorrect(false);
       setShowNextButton(true);
     }
@@ -109,14 +128,18 @@ const ImbuhanPage = () => {
     }
   }, [checkAnswer, isCorrect, userInput]);
 
-  const isCompleted = currentIndex >= shuffledItems.length && shuffledItems.length > 0;
+  const isCompleted = currentIndex >= shuffledItems.length && shuffledItems.length > 0 && !isLoading;
 
-  // Render Loading state
+  // --- Render States ---
+
   if (isLoading) {
        return <div className={styles.loading}>Memuat pertanyaan...</div>;
   }
 
-  // Render Completion state
+  if (error) {
+       return <div className={styles.error}>{error}</div>;
+  }
+
   if (isCompleted) {
     return (
       <div className={styles.container}>
@@ -128,15 +151,14 @@ const ImbuhanPage = () => {
     );
   }
 
-  // Render Active Question state (only if currentItem is valid)
   if (currentItem) {
       return (
         <div className={styles.container}>
           <div className={styles.card}>
             <p className={styles.label}>Kata Dasar (Root):</p>
-            <h2 className={styles.rootWord}>{currentItem.root}</h2>
+            <h2 className={styles.rootWord}>{currentItem.root || '[Tidak Ada]'}</h2>
             <p className={styles.label}>Arti yang Dimaksud (Target Meaning):</p>
-            <p className={styles.definition}>{currentItem.targetDefinition}</p>
+            <p className={styles.definition}>{currentItem.targetDefinition || '[Tidak Ada]'}</p>
           </div>
 
           <div className={styles.inputSection}>
@@ -164,7 +186,7 @@ const ImbuhanPage = () => {
           )}
 
           <div className={styles.buttonRow}>
-            {!isCorrect && ( // Only show Check button if not already correct
+            {!isCorrect && (
                 <button
                 className={styles.button}
                 onClick={checkAnswer}
@@ -173,7 +195,7 @@ const ImbuhanPage = () => {
                 Periksa (Check)
                 </button>
             )}
-            {showNextButton && ( // Show Next button only when feedback indicates incorrect
+            {showNextButton && (
               <button className={styles.button} onClick={loadNextItem}>
                 Lanjut (Next)
               </button>
@@ -183,8 +205,8 @@ const ImbuhanPage = () => {
       );
   }
 
-  // Fallback if something went wrong (e.g., data is empty but not loading/completed)
-  return <div className={styles.loading}>Terjadi kesalahan memuat data.</div>;
+  // Fallback if no items loaded but not loading/error/completed
+  return <div className={styles.loading}>Tidak ada data imbuhan untuk ditampilkan.</div>;
 };
 
 export default ImbuhanPage;

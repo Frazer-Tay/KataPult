@@ -1,4 +1,4 @@
-/ src/pages/KaranganPage.js
+// src/pages/KaranganPage.js // <-- This is a proper comment, starts with //
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { karanganData } from '../data/karangan';
 import styles from './KaranganPage.module.css'; // Ensure CSS Module import

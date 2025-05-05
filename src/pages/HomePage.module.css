@@ -1,41 +1,41 @@
 /* src/pages/HomePage.module.css */
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 70vh; /* Adjust as needed */
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .title {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    color: #333;
-  }
-  
-  .buttonContainer {
-    width: 80%;
-    max-width: 350px;
-    margin: 10px 0;
-  }
-  
-  .button {
-    display: block;
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 1rem;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    box-sizing: border-box; /* Include padding in width */
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh; /* Adjust as needed */
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.buttonContainer {
+  width: 80%;
+  max-width: 350px; /* Limit button width on larger screens */
+  margin: 10px 0;
+}
+
+.button {
+  display: block; /* Make link act like a block for full width */
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none; /* Remove underline from link */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
