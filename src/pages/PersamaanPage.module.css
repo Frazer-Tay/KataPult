@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   padding: 25px 20px 40px 20px;
-  max-width: 720px; /* Consistent width */
+  max-width: 720px;
   min-height: 75vh;
   margin: 30px auto;
   background-color: var(--card-background);
@@ -15,60 +15,57 @@
   border: 1px solid var(--border-color-light);
   position: relative;
 }
+/* Remove outline for keyboard listener */
+.container:focus { outline: none; }
 
 /* Progress Bar Container */
-.progressBarContainer {
-    width: 95%;
-    margin-bottom: 30px;
-}
-
+/* Uses component styles */
 
 /* Card holding the main word */
 .card {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  border-radius: var(--border-radius-lg); /* More rounded */
+  border-radius: var(--border-radius-lg);
   padding: 35px 40px;
   width: 100%;
   text-align: center;
   margin-top: 10px; /* Space below progress */
   margin-bottom: 40px; /* More space below */
   box-sizing: border-box;
-  box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.15); /* Deeper inner shadow */
+  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.1);
   color: white;
 }
 
 .label {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.9); /* Brighter label */
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 8px;
-  font-weight: 500; /* Medium weight */
+  font-weight: 500;
 }
 
 .word {
-  font-size: 2.8rem; /* Large word */
+  font-size: 2.8rem;
   font-weight: 700;
   color: #ffffff;
   margin-top: 5px;
   letter-spacing: 0.5px;
   word-wrap: break-word;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Subtle text shadow */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
 /* Options container */
 .optionsContainer {
   width: 100%;
-  max-width: 600px; /* Consistent max width */
+  max-width: 600px; /* Adjusted width */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px; /* Slightly more gap */
+  gap: 18px; /* Increased gap */
   margin-bottom: 30px;
 }
 
-/* Instruction Text */
 .instruction {
   font-size: 1.2rem;
-  margin-bottom: 25px; /* More space */
+  margin-bottom: 25px;
   color: var(--text-dark);
   font-weight: 600;
   text-align: center;
@@ -77,47 +74,57 @@
 /* --- Option Button Styling --- */
 .optionButton {
   position: relative;
-  padding: 16px 25px 16px 60px; /* More vertical padding */
+  padding: 16px 25px 16px 70px; /* Increased left padding for number + icon */
   font-size: 1.1rem;
   color: var(--text-dark);
-  background-color: var(--card-background); /* White */
-  border: 2px solid var(--border-color); /* Standard border */
-  border-radius: var(--border-radius-lg); /* Rounded */
+  background-color: #ffffff;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.20s ease-in-out;
   width: 100%;
   text-align: left;
   box-sizing: border-box;
   font-weight: 500;
   box-shadow: var(--shadow-xs);
+  display: flex; /* Align number and text */
+  align-items: center;
 }
 
 .optionButton:hover:not(:disabled) {
-  background-color: #f1f9ff; /* Very light blue hover */
-  border-color: var(--secondary-color); /* Blue border on hover */
+  background-color: #f1f9ff; /* Lighter blue hover */
+  border-color: var(--secondary-color);
   box-shadow: var(--shadow-sm);
-  transform: translateY(-3px); /* Enhanced lift */
+  transform: translateY(-2px);
 }
 
-.optionButton:focus {
-    outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+/* Use global focus visible */
+.optionButton:focus { outline: none; } /* Let global handle focus */
+
+.optionButton:disabled { cursor: not-allowed; }
+
+/* Option Number */
+.optionNumber {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: var(--text-light);
+    font-size: 1rem;
+    width: 24px; /* Fixed width */
+    text-align: center;
 }
 
-.optionButton:disabled {
-  cursor: not-allowed;
-}
-
-/* Icon Styling */
+/* Icon Styling (position adjusted) */
 .optionButton::before {
     content: '';
     font-family: 'Segoe UI Symbol', sans-serif;
     position: absolute;
-    left: 22px; /* Consistent icon position */
+    left: 45px; /* Position icon after number */
     top: 50%;
     transform: translateY(-50%) scale(0.8);
-    font-size: 1.6rem;
+    font-size: 1.5rem; /* Adjusted icon size */
     font-weight: bold;
     transition: all 0.25s ease-in-out;
     opacity: 0;
@@ -127,30 +134,26 @@
 .optionButton.correct {
   background-color: var(--success-light);
   border-color: var(--success-color);
-  color: var(--success-dark);
+  color: #0a3622;
   font-weight: 600;
   opacity: 1 !important;
 }
+.optionButton.correct .optionNumber { color: var(--success-dark); }
 .optionButton.correct::before {
-    content: '✓';
-    color: var(--success-color);
-    opacity: 1;
-    transform: translateY(-50%) scale(1.2); /* Pop effect */
+    content: '✓'; color: var(--success-color); opacity: 1; transform: translateY(-50%) scale(1.15);
 }
 
 /* Incorrect State (Selected) */
 .optionButton.incorrect {
   background-color: var(--error-light);
   border-color: var(--error-color);
-  color: var(--error-dark);
+  color: #58151c;
   font-weight: 600;
   opacity: 1 !important;
 }
+.optionButton.incorrect .optionNumber { color: var(--error-dark); }
 .optionButton.incorrect::before {
-    content: '✗';
-    color: var(--error-color);
-    opacity: 1;
-    transform: translateY(-50%) scale(1.2); /* Pop effect */
+    content: '✗'; color: var(--error-color); opacity: 1; transform: translateY(-50%) scale(1.15);
 }
 
 /* Disabled State (non-selected incorrect) */
@@ -158,17 +161,16 @@
     background-color: #f8f9fa;
     border-color: #e9ecef;
     color: #adb5bd;
-    opacity: 0.55; /* More subtle fade */
+    opacity: 0.55;
     box-shadow: none;
     transform: none;
 }
 .optionButton.disabled:hover { transform: none; box-shadow: none; }
 .optionButton.disabled::before { display: none; }
-.optionButton.correct.disabled::before {
-    display: block;
-    opacity: 1;
-    transform: translateY(-50%) scale(1.2);
-}
+.optionButton.disabled .optionNumber { color: #ced4da; } /* Muted number */
+
+/* Ensure correct icon shows */
+.optionButton.correct.disabled::before { display: block; opacity: 1; transform: translateY(-50%) scale(1.15); }
 
 .optionText { display: inline-block; }
 
@@ -176,11 +178,11 @@
 .feedback {
   font-size: 1.1rem;
   font-weight: 500;
-  margin: 10px 0 20px 0; /* Adjusted margin */
+  margin: 15px 0 20px 0;
   padding: 15px 20px;
   border-radius: var(--border-radius-md);
   width: 95%;
-  max-width: 600px; /* Consistent width */
+  max-width: 600px;
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
@@ -191,32 +193,14 @@
   justify-content: center;
   gap: 10px;
 }
-.feedback::before {
-    font-family: 'Segoe UI Symbol', sans-serif;
-    font-size: 1.3rem; /* Consistent icon size */
-    line-height: 1;
-}
-.correctFeedback {
-  color: #0a3622;
-  background-color: var(--success-light);
-  border-color: #a3cfbb;
-}
+.feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.3rem; line-height: 1; }
+.correctFeedback { color: #0a3622; background-color: var(--success-light); border-color: #a3cfbb; }
 .correctFeedback::before { content: '✓'; }
-.incorrectFeedback {
-  color: #58151c;
-  background-color: var(--error-light);
-  border-color: #f1b0b7;
-}
+.incorrectFeedback { color: #58151c; background-color: var(--error-light); border-color: #f1b0b7; }
 .incorrectFeedback::before { content: '✗'; }
 
 
-/* Uses global button styles from App.css for Next/Completion */
-.completionActions {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
+/* Next/Completion Buttons - use global styles */
+/* .completionActions defined globally */
 
-/* Loading, Error, Completion Messages use global styles */
+/* Loading, Error, Completion uses global styles */

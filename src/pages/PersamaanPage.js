@@ -1,7 +1,7 @@
 // src/pages/PersamaanPage.js
-// CORRECTED: Displays an Indonesian word, asks to choose Indonesian synonym via MCQ.
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { persamaanData } from '../data/persamaan'; // Uses persamaan data
+// Added keyboard navigation (numbers, Enter, Space) + focus management
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'; // Import useRef
+import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -16,32 +16,29 @@ const shuffleArray = (array) => {
   return array;
 };
 
-// Gets distractor SYNONYMS from other items
 const getDistractors = (allItems, currentItem, count = 2) => {
-    const distractors = new Set();
+    // ... (getDistractors function remains the same as previous version)
+     const distractors = new Set();
     if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) return [];
     const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.word && item.synonyms && item.synonyms.length > 0);
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
     const currentSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
-
     for (const item of shuffledPool) {
         if (distractors.size >= count) break;
-        // Try getting a synonym from the distractor item that ISN'T the distractor item's main word itself
-        const potentialDistractorSynonym = item.synonyms.find(syn => syn.toLowerCase() !== item.word.toLowerCase()) || item.synonyms[0];
-
-        if (potentialDistractorSynonym) {
-            const potentialDistractorLower = potentialDistractorSynonym.toLowerCase();
-             // Check against current answers AND already added distractors
-            if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
-                distractors.add(potentialDistractorSynonym);
+        if (item.synonyms && item.synonyms.length > 0) {
+            const potentialDistractor = item.synonyms.find(syn => syn.toLowerCase() !== item.word.toLowerCase()) || item.synonyms[0];
+             if (potentialDistractor) {
+                const potentialDistractorLower = potentialDistractor.toLowerCase();
+                 if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
+                    distractors.add(potentialDistractor);
+                }
             }
         }
     }
-    // Fallback
     let fallbackCounter = 1;
     while (distractors.size < count) {
         const fallback = `[Opsi Sinonim ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-        if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
+         if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
            distractors.add(fallback);
         }
         fallbackCounter++;
@@ -50,14 +47,15 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     return Array.from(distractors);
 };
 
-const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v2'; // Use new key if old state exists
+const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v2';
 
 const PersamaanPage = () => {
+  // --- State Hooks ---
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [options, setOptions] = useState([]); // MCQ options are Indonesian words (synonyms/distractors)
-  const [selectedAnswer, setSelectedAnswer] = useState(null); // The chosen Indonesian word
+  const [options, setOptions] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,6 +63,12 @@ const PersamaanPage = () => {
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
 
+  // --- Refs ---
+  const optionButtonRefs = useRef([]); // Array of refs for option buttons
+  const pageRef = useRef(null); // Ref for main container
+  const nextButtonRef = useRef(null); // Ref for next button
+
+  // --- Memoized Values ---
   const { currentItem, totalItemsInSet } = useMemo(() => {
       const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
           ? displayItems[currentIndex]
@@ -72,106 +76,59 @@ const PersamaanPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  // Load data helper
+  // --- Data Loading & Initialization ---
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
-      setIsLoading(true);
-      setError(null);
+      // ... (loadData logic remains the same)
+      setIsLoading(true); setError(null);
       try {
-          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) {
-              throw new Error("Tidak ada data persamaan yang valid untuk dimuat.");
-          }
+          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Persamaan data.");
           setDisplayItems(shuffleArray([...itemsToLoad]));
-          setCurrentIndex(0);
-          setIsReviewing(isReviewSession);
-          setIsAnswered(false);
-          setFeedback('');
-          setSelectedAnswer(null);
-          if (!isReviewSession) {
-              setMissedItems(new Set());
-              localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear state only on full reset
-              console.log("Starting fresh full Persamaan run, cleared saved state.");
-          }
-      } catch (err) {
-          console.error("Error loading Persamaan data:", err);
-          setError("Gagal memuat data Persamaan.");
-          setDisplayItems([]);
-      } finally {
-          setIsLoading(false);
-      }
-  }, []); // Removed isReviewing dependency
+          setCurrentIndex(0); setIsReviewing(isReviewSession);
+          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null);
+          if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
+      } catch (err) { console.error("Error loading Persamaan:", err); setError(err.message); setDisplayItems([]); }
+      finally { setIsLoading(false); }
+  }, []);
 
-  // Initial Load / Load from localStorage
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
+    // ... (Initial load from localStorage logic remains the same)
+    setIsLoading(true); setError(null); let initialLoadItems = [];
     try {
-      const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
-      if (filteredData.length === 0) throw new Error("No valid Persamaan data found in source.");
-      setAllItems(filteredData);
-
-      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedStateJSON) {
-        const savedState = JSON.parse(savedStateJSON);
-        if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
-            console.log("Resuming Persamaan from saved state:", savedState);
-            const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
-             const validSavedDisplayItems = savedState.displayItems
-                .map(savedItem => currentAllItemsMap.get(savedItem.id))
-                .filter(Boolean);
-
-            if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
-                setDisplayItems(validSavedDisplayItems);
-                setCurrentIndex(savedState.currentIndex);
-                setMissedItems(new Set(savedState.missedItems));
-                setIsReviewing(savedState.isReviewing || false);
-                setIsAnswered(false); // Start unanswered
-             } else {
-                 console.warn("Invalid Persamaan saved state, starting fresh.");
-                 localStorage.removeItem(LOCAL_STORAGE_KEY);
-                 loadData(filteredData, false);
-             }
-        } else {
-            console.warn("Invalid Persamaan saved state structure, starting fresh.");
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
-            loadData(filteredData, false);
-        }
-      } else {
-        console.log("No saved Persamaan state, starting fresh.");
-        loadData(filteredData, false);
-      }
-    } catch (err) {
-      console.error("Error initializing Persamaan page:", err);
-      setError("Gagal memuat data Persamaan.");
-      setAllItems([]);
-      setDisplayItems([]);
-    } finally {
-      setIsLoading(false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+        const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
+        if (filteredData.length === 0) throw new Error("No valid Persamaan data found.");
+        setAllItems(filteredData); initialLoadItems = filteredData;
+        const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedStateJSON) {
+            const savedState = JSON.parse(savedStateJSON);
+            if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItemIds) && Array.isArray(savedState.missedItems)) {
+                 const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
+                 const validSavedDisplayItems = savedState.displayItemIds.map(id => currentAllItemsMap.get(id)).filter(Boolean);
+                 if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
+                    setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
+                    setMissedItems(new Set(savedState.missedItems)); setIsReviewing(savedState.isReviewing || false); setIsAnswered(false);
+                 } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
+            } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
+        } else { loadData(initialLoadItems, false); }
+    } catch (err) { console.error("Error init Persamaan:", err); setError(err.message); setAllItems([]); setDisplayItems([]); }
+    finally { setIsLoading(false); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Load on mount only
 
 
-  // Save state to localStorage
+  // --- Save State ---
   useEffect(() => {
-    if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    // ... (save state logic remains the same)
+     if (isLoading || error || !displayItems || displayItems.length === 0) return;
     const isCompleted = currentIndex >= displayItems.length;
-     if (isCompleted) return; // Don't save completed state until reset
-
+     if (isCompleted) return;
     try {
-      const stateToSave = {
-        currentIndex: currentIndex,
-        displayItems: displayItems.map(item => ({ id: item.id })), // Save IDs
-        missedItems: Array.from(missedItems),
-        isReviewing: isReviewing,
-      };
+      const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => item.id), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
-    } catch (err) {
-      console.error("Failed to save Persamaan state:", err);
-    }
+    } catch (err) { console.error("Failed to save Persamaan state:", err); }
   }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
 
-  // Generate options (Indonesian synonyms/distractors)
+  // --- Generate Options ---
   const generateOptions = useCallback(() => {
     if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
@@ -181,20 +138,25 @@ const PersamaanPage = () => {
     const distractors = getDistractors(allItems, currentItem, 2);
     const allOptions = shuffleArray([correctSynonym, ...distractors]);
     setOptions(allOptions);
+    optionButtonRefs.current = allOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef()); // Initialize or keep refs
+
   }, [currentItem, allItems]);
 
-  // Regenerate options when needed
   useEffect(() => {
     if (!isLoading && currentItem) {
         generateOptions();
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
+        // Focus the first option button when new question loads
+        setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
     } else if (!currentItem) {
        setOptions([]);
     }
   }, [currentItem, isLoading, generateOptions]);
 
+
+  // --- Action Handlers ---
   const handleReshuffleAll = () => {
     setIsReviewing(false);
     loadData(allItems, false);
@@ -219,11 +181,12 @@ const PersamaanPage = () => {
     }
   }, [currentIndex, displayItems]);
 
-  // Check if the selected Indonesian word is a synonym of the current word
-  const checkAnswer = (selectedOption) => {
+  const checkAnswer = useCallback((selectedOption) => {
     if (isAnswered || !currentItem || !currentItem.synonyms) return;
+
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
+
     const correctSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
     const isCorrect = correctSynonymsLower.includes(selectedOption.toLowerCase());
 
@@ -231,12 +194,61 @@ const PersamaanPage = () => {
       setFeedback('Tepat! Sinonim Benar. 👍');
       setTimeout(loadNextItem, 1500);
     } else {
-      setFeedback(`Kurang Tepat. Sinonim yang benar: ${currentItem.synonyms.join(', ')}`);
+      setFeedback(`Kurang Tepat. Sinonim: ${currentItem.synonyms.join(', ')}`);
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
       }
+      // Focus the next button after incorrect answer
+      setTimeout(() => nextButtonRef.current?.focus(), 0);
     }
+  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Removed redundant state deps
+
+
+  // --- Keyboard Navigation ---
+  useEffect(() => {
+    const handlePageKeyDown = (event) => {
+      if (isCompleted) return; // Don't process keys on completion screen
+
+      // Handle number keys for MCQ selection (if not answered)
+      if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
+        const optionIndex = parseInt(event.key, 10) - 1;
+        if (options[optionIndex]) {
+          checkAnswer(options[optionIndex]);
+          // Prevent default number input behavior if needed
+          event.preventDefault();
+        }
+      }
+      // Handle Enter key
+      else if (event.key === 'Enter') {
+          // If incorrect answer shown, Enter triggers Next button
+          if (isAnswered && !isCorrect) {
+             loadNextItem();
+             event.preventDefault(); // Prevent potential form submission if inside one
+          }
+          // If an option button has focus, Enter should trigger it (handled by handleOptionKeyDown)
+      }
+    };
+
+    const pageElement = pageRef.current;
+    if (pageElement) {
+        // Use keydown for better capture of Enter/Numbers
+        pageElement.addEventListener('keydown', handlePageKeyDown);
+    }
+    return () => {
+        if (pageElement) {
+            pageElement.removeEventListener('keydown', handlePageKeyDown);
+        }
+    };
+  }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]); // Include dependencies
+
+  // Handle Enter/Space on focused option buttons
+  const handleOptionKeyDown = (event, option) => {
+      if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
+          checkAnswer(option);
+          event.preventDefault(); // Prevent default button action / scrolling
+      }
   };
+
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCount = missedItems.size;
@@ -247,7 +259,7 @@ const PersamaanPage = () => {
 
   if (isCompleted) {
       const completionText = isReviewing ? "✨ Sesi Review Persamaan Selesai! ✨" : "✨ Latihan Persamaan Selesai! ✨";
-      const mistakesToShow = finalMistakeCount; // Show count based on persisted set
+      const mistakesToShow = finalMistakeCount;
     return (
       <div className={styles.container}>
           <p className="completionMessage">{completionText}</p>
@@ -267,13 +279,15 @@ const PersamaanPage = () => {
    if (!currentItem) { return <div className="loading">Memuat kata berikutnya...</div>; }
 
   return (
-    <div className={styles.container}>
+    // Add ref and tabIndex to container for keyboard listener
+    <div className={styles.container} ref={pageRef} tabIndex={-1}>
         <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewing ? "Review Kesalahan" : "Persamaan"} />
         <div className={styles.card}>
             <p className={styles.label}>Carikan persamaan kata (sinonim) untuk:</p>
             <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
         </div>
-        <div className={styles.optionsContainer}>
+        <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-persamaan">
+            <p className={styles.instruction} id="instruction-persamaan">Pilih salah satu persamaannya (Gunakan tombol 1, 2, 3):</p>
             {options.map((option, index) => {
               const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
               let buttonClassName = styles.optionButton;
@@ -285,12 +299,18 @@ const PersamaanPage = () => {
               return (
                 <button
                   key={`${currentItem.id}-option-${index}-${option}`}
+                  ref={optionButtonRefs.current[index]} // Assign ref
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
+                  onKeyDown={(e) => handleOptionKeyDown(e, option)} // Handle Enter/Space on button focus
                   disabled={isAnswered}
-                  aria-pressed={selectedAnswer === option}
+                  role="radio" // Semantics for MCQ
+                  aria-checked={selectedAnswer === option}
+                  tabIndex={isAnswered ? -1 : 0} // Manage focusability
                 >
+                  <span className={styles.optionNumber}>{index + 1}.</span> {/* Display number */}
                   <span className={styles.optionText}>{option}</span>
+                  {/* Icons added via CSS */}
                 </button>
               );
             })}
@@ -301,7 +321,10 @@ const PersamaanPage = () => {
             </div>
         )}
         {isAnswered && feedback.startsWith('Kurang Tepat') && (
-            <button className="nextButton" onClick={loadNextItem}>Lanjut <span className="arrowIcon">→</span></button>
+            // Add ref to next button
+            <button className="nextButton" onClick={loadNextItem} ref={nextButtonRef}>
+                Lanjut <span className="arrowIcon">→</span>
+            </button>
         )}
     </div>
   );

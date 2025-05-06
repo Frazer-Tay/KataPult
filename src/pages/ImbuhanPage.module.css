@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   padding: 25px 20px 40px 20px;
-  max-width: 800px; /* Wider for sentences */
+  max-width: 750px;
   margin: 30px auto;
   background-color: var(--card-background);
   border-radius: var(--border-radius-xl);
@@ -12,55 +12,63 @@
   border: 1px solid var(--border-color-light);
   position: relative;
 }
+/* Remove default outline when programmatically focused */
+.container:focus {
+    outline: none;
+}
 
 /* Progress Bar Container */
-/* Uses component styles */
+/* Styles applied via ProgressBar component */
 
 /* Card Styling */
 .card {
   background-color: var(--background-medium);
   border-radius: var(--border-radius-lg);
-  padding: 35px 40px; /* More padding */
+  padding: 30px 40px;
   width: 100%;
   box-sizing: border-box;
   margin-top: 10px; /* Space below progress */
   margin-bottom: 30px;
   border: 1px solid var(--border-color);
-  text-align: left; /* Align sentence left */
 }
 
 .label {
   font-size: 1rem;
   color: var(--text-light);
-  margin-bottom: 10px;
-  font-weight: 600; /* Bolder label */
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .sentence {
-    font-size: 1.3rem; /* Larger sentence */
-    line-height: 1.8; /* More line spacing */
-    margin-bottom: 30px; /* Space below sentence */
+    font-size: 1.35rem; /* Larger sentence */
+    line-height: 1.8;
+    margin-bottom: 30px;
     color: var(--text-dark);
-    text-align: center; /* Center sentence */
-    padding: 10px;
+    text-align: center;
+    padding: 15px; /* Padding around sentence */
+    background-color: #fff; /* White background for sentence */
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
 }
 
 /* Style the blank placeholder within the sentence */
 .blankPlaceholder {
     display: inline-block;
-    min-width: 80px; /* Give blank some width */
+    min-width: 90px; /* Wider blank */
     border-bottom: 2px solid var(--primary-color);
-    margin: 0 4px;
-    padding: 0 4px;
-    font-weight: 600;
-    color: var(--primary-color);
-    vertical-align: baseline; /* Align with text */
+    margin: 0 5px;
+    padding: 0 5px;
+    font-weight: 700; /* Bolder blank */
+    color: var(--primary-light); /* Lighter color for placeholder */
+    vertical-align: baseline;
+    letter-spacing: 1px; /* Spacing inside blank */
 }
 
 .promptSection {
     display: flex;
-    justify-content: space-around; /* Space out prompts */
-    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: space-evenly; /* Evenly space prompts */
+    flex-wrap: wrap;
     gap: 20px;
     margin-top: 25px;
     padding-top: 20px;
@@ -69,6 +77,11 @@
 
 .promptItem {
     text-align: center;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color-light);
+    min-width: 150px; /* Ensure items have some width */
 }
 
 .promptLabel {
@@ -80,13 +93,9 @@
 }
 
 .promptValue {
-    font-size: 1.1rem;
+    font-size: 1.15rem; /* Slightly larger */
     font-weight: 600;
     color: var(--text-dark);
-    background-color: #fff;
-    padding: 5px 10px;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--border-color);
 }
 
 
@@ -101,18 +110,18 @@
 }
 
 .instruction {
-  font-size: 1.2rem; /* Adjusted size */
+  font-size: 1.2rem;
   margin-bottom: 18px;
   color: var(--text-dark);
   font-weight: 600;
-  max-width: 550px; /* Prevent instruction being too wide */
+  max-width: 600px;
 }
 
 .input {
   width: 90%;
-  max-width: 400px; /* Input width */
-  padding: 15px 20px;
-  font-size: 1.2rem;
+  max-width: 450px;
+  padding: 16px 22px;
+  font-size: 1.25rem; /* Larger input */
   border: 2px solid var(--border-color);
   border-radius: var(--border-radius-md);
   box-sizing: border-box;
@@ -122,28 +131,29 @@
   box-shadow: inset 0 2px 4px var(--shadow-color-light);
 }
 
-.input:focus {
+/* Use more specific :focus-visible for keyboard focus */
+.input:focus-visible {
     border-color: var(--primary-light);
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
+    box-shadow: 0 0 0 3px rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
 .inputCorrect {
-    border-color: var(--success-color);
+    border-color: var(--success-color) !important; /* Use important to override focus */
     background-color: var(--success-light);
     color: var(--success-dark);
 }
-.inputCorrect:focus {
-     box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25), inset 0 2px 4px var(--shadow-color-light);
+.inputCorrect:focus-visible {
+     box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
 .inputIncorrect {
-    border-color: var(--error-color);
+    border-color: var(--error-color) !important; /* Use important to override focus */
     background-color: var(--error-light);
     color: var(--error-dark);
 }
-.inputIncorrect:focus {
-     box-shadow: 0 0 0 0.25rem rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light);
+.inputIncorrect:focus-visible {
+     box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
 
@@ -151,7 +161,7 @@
 .feedback {
   font-size: 1.1rem;
   font-weight: 500;
-  margin: 10px 0 25px 0; /* More space below feedback */
+  margin: 10px 0 25px 0;
   padding: 15px 20px;
   border-radius: var(--border-radius-md);
   width: 95%;
@@ -191,7 +201,7 @@
   justify-content: center;
   gap: 20px;
   width: 100%;
-  margin-top: 5px; /* Less space when feedback is shown */
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 

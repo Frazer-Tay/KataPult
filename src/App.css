@@ -2,35 +2,65 @@
 
 /* --- Color Palette Variables --- */
 :root {
-  --primary-color: #4a55a2; /* Deep Indigo */
-  --primary-light: #788bff; /* Lighter Indigo/Blue */
-  --secondary-color: #3498db; /* Bright Blue */
-  --accent-color: #f1c40f; /* Yellow Accent */
-  --success-color: #2ecc71; /* Green */
-  --success-light: #eafaf1;
-  --error-color: #e74c3c; /* Red */
-  --error-light: #fdedec;
-  --text-dark: #2c3e50; /* Dark Slate Blue */
-  --text-light: #7f8c8d; /* Grey */
-  --background-light: #f8f9fc; /* Very light grey/blue */
-  --background-medium: #eef2f7; /* Light blue-grey */
-  --card-background: #ffffff;
+  --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+
+  --primary-color: #663399; /* Rebeccapurple */
+  --primary-light: #9370DB; /* MediumPurple */
+  --primary-dark: #483D8B;  /* DarkSlateBlue */
+
+  --secondary-color: #007BFF; /* Bright Blue */
+  --secondary-light: #5CACEE; /* Lighter Blue */
+
+  --accent-color: #FFC107; /* Amber/Gold */
+  --accent-dark: #FFA000; /* Darker Amber */
+
+  --success-color: #20C997; /* Teal Green */
+  --success-light: #E0F8F0; /* Light Teal */
+  --success-dark: #198754;  /* Dark Green */
+
+  --error-color: #F85149; /* Bright Red */
+  --error-light: #FDECEA; /* Light Red */
+  --error-dark: #DC3545; /* Darker Red */
+
+  --text-dark: #343a40; /* Near Black */
+  --text-medium: #5a6268; /* Medium Grey */
+  --text-light: #868e96; /* Light Grey */
+
+  --background-light: #ffffff; /* White */
+  --background-medium: #f4f7fc; /* Very Light Blue/Grey */
+  --background-dark: #eef2f7; /* Light Blue-Grey */
+
   --border-color: #dee2e6;
-  --shadow-color: rgba(0, 0, 0, 0.08); /* Softened shadow */
+  --border-color-light: #f1f3f5;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 3px 6px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+
   --progress-bar-background: #e9ecef;
 }
 
-/* --- Base Styles --- */
+/* --- Base & Reset Styles --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-family-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-medium);
+  background-color: var(--background-dark);
   color: var(--text-dark);
-  line-height: 1.6;
+  line-height: 1.65;
   font-size: 16px;
 }
 
@@ -42,17 +72,20 @@ body {
 
 /* --- Layout Components --- */
 .app-header {
-  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  padding: 14px 25px;
+  background: var(--primary-dark);
+  padding: 16px 30px;
   text-align: center;
-  box-shadow: 0 3px 6px var(--shadow-color);
+  box-shadow: 0 4px 8px var(--shadow-color-light);
   flex-shrink: 0;
-  border-bottom: 4px solid var(--secondary-color);
+  border-bottom: 4px solid var(--accent-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .home-link {
   color: white;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 700;
   text-decoration: none;
   transition: opacity 0.2s ease;
@@ -65,20 +98,24 @@ body {
 }
 
 main {
-  padding: 30px 15px;
+  padding: 35px 15px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .app-footer {
   text-align: center;
-  margin-top: 50px; /* More space */
-  padding: 20px;
+  margin-top: 60px;
+  padding: 25px;
   color: var(--text-light);
   font-size: 0.9rem;
-  border-top: 1px solid var(--border-color);
-  background-color: var(--card-background);
+  border-top: 1px solid var(--border-color-light);
+  background-color: var(--background-light);
   flex-shrink: 0;
 }
 
@@ -100,104 +137,78 @@ main {
     width: 100%;
     box-sizing: border-box;
 }
-.error {
-    color: var(--error-color);
-}
-.completionMessage {
-    color: var(--success-color);
-    margin-bottom: 20px;
-    font-size: 1.5rem; /* Larger completion message */
-    font-weight: 600;
-}
-.completionSubMessage { /* New style for sub-messages */
-    font-size: 1rem;
-    color: var(--text-light);
-    margin-bottom: 25px;
-}
+.error { color: var(--error-color); font-weight: 600; }
+.completionMessage { color: var(--primary-dark); font-size: 2rem; font-weight: 700; margin-bottom: 15px; line-height: 1.3; }
+.completionSubMessage { font-size: 1.1rem; color: var(--text-medium); margin-bottom: 30px; }
+.completionActions { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
 
-
-/* General Button Styling */
-button, .button {
+/* --- Enhanced Button & Link Styling --- */
+button, .button, a.buttonCard { /* Include Link styled as button */
   cursor: pointer;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  display: inline-flex; /* Align icons if needed */
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  line-height: 1.5;
+  text-decoration: none;
+  font-family: inherit;
+  color: inherit; /* Ensure links inherit color if styled as button */
 }
 
-button:hover:not(:disabled), .button:hover:not(:disabled) {
+button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-md);
 }
-button:active:not(:disabled), .button:active:not(:disabled) {
+button:active:not(:disabled), .button:active:not(:disabled), a.buttonCard:active {
     transform: translateY(0px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-xs);
 }
 button:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    background-color: #e9ecef !important;
+    color: #adb5bd !important;
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+    opacity: 0.7;
 }
 
-/* Primary Button Style (used for reshuffle/check) */
-.primaryButton {
-  background-color: var(--primary-color);
-  color: white;
-}
-.primaryButton:hover:not(:disabled) {
-  background-color: var(--primary-light);
-}
-
-/* Secondary Button Style (used for review mistakes) */
-.secondaryButton {
-    background-color: var(--accent-color); /* Yellow */
-    color: var(--text-dark);
-}
-.secondaryButton:hover:not(:disabled) {
-    background-color: #eecd4f; /* Darker yellow */
-}
-
-/* Next Button Style */
-.nextButton {
-    background-color: var(--secondary-color); /* Blue */
-    color: white;
-}
-.nextButton:hover:not(:disabled) {
-    background-color: #2980b9; /* Darker blue */
-}
-.arrowIcon {
-    font-size: 1.3rem;
-    line-height: 1;
-    transition: transform 0.2s ease;
-}
-.nextButton:hover:not(:disabled) .arrowIcon {
-    transform: translateX(3px);
-}
-
-/* Focus visible style */
+/* --- Enhanced Focus Visible Styling (Applies to buttons, links, inputs) --- */
 *:focus-visible {
-    outline: 3px solid var(--secondary-color);
-    outline-offset: 3px;
-    border-radius: 4px;
+    outline: 3px solid var(--secondary-light); /* Brighter focus outline */
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); /* Outer glow */
+}
+/* Specific focus for inputs if needed */
+input:focus-visible {
+     border-color: var(--primary-light) !important; /* Ensure border changes too */
+}
+/* Specific focus for card-like buttons */
+a.buttonCard:focus-visible {
+    border-color: var(--primary-color); /* Use primary color for card focus border */
 }
 
-/* Basic responsive adjustments */
+
+/* Specific Button Styles */
+.primaryButton { background: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; }
+.primaryButton:hover:not(:disabled) { opacity: 0.9; }
+.secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid #e6b300; }
+.secondaryButton:hover:not(:disabled) { background-color: #e6b300; }
+.nextButton { background-color: var(--secondary-color); color: white; }
+.nextButton:hover:not(:disabled) { background-color: #0069d9; }
+.arrowIcon { font-size: 1.3rem; line-height: 1; transition: transform 0.2s ease; }
+.nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(4px); }
+
+/* Responsive Adjustments */
 @media (min-width: 768px) {
-  .app-header {
-    padding: 18px 40px;
-    text-align: left;
-  }
-  main {
-    padding: 40px;
-  }
-  button, .button {
-      padding: 14px 30px;
-      font-size: 1.05rem;
-  }
+  .app-header { padding: 18px 50px; text-align: left; }
+  main { padding: 50px 40px; }
+  button, .button, a.buttonCard { padding: 15px 35px; font-size: 1.05rem; }
 }

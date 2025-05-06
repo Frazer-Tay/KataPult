@@ -3,64 +3,69 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px 50px 20px; /* Added more padding */
-  max-width: 900px; /* Wider container */
+  padding: 30px 20px 50px 20px;
+  max-width: 880px; /* Wider */
   margin: 30px auto;
   background-color: var(--card-background);
   border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-lg); /* More prominent shadow */
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-color-light);
+  position: relative; /* For progress bar potentially */
 }
 
-/* --- Progress Bar --- */
-/* ProgressBar styles are in its own component CSS */
+/* Remove default outline when programmatically focused for key listener */
+.container:focus {
+    outline: none;
+}
 
-/* --- Card Styling --- */
+/* Progress Bar Container */
+/* Styles applied via ProgressBar component */
+
 .card {
-  background-color: var(--background-light);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg); /* Consistent rounding */
-  padding: 40px 50px; /* Generous padding */
+  background-color: #fdfdff;
+  border: 1px solid #e9ecef;
+  border-radius: var(--border-radius-lg);
+  padding: 40px 50px;
   width: 100%;
   text-align: center;
-  margin-top: 10px; /* Space below progress */
-  margin-bottom: 40px; /* More space below card */
+  margin-top: 10px;
+  margin-bottom: 40px;
   box-sizing: border-box;
   box-shadow: var(--shadow-sm);
 }
 
 .word {
-  font-size: 3rem; /* Larger */
+  font-size: 3.2rem;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   color: var(--primary-dark);
   line-height: 1.3;
 }
 
 .definition {
-  font-size: 1.25rem; /* Larger */
+  font-size: 1.25rem;
   color: var(--text-medium);
   line-height: 1.7;
   margin-top: 10px;
   margin-bottom: 35px;
   font-style: italic;
-  max-width: 650px;
+  max-width: 680px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .exampleSection {
-    margin-top: 30px;
+    margin-top: 35px;
     padding-top: 25px;
-    border-top: 2px dashed var(--border-color); /* Clearer dashed line */
+    border-top: 2px dashed var(--border-color);
     text-align: left;
 }
 
 .sectionTitle {
-    font-size: 1.2rem; /* Larger section title */
+    font-size: 1.1rem; /* Adjusted size */
     font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 18px; /* More space */
+    margin-bottom: 18px;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     padding-bottom: 8px;
@@ -69,41 +74,40 @@
 }
 
 .exampleSentence {
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* Consistent size */
     color: var(--text-dark);
     line-height: 1.75;
     margin-bottom: 20px;
     font-style: italic;
     background-color: var(--background-medium);
-    padding: 20px; /* More padding */
+    padding: 20px;
     border-radius: var(--border-radius-md);
-    border-left: 5px solid var(--secondary-color); /* Thicker accent */
+    border-left: 5px solid var(--secondary-color);
     box-shadow: var(--shadow-xs);
 }
 
 .translationSection {
-    margin-top: 20px;
-    padding-top: 15px;
+    margin-top: 18px; /* Adjusted space */
+    padding-top: 18px;
     border-top: 1px solid var(--border-color-light);
 }
 
 .translationText {
     font-size: 1rem;
-    color: var(--text-light); /* Lighter grey */
+    color: var(--text-light);
     line-height: 1.6;
     font-style: italic;
 }
 
-/* Next Button - uses global style */
+/* Next Button uses global style */
 
-/* Completion Container */
 .completionContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 50px 20px; /* Add padding */
-    min-height: 40vh;
+    padding: 50px 20px;
+    min-height: 50vh;
 }
 
 /* Loading, Error, Completion Message use global styles */
