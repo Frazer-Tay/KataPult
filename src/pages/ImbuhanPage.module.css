@@ -1,62 +1,94 @@
 /* src/pages/ImbuhanPage.module.css */
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 25px 20px 40px 20px;
-  max-width: 750px; /* Adjusted width */
+  max-width: 800px; /* Wider for sentences */
   margin: 30px auto;
-  background-color: var(--card-background); /* Use variable */
-  border-radius: var(--border-radius-xl); /* Use variable */
-  box-shadow: 0 8px 30px var(--shadow-color); /* Use variable */
-  border: 1px solid var(--border-color-light); /* Use variable */
-  position: relative; /* For potential absolute elements */
+  background-color: var(--card-background);
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  border: 1px solid var(--border-color-light);
+  position: relative;
 }
 
 /* Progress Bar Container */
-/* Wrap the ProgressBar component in this div */
-.progressBarContainer {
-    width: 95%;
-    margin-bottom: 30px;
-}
-
+/* Uses component styles */
 
 /* Card Styling */
 .card {
-  background-color: var(--background-medium); /* Use variable */
-  border-radius: var(--border-radius-lg); /* Use variable */
-  padding: 30px 40px;
+  background-color: var(--background-medium);
+  border-radius: var(--border-radius-lg);
+  padding: 35px 40px; /* More padding */
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 35px; /* More space */
-  border: 1px solid var(--border-color); /* Use variable */
-  text-align: center;
+  margin-top: 10px; /* Space below progress */
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color);
+  text-align: left; /* Align sentence left */
 }
 
 .label {
   font-size: 1rem;
   color: var(--text-light);
-  margin-bottom: 8px; /* Increased space */
-  font-weight: 500;
+  margin-bottom: 10px;
+  font-weight: 600; /* Bolder label */
 }
 
-.rootWord {
-  font-size: 2.4rem; /* Prominent root word */
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 25px; /* More space */
-  display: inline-block;
-  border-bottom: 3px solid var(--primary-light);
-  padding-bottom: 6px; /* Slightly more padding */
+.sentence {
+    font-size: 1.3rem; /* Larger sentence */
+    line-height: 1.8; /* More line spacing */
+    margin-bottom: 30px; /* Space below sentence */
+    color: var(--text-dark);
+    text-align: center; /* Center sentence */
+    padding: 10px;
 }
 
-.definition {
-  font-size: 1.15rem;
-  color: var(--text-dark);
-  line-height: 1.7; /* Better spacing */
-  font-style: italic;
+/* Style the blank placeholder within the sentence */
+.blankPlaceholder {
+    display: inline-block;
+    min-width: 80px; /* Give blank some width */
+    border-bottom: 2px solid var(--primary-color);
+    margin: 0 4px;
+    padding: 0 4px;
+    font-weight: 600;
+    color: var(--primary-color);
+    vertical-align: baseline; /* Align with text */
 }
+
+.promptSection {
+    display: flex;
+    justify-content: space-around; /* Space out prompts */
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 20px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.promptItem {
+    text-align: center;
+}
+
+.promptLabel {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.promptValue {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+}
+
 
 /* Input Section */
 .inputSection {
@@ -69,16 +101,17 @@
 }
 
 .instruction {
-  font-size: 1.25rem;
-  margin-bottom: 20px; /* More space */
+  font-size: 1.2rem; /* Adjusted size */
+  margin-bottom: 18px;
   color: var(--text-dark);
   font-weight: 600;
+  max-width: 550px; /* Prevent instruction being too wide */
 }
 
 .input {
   width: 90%;
-  max-width: 500px; /* Consistent max width */
-  padding: 15px 20px; /* Increased padding */
+  max-width: 400px; /* Input width */
+  padding: 15px 20px;
   font-size: 1.2rem;
   border: 2px solid var(--border-color);
   border-radius: var(--border-radius-md);
@@ -86,7 +119,7 @@
   text-align: center;
   transition: all 0.2s ease-in-out;
   background-color: #fff;
-  box-shadow: inset 0 2px 4px var(--shadow-color-light); /* Subtle inset shadow */
+  box-shadow: inset 0 2px 4px var(--shadow-color-light);
 }
 
 .input:focus {
@@ -95,7 +128,6 @@
     box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
-/* Input validation styles */
 .inputCorrect {
     border-color: var(--success-color);
     background-color: var(--success-light);
@@ -114,15 +146,16 @@
      box-shadow: 0 0 0 0.25rem rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
+
 /* Feedback Area */
 .feedback {
   font-size: 1.1rem;
   font-weight: 500;
-  margin: 10px 0 25px 0; /* Adjusted margin */
+  margin: 10px 0 25px 0; /* More space below feedback */
   padding: 15px 20px;
   border-radius: var(--border-radius-md);
   width: 95%;
-  max-width: 600px; /* Consistent width */
+  max-width: 600px;
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
@@ -135,7 +168,7 @@
 }
 .feedback::before {
     font-family: 'Segoe UI Symbol', sans-serif;
-    font-size: 1.4rem; /* Prominent icon */
+    font-size: 1.4rem;
     line-height: 1;
 }
 .correctFeedback {
@@ -158,7 +191,7 @@
   justify-content: center;
   gap: 20px;
   width: 100%;
-  margin-top: 10px; /* Less space when feedback is shown */
+  margin-top: 5px; /* Less space when feedback is shown */
   flex-wrap: wrap;
 }
 
