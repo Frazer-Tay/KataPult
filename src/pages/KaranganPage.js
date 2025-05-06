@@ -57,7 +57,7 @@ const KaranganPage = () => {
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
   // --- Initialize isCorrect state ---
-  const [isCorrect, setIsCorrect] = useState(false); // Track correctness of last answer
+  const [isCorrect, setIsCorrect] = useState(false); // Track correctness
 
   // --- Refs ---
   const optionButtonRefs = useRef([]);
@@ -74,7 +74,7 @@ const KaranganPage = () => {
 
   // --- Data Loading ---
    const loadData = useCallback((itemsToLoad, isReviewSession) => {
-       // ... (loadData logic remains the same, including resetting isAnswered, isCorrect, feedback etc)
+      // ... (loadData logic remains the same)
       setIsLoading(true); setError(null);
       try {
           if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Karangan data.");
@@ -84,7 +84,7 @@ const KaranganPage = () => {
           if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
       } catch (err) { console.error("Error loading Karangan:", err); setError(err.message); setDisplayItems([]); }
       finally { setIsLoading(false); }
-   }, []); // Removed isReviewing dep
+   }, []); // Removed isReviewing
 
   // Initial Load / Load from localStorage
    useEffect(() => {
@@ -112,6 +112,7 @@ const KaranganPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   // Save state to localStorage
   useEffect(() => {
     // ... (save state logic remains the same)
@@ -127,7 +128,7 @@ const KaranganPage = () => {
 
   // Generate Options
   const generateOptions = useCallback(() => {
-    // ... (generate options logic remains the same)
+     // ... (generate options logic remains the same)
      if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) { setOptions([]); return; }
     const correctDefinition = currentItem.definition;
     const distractors = getDistractors(allItems, currentItem, 2);
@@ -190,24 +191,29 @@ const KaranganPage = () => {
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
       }
-      setTimeout(() => nextButtonRef.current?.focus(), 0);
+      setTimeout(() => nextButtonRef.current?.focus(), 50);
     }
-  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Removed redundant deps
+  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Added deps
 
 
    // --- Keyboard Navigation ---
    useEffect(() => {
     const handlePageKeyDown = (event) => {
+        // Use local variable for correctness check based on *current* state
+        const currentlyCorrect = isCorrect;
+        const currentlyAnswered = isAnswered;
+
         if (isCompleted) return;
-        if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
+
+        if (!currentlyAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex]) {
                 checkAnswer(options[optionIndex]);
                 event.preventDefault();
             }
         }
-         // Use the *isCorrect* state variable here
-        else if (event.key === 'Enter' && isAnswered && !isCorrect) {
+        // Check *isAnswered* state directly, use *!isCorrect*
+        else if (event.key === 'Enter' && currentlyAnswered && !currentlyCorrect) {
              if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
                  loadNextItem();
                  event.preventDefault();
@@ -217,7 +223,7 @@ const KaranganPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-   // Add isCorrect here
+   // Add isCorrect here as well
   }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]);
 
   const handleOptionKeyDown = (event, option) => {
@@ -236,7 +242,7 @@ const KaranganPage = () => {
 
   // --- Completion Screen ---
   if (isCompleted) {
-       // ... (Completion screen logic remains the same)
+      // ... (Completion screen logic remains the same)
        const completionText = isReviewing ? "✨ Sesi Review Karangan Selesai! ✨" : "✨ Latihan Karangan Selesai! ✨";
        const mistakesToShow = finalMistakeCount;
      return ( <div className={styles.container}> <p className="completionMessage">{completionText}</p> {!isReviewing && mistakesToShow > 0 && ( <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan.</p> )} <div className={styles.completionActions}> {finalMistakeCount > 0 && !isReviewing && ( <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button> )} <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button> </div> </div> );
@@ -258,7 +264,7 @@ const KaranganPage = () => {
             )}
         </div>
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-karangan">
-            {/* Use the state variable isCorrect here */}
+             {/* Use the state variable isCorrect here */}
             <p className={styles.instruction} id="instruction-karangan">Pilih definisi (English meaning) yang paling tepat (Gunakan 1, 2, 3):</p>
             {options.map((option, index) => {
               const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();

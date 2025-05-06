@@ -1,5 +1,5 @@
 // src/pages/PersamaanPage.js
-// CORRECTED: Added missing isCorrect state declaration
+// CORRECTED: Add checks for currentItem inside map and refine deps
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
@@ -61,8 +61,7 @@ const PersamaanPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
-  // --- Initialize isCorrect state ---
-  const [isCorrect, setIsCorrect] = useState(false); // Track if the *last submitted* answer was correct
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const optionButtonRefs = useRef([]);
   const pageRef = useRef(null);
@@ -75,25 +74,25 @@ const PersamaanPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  // Load Data function
+  // Load Data helper
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
-       // ... (loadData logic remains the same, including resetting isAnswered, isCorrect, feedback etc)
+      // ... (loadData logic remains the same)
       setIsLoading(true); setError(null);
       try {
           if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Persamaan data.");
           setDisplayItems(shuffleArray([...itemsToLoad]));
           setCurrentIndex(0); setIsReviewing(isReviewSession);
-          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false); // Reset isCorrect too
+          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false);
           if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
       } catch (err) { console.error("Error loading Persamaan:", err); setError(err.message); setDisplayItems([]); }
       finally { setIsLoading(false); }
-  }, []); // Removed isReviewing dep
+  }, []);
 
   // Initial Load / Load from localStorage
    useEffect(() => {
-    // ... (initial load logic remains the same)
+     // ... (initial load logic remains the same)
      setIsLoading(true); setError(null); let initialLoadItems = [];
-    try {
+     try {
         const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
         if (filteredData.length === 0) throw new Error("No valid Persamaan data.");
         setAllItems(filteredData); initialLoadItems = filteredData;
@@ -106,7 +105,7 @@ const PersamaanPage = () => {
                  if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
                     setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
                     setMissedItems(new Set(savedState.missedItems)); setIsReviewing(savedState.isReviewing || false);
-                    setIsAnswered(false); setIsCorrect(false); // Ensure reset
+                    setIsAnswered(false); setIsCorrect(false);
                  } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
             } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
         } else { loadData(initialLoadItems, false); }
@@ -115,28 +114,29 @@ const PersamaanPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   // Save state to localStorage
   useEffect(() => {
-    // ... (save state logic remains the same)
-    if (isLoading || error || !displayItems || displayItems.length === 0) return;
-    const isCompleted = currentIndex >= displayItems.length;
+     // ... (save state logic remains the same)
+     if (isLoading || error || !displayItems || displayItems.length === 0) return;
+     const isCompleted = currentIndex >= displayItems.length;
      if (isCompleted) return;
-    try {
-      const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => ({ id: item.id })), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
-    } catch (err) { console.error("Failed to save Persamaan state:", err); }
+     try {
+       const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => ({ id: item.id })), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
+       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+     } catch (err) { console.error("Failed to save Persamaan state:", err); }
   }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
 
   // Generate options
   const generateOptions = useCallback(() => {
-    // ... (generate options logic remains the same)
-    if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) { setOptions([]); return; }
-    const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
-    const distractors = getDistractors(allItems, currentItem, 2);
-    const allOptions = shuffleArray([correctSynonym, ...distractors]);
-    setOptions(allOptions);
-    optionButtonRefs.current = allOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef());
+     // ... (generate options logic remains the same)
+     if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) { setOptions([]); return; }
+     const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
+     const distractors = getDistractors(allItems, currentItem, 2);
+     const allOptions = shuffleArray([correctSynonym, ...distractors]);
+     setOptions(allOptions);
+     optionButtonRefs.current = allOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef());
   }, [currentItem, allItems]);
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const PersamaanPage = () => {
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
-        setIsCorrect(false); // Reset correctness
+        setIsCorrect(false);
         setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
     } else if (!currentItem) {
        setOptions([]);
@@ -173,18 +173,21 @@ const PersamaanPage = () => {
 
   const loadNextItem = useCallback(() => {
      if (!displayItems || displayItems.length === 0) return;
-     if (currentIndex < displayItems.length) {
+     // Check against length - 1 to see if it's the last item
+     if (currentIndex < displayItems.length - 1) {
         setCurrentIndex(prevIndex => prevIndex + 1);
+    } else {
+        setCurrentIndex(displayItems.length); // Trigger completion
     }
-  }, [currentIndex, displayItems]);
+  }, [currentIndex, displayItems]); // Use displayItems.length
 
   const checkAnswer = useCallback((selectedOption) => {
     if (isAnswered || !currentItem || !currentItem.synonyms) return;
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
     const correctSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
-    const correct = correctSynonymsLower.includes(selectedOption.toLowerCase()); // Assign to 'correct'
-    setIsCorrect(correct); // Set the state
+    const correct = correctSynonymsLower.includes(selectedOption.toLowerCase());
+    setIsCorrect(correct); // Set state based on correctness
 
     if (correct) {
       setFeedback('Tepat! Sinonim Benar. 👍');
@@ -194,36 +197,40 @@ const PersamaanPage = () => {
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
       }
-      setTimeout(() => nextButtonRef.current?.focus(), 0);
+      setTimeout(() => nextButtonRef.current?.focus(), 50); // Slightly delayed focus
     }
-  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Added isCorrect to deps indirectly via checkAnswer
+  // Ensure all dependencies influencing the check are listed
+  }, [isAnswered, currentItem, isReviewing, loadNextItem]);
 
 
    // --- Keyboard Navigation ---
    useEffect(() => {
     const handlePageKeyDown = (event) => {
+        // Use local variable for correctness check based on *current* state
+        const currentlyCorrect = isCorrect;
+        const currentlyAnswered = isAnswered;
+
         if (isCompleted) return;
-        if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
+
+        if (!currentlyAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex]) {
                 checkAnswer(options[optionIndex]);
                 event.preventDefault();
             }
         }
-        // Use the *isCorrect* state variable here
-        else if (event.key === 'Enter' && isAnswered && !isCorrect) {
-            if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
+        // Check *isAnswered* state directly, use *!isCorrect*
+        else if (event.key === 'Enter' && currentlyAnswered && !currentlyCorrect) {
+             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
                  loadNextItem();
                  event.preventDefault();
             }
         }
     };
     const pageElement = pageRef.current;
-    if (pageElement) {
-        pageElement.addEventListener('keydown', handlePageKeyDown);
-    }
+    if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-   // Add isCorrect here
+   // Add isCorrect here as well, as its value is used in the condition
   }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]);
 
   const handleOptionKeyDown = (event, option) => {
@@ -257,9 +264,9 @@ const PersamaanPage = () => {
             <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
         </div>
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-persamaan">
-            {/* Use the state variable isCorrect here */}
             <p className={styles.instruction} id="instruction-persamaan">Pilih salah satu persamaannya (Gunakan tombol 1, 2, 3):</p>
             {options.map((option, index) => {
+              // Ensure currentItem exists before accessing synonyms
               const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
               let buttonClassName = styles.optionButton;
               if (isAnswered) {
@@ -285,13 +292,13 @@ const PersamaanPage = () => {
               );
             })}
         </div>
-        {/* Use the state variable isCorrect here */}
         {isAnswered && feedback && (
+            // Use isCorrect state here
             <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
-         {/* Use the state variable isCorrect here */}
+         {/* Use isCorrect state here */}
         {isAnswered && !isCorrect && (
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>
                 Lanjut <span className="arrowIcon">→</span>
