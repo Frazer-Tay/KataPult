@@ -1,6 +1,6 @@
 // src/pages/KaranganPage.js
-// Added keyboard navigation (numbers, Enter, Space) + focus management
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'; // Import useRef
+// CORRECTED: Added missing isCorrect state declaration
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { karanganData } from '../data/karangan';
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
@@ -18,7 +18,7 @@ const shuffleArray = (array) => {
 
 const getDistractors = (allItems, currentItem, count = 2) => {
     // ... (getDistractors logic remains the same)
-    const distractors = new Set();
+     const distractors = new Set();
      if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return [];
     const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.definition);
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
@@ -56,11 +56,13 @@ const KaranganPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
+  // --- Initialize isCorrect state ---
+  const [isCorrect, setIsCorrect] = useState(false); // Track correctness of last answer
 
   // --- Refs ---
-  const optionButtonRefs = useRef([]); // Array of refs for option buttons
-  const pageRef = useRef(null); // Ref for main container
-  const nextButtonRef = useRef(null); // Ref for next button
+  const optionButtonRefs = useRef([]);
+  const pageRef = useRef(null);
+  const nextButtonRef = useRef(null);
 
   // --- Memoized Values ---
   const { currentItem, totalItemsInSet } = useMemo(() => {
@@ -71,18 +73,18 @@ const KaranganPage = () => {
   }, [displayItems, currentIndex]);
 
   // --- Data Loading ---
-  const loadData = useCallback((itemsToLoad, isReviewSession) => {
-      // ... (loadData logic remains the same)
-       setIsLoading(true); setError(null);
-       try {
-          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("Tidak ada data Karangan valid.");
+   const loadData = useCallback((itemsToLoad, isReviewSession) => {
+       // ... (loadData logic remains the same, including resetting isAnswered, isCorrect, feedback etc)
+      setIsLoading(true); setError(null);
+      try {
+          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Karangan data.");
           setDisplayItems(shuffleArray([...itemsToLoad]));
           setCurrentIndex(0); setIsReviewing(isReviewSession);
-          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null);
+          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false); // Reset isCorrect
           if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
-       } catch (err) { console.error("Error loading Karangan:", err); setError(err.message); setDisplayItems([]); }
-       finally { setIsLoading(false); }
-  }, []); // Removed isReviewing
+      } catch (err) { console.error("Error loading Karangan:", err); setError(err.message); setDisplayItems([]); }
+      finally { setIsLoading(false); }
+   }, []); // Removed isReviewing dep
 
   // Initial Load / Load from localStorage
    useEffect(() => {
@@ -100,7 +102,8 @@ const KaranganPage = () => {
                  const validSavedDisplayItems = savedState.displayItemIds.map(id => currentAllItemsMap.get(id)).filter(Boolean);
                  if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
                     setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
-                    setMissedItems(new Set(savedState.missedItems)); setIsReviewing(savedState.isReviewing || false); setIsAnswered(false);
+                    setMissedItems(new Set(savedState.missedItems)); setIsReviewing(savedState.isReviewing || false);
+                    setIsAnswered(false); setIsCorrect(false); // Ensure reset
                  } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
             } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
         } else { loadData(initialLoadItems, false); }
@@ -112,7 +115,7 @@ const KaranganPage = () => {
   // Save state to localStorage
   useEffect(() => {
     // ... (save state logic remains the same)
-     if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    if (isLoading || error || !displayItems || displayItems.length === 0) return;
     const isCompleted = currentIndex >= displayItems.length;
      if (isCompleted) return;
     try {
@@ -139,7 +142,7 @@ const KaranganPage = () => {
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
-        // Focus first option
+        setIsCorrect(false); // Reset correctness
         setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
     } else if (!currentItem) {
        setOptions([]);
@@ -174,13 +177,12 @@ const KaranganPage = () => {
 
   const checkAnswer = useCallback((selectedOption) => {
     if (isAnswered || !currentItem || !currentItem.definition) return;
-
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
+    const correct = selectedOption.toLowerCase() === currentItem.definition.toLowerCase(); // Assign to 'correct'
+    setIsCorrect(correct); // Set state
 
-    const isCorrect = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
-
-    if (isCorrect) {
+    if (correct) {
       setFeedback('Tepat! Definisi Benar. 👍');
       setTimeout(loadNextItem, 1500);
     } else {
@@ -188,18 +190,15 @@ const KaranganPage = () => {
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
       }
-       // Focus the Next button after incorrect answer
       setTimeout(() => nextButtonRef.current?.focus(), 0);
     }
-  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Removed redundant state deps
+  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Removed redundant deps
 
 
    // --- Keyboard Navigation ---
    useEffect(() => {
     const handlePageKeyDown = (event) => {
         if (isCompleted) return;
-
-        // Handle number keys for MCQ selection
         if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex]) {
@@ -207,28 +206,20 @@ const KaranganPage = () => {
                 event.preventDefault();
             }
         }
-        // Handle Enter key for Next button when visible
+         // Use the *isCorrect* state variable here
         else if (event.key === 'Enter' && isAnswered && !isCorrect) {
-             // Check if focus is not on an option button itself
-            if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
+             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
                  loadNextItem();
                  event.preventDefault();
             }
         }
     };
-
     const pageElement = pageRef.current;
-    if (pageElement) {
-        pageElement.addEventListener('keydown', handlePageKeyDown);
-    }
-    return () => {
-        if (pageElement) {
-            pageElement.removeEventListener('keydown', handlePageKeyDown);
-        }
-    };
-  }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]); // Added isCompleted
+    if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
+    return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
+   // Add isCorrect here
+  }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]);
 
-  // Handle Enter/Space on focused option buttons
   const handleOptionKeyDown = (event, option) => {
       if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
           checkAnswer(option);
@@ -245,23 +236,11 @@ const KaranganPage = () => {
 
   // --- Completion Screen ---
   if (isCompleted) {
-      const completionText = isReviewing ? "✨ Sesi Review Karangan Selesai! ✨" : "✨ Latihan Karangan Selesai! ✨";
-      const mistakesToShow = finalMistakeCount;
-    return (
-      <div className={styles.container}>
-          <p className="completionMessage">{completionText}</p>
-          {!isReviewing && mistakesToShow > 0 && (
-             <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan pada putaran awal.</p>
-          )}
-          <div className={styles.completionActions}>
-              {finalMistakeCount > 0 && !isReviewing && (
-                   <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button>
-              )}
-              <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button>
-          </div>
-      </div>
-    );
-  }
+       // ... (Completion screen logic remains the same)
+       const completionText = isReviewing ? "✨ Sesi Review Karangan Selesai! ✨" : "✨ Latihan Karangan Selesai! ✨";
+       const mistakesToShow = finalMistakeCount;
+     return ( <div className={styles.container}> <p className="completionMessage">{completionText}</p> {!isReviewing && mistakesToShow > 0 && ( <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan.</p> )} <div className={styles.completionActions}> {finalMistakeCount > 0 && !isReviewing && ( <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button> )} <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button> </div> </div> );
+   }
 
    // --- Active Question Screen ---
    if (!currentItem) { return <div className="loading">Memuat kata berikutnya...</div>; }
@@ -279,6 +258,7 @@ const KaranganPage = () => {
             )}
         </div>
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-karangan">
+            {/* Use the state variable isCorrect here */}
             <p className={styles.instruction} id="instruction-karangan">Pilih definisi (English meaning) yang paling tepat (Gunakan 1, 2, 3):</p>
             {options.map((option, index) => {
               const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();
@@ -294,7 +274,7 @@ const KaranganPage = () => {
                   ref={optionButtonRefs.current[index]}
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
-                   onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                  onKeyDown={(e) => handleOptionKeyDown(e, option)}
                   disabled={isAnswered}
                   role="radio"
                   aria-checked={selectedAnswer === option}
@@ -307,12 +287,14 @@ const KaranganPage = () => {
               );
             })}
         </div>
+         {/* Use the state variable isCorrect here */}
         {isAnswered && feedback && (
-            <div className={`${styles.feedback} ${feedback.startsWith('Tepat') ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
+            <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
-        {isAnswered && feedback.startsWith('Kurang Tepat') && (
+         {/* Use the state variable isCorrect here */}
+        {isAnswered && !isCorrect && (
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>
                 Lanjut <span className="arrowIcon">→</span>
             </button>
