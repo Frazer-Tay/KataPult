@@ -1,5 +1,5 @@
 // src/pages/PersamaanPage.js
-// CORRECTED: Added back handleReshuffleAll and handleReviewMistakes definitions
+// CORRECTED FULL SCRIPT: Includes refined distractor logic and ensures all functions/state are present.
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
@@ -16,37 +16,55 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Gets distractor WORDS from other items
 const getDistractors = (allItems, currentItem, count = 2) => {
-    // ... (getDistractors logic remains the same)
-     const distractors = new Set();
-    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) return [];
-    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.word && item.synonyms && item.synonyms.length > 0);
+    const distractors = new Set();
+    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) {
+        console.error("Invalid input to getDistractors in Persamaan");
+        return [];
+    }
+    // Filter items that could be distractors
+    const potentialDistractorItems = allItems.filter(item =>
+        item.id !== currentItem.id && // Not the current item
+        item.word && // Has a word
+        !currentItem.synonyms.map(s => s.toLowerCase()).includes(item.word.toLowerCase()) // The item's word is NOT a synonym of the current item
+    );
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
     const currentSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
+
     for (const item of shuffledPool) {
         if (distractors.size >= count) break;
-        if (item.synonyms && item.synonyms.length > 0) {
-            const potentialDistractor = item.synonyms.find(syn => syn.toLowerCase() !== item.word.toLowerCase()) || item.synonyms[0];
-             if (potentialDistractor) {
-                const potentialDistractorLower = potentialDistractor.toLowerCase();
-                 if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
-                    distractors.add(potentialDistractor);
-                }
+        const potentialDistractorWord = item.word;
+        const potentialDistractorLower = potentialDistractorWord.toLowerCase();
+        // Double-check it's not a synonym and not already added
+        if (!currentSynonymsLower.includes(potentialDistractorLower) && ![...distractors].map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
+             distractors.add(potentialDistractorWord);
+        }
+    }
+
+    // Fallback if still not enough unique distractors found
+    let fallbackCounter = 1;
+    const allWordsForFallback = allItems.map(i => i.word).filter(Boolean); // Get all words
+    while (distractors.size < count && fallbackCounter <= allItems.length) {
+        // Pick a random word from the entire list as fallback
+        const randomFallbackWord = allWordsForFallback[Math.floor(Math.random() * allWordsForFallback.length)];
+        if (randomFallbackWord){
+            const fallbackLower = randomFallbackWord.toLowerCase();
+             if (!currentSynonymsLower.includes(fallbackLower) && ![...distractors].map(d => d.toLowerCase()).includes(fallbackLower)) {
+                 distractors.add(randomFallbackWord);
             }
         }
-    }
-    let fallbackCounter = 1;
-    while (distractors.size < count) {
-        const fallback = `[Opsi Sinonim ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-         if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
-           distractors.add(fallback);
-        }
         fallbackCounter++;
-        if (fallbackCounter > 10 + count) break;
+        if (fallbackCounter > allItems.length + 5) break; // Safety break
     }
+
+     // Final fallback if still issues
+     while (distractors.size < count) {
+         distractors.add(`[Opsi Acak ${distractors.size + 1}]`);
+     }
+
     return Array.from(distractors);
 };
-
 
 const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v2';
 
@@ -86,23 +104,36 @@ const PersamaanPage = () => {
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
       setIsLoading(true); setError(null);
       try {
-          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Persamaan data.");
-          setDisplayItems(shuffleArray([...itemsToLoad]));
+          // Ensure we filter the *correct* source data
+          const validItemsToLoad = itemsToLoad.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
+          if (!validItemsToLoad || validItemsToLoad.length === 0) {
+               throw new Error("Tidak ada data persamaan yang valid untuk dimuat.");
+          }
+          setDisplayItems(shuffleArray([...validItemsToLoad]));
           setCurrentIndex(0); setIsReviewing(isReviewSession);
           setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false);
           isCompletedRef.current = false;
-          if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
-      } catch (err) { console.error("Error loading Persamaan:", err); setError(err.message); setDisplayItems([]); }
-      finally { setIsLoading(false); }
-  }, []);
+          if (!isReviewSession) {
+              setMissedItems(new Set());
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+              console.log("Starting fresh full Persamaan run, cleared saved state.");
+          }
+      } catch (err) {
+          console.error("Error loading Persamaan data:", err);
+          setError(err.message);
+          setDisplayItems([]);
+      } finally {
+          setIsLoading(false);
+      }
+  }, []); // Removed isReviewing dep
 
   // Initial Load / Load from localStorage
    useEffect(() => {
-     // ... (initial load logic remains the same)
      setIsLoading(true); setError(null); let initialLoadItems = [];
     try {
+        // Use the correctly structured persamaanData
         const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
-        if (filteredData.length === 0) throw new Error("No valid Persamaan data.");
+        if (filteredData.length === 0) throw new Error("No valid Persamaan data in source.");
         setAllItems(filteredData); initialLoadItems = filteredData;
         const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedStateJSON) {
@@ -120,26 +151,24 @@ const PersamaanPage = () => {
     } catch (err) { console.error("Error init Persamaan:", err); setError(err.message); setAllItems([]); setDisplayItems([]); }
     finally { setIsLoading(false); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Load on mount only
 
 
   // Save state to localStorage
   useEffect(() => {
-     // ... (save state logic remains the same)
-      if (isLoading || error || !displayItems || displayItems.length === 0) return;
-      const isCompletedNow = currentIndex >= displayItems.length;
-      isCompletedRef.current = isCompletedNow;
-      if (isCompletedNow) { localStorage.removeItem(LOCAL_STORAGE_KEY); return; }
-      try {
-          const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => ({ id: item.id })), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
-      } catch (err) { console.error("Failed to save Persamaan state:", err); }
+     if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    const isCompletedNow = currentIndex >= displayItems.length;
+    isCompletedRef.current = isCompletedNow;
+     if (isCompletedNow) { localStorage.removeItem(LOCAL_STORAGE_KEY); return; }
+    try {
+      const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => ({ id: item.id })), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (err) { console.error("Failed to save Persamaan state:", err); }
   }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
 
-  // Generate Options
+  // Generate options
   const generateOptions = useCallback(() => {
-     // ... (generate options logic remains the same)
      if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) { setOptions([]); return; }
      const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
      const distractors = getDistractors(allItems, currentItem, 2);
@@ -155,39 +184,43 @@ const PersamaanPage = () => {
         setFeedback('');
         setIsAnswered(false);
         setIsCorrect(false);
+        // Focus the first option button after options are generated
         setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
     } else if (!currentItem) {
        setOptions([]);
     }
   }, [currentItem, isLoading, generateOptions]);
 
+
   // --- Action Handlers ---
-  // ADDING THESE FUNCTIONS BACK:
   const handleReshuffleAll = () => {
-    setIsReviewing(false); // Ensure exit review mode
-    loadData(allItems, false); // Load all items, mark as not reviewing
+    setIsReviewing(false);
+    loadData(allItems, false);
   };
 
   const handleReviewMistakes = () => {
     const mistakeIds = Array.from(missedItems);
-    if (mistakeIds.length === 0) return; // Nothing to review
+    if (mistakeIds.length === 0) return;
     const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
      if (itemsToReview.length > 0) {
-        setIsReviewing(true); // Enter review mode
-        loadData(itemsToReview, true); // Load only missed items, mark as reviewing
+        setIsReviewing(true);
+        loadData(itemsToReview, true);
     } else {
-         console.warn("Mistake IDs found, but no matching items in allItems for Persamaan review.");
          setError("Tidak dapat memulai review kesalahan Persamaan.");
     }
   };
-  // END OF ADDED FUNCTIONS
 
   const loadNextItem = useCallback(() => {
      if (!displayItems || displayItems.length === 0) return;
-     if (currentIndex < displayItems.length) {
+     // Check using totalItemsInSet derived from displayItems
+     if (currentIndex < totalItemsInSet - 1) {
         setCurrentIndex(prevIndex => prevIndex + 1);
+    } else {
+         setCurrentIndex(totalItemsInSet); // Trigger completion
+         isCompletedRef.current = true;
     }
-  }, [currentIndex, displayItems]);
+  }, [currentIndex, displayItems, totalItemsInSet]); // Use totalItemsInSet
+
 
   const checkAnswer = useCallback((selectedOption) => {
     if (isAnsweredRef.current || !currentItem || !currentItem.synonyms) return;
@@ -207,7 +240,8 @@ const PersamaanPage = () => {
       }
       setTimeout(() => nextButtonRef.current?.focus(), 50);
     }
-  }, [currentItem, isReviewing, loadNextItem]); // Removed isAnswered, isCorrect deps
+  }, [currentItem, isReviewing, loadNextItem]);
+
 
   // --- Update Refs ---
   useEffect(() => {
@@ -215,10 +249,12 @@ const PersamaanPage = () => {
       isCorrectRef.current = isCorrect;
   }, [isAnswered, isCorrect]);
 
+
    // --- Keyboard Navigation ---
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        if (isCompletedRef.current) return;
+        if (isCompletedRef.current) return; // Use ref for completion check
+
         if (!isAnsweredRef.current && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex]) {
@@ -236,7 +272,7 @@ const PersamaanPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  }, [options, checkAnswer, loadNextItem]); // Simplified deps as state read via refs
+  }, [options, checkAnswer, loadNextItem]); // Simplified deps
 
   const handleOptionKeyDown = (event, option) => {
       if (!isAnsweredRef.current && (event.key === 'Enter' || event.key === ' ')) {
@@ -261,7 +297,7 @@ const PersamaanPage = () => {
           {!isReviewing && mistakesToShow > 0 && (
              <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan.</p>
           )}
-          {/* Make sure these onClick handlers exist */}
+          {/* Ensure functions are correctly referenced */}
           <div className={styles.completionActions}>
               {finalMistakeCount > 0 && !isReviewing && (
                    <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button>
@@ -284,6 +320,7 @@ const PersamaanPage = () => {
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-persamaan">
             <p className={styles.instruction} id="instruction-persamaan">Pilih salah satu persamaannya (Gunakan tombol 1, 2, 3):</p>
             {options.map((option, index) => {
+              // Ensure currentItem exists before accessing synonyms
               const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
               let buttonClassName = styles.optionButton;
               if (isAnswered) { // Use state directly for styling
@@ -298,7 +335,7 @@ const PersamaanPage = () => {
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
                   onKeyDown={(e) => handleOptionKeyDown(e, option)}
-                  disabled={isAnswered}
+                  disabled={isAnswered} // Use state directly for disabling
                   role="radio"
                   aria-checked={selectedAnswer === option}
                   tabIndex={isAnswered ? -1 : 0}
@@ -310,10 +347,12 @@ const PersamaanPage = () => {
             })}
         </div>
         {isAnswered && feedback && (
+             // Use isCorrect state here
             <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
+         {/* Use isCorrect state here */}
         {isAnswered && !isCorrect && (
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>
                 Lanjut <span className="arrowIcon">→</span>
