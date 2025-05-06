@@ -1,45 +1,13 @@
 // src/pages/KaranganPage.js
-// CORRECTED: Added missing isCorrect state declaration
+// CORRECTED: Using refs inside keyboard handler useEffect
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { karanganData } from '../data/karangan';
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
-const shuffleArray = (array) => {
-  if (!Array.isArray(array)) return [];
-  let currentIndex = array.length, randomIndex;
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-  return array;
-};
-
-const getDistractors = (allItems, currentItem, count = 2) => {
-    // ... (getDistractors logic remains the same)
-     const distractors = new Set();
-     if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return [];
-    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.definition);
-    const shuffledPool = shuffleArray([...potentialDistractorItems]);
-    const correctDefinitionLower = currentItem.definition.toLowerCase();
-    for (const item of shuffledPool) {
-        if (distractors.size >= count) break;
-         if (item.definition.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(item.definition.toLowerCase())) {
-            distractors.add(item.definition);
-        }
-    }
-    let fallbackCounter = 1;
-    while (distractors.size < count) {
-        const fallback = `[Incorrect Definition Option ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-        if (fallback.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
-           distractors.add(fallback);
-        }
-        fallbackCounter++;
-        if (fallbackCounter > 10 + count) break;
-    }
-    return Array.from(distractors);
-};
+// ... (shuffleArray and getDistractors functions remain the same)
+const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
+const getDistractors = (allItems, currentItem, count = 2) => { const distractors = new Set(); if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return []; const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.definition); const shuffledPool = shuffleArray([...potentialDistractorItems]); const correctDefinitionLower = currentItem.definition.toLowerCase(); for (const item of shuffledPool) { if (distractors.size >= count) break; if (item.definition.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(item.definition.toLowerCase())) { distractors.add(item.definition); } } let fallbackCounter = 1; while (distractors.size < count) { const fallback = `[Incorrect Definition Option ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`; if (fallback.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) { distractors.add(fallback); } fallbackCounter++; if (fallbackCounter > 10 + count) break; } return Array.from(distractors); };
 
 const LOCAL_STORAGE_KEY = 'kataPultKaranganState_v2';
 
@@ -63,6 +31,11 @@ const KaranganPage = () => {
   const optionButtonRefs = useRef([]);
   const pageRef = useRef(null);
   const nextButtonRef = useRef(null);
+  // Refs to hold latest state values for event listener
+  const isAnsweredRef = useRef(isAnswered);
+  const isCorrectRef = useRef(isCorrect);
+  const isCompletedRef = useRef(false);
+
 
   // --- Memoized Values ---
   const { currentItem, totalItemsInSet } = useMemo(() => {
@@ -74,7 +47,7 @@ const KaranganPage = () => {
 
   // --- Data Loading ---
    const loadData = useCallback((itemsToLoad, isReviewSession) => {
-      // ... (loadData logic remains the same)
+       // ... (loadData logic remains the same)
       setIsLoading(true); setError(null);
       try {
           if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) throw new Error("No valid Karangan data.");
@@ -84,7 +57,7 @@ const KaranganPage = () => {
           if (!isReviewSession) { setMissedItems(new Set()); localStorage.removeItem(LOCAL_STORAGE_KEY); }
       } catch (err) { console.error("Error loading Karangan:", err); setError(err.message); setDisplayItems([]); }
       finally { setIsLoading(false); }
-   }, []); // Removed isReviewing
+   }, []); // Removed isReviewing dep
 
   // Initial Load / Load from localStorage
    useEffect(() => {
@@ -116,9 +89,10 @@ const KaranganPage = () => {
   // Save state to localStorage
   useEffect(() => {
     // ... (save state logic remains the same)
-    if (isLoading || error || !displayItems || displayItems.length === 0) return;
-    const isCompleted = currentIndex >= displayItems.length;
-     if (isCompleted) return;
+     if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    const isCompletedNow = currentIndex >= displayItems.length;
+    isCompletedRef.current = isCompletedNow; // Update completion ref
+     if (isCompletedNow) { localStorage.removeItem(LOCAL_STORAGE_KEY); return; } // Clear on completion
     try {
       const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => ({ id: item.id })), missedItems: Array.from(missedItems), isReviewing: isReviewing, };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
@@ -128,7 +102,7 @@ const KaranganPage = () => {
 
   // Generate Options
   const generateOptions = useCallback(() => {
-     // ... (generate options logic remains the same)
+    // ... (generate options logic remains the same)
      if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) { setOptions([]); return; }
     const correctDefinition = currentItem.definition;
     const distractors = getDistractors(allItems, currentItem, 2);
@@ -177,10 +151,10 @@ const KaranganPage = () => {
   }, [currentIndex, displayItems]);
 
   const checkAnswer = useCallback((selectedOption) => {
-    if (isAnswered || !currentItem || !currentItem.definition) return;
+    if (isAnsweredRef.current || !currentItem || !currentItem.definition) return; // Use ref
     setSelectedAnswer(selectedOption);
-    setIsAnswered(true);
-    const correct = selectedOption.toLowerCase() === currentItem.definition.toLowerCase(); // Assign to 'correct'
+    setIsAnswered(true); // Set state
+    const correct = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
     setIsCorrect(correct); // Set state
 
     if (correct) {
@@ -193,27 +167,29 @@ const KaranganPage = () => {
       }
       setTimeout(() => nextButtonRef.current?.focus(), 50);
     }
-  }, [isAnswered, currentItem, isReviewing, loadNextItem]); // Added deps
+  }, [currentItem, isReviewing, loadNextItem]); // Removed isAnswered, isCorrect from deps, use refs
+
+  // Update refs when state changes
+  useEffect(() => {
+      isAnsweredRef.current = isAnswered;
+      isCorrectRef.current = isCorrect;
+  }, [isAnswered, isCorrect]);
 
 
    // --- Keyboard Navigation ---
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        // Use local variable for correctness check based on *current* state
-        const currentlyCorrect = isCorrect;
-        const currentlyAnswered = isAnswered;
+      // Use refs here
+        if (isCompletedRef.current) return;
 
-        if (isCompleted) return;
-
-        if (!currentlyAnswered && ['1', '2', '3'].includes(event.key)) {
+        if (!isAnsweredRef.current && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex]) {
                 checkAnswer(options[optionIndex]);
                 event.preventDefault();
             }
         }
-        // Check *isAnswered* state directly, use *!isCorrect*
-        else if (event.key === 'Enter' && currentlyAnswered && !currentlyCorrect) {
+        else if (event.key === 'Enter' && isAnsweredRef.current && !isCorrectRef.current) {
              if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
                  loadNextItem();
                  event.preventDefault();
@@ -223,15 +199,17 @@ const KaranganPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-   // Add isCorrect here as well
-  }, [isAnswered, isCorrect, loadNextItem, options, checkAnswer, isCompleted]);
+   // Refs handle state changes, remove direct state deps here
+  }, [options, checkAnswer, loadNextItem]);
 
+  // Handle Enter/Space on focused option buttons
   const handleOptionKeyDown = (event, option) => {
-      if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
+      if (!isAnsweredRef.current && (event.key === 'Enter' || event.key === ' ')) {
           checkAnswer(option);
           event.preventDefault();
       }
   };
+
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCount = missedItems.size;
@@ -264,9 +242,9 @@ const KaranganPage = () => {
             )}
         </div>
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-karangan">
-             {/* Use the state variable isCorrect here */}
             <p className={styles.instruction} id="instruction-karangan">Pilih definisi (English meaning) yang paling tepat (Gunakan 1, 2, 3):</p>
             {options.map((option, index) => {
+              // Use isCorrect state directly for styling
               const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();
               let buttonClassName = styles.optionButton;
               if (isAnswered) {
@@ -281,7 +259,7 @@ const KaranganPage = () => {
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
                   onKeyDown={(e) => handleOptionKeyDown(e, option)}
-                  disabled={isAnswered}
+                  disabled={isAnswered} // Use state directly
                   role="radio"
                   aria-checked={selectedAnswer === option}
                   tabIndex={isAnswered ? -1 : 0}
@@ -293,13 +271,13 @@ const KaranganPage = () => {
               );
             })}
         </div>
-         {/* Use the state variable isCorrect here */}
+        {/* Use isCorrect state directly for styling feedback */}
         {isAnswered && feedback && (
             <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
-         {/* Use the state variable isCorrect here */}
+        {/* Use isCorrect state directly for Next button visibility */}
         {isAnswered && !isCorrect && (
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>
                 Lanjut <span className="arrowIcon">→</span>
