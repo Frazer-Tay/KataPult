@@ -1,5 +1,6 @@
 // src/pages/ImbuhanPage.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+// V-- CRITICAL: Ensure this exact line is correct --V
 import { imbuhanData } from '../data/imbuhan';
 import styles from './ImbuhanPage.module.css';
 import ProgressBar from '../components/ProgressBar';

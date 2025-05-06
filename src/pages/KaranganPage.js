@@ -1,6 +1,7 @@
 // src/pages/KaranganPage.js
+// CORRECTED: Displays Indonesian word (and synonyms), asks to choose English definition via MCQ.
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { karanganData } from '../data/karangan';
+import { karanganData } from '../data/karangan'; // Uses karangan data
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -15,6 +16,7 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Gets distractor DEFINITIONS from other items
 const getDistractors = (allItems, currentItem, count = 2) => {
     const distractors = new Set();
      if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return [];
@@ -30,7 +32,7 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     }
     let fallbackCounter = 1;
     while (distractors.size < count) {
-        const fallback = `[Definisi Pilihan ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
+        const fallback = `[Incorrect Definition Option ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
         if (fallback.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
            distractors.add(fallback);
         }
@@ -40,14 +42,14 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     return Array.from(distractors);
 };
 
-const LOCAL_STORAGE_KEY = 'kataPultKaranganState';
+const LOCAL_STORAGE_KEY = 'kataPultKaranganState_v2'; // Use new key
 
 const KaranganPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [options, setOptions] = useState([]);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [options, setOptions] = useState([]); // MCQ options are English definitions
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // The chosen English definition
   const [feedback, setFeedback] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,33 +64,72 @@ const KaranganPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  // Load initial state or saved state
-   useEffect(() => {
+  // Load Data helper
+  const loadData = useCallback((itemsToLoad, isReviewSession) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) {
+              throw new Error("Tidak ada data Karangan yang valid untuk dimuat.");
+          }
+          setDisplayItems(shuffleArray([...itemsToLoad]));
+          setCurrentIndex(0);
+          setIsReviewing(isReviewSession);
+          setIsAnswered(false);
+          setFeedback('');
+          setSelectedAnswer(null);
+          if (!isReviewSession) {
+              setMissedItems(new Set());
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+               console.log("Starting fresh full Karangan run, cleared saved state.");
+          }
+      } catch (err) {
+          console.error("Error loading Karangan data:", err);
+          setError("Gagal memuat data Karangan.");
+          setDisplayItems([]);
+      } finally {
+          setIsLoading(false);
+      }
+  }, []); // Removed isReviewing
+
+  // Initial Load / Load from localStorage
+  useEffect(() => {
     setIsLoading(true);
     setError(null);
     try {
       const filteredData = karanganData.filter(item => item.word && item.definition);
-      if (filteredData.length === 0) throw new Error("No valid Karangan data found.");
+      if (filteredData.length === 0) throw new Error("No valid Karangan data found in source.");
       setAllItems(filteredData);
 
       const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedStateJSON) {
         const savedState = JSON.parse(savedStateJSON);
         if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
-             console.log("Resuming Karangan from saved state:", savedState);
-             setDisplayItems(savedState.displayItems);
-             setCurrentIndex(savedState.currentIndex);
-             setMissedItems(new Set(savedState.missedItems));
-             setIsReviewing(savedState.isReviewing || false);
-             setIsAnswered(false);
+            console.log("Resuming Karangan from saved state:", savedState);
+            const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
+            const validSavedDisplayItems = savedState.displayItems
+                .map(savedItem => currentAllItemsMap.get(savedItem.id))
+                .filter(Boolean);
+
+             if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
+                setDisplayItems(validSavedDisplayItems);
+                setCurrentIndex(savedState.currentIndex);
+                setMissedItems(new Set(savedState.missedItems));
+                setIsReviewing(savedState.isReviewing || false);
+                setIsAnswered(false);
+             } else {
+                console.warn("Invalid Karangan saved state (items/index), starting fresh.");
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                loadData(filteredData, false);
+            }
         } else {
-            console.warn("Invalid Karangan saved state, starting fresh.");
+            console.warn("Invalid Karangan saved state structure, starting fresh.");
             localStorage.removeItem(LOCAL_STORAGE_KEY);
-            loadDataSet(filteredData, false);
+            loadData(filteredData, false);
         }
       } else {
         console.log("No saved Karangan state, starting fresh.");
-        loadDataSet(filteredData, false);
+        loadData(filteredData, false);
       }
     } catch (err) {
       console.error("Error initializing Karangan page:", err);
@@ -102,33 +143,16 @@ const KaranganPage = () => {
   }, []); // Load on mount
 
 
-  const loadDataSet = useCallback((itemsToLoad, isReviewSession) => {
-      setDisplayItems(shuffleArray([...itemsToLoad]));
-      setCurrentIndex(0);
-      setIsReviewing(isReviewSession);
-      setIsAnswered(false);
-      setFeedback('');
-      setSelectedAnswer(null);
-      if (!isReviewSession) {
-          setMissedItems(new Set());
-      }
-      if (!isReviewSession) {
-         localStorage.removeItem(LOCAL_STORAGE_KEY);
-          console.log("Starting fresh full Karangan run, cleared saved state.");
-      }
-  }, []); // Removed isReviewing
-
-
   // Save state to localStorage
   useEffect(() => {
     if (isLoading || error || !displayItems || displayItems.length === 0) return;
     const isCompleted = currentIndex >= displayItems.length;
-     if (isCompleted) return; // Don't save completed state until reset
+     if (isCompleted) return; // Don't save completed
 
     try {
       const stateToSave = {
         currentIndex: currentIndex,
-        displayItems: displayItems,
+        displayItems: displayItems.map(item => ({ id: item.id })), // Save IDs
         missedItems: Array.from(missedItems),
         isReviewing: isReviewing,
       };
@@ -139,16 +163,17 @@ const KaranganPage = () => {
   }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
 
+  // Generate MCQ options (English definitions)
   const generateOptions = useCallback(() => {
     if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
         return;
     }
     const correctDefinition = currentItem.definition;
-    const distractors = getDistractors(allItems, currentItem, 2);
+    const distractors = getDistractors(allItems, currentItem, 2); // Get 2 distractor definitions
     const allOptions = shuffleArray([correctDefinition, ...distractors]);
     setOptions(allOptions);
-  }, [currentItem, allItems]);
+  }, [currentItem, allItems]); // Depend on allItems for distractors
 
   useEffect(() => {
     if (!isLoading && currentItem) {
@@ -163,16 +188,16 @@ const KaranganPage = () => {
 
   const handleReshuffleAll = () => {
     setIsReviewing(false);
-    loadDataSet(allItems, false);
+    loadData(allItems, false);
   };
 
   const handleReviewMistakes = () => {
-    const mistakeIds = Array.from(missedItems);
+     const mistakeIds = Array.from(missedItems);
     if (mistakeIds.length === 0) return;
     const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
      if (itemsToReview.length > 0) {
         setIsReviewing(true);
-        loadDataSet(itemsToReview, true);
+        loadData(itemsToReview, true);
     } else {
          setError("Tidak dapat memulai review kesalahan Karangan.");
     }
@@ -185,12 +210,11 @@ const KaranganPage = () => {
     }
   }, [currentIndex, displayItems]);
 
+  // Check if selected English definition matches the current item's definition
   const checkAnswer = (selectedOption) => {
     if (isAnswered || !currentItem || !currentItem.definition) return;
-
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
-
     const isCorrect = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
 
     if (isCorrect) {
@@ -208,72 +232,49 @@ const KaranganPage = () => {
   const finalMistakeCount = missedItems.size;
 
   // --- Render Logic ---
-   if (isLoading) {
-    return <div className="loading">Memuat kata Karangan...</div>;
-  }
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+   if (isLoading) { return <div className="loading">Memuat kata Karangan...</div>; }
+   if (error) { return <div className="error">{error}</div>; }
 
   // --- Completion Screen ---
   if (isCompleted) {
-      const completionText = isReviewing
-        ? "✨ Sesi Review Karangan Selesai! ✨"
-        : "✨ Latihan Karangan Selesai! ✨";
-       // Show mistakes count based on the persisted set before review started
+      const completionText = isReviewing ? "✨ Sesi Review Karangan Selesai! ✨" : "✨ Latihan Karangan Selesai! ✨";
       const mistakesToShow = finalMistakeCount;
-
     return (
       <div className={styles.container}>
           <p className="completionMessage">{completionText}</p>
           {!isReviewing && mistakesToShow > 0 && (
-             <p className="completionSubMessage">
-                 Anda membuat {mistakesToShow} kesalahan pada putaran awal.
-             </p>
+             <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan pada putaran awal.</p>
           )}
           <div className={styles.completionActions}>
               {finalMistakeCount > 0 && !isReviewing && (
-                   <button className="secondaryButton" onClick={handleReviewMistakes}>
-                      🔁 Ulangi Kesalahan ({finalMistakeCount})
-                   </button>
+                   <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button>
               )}
-              <button className="primaryButton" onClick={handleReshuffleAll}>
-                   {isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}
-              </button>
+              <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button>
           </div>
       </div>
     );
   }
 
    // --- Active Question Screen ---
-   if (!currentItem) {
-     return <div className="loading">Memuat kata berikutnya...</div>;
-   }
+   if (!currentItem) { return <div className="loading">Memuat kata berikutnya...</div>; }
 
   return (
     <div className={styles.container}>
-        <ProgressBar
-            current={currentIndex + 1}
-            total={totalItemsInSet}
-            label={isReviewing ? "Review Kesalahan" : "Karangan Vocab"}
-        />
-
+       <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewing ? "Review Kesalahan" : "Karangan Vocab"} />
         <div className={styles.card}>
             <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
             {currentItem.synonyms && currentItem.synonyms.length > 0 && (
                 <div className={styles.synonymSection}>
-                    <p className={styles.synonymLabel}>Sinonim:</p>
+                    <p className={styles.synonymLabel}>Sinonim (Mungkin Membantu):</p> {/* Adjusted label */}
                     <p className={styles.synonymText}>{currentItem.synonyms.join(', ')}</p>
                 </div>
             )}
         </div>
-
         <div className={styles.optionsContainer}>
-            <p className={styles.instruction}>Pilih definisi (arti) yang paling tepat:</p>
+            <p className={styles.instruction}>Pilih definisi (English meaning) yang paling tepat:</p>
             {options.map((option, index) => {
               const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();
               let buttonClassName = styles.optionButton;
-
               if (isAnswered) {
                 if (isCorrectOption) buttonClassName += ` ${styles.correct}`;
                 else if (selectedAnswer === option) buttonClassName += ` ${styles.incorrect}`;
@@ -288,22 +289,17 @@ const KaranganPage = () => {
                   aria-pressed={selectedAnswer === option}
                 >
                   <span className={styles.optionText}>{option}</span>
-                   {/* Icons added via CSS */}
                 </button>
               );
             })}
         </div>
-
         {isAnswered && feedback && (
             <div className={`${styles.feedback} ${feedback.startsWith('Tepat') ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
-
         {isAnswered && feedback.startsWith('Kurang Tepat') && (
-            <button className="nextButton" onClick={loadNextItem}>
-            Lanjut <span className="arrowIcon">→</span>
-            </button>
+            <button className="nextButton" onClick={loadNextItem}>Lanjut <span className="arrowIcon">→</span></button>
         )}
     </div>
   );

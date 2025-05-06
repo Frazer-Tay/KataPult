@@ -1,7 +1,8 @@
-// src/pages/KaranganPage.js
+// src/pages/PersamaanPage.js
+// CORRECTED: Displays an Indonesian word, asks to choose Indonesian synonym via MCQ.
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { karanganData } from '../data/karangan';
-import styles from './KaranganPage.module.css';
+import { persamaanData } from '../data/persamaan'; // Uses persamaan data
+import styles from './PersamaanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
@@ -15,23 +16,32 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Gets distractor SYNONYMS from other items
 const getDistractors = (allItems, currentItem, count = 2) => {
     const distractors = new Set();
-     if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return [];
-    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.definition);
+    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) return [];
+    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.word && item.synonyms && item.synonyms.length > 0);
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
-    const correctDefinitionLower = currentItem.definition.toLowerCase();
+    const currentSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
 
     for (const item of shuffledPool) {
         if (distractors.size >= count) break;
-         if (item.definition.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(item.definition.toLowerCase())) {
-            distractors.add(item.definition);
+        // Try getting a synonym from the distractor item that ISN'T the distractor item's main word itself
+        const potentialDistractorSynonym = item.synonyms.find(syn => syn.toLowerCase() !== item.word.toLowerCase()) || item.synonyms[0];
+
+        if (potentialDistractorSynonym) {
+            const potentialDistractorLower = potentialDistractorSynonym.toLowerCase();
+             // Check against current answers AND already added distractors
+            if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
+                distractors.add(potentialDistractorSynonym);
+            }
         }
     }
+    // Fallback
     let fallbackCounter = 1;
     while (distractors.size < count) {
-        const fallback = `[Definisi Pilihan ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-        if (fallback.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
+        const fallback = `[Opsi Sinonim ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
+        if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
            distractors.add(fallback);
         }
         fallbackCounter++;
@@ -40,14 +50,14 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     return Array.from(distractors);
 };
 
-const LOCAL_STORAGE_KEY = 'kataPultKaranganState'; // Unique key for Karangan
+const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v2'; // Use new key if old state exists
 
-const KaranganPage = () => {
+const PersamaanPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [options, setOptions] = useState([]);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [options, setOptions] = useState([]); // MCQ options are Indonesian words (synonyms/distractors)
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // The chosen Indonesian word
   const [feedback, setFeedback] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,80 +72,90 @@ const KaranganPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  // Load initial state or saved state
+  // Load data helper
+  const loadData = useCallback((itemsToLoad, isReviewSession) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) {
+              throw new Error("Tidak ada data persamaan yang valid untuk dimuat.");
+          }
+          setDisplayItems(shuffleArray([...itemsToLoad]));
+          setCurrentIndex(0);
+          setIsReviewing(isReviewSession);
+          setIsAnswered(false);
+          setFeedback('');
+          setSelectedAnswer(null);
+          if (!isReviewSession) {
+              setMissedItems(new Set());
+              localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear state only on full reset
+              console.log("Starting fresh full Persamaan run, cleared saved state.");
+          }
+      } catch (err) {
+          console.error("Error loading Persamaan data:", err);
+          setError("Gagal memuat data Persamaan.");
+          setDisplayItems([]);
+      } finally {
+          setIsLoading(false);
+      }
+  }, []); // Removed isReviewing dependency
+
+  // Initial Load / Load from localStorage
   useEffect(() => {
     setIsLoading(true);
     setError(null);
     try {
-      const filteredData = karanganData.filter(item => item.word && item.definition);
-      if (filteredData.length === 0) throw new Error("No valid Karangan data found.");
+      const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
+      if (filteredData.length === 0) throw new Error("No valid Persamaan data found in source.");
       setAllItems(filteredData);
 
       const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedStateJSON) {
         const savedState = JSON.parse(savedStateJSON);
         if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
-             console.log("Resuming Karangan from saved state:", savedState);
-             // Validate saved items against current data
-             const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
+            console.log("Resuming Persamaan from saved state:", savedState);
+            const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
              const validSavedDisplayItems = savedState.displayItems
-                .map(savedItem => currentAllItemsMap.get(savedItem.id)) // Get full item if only ID was saved, or just use savedItem if full object was saved
+                .map(savedItem => currentAllItemsMap.get(savedItem.id))
                 .filter(Boolean);
 
-             if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
+            if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
                 setDisplayItems(validSavedDisplayItems);
                 setCurrentIndex(savedState.currentIndex);
                 setMissedItems(new Set(savedState.missedItems));
                 setIsReviewing(savedState.isReviewing || false);
-                setIsAnswered(false);
+                setIsAnswered(false); // Start unanswered
              } else {
-                 console.warn("Invalid Karangan saved state (items mismatch or index out of bounds), starting fresh.");
+                 console.warn("Invalid Persamaan saved state, starting fresh.");
                  localStorage.removeItem(LOCAL_STORAGE_KEY);
-                 loadDataSet(filteredData, false);
+                 loadData(filteredData, false);
              }
         } else {
-            console.warn("Invalid Karangan saved state structure, starting fresh.");
+            console.warn("Invalid Persamaan saved state structure, starting fresh.");
             localStorage.removeItem(LOCAL_STORAGE_KEY);
-            loadDataSet(filteredData, false);
+            loadData(filteredData, false);
         }
       } else {
-        console.log("No saved Karangan state, starting fresh.");
-        loadDataSet(filteredData, false);
+        console.log("No saved Persamaan state, starting fresh.");
+        loadData(filteredData, false);
       }
     } catch (err) {
-      console.error("Error initializing Karangan page:", err);
-      setError("Gagal memuat data Karangan.");
+      console.error("Error initializing Persamaan page:", err);
+      setError("Gagal memuat data Persamaan.");
       setAllItems([]);
       setDisplayItems([]);
     } finally {
       setIsLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Load on mount
-
-  // Helper to load data set and reset necessary states
-  const loadDataSet = useCallback((itemsToLoad, isReviewSession) => {
-      setDisplayItems(shuffleArray([...itemsToLoad]));
-      setCurrentIndex(0);
-      setIsReviewing(isReviewSession);
-      setIsAnswered(false);
-      setFeedback('');
-      setSelectedAnswer(null);
-      if (!isReviewSession) {
-          setMissedItems(new Set()); // Clear mistakes only for full run
-      }
-      if (!isReviewSession) {
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
-          console.log("Starting fresh full Karangan run, cleared saved state.");
-      }
-  }, []); // Removed isReviewing dep
+  }, []); // Load on mount only
 
 
   // Save state to localStorage
   useEffect(() => {
     if (isLoading || error || !displayItems || displayItems.length === 0) return;
     const isCompleted = currentIndex >= displayItems.length;
-     if (isCompleted) return; // Don't save completed state
+     if (isCompleted) return; // Don't save completed state until reset
 
     try {
       const stateToSave = {
@@ -146,22 +166,24 @@ const KaranganPage = () => {
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
     } catch (err) {
-      console.error("Failed to save Karangan state:", err);
+      console.error("Failed to save Persamaan state:", err);
     }
   }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
 
+  // Generate options (Indonesian synonyms/distractors)
   const generateOptions = useCallback(() => {
-    if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) {
+    if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
         return;
     }
-    const correctDefinition = currentItem.definition;
+    const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
     const distractors = getDistractors(allItems, currentItem, 2);
-    const allOptions = shuffleArray([correctDefinition, ...distractors]);
+    const allOptions = shuffleArray([correctSynonym, ...distractors]);
     setOptions(allOptions);
   }, [currentItem, allItems]);
 
+  // Regenerate options when needed
   useEffect(() => {
     if (!isLoading && currentItem) {
         generateOptions();
@@ -175,7 +197,7 @@ const KaranganPage = () => {
 
   const handleReshuffleAll = () => {
     setIsReviewing(false);
-    loadDataSet(allItems, false);
+    loadData(allItems, false);
   };
 
   const handleReviewMistakes = () => {
@@ -184,9 +206,9 @@ const KaranganPage = () => {
     const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
      if (itemsToReview.length > 0) {
         setIsReviewing(true);
-        loadDataSet(itemsToReview, true);
+        loadData(itemsToReview, true);
     } else {
-         setError("Tidak dapat memulai review kesalahan Karangan.");
+         setError("Tidak dapat memulai review kesalahan Persamaan.");
     }
   };
 
@@ -197,19 +219,19 @@ const KaranganPage = () => {
     }
   }, [currentIndex, displayItems]);
 
+  // Check if the selected Indonesian word is a synonym of the current word
   const checkAnswer = (selectedOption) => {
-    if (isAnswered || !currentItem || !currentItem.definition) return;
-
+    if (isAnswered || !currentItem || !currentItem.synonyms) return;
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
-
-    const isCorrect = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
+    const correctSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
+    const isCorrect = correctSynonymsLower.includes(selectedOption.toLowerCase());
 
     if (isCorrect) {
-      setFeedback('Tepat! Definisi Benar. 👍');
+      setFeedback('Tepat! Sinonim Benar. 👍');
       setTimeout(loadNextItem, 1500);
     } else {
-      setFeedback(`Kurang Tepat. Definisi: ${currentItem.definition}`);
+      setFeedback(`Kurang Tepat. Sinonim yang benar: ${currentItem.synonyms.join(', ')}`);
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
       }
@@ -219,72 +241,42 @@ const KaranganPage = () => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCount = missedItems.size;
 
-   // --- Render Logic ---
-   if (isLoading) {
-    return <div className="loading">Memuat kata Karangan...</div>;
-  }
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+  // --- Render Logic ---
+  if (isLoading) { return <div className="loading">Memuat sinonim...</div>; }
+  if (error) { return <div className="error">{error}</div>; }
 
-  // --- Completion Screen ---
   if (isCompleted) {
-      const completionText = isReviewing
-        ? "✨ Sesi Review Karangan Selesai! ✨"
-        : "✨ Latihan Karangan Selesai! ✨";
-      // Show mistakes based on the persisted set
-      const mistakesToShow = finalMistakeCount;
+      const completionText = isReviewing ? "✨ Sesi Review Persamaan Selesai! ✨" : "✨ Latihan Persamaan Selesai! ✨";
+      const mistakesToShow = finalMistakeCount; // Show count based on persisted set
     return (
       <div className={styles.container}>
           <p className="completionMessage">{completionText}</p>
           {!isReviewing && mistakesToShow > 0 && (
-             <p className="completionSubMessage">
-                 Anda membuat {mistakesToShow} kesalahan pada putaran awal.
-             </p>
+             <p className="completionSubMessage">Anda membuat {mistakesToShow} kesalahan pada putaran awal.</p>
           )}
           <div className={styles.completionActions}>
               {finalMistakeCount > 0 && !isReviewing && (
-                   <button className="secondaryButton" onClick={handleReviewMistakes}>
-                      🔁 Ulangi Kesalahan ({finalMistakeCount})
-                   </button>
+                   <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCount})</button>
               )}
-              <button className="primaryButton" onClick={handleReshuffleAll}>
-                   {isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}
-              </button>
+              <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button>
           </div>
       </div>
     );
   }
 
-   // --- Active Question Screen ---
-   if (!currentItem) {
-     return <div className="loading">Memuat kata berikutnya...</div>;
-   }
+   if (!currentItem) { return <div className="loading">Memuat kata berikutnya...</div>; }
 
   return (
     <div className={styles.container}>
-       <ProgressBar
-            current={currentIndex + 1}
-            total={totalItemsInSet}
-            label={isReviewing ? "Review Kesalahan" : "Karangan Vocab"}
-        />
-
+        <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewing ? "Review Kesalahan" : "Persamaan"} />
         <div className={styles.card}>
+            <p className={styles.label}>Carikan persamaan kata (sinonim) untuk:</p>
             <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
-            {currentItem.synonyms && currentItem.synonyms.length > 0 && (
-                <div className={styles.synonymSection}>
-                    <p className={styles.synonymLabel}>Sinonim:</p>
-                    <p className={styles.synonymText}>{currentItem.synonyms.join(', ')}</p>
-                </div>
-            )}
         </div>
-
         <div className={styles.optionsContainer}>
-            <p className={styles.instruction}>Pilih definisi (arti) yang paling tepat:</p>
             {options.map((option, index) => {
-              const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();
+              const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
               let buttonClassName = styles.optionButton;
-
               if (isAnswered) {
                 if (isCorrectOption) buttonClassName += ` ${styles.correct}`;
                 else if (selectedAnswer === option) buttonClassName += ` ${styles.incorrect}`;
@@ -292,32 +284,27 @@ const KaranganPage = () => {
               }
               return (
                 <button
-                  key={`${currentItem.id}-def-${index}`}
+                  key={`${currentItem.id}-option-${index}-${option}`}
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
                   disabled={isAnswered}
                   aria-pressed={selectedAnswer === option}
                 >
                   <span className={styles.optionText}>{option}</span>
-                  {/* Icons added via CSS */}
                 </button>
               );
             })}
         </div>
-
         {isAnswered && feedback && (
             <div className={`${styles.feedback} ${feedback.startsWith('Tepat') ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
                  {feedback}
             </div>
         )}
-
         {isAnswered && feedback.startsWith('Kurang Tepat') && (
-            <button className="nextButton" onClick={loadNextItem}>
-            Lanjut <span className="arrowIcon">→</span>
-            </button>
+            <button className="nextButton" onClick={loadNextItem}>Lanjut <span className="arrowIcon">→</span></button>
         )}
     </div>
   );
 };
 
-export default KaranganPage;
+export default PersamaanPage;
