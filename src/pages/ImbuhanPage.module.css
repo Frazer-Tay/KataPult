@@ -1,63 +1,67 @@
 /* src/pages/ImbuhanPage.module.css */
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 25px 20px 40px 20px;
-  max-width: 700px;
+  max-width: 750px; /* Adjusted width */
   margin: 30px auto;
-  background-color: var(--card-background);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px var(--shadow-color);
-  border: 1px solid var(--border-color);
+  background-color: var(--card-background); /* Use variable */
+  border-radius: var(--border-radius-xl); /* Use variable */
+  box-shadow: 0 8px 30px var(--shadow-color); /* Use variable */
+  border: 1px solid var(--border-color-light); /* Use variable */
+  position: relative; /* For potential absolute elements */
 }
 
-/* --- Progress Bar Placeholder Style --- */
+/* Progress Bar Container */
+/* Wrap the ProgressBar component in this div */
 .progressBarContainer {
     width: 95%;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
-/* --- Card Styling --- */
+
+/* Card Styling */
 .card {
-  background-color: #f8f9fc;
-  border-radius: 10px;
-  padding: 30px 35px;
+  background-color: var(--background-medium); /* Use variable */
+  border-radius: var(--border-radius-lg); /* Use variable */
+  padding: 30px 40px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 30px;
-  border: 1px solid #e9ecef;
-  text-align: center; /* Center card content */
+  margin-bottom: 35px; /* More space */
+  border: 1px solid var(--border-color); /* Use variable */
+  text-align: center;
 }
 
 .label {
   font-size: 1rem;
   color: var(--text-light);
-  margin-bottom: 6px;
+  margin-bottom: 8px; /* Increased space */
   font-weight: 500;
 }
 
 .rootWord {
-  font-size: 2.2rem;
+  font-size: 2.4rem; /* Prominent root word */
   font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 20px;
-  display: inline-block; /* Prevent taking full width */
-  border-bottom: 3px solid var(--primary-light); /* Accent underline */
-  padding-bottom: 5px;
+  margin-bottom: 25px; /* More space */
+  display: inline-block;
+  border-bottom: 3px solid var(--primary-light);
+  padding-bottom: 6px; /* Slightly more padding */
 }
 
 .definition {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--text-dark);
-  line-height: 1.6;
+  line-height: 1.7; /* Better spacing */
   font-style: italic;
 }
 
-/* --- Input Section --- */
+/* Input Section */
 .inputSection {
   width: 100%;
-  margin-bottom: 25px; /* More space */
+  margin-bottom: 25px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -65,56 +69,60 @@
 }
 
 .instruction {
-  font-size: 1.2rem; /* Larger instruction */
-  margin-bottom: 18px; /* More space */
+  font-size: 1.25rem;
+  margin-bottom: 20px; /* More space */
   color: var(--text-dark);
   font-weight: 600;
 }
 
 .input {
   width: 90%;
-  max-width: 450px;
+  max-width: 500px; /* Consistent max width */
   padding: 15px 20px; /* Increased padding */
-  font-size: 1.2rem; /* Larger input text */
+  font-size: 1.2rem;
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   box-sizing: border-box;
   text-align: center;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  background-color: #fff; /* Ensure white background */
+  transition: all 0.2s ease-in-out;
+  background-color: #fff;
+  box-shadow: inset 0 2px 4px var(--shadow-color-light); /* Subtle inset shadow */
 }
 
 .input:focus {
     border-color: var(--primary-light);
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
+/* Input validation styles */
 .inputCorrect {
     border-color: var(--success-color);
-    background-color: #f0fff4; /* Very light green */
+    background-color: var(--success-light);
+    color: var(--success-dark);
 }
 .inputCorrect:focus {
-     box-shadow: 0 0 0 0.25rem rgba(46, 204, 113, 0.25);
+     box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
 .inputIncorrect {
     border-color: var(--error-color);
-    background-color: #fff0f1; /* Very light red */
+    background-color: var(--error-light);
+    color: var(--error-dark);
 }
 .inputIncorrect:focus {
-     box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+     box-shadow: 0 0 0 0.25rem rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
 
 /* Feedback Area */
 .feedback {
   font-size: 1.1rem;
-  font-weight: 500; /* Normal weight for readability */
-  margin: 10px 0 20px 0; /* Adjust margin */
-  padding: 12px 18px;
-  border-radius: 8px;
+  font-weight: 500;
+  margin: 10px 0 25px 0; /* Adjusted margin */
+  padding: 15px 20px;
+  border-radius: var(--border-radius-md);
   width: 95%;
-  max-width: 550px; /* Limit feedback width */
+  max-width: 600px; /* Consistent width */
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
@@ -123,29 +131,26 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  line-height: 1.6; /* Better multi-line */
+  line-height: 1.6;
 }
 .feedback::before {
     font-family: 'Segoe UI Symbol', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.4rem; /* Prominent icon */
     line-height: 1;
 }
 .correctFeedback {
-  color: #0f5132;
+  color: #0a3622;
   background-color: var(--success-light);
-  border-color: #badbcc;
+  border-color: #a3cfbb;
 }
-.correctFeedback::before {
-    content: '✓';
-}
+.correctFeedback::before { content: '✓'; }
+
 .incorrectFeedback {
-  color: #842029;
+  color: #58151c;
   background-color: var(--error-light);
-  border-color: #f5c2c7;
+  border-color: #f1b0b7;
 }
-.incorrectFeedback::before {
-    content: '✗';
-}
+.incorrectFeedback::before { content: '✗'; }
 
 /* Buttons */
 .buttonRow {
@@ -153,20 +158,22 @@
   justify-content: center;
   gap: 20px;
   width: 100%;
-  margin-top: 15px; /* Space above buttons */
+  margin-top: 10px; /* Less space when feedback is shown */
   flex-wrap: wrap;
 }
 
-/* --- Completion State Styles --- */
+/* Uses global button styles from App.css */
+
+/* Completion State Styles - uses global classes */
 .completionActions {
     display: flex;
-    gap: 20px; /* Space between completion buttons */
+    gap: 15px;
     margin-top: 15px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-/* General loading/error styles inherited from App.css */
+/* Loading, Error inherited */
 .loading, .error {
-    min-height: 300px; /* Ensure space while loading/error */
+    min-height: 300px;
 }

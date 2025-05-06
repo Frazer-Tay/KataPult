@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { karanganData } from '../data/karangan';
 import styles from './KaranganPage.module.css';
-import ProgressBar from '../components/ProgressBar'; // Assuming ProgressBar component exists
+import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -40,6 +40,8 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     return Array.from(distractors);
 };
 
+const LOCAL_STORAGE_KEY = 'kataPultKaranganState';
+
 const KaranganPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
@@ -52,7 +54,6 @@ const KaranganPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
-  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0);
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
       const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
@@ -61,34 +62,85 @@ const KaranganPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  const loadData = useCallback((itemsToLoad) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) {
-              throw new Error("Tidak ada data Karangan yang valid untuk dimuat.");
-          }
-          setDisplayItems(shuffleArray([...itemsToLoad]));
-          setCurrentIndex(0);
-          setMissedItems(new Set());
-          setMistakesMadeCountDuringRun(0);
-      } catch (err) {
-          console.error("Error loading Karangan data:", err);
-          setError("Gagal memuat data Karangan.");
-          setDisplayItems([]);
-      } finally {
-          setIsLoading(false);
-      }
-  }, []);
+  // Load initial state or saved state
+   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const filteredData = karanganData.filter(item => item.word && item.definition);
+      if (filteredData.length === 0) throw new Error("No valid Karangan data found.");
+      setAllItems(filteredData);
 
+      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedStateJSON) {
+        const savedState = JSON.parse(savedStateJSON);
+        if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
+             console.log("Resuming Karangan from saved state:", savedState);
+             setDisplayItems(savedState.displayItems);
+             setCurrentIndex(savedState.currentIndex);
+             setMissedItems(new Set(savedState.missedItems));
+             setIsReviewing(savedState.isReviewing || false);
+             setIsAnswered(false);
+        } else {
+            console.warn("Invalid Karangan saved state, starting fresh.");
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            loadDataSet(filteredData, false);
+        }
+      } else {
+        console.log("No saved Karangan state, starting fresh.");
+        loadDataSet(filteredData, false);
+      }
+    } catch (err) {
+      console.error("Error initializing Karangan page:", err);
+      setError("Gagal memuat data Karangan.");
+      setAllItems([]);
+      setDisplayItems([]);
+    } finally {
+      setIsLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Load on mount
+
+
+  const loadDataSet = useCallback((itemsToLoad, isReviewSession) => {
+      setDisplayItems(shuffleArray([...itemsToLoad]));
+      setCurrentIndex(0);
+      setIsReviewing(isReviewSession);
+      setIsAnswered(false);
+      setFeedback('');
+      setSelectedAnswer(null);
+      if (!isReviewSession) {
+          setMissedItems(new Set());
+      }
+      if (!isReviewSession) {
+         localStorage.removeItem(LOCAL_STORAGE_KEY);
+          console.log("Starting fresh full Karangan run, cleared saved state.");
+      }
+  }, []); // Removed isReviewing
+
+
+  // Save state to localStorage
   useEffect(() => {
-    const filteredData = karanganData.filter(item => item.word && item.definition);
-    setAllItems(filteredData);
-    loadData(filteredData);
-  }, [loadData]);
+    if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    const isCompleted = currentIndex >= displayItems.length;
+     if (isCompleted) return; // Don't save completed state until reset
+
+    try {
+      const stateToSave = {
+        currentIndex: currentIndex,
+        displayItems: displayItems,
+        missedItems: Array.from(missedItems),
+        isReviewing: isReviewing,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (err) {
+      console.error("Failed to save Karangan state:", err);
+    }
+  }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
+
 
   const generateOptions = useCallback(() => {
-    if (!currentItem || !Array.isArray(currentItem.synonyms) || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) {
+    if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
         return;
     }
@@ -96,8 +148,7 @@ const KaranganPage = () => {
     const distractors = getDistractors(allItems, currentItem, 2);
     const allOptions = shuffleArray([correctDefinition, ...distractors]);
     setOptions(allOptions);
-
-  }, [currentItem, allItems]); // Use allItems for distractors
+  }, [currentItem, allItems]);
 
   useEffect(() => {
     if (!isLoading && currentItem) {
@@ -112,27 +163,25 @@ const KaranganPage = () => {
 
   const handleReshuffleAll = () => {
     setIsReviewing(false);
-    loadData(allItems);
+    loadDataSet(allItems, false);
   };
 
   const handleReviewMistakes = () => {
-    if (mistakesMadeCountDuringRun === 0) return;
-    const itemsToReview = allItems.filter(item => missedItems.has(item.id));
+    const mistakeIds = Array.from(missedItems);
+    if (mistakeIds.length === 0) return;
+    const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
      if (itemsToReview.length > 0) {
         setIsReviewing(true);
-        loadData(itemsToReview);
+        loadDataSet(itemsToReview, true);
     } else {
-         console.warn("Mistake IDs found, but no matching items in allItems for Karangan review.");
          setError("Tidak dapat memulai review kesalahan Karangan.");
     }
   };
 
   const loadNextItem = useCallback(() => {
      if (!displayItems || displayItems.length === 0) return;
-     if (currentIndex < displayItems.length - 1) {
+     if (currentIndex < displayItems.length) { // Use length
         setCurrentIndex(prevIndex => prevIndex + 1);
-    } else {
-         setCurrentIndex(displayItems.length);
     }
   }, [currentIndex, displayItems]);
 
@@ -145,25 +194,25 @@ const KaranganPage = () => {
     const isCorrect = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
 
     if (isCorrect) {
-      setFeedback('Tepat! Definisi Benar.');
+      setFeedback('Tepat! Definisi Benar. 👍');
       setTimeout(loadNextItem, 1500);
     } else {
       setFeedback(`Kurang Tepat. Definisi: ${currentItem.definition}`);
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
-            setMistakesMadeCountDuringRun(prev => prev + 1);
       }
     }
   };
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
+  const finalMistakeCount = missedItems.size;
 
-   // --- Render Logic ---
+  // --- Render Logic ---
    if (isLoading) {
-    return <div className={styles.loading}>Memuat kata Karangan...</div>;
+    return <div className="loading">Memuat kata Karangan...</div>;
   }
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   // --- Completion Screen ---
@@ -171,18 +220,21 @@ const KaranganPage = () => {
       const completionText = isReviewing
         ? "✨ Sesi Review Karangan Selesai! ✨"
         : "✨ Latihan Karangan Selesai! ✨";
+       // Show mistakes count based on the persisted set before review started
+      const mistakesToShow = finalMistakeCount;
+
     return (
       <div className={styles.container}>
-          <p className={styles.completionMessage}>{completionText}</p>
-          {!isReviewing && mistakesMadeCountDuringRun > 0 && (
-             <p className={styles.completionSubMessage}>
-                 Anda membuat {mistakesMadeCountDuringRun} kesalahan pada putaran ini.
+          <p className="completionMessage">{completionText}</p>
+          {!isReviewing && mistakesToShow > 0 && (
+             <p className="completionSubMessage">
+                 Anda membuat {mistakesToShow} kesalahan pada putaran awal.
              </p>
           )}
           <div className={styles.completionActions}>
-              {!isReviewing && mistakesMadeCountDuringRun > 0 && (
+              {finalMistakeCount > 0 && !isReviewing && (
                    <button className="secondaryButton" onClick={handleReviewMistakes}>
-                      🔁 Ulangi Kesalahan ({mistakesMadeCountDuringRun})
+                      🔁 Ulangi Kesalahan ({finalMistakeCount})
                    </button>
               )}
               <button className="primaryButton" onClick={handleReshuffleAll}>
@@ -195,15 +247,15 @@ const KaranganPage = () => {
 
    // --- Active Question Screen ---
    if (!currentItem) {
-     return <div className={styles.loading}>Memuat kata berikutnya...</div>;
+     return <div className="loading">Memuat kata berikutnya...</div>;
    }
 
   return (
     <div className={styles.container}>
-       <ProgressBar
+        <ProgressBar
             current={currentIndex + 1}
             total={totalItemsInSet}
-            label={isReviewing ? "Review Kesalahan" : "Progress"}
+            label={isReviewing ? "Review Kesalahan" : "Karangan Vocab"}
         />
 
         <div className={styles.card}>

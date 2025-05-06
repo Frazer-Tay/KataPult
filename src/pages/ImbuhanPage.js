@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { imbuhanData } from '../data/imbuhan';
 import styles from './ImbuhanPage.module.css';
-import ProgressBar from '../components/ProgressBar'; // Import ProgressBar
+import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
     if (!Array.isArray(array)) return [];
@@ -15,6 +15,8 @@ const shuffleArray = (array) => {
     return array;
 };
 
+const LOCAL_STORAGE_KEY = 'kataPultImbuhanState';
+
 const ImbuhanPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
@@ -22,14 +24,11 @@ const ImbuhanPage = () => {
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
-  const [showNextButton, setShowNextButton] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [missedItems, setMissedItems] = useState(new Set());
+  const [missedItems, setMissedItems] = useState(new Set()); // Persisted via localStorage indirectly
   const [isReviewing, setIsReviewing] = useState(false);
-  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0);
-  // --- ADD isAnswered STATE ---
-  const [isAnswered, setIsAnswered] = useState(false); // Track if current question was answered
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
     const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
@@ -38,155 +37,186 @@ const ImbuhanPage = () => {
     return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  // Initial Load
+  // Load initial state or saved state
   useEffect(() => {
     setIsLoading(true);
     setError(null);
     try {
-      if (!imbuhanData || !Array.isArray(imbuhanData) || imbuhanData.length === 0) {
-        throw new Error("No valid Imbuhan data found.");
+      const filteredData = imbuhanData.filter(item => item.root && item.targetWord && item.targetDefinition);
+      if (filteredData.length === 0) throw new Error("No valid Imbuhan data found.");
+      setAllItems(filteredData);
+
+      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedStateJSON) {
+        const savedState = JSON.parse(savedStateJSON);
+        if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
+             console.log("Resuming Imbuhan from saved state:", savedState);
+             setDisplayItems(savedState.displayItems);
+             setCurrentIndex(savedState.currentIndex);
+             setMissedItems(new Set(savedState.missedItems)); // Restore Set from array
+             setIsReviewing(savedState.isReviewing || false); // Restore review mode
+             setIsAnswered(false); // Always start unanswered
+        } else {
+            console.warn("Invalid Imbuhan saved state found, starting fresh.");
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            loadDataSet(filteredData, false); // Load fresh full set
+        }
+      } else {
+        console.log("No saved Imbuhan state, starting fresh.");
+        loadDataSet(filteredData, false); // Load fresh full set
       }
-      const initialData = shuffleArray([...imbuhanData]);
-      setAllItems([...imbuhanData]);
-      setDisplayItems(initialData);
-      setCurrentIndex(0);
-      setMissedItems(new Set());
-      setIsReviewing(false);
-      setIsAnswered(false); // Reset on load
     } catch (err) {
-      console.error("Error loading/shuffling Imbuhan data:", err);
+      console.error("Error initializing Imbuhan page:", err);
       setError("Gagal memuat data Imbuhan.");
+      setAllItems([]);
+      setDisplayItems([]);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Load on mount
 
-  // Effect to reset state for the next item
-  useEffect(() => {
-    if (!isLoading && currentItem) {
-      setUserInput('');
+  // Helper to load a specific dataset (full or review)
+  const loadDataSet = useCallback((itemsToLoad, isReviewSession) => {
+      setDisplayItems(shuffleArray([...itemsToLoad]));
+      setCurrentIndex(0);
+      setIsReviewing(isReviewSession);
+      setIsAnswered(false);
       setFeedback('');
-      setIsCorrect(false);
-      setShowNextButton(false);
-      setIsAnswered(false); // Reset answered state for new item
+      setUserInput('');
+      // Only reset missedItems when starting a FULL run
+      if (!isReviewSession) {
+          setMissedItems(new Set());
+      }
+      // Clear localStorage ONLY when starting a fresh FULL run
+      if (!isReviewSession) {
+         localStorage.removeItem(LOCAL_STORAGE_KEY);
+         console.log("Starting fresh full Imbuhan run, cleared saved state.");
+      }
+  }, []); // Removed isReviewing from deps, pass as arg
+
+  // Save state to localStorage
+  useEffect(() => {
+    if (isLoading || error || !displayItems || displayItems.length === 0) return;
+
+    const isCompleted = currentIndex >= displayItems.length;
+     if (isCompleted) {
+        // Decide whether to clear storage on completion or keep missed items for review button
+        // Let's keep it until "Ulangi Semua" is clicked
+        // localStorage.removeItem(LOCAL_STORAGE_KEY);
+        // console.log("Imbuhan session completed, cleared saved state.");
+        return;
+     }
+
+    try {
+      const stateToSave = {
+        currentIndex: currentIndex,
+        displayItems: displayItems,
+        missedItems: Array.from(missedItems), // Convert Set to Array for storage
+        isReviewing: isReviewing,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+      // console.log("Imbuhan state saved:", stateToSave);
+    } catch (err) {
+      console.error("Failed to save Imbuhan state to localStorage:", err);
     }
-  }, [currentItem, isLoading]);
+  }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
 
-
+  // Start Over (All items)
   const handleReshuffleAll = () => {
     if (allItems.length === 0) return;
-    setIsLoading(true);
-    setError(null);
-    setIsReviewing(false); // Ensure not in review mode
-    const reshuffled = shuffleArray([...allItems]);
-    setDisplayItems(reshuffled);
-    setCurrentIndex(0);
-    setMissedItems(new Set());
-    setMistakesMadeCountDuringRun(0);
-    setIsAnswered(false);
-    setIsLoading(false);
+    loadDataSet(allItems, false); // Load all, mark as NOT reviewing
   };
 
+  // Start Review (Missed items)
   const handleReviewMistakes = () => {
-    // Use mistakesMadeCountDuringRun to check if review is possible
     const mistakeIds = Array.from(missedItems);
-    if (mistakeIds.length === 0) return;
-
-    setIsLoading(true);
-    setError(null);
+    if (mistakeIds.length === 0) return; // Nothing to review
     const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
-    if (itemsToReview.length > 0) {
-        setDisplayItems(shuffleArray(itemsToReview));
-        setCurrentIndex(0);
-        setMissedItems(new Set()); // Clear for the next *full* run
-        setIsReviewing(true);
-        setMistakesMadeCountDuringRun(0); // Reset count for the review session
-        setIsAnswered(false);
+     if (itemsToReview.length > 0) {
+        loadDataSet(itemsToReview, true); // Load review set, mark as reviewing
     } else {
-         console.warn("Mistake IDs found, but no matching items in allItems.");
-         setError("Tidak dapat memulai review kesalahan.");
+         setError("Tidak dapat memulai review, data kesalahan tidak ditemukan.");
     }
-     setIsLoading(false);
   };
 
+  // Go to Next Item
   const loadNextItem = useCallback(() => {
-    if (!displayItems || displayItems.length === 0) return;
-    if (currentIndex < displayItems.length - 1) {
-      setCurrentIndex(prevIndex => prevIndex + 1);
-      // State resets (input, feedback, isAnswered) handled by useEffect [currentItem]
-    } else {
-      setCurrentIndex(displayItems.length);
+     if (!displayItems || displayItems.length === 0) return;
+     if (currentIndex < displayItems.length) { // Use length directly
+        setCurrentIndex(prevIndex => prevIndex + 1);
+        // Reset answer state is handled by useEffect [currentItem]
     }
   }, [currentIndex, displayItems]);
 
+  // Check Answer Logic
   const checkAnswer = useCallback(() => {
-    // Use isAnswered state to prevent re-checking
     if (!currentItem || isAnswered) return;
-    setIsAnswered(true); // Mark as answered
+    setIsAnswered(true);
 
     const correctAnswer = currentItem.targetWord ? currentItem.targetWord.toLowerCase() : '';
     const userAnswer = userInput.trim().toLowerCase();
 
     if (correctAnswer && userAnswer === correctAnswer) {
-      setFeedback('Tepat! Jawaban Benar.');
+      setFeedback('Tepat! Jawaban Benar. 👍');
       setIsCorrect(true);
-      setShowNextButton(false);
+      // If reviewing, we can potentially remove it from the *next* review list
+      // For simplicity, we only build the review list from the *full* run's mistakes
       setTimeout(loadNextItem, 1500);
     } else {
       setFeedback(`Kurang Tepat. Jawaban: ${currentItem.targetWord || '[N/A]'}`);
       setIsCorrect(false);
-      setShowNextButton(true);
       // Add to missed items only if NOT currently reviewing
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
-            setMistakesMadeCountDuringRun(prev => prev + 1);
       }
     }
-  }, [currentItem, isAnswered, isReviewing, userInput, loadNextItem]); // Add isAnswered, isReviewing
+  }, [currentItem, isAnswered, isReviewing, userInput, loadNextItem]); // Removed unnecessary deps
 
   const handleKeyPress = useCallback((event) => {
-    // Use isAnswered state here too
     if (event.key === 'Enter' && !isAnswered && userInput.trim()) {
       checkAnswer();
+    } else if (event.key === 'Enter' && isAnswered && !isCorrect) {
+        loadNextItem();
     }
-  }, [checkAnswer, isAnswered, userInput]); // Add isAnswered
+  }, [checkAnswer, isAnswered, isCorrect, userInput, loadNextItem]);
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
-  const finalMistakeCount = missedItems.size; // Use this for the completion screen button
+  // Get the count of mistakes from the *persisted* set for the completion screen button
+  const finalMistakeCount = missedItems.size;
 
   // --- Render Logic ---
   if (isLoading) {
-       return <div className={styles.loading}>Memuat pertanyaan...</div>;
+       return <div className="loading">Memuat pertanyaan...</div>;
   }
   if (error) {
-       return <div className={styles.error}>{error}</div>;
+       return <div className="error">{error}</div>;
   }
 
   // --- Completion Screen ---
   if (isCompleted) {
       const completionText = isReviewing
-        ? "✨ Sesi Review Selesai! ✨"
+        ? "✨ Sesi Review Imbuhan Selesai! ✨"
         : "✨ Latihan Imbuhan Selesai! ✨";
-      // Use mistakesMadeCountDuringRun for the message after the *initial* run
-      const mistakesToShow = isReviewing ? 0 : mistakesMadeCountDuringRun;
 
     return (
       <div className={styles.container}>
-        <p className={styles.completionMessage}>{completionText}</p>
-        {mistakesToShow > 0 && (
-           <p className={styles.completionSubMessage}>
-             Anda membuat {mistakesToShow} kesalahan pada putaran ini.
+        <p className="completionMessage">{completionText}</p>
+        {/* Show count only if mistakes were made during the last FULL run */}
+        {!isReviewing && finalMistakeCount > 0 && (
+           <p className="completionSubMessage">
+             Anda membuat {finalMistakeCount} kesalahan pada putaran awal.
            </p>
         )}
         <div className={styles.completionActions}>
-            {/* Use finalMistakeCount (from the Set) to decide if Review button shows */}
-            {finalMistakeCount > 0 && (
+            {/* Show Review button only if mistakes exist and not currently reviewing */}
+            {finalMistakeCount > 0 && !isReviewing && (
                  <button className="secondaryButton" onClick={handleReviewMistakes}>
                     🔁 Ulangi Kesalahan ({finalMistakeCount})
                  </button>
             )}
             <button className="primaryButton" onClick={handleReshuffleAll}>
-                 Ulangi Semua
+                 {isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'}
             </button>
         </div>
       </div>
@@ -195,7 +225,7 @@ const ImbuhanPage = () => {
 
    // --- Active Question Screen ---
    if (!currentItem) {
-     return <div className={styles.loading}>Memuat soal berikutnya...</div>;
+     return <div className="loading">Tidak ada data imbuhan untuk ditampilkan.</div>;
    }
 
   return (
@@ -203,7 +233,7 @@ const ImbuhanPage = () => {
         <ProgressBar
             current={currentIndex + 1}
             total={totalItemsInSet}
-            label={isReviewing ? "Review Kesalahan" : "Progress"}
+            label={isReviewing ? "Review Kesalahan" : "Imbuhan"}
          />
         <div className={styles.card}>
             <p className={styles.label}>Kata Dasar (Root):</p>
@@ -219,29 +249,26 @@ const ImbuhanPage = () => {
             <input
             id="imbuhanInput"
             type="text"
-            // Use isAnswered state for conditional styling
             className={`${styles.input} ${isAnswered ? (isCorrect ? styles.inputCorrect : styles.inputIncorrect) : ''}`}
-            placeholder="Jawaban Anda..."
+            placeholder="Ketik jawaban..."
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            // Use isAnswered state to disable after check, not just isCorrect
             disabled={isAnswered}
+            autoFocus={!isAnswered} // Autofocus on new question
             autoCapitalize="none"
             aria-describedby="feedbackArea"
             aria-invalid={isAnswered && !isCorrect}
             />
         </div>
 
-        {/* Use isAnswered state to show feedback */}
         {isAnswered && feedback && (
-        <p id="feedbackArea" className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
+        <div id="feedbackArea" className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">
             {feedback}
-        </p>
+        </div>
         )}
 
         <div className={styles.buttonRow}>
-        {/* Use isAnswered state to show Check button */}
         {!isAnswered && (
             <button
             className="primaryButton"
@@ -251,8 +278,8 @@ const ImbuhanPage = () => {
             Periksa Jawaban
             </button>
         )}
-        {/* Use showNextButton state (set only on incorrect) */}
-        {showNextButton && (
+        {/* Show Next button ONLY if answered and INCORRECT */}
+        {isAnswered && !isCorrect && (
             <button className="nextButton" onClick={loadNextItem}>
             Lanjut <span className="arrowIcon">→</span>
             </button>

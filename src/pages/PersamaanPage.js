@@ -1,7 +1,7 @@
-// src/pages/PersamaanPage.js
+// src/pages/KaranganPage.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { persamaanData } from '../data/persamaan';
-import styles from './PersamaanPage.module.css';
+import { karanganData } from '../data/karangan';
+import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
@@ -15,34 +15,23 @@ const shuffleArray = (array) => {
   return array;
 };
 
-// Moved getDistractors outside, ensuring it receives necessary data as arguments
 const getDistractors = (allItems, currentItem, count = 2) => {
     const distractors = new Set();
-    if (!Array.isArray(allItems) || !currentItem || !currentItem.synonyms) {
-        console.error("Invalid input to getDistractors in Persamaan");
-        return [];
-    }
-    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.word && item.synonyms && item.synonyms.length > 0);
+     if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) return [];
+    const potentialDistractorItems = allItems.filter(item => item.id !== currentItem.id && item.definition);
     const shuffledPool = shuffleArray([...potentialDistractorItems]);
-    const currentSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
+    const correctDefinitionLower = currentItem.definition.toLowerCase();
 
     for (const item of shuffledPool) {
         if (distractors.size >= count) break;
-        // Ensure synonyms array exists and has items
-        if (item.synonyms && item.synonyms.length > 0) {
-            const potentialDistractor = item.synonyms[0]; // Simple strategy
-            const potentialDistractorLower = potentialDistractor.toLowerCase();
-             // Check against current answers and already added distractors
-            if (!currentSynonymsLower.includes(potentialDistractorLower) && !Array.from(distractors).map(d => d.toLowerCase()).includes(potentialDistractorLower)) {
-                distractors.add(potentialDistractor);
-            }
+         if (item.definition.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(item.definition.toLowerCase())) {
+            distractors.add(item.definition);
         }
     }
-    // Fallback
     let fallbackCounter = 1;
     while (distractors.size < count) {
-        const fallback = `[Opsi ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
-         if (!currentSynonymsLower.includes(fallback.toLowerCase()) && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
+        const fallback = `[Definisi Pilihan ${String.fromCharCode(65 + distractors.size + fallbackCounter)}]`;
+        if (fallback.toLowerCase() !== correctDefinitionLower && !Array.from(distractors).map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
            distractors.add(fallback);
         }
         fallbackCounter++;
@@ -51,8 +40,9 @@ const getDistractors = (allItems, currentItem, count = 2) => {
     return Array.from(distractors);
 };
 
+const LOCAL_STORAGE_KEY = 'kataPultKaranganState'; // Unique key for Karangan
 
-const PersamaanPage = () => {
+const KaranganPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,7 +54,6 @@ const PersamaanPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
-  const [mistakesMadeCountDuringRun, setMistakesMadeCountDuringRun] = useState(0);
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
       const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
@@ -73,66 +62,120 @@ const PersamaanPage = () => {
       return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
-  const loadData = useCallback((itemsToLoad) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-          if (!itemsToLoad || !Array.isArray(itemsToLoad) || itemsToLoad.length === 0) {
-              throw new Error("Tidak ada data persamaan yang valid untuk dimuat.");
-          }
-          setDisplayItems(shuffleArray([...itemsToLoad]));
-          setCurrentIndex(0);
-          setMissedItems(new Set());
-          setMistakesMadeCountDuringRun(0);
-          setIsAnswered(false); // Ensure reset on load/reload
-      } catch (err) {
-          console.error("Error loading Persamaan data:", err);
-          setError("Gagal memuat data Persamaan.");
-          setDisplayItems([]);
-      } finally {
-          setIsLoading(false);
-      }
-  }, []);
-
-  // Initial Load
+  // Load initial state or saved state
   useEffect(() => {
-    const filteredData = persamaanData.filter(item => item.word && item.synonyms && item.synonyms.length > 0);
-    setAllItems(filteredData);
-    loadData(filteredData);
-  }, [loadData]);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const filteredData = karanganData.filter(item => item.word && item.definition);
+      if (filteredData.length === 0) throw new Error("No valid Karangan data found.");
+      setAllItems(filteredData);
+
+      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedStateJSON) {
+        const savedState = JSON.parse(savedStateJSON);
+        if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItems) && Array.isArray(savedState.missedItems)) {
+             console.log("Resuming Karangan from saved state:", savedState);
+             // Validate saved items against current data
+             const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
+             const validSavedDisplayItems = savedState.displayItems
+                .map(savedItem => currentAllItemsMap.get(savedItem.id)) // Get full item if only ID was saved, or just use savedItem if full object was saved
+                .filter(Boolean);
+
+             if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
+                setDisplayItems(validSavedDisplayItems);
+                setCurrentIndex(savedState.currentIndex);
+                setMissedItems(new Set(savedState.missedItems));
+                setIsReviewing(savedState.isReviewing || false);
+                setIsAnswered(false);
+             } else {
+                 console.warn("Invalid Karangan saved state (items mismatch or index out of bounds), starting fresh.");
+                 localStorage.removeItem(LOCAL_STORAGE_KEY);
+                 loadDataSet(filteredData, false);
+             }
+        } else {
+            console.warn("Invalid Karangan saved state structure, starting fresh.");
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            loadDataSet(filteredData, false);
+        }
+      } else {
+        console.log("No saved Karangan state, starting fresh.");
+        loadDataSet(filteredData, false);
+      }
+    } catch (err) {
+      console.error("Error initializing Karangan page:", err);
+      setError("Gagal memuat data Karangan.");
+      setAllItems([]);
+      setDisplayItems([]);
+    } finally {
+      setIsLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Load on mount
+
+  // Helper to load data set and reset necessary states
+  const loadDataSet = useCallback((itemsToLoad, isReviewSession) => {
+      setDisplayItems(shuffleArray([...itemsToLoad]));
+      setCurrentIndex(0);
+      setIsReviewing(isReviewSession);
+      setIsAnswered(false);
+      setFeedback('');
+      setSelectedAnswer(null);
+      if (!isReviewSession) {
+          setMissedItems(new Set()); // Clear mistakes only for full run
+      }
+      if (!isReviewSession) {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          console.log("Starting fresh full Karangan run, cleared saved state.");
+      }
+  }, []); // Removed isReviewing dep
 
 
-  // Generate options when currentItem or *allItems* change
+  // Save state to localStorage
+  useEffect(() => {
+    if (isLoading || error || !displayItems || displayItems.length === 0) return;
+    const isCompleted = currentIndex >= displayItems.length;
+     if (isCompleted) return; // Don't save completed state
+
+    try {
+      const stateToSave = {
+        currentIndex: currentIndex,
+        displayItems: displayItems.map(item => ({ id: item.id })), // Save IDs
+        missedItems: Array.from(missedItems),
+        isReviewing: isReviewing,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (err) {
+      console.error("Failed to save Karangan state:", err);
+    }
+  }, [currentIndex, displayItems, missedItems, isReviewing, isLoading, error]);
+
+
   const generateOptions = useCallback(() => {
-      // Use allItems to get distractors, ensuring it's available
-    if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
+    if (!currentItem || !currentItem.definition || !Array.isArray(allItems) || allItems.length === 0) {
         setOptions([]);
         return;
     }
-    const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
-    // Pass allItems here explicitly
+    const correctDefinition = currentItem.definition;
     const distractors = getDistractors(allItems, currentItem, 2);
-    const allOptions = shuffleArray([correctSynonym, ...distractors]);
+    const allOptions = shuffleArray([correctDefinition, ...distractors]);
     setOptions(allOptions);
+  }, [currentItem, allItems]);
 
-  }, [currentItem, allItems]); // Depend on allItems now
-
-  // Regenerate options when dependencies change
   useEffect(() => {
     if (!isLoading && currentItem) {
         generateOptions();
-        // Reset answer state for the new question
         setSelectedAnswer(null);
         setFeedback('');
         setIsAnswered(false);
     } else if (!currentItem) {
        setOptions([]);
     }
-  }, [currentItem, isLoading, generateOptions]); // generateOptions now depends on allItems too
+  }, [currentItem, isLoading, generateOptions]);
 
   const handleReshuffleAll = () => {
     setIsReviewing(false);
-    loadData(allItems);
+    loadDataSet(allItems, false);
   };
 
   const handleReviewMistakes = () => {
@@ -141,72 +184,66 @@ const PersamaanPage = () => {
     const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
      if (itemsToReview.length > 0) {
         setIsReviewing(true);
-        loadData(itemsToReview);
+        loadDataSet(itemsToReview, true);
     } else {
-         console.warn("Mistake IDs found, but no matching items in allItems for Persamaan review.");
-         setError("Tidak dapat memulai review kesalahan Persamaan.");
+         setError("Tidak dapat memulai review kesalahan Karangan.");
     }
   };
 
   const loadNextItem = useCallback(() => {
      if (!displayItems || displayItems.length === 0) return;
-     if (currentIndex < displayItems.length - 1) {
+     if (currentIndex < displayItems.length) {
         setCurrentIndex(prevIndex => prevIndex + 1);
-    } else {
-         setCurrentIndex(displayItems.length);
     }
   }, [currentIndex, displayItems]);
 
   const checkAnswer = (selectedOption) => {
-    if (isAnswered || !currentItem || !currentItem.synonyms) return;
+    if (isAnswered || !currentItem || !currentItem.definition) return;
 
     setSelectedAnswer(selectedOption);
     setIsAnswered(true);
 
-    const correctSynonymsLower = currentItem.synonyms.map(s => s.toLowerCase());
-    const isCorrect = correctSynonymsLower.includes(selectedOption.toLowerCase());
+    const isCorrect = selectedOption.toLowerCase() === currentItem.definition.toLowerCase();
 
     if (isCorrect) {
-      setFeedback('Tepat! Jawaban Benar.');
+      setFeedback('Tepat! Definisi Benar. 👍');
       setTimeout(loadNextItem, 1500);
     } else {
-      const allAnswers = currentItem.synonyms.join(', ');
-      setFeedback(`Kurang Tepat. Sinonim: ${allAnswers}`);
+      setFeedback(`Kurang Tepat. Definisi: ${currentItem.definition}`);
       if (!isReviewing) {
             setMissedItems(prev => new Set(prev).add(currentItem.id));
-            setMistakesMadeCountDuringRun(prev => prev + 1);
       }
     }
   };
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
-  const finalMistakeCount = missedItems.size; // Use this for completion button logic
+  const finalMistakeCount = missedItems.size;
 
-  // --- Render Logic ---
-  if (isLoading) {
-    return <div className={styles.loading}>Memuat sinonim...</div>;
+   // --- Render Logic ---
+   if (isLoading) {
+    return <div className="loading">Memuat kata Karangan...</div>;
   }
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   // --- Completion Screen ---
   if (isCompleted) {
       const completionText = isReviewing
-        ? "✨ Sesi Review Selesai! ✨"
-        : "✨ Latihan Persamaan Selesai! ✨";
-      const mistakesToShow = isReviewing ? 0 : mistakesMadeCountDuringRun;
+        ? "✨ Sesi Review Karangan Selesai! ✨"
+        : "✨ Latihan Karangan Selesai! ✨";
+      // Show mistakes based on the persisted set
+      const mistakesToShow = finalMistakeCount;
     return (
       <div className={styles.container}>
-          <p className={styles.completionMessage}>{completionText}</p>
-          {mistakesToShow > 0 && (
-             <p className={styles.completionSubMessage}>
-                 Anda membuat {mistakesToShow} kesalahan pada putaran ini.
+          <p className="completionMessage">{completionText}</p>
+          {!isReviewing && mistakesToShow > 0 && (
+             <p className="completionSubMessage">
+                 Anda membuat {mistakesToShow} kesalahan pada putaran awal.
              </p>
           )}
           <div className={styles.completionActions}>
-              {/* Use finalMistakeCount (from the Set) to decide if Review button shows */}
-              {finalMistakeCount > 0 && (
+              {finalMistakeCount > 0 && !isReviewing && (
                    <button className="secondaryButton" onClick={handleReviewMistakes}>
                       🔁 Ulangi Kesalahan ({finalMistakeCount})
                    </button>
@@ -221,26 +258,31 @@ const PersamaanPage = () => {
 
    // --- Active Question Screen ---
    if (!currentItem) {
-     return <div className={styles.loading}>Memuat kata berikutnya...</div>;
+     return <div className="loading">Memuat kata berikutnya...</div>;
    }
 
   return (
     <div className={styles.container}>
-        <ProgressBar
+       <ProgressBar
             current={currentIndex + 1}
             total={totalItemsInSet}
-            label={isReviewing ? "Review Kesalahan" : "Progress"}
+            label={isReviewing ? "Review Kesalahan" : "Karangan Vocab"}
         />
 
         <div className={styles.card}>
-            <p className={styles.label}>Carikan persamaan kata untuk:</p>
             <h2 className={styles.word}>{currentItem.word || '[N/A]'}</h2>
+            {currentItem.synonyms && currentItem.synonyms.length > 0 && (
+                <div className={styles.synonymSection}>
+                    <p className={styles.synonymLabel}>Sinonim:</p>
+                    <p className={styles.synonymText}>{currentItem.synonyms.join(', ')}</p>
+                </div>
+            )}
         </div>
 
         <div className={styles.optionsContainer}>
+            <p className={styles.instruction}>Pilih definisi (arti) yang paling tepat:</p>
             {options.map((option, index) => {
-              // Ensure currentItem and synonyms exist before checking
-              const isCorrectOption = currentItem?.synonyms?.map(s => s.toLowerCase()).includes(option.toLowerCase()) ?? false;
+              const isCorrectOption = currentItem?.definition?.toLowerCase() === option.toLowerCase();
               let buttonClassName = styles.optionButton;
 
               if (isAnswered) {
@@ -248,10 +290,9 @@ const PersamaanPage = () => {
                 else if (selectedAnswer === option) buttonClassName += ` ${styles.incorrect}`;
                 else buttonClassName += ` ${styles.disabled}`;
               }
-
               return (
                 <button
-                  key={`${currentItem.id}-option-${index}-${option}`}
+                  key={`${currentItem.id}-def-${index}`}
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
                   disabled={isAnswered}
@@ -279,4 +320,4 @@ const PersamaanPage = () => {
   );
 };
 
-export default PersamaanPage;
+export default KaranganPage;

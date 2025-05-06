@@ -6,25 +6,24 @@ import styles from './HomePage.module.css';
 const HomePage = () => {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Pilih Mode Latihan Anda</h1>
-      <div className={styles.buttonContainer}>
-        <Link to="/vocabulary" className={`${styles.button} ${styles.vocabButton}`}>
-          📚 Vocabulary (Kalimat)
+      <h1 className={styles.title}>Selamat Datang di KataPult!</h1>
+      <p className={styles.subtitle}>Pilih mode latihan untuk mengasah Bahasa Indonesia Anda.</p>
+      <div className={styles.buttonGrid}>
+        <Link to="/vocabulary" className={`${styles.buttonCard} ${styles.vocabButton}`}>
+          <span className={styles.buttonIcon}>📚</span>
+          <span className={styles.buttonText}>Vocabulary (Contoh Kalimat)</span>
         </Link>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Link to="/imbuhan" className={`${styles.button} ${styles.imbuhanButton}`}>
-          🔗 Imbuhan (Affixes)
+        <Link to="/imbuhan" className={`${styles.buttonCard} ${styles.imbuhanButton}`}>
+          <span className={styles.buttonIcon}>🔗</span>
+          <span className={styles.buttonText}>Imbuhan (Affixes)</span>
         </Link>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Link to="/persamaan" className={`${styles.button} ${styles.persamaanButton}`}>
-          🔄 Persamaan (Synonyms)
+        <Link to="/persamaan" className={`${styles.buttonCard} ${styles.persamaanButton}`}>
+          <span className={styles.buttonIcon}>🔄</span>
+          <span className={styles.buttonText}>Persamaan (Synonyms - MCQ)</span>
         </Link>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Link to="/karangan" className={`${styles.button} ${styles.karanganButton}`}>
-          📝 Karangan Vocabulary
+        <Link to="/karangan" className={`${styles.buttonCard} ${styles.karanganButton}`}>
+          <span className={styles.buttonIcon}>📝</span>
+          <span className={styles.buttonText}>Karangan Vocab (MCQ)</span>
         </Link>
       </div>
     </div>

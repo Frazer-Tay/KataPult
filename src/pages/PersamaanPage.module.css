@@ -5,107 +5,104 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 20px 40px 20px; /* Adjusted padding */
-  max-width: 720px; /* Wider */
+  padding: 25px 20px 40px 20px;
+  max-width: 720px; /* Consistent width */
   min-height: 75vh;
   margin: 30px auto;
   background-color: var(--card-background);
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
-  border: 1px solid #e9ecef;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  border: 1px solid var(--border-color-light);
   position: relative;
 }
 
-/* --- Progress Bar Container --- */
-/* Wrap the ProgressBar component in this div */
+/* Progress Bar Container */
 .progressBarContainer {
     width: 95%;
-    margin: 15px 0 30px 0; /* Position below header, above card */
+    margin-bottom: 30px;
 }
 
 
 /* Card holding the main word */
 .card {
-  /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Purple to Blue Gradient */
-  background-color: #f8f9fc; /* Light background */
-  border: 1px solid var(--border-color);
-  border-radius: 12px; /* Slightly more rounded */
-  padding: 30px 35px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: var(--border-radius-lg); /* More rounded */
+  padding: 35px 40px;
   width: 100%;
   text-align: center;
-  margin-bottom: 35px;
+  margin-top: 10px; /* Space below progress */
+  margin-bottom: 40px; /* More space below */
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.15); /* Deeper inner shadow */
+  color: white;
 }
 
 .label {
   font-size: 1rem;
-  color: var(--text-light);
+  color: rgba(255, 255, 255, 0.9); /* Brighter label */
   margin-bottom: 8px;
-  font-weight: 500;
+  font-weight: 500; /* Medium weight */
 }
 
 .word {
-  font-size: 2.5rem; /* Large main word */
+  font-size: 2.8rem; /* Large word */
   font-weight: 700;
-  color: var(--primary-color); /* Use primary color */
+  color: #ffffff;
   margin-top: 5px;
   letter-spacing: 0.5px;
   word-wrap: break-word;
-  padding-bottom: 5px;
-  border-bottom: 2px solid var(--primary-light);
-  display: inline-block; /* Fit content */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Subtle text shadow */
 }
 
 /* Options container */
 .optionsContainer {
   width: 100%;
-  max-width: 580px;
+  max-width: 600px; /* Consistent max width */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 30px; /* Space before feedback */
+  gap: 18px; /* Slightly more gap */
+  margin-bottom: 30px;
 }
 
 /* Instruction Text */
 .instruction {
-    font-size: 1.15rem; /* Clearer instruction */
-    margin-bottom: 20px;
-    color: var(--text-dark);
-    font-weight: 500;
-    text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 25px; /* More space */
+  color: var(--text-dark);
+  font-weight: 600;
+  text-align: center;
 }
 
 /* --- Option Button Styling --- */
 .optionButton {
   position: relative;
-  padding: 15px 25px 15px 60px; /* Adjusted padding */
+  padding: 16px 25px 16px 60px; /* More vertical padding */
   font-size: 1.1rem;
   color: var(--text-dark);
-  background-color: #ffffff; /* White */
-  border: 2px solid #e0e0e0; /* Slightly darker border */
-  border-radius: 10px;
+  background-color: var(--card-background); /* White */
+  border: 2px solid var(--border-color); /* Standard border */
+  border-radius: var(--border-radius-lg); /* Rounded */
   cursor: pointer;
-  transition: all 0.20s ease-in-out;
-  width: 100%; /* Full width within container */
+  transition: all 0.25s ease-in-out;
+  width: 100%;
   text-align: left;
   box-sizing: border-box;
   font-weight: 500;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-xs);
 }
 
 .optionButton:hover:not(:disabled) {
-  background-color: #f1f3f5;
-  border-color: var(--primary-color); /* Highlight border on hover */
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+  background-color: #f1f9ff; /* Very light blue hover */
+  border-color: var(--secondary-color); /* Blue border on hover */
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-3px); /* Enhanced lift */
 }
 
 .optionButton:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(74, 85, 162, 0.25); /* Indigo focus */
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
 .optionButton:disabled {
@@ -117,7 +114,7 @@
     content: '';
     font-family: 'Segoe UI Symbol', sans-serif;
     position: absolute;
-    left: 20px;
+    left: 22px; /* Consistent icon position */
     top: 50%;
     transform: translateY(-50%) scale(0.8);
     font-size: 1.6rem;
@@ -130,7 +127,7 @@
 .optionButton.correct {
   background-color: var(--success-light);
   border-color: var(--success-color);
-  color: #0a3622;
+  color: var(--success-dark);
   font-weight: 600;
   opacity: 1 !important;
 }
@@ -138,14 +135,14 @@
     content: '✓';
     color: var(--success-color);
     opacity: 1;
-    transform: translateY(-50%) scale(1.15); /* Make icon prominent */
+    transform: translateY(-50%) scale(1.2); /* Pop effect */
 }
 
 /* Incorrect State (Selected) */
 .optionButton.incorrect {
   background-color: var(--error-light);
   border-color: var(--error-color);
-  color: #58151c;
+  color: var(--error-dark);
   font-weight: 600;
   opacity: 1 !important;
 }
@@ -153,7 +150,7 @@
     content: '✗';
     color: var(--error-color);
     opacity: 1;
-    transform: translateY(-50%) scale(1.15);
+    transform: translateY(-50%) scale(1.2); /* Pop effect */
 }
 
 /* Disabled State (non-selected incorrect) */
@@ -161,36 +158,29 @@
     background-color: #f8f9fa;
     border-color: #e9ecef;
     color: #adb5bd;
-    opacity: 0.5; /* More faded */
+    opacity: 0.55; /* More subtle fade */
     box-shadow: none;
     transform: none;
 }
-.optionButton.disabled:hover {
-    transform: none;
-    box-shadow: none;
-}
-.optionButton.disabled::before {
-    display: none;
-}
+.optionButton.disabled:hover { transform: none; box-shadow: none; }
+.optionButton.disabled::before { display: none; }
 .optionButton.correct.disabled::before {
     display: block;
     opacity: 1;
-    transform: translateY(-50%) scale(1.15);
+    transform: translateY(-50%) scale(1.2);
 }
 
-.optionText {
-    display: inline-block;
-}
+.optionText { display: inline-block; }
 
 /* Feedback Area */
 .feedback {
-  font-size: 1.05rem; /* Slightly smaller feedback text */
+  font-size: 1.1rem;
   font-weight: 500;
-  margin: 15px 0 20px 0; /* Adjusted margin */
+  margin: 10px 0 20px 0; /* Adjusted margin */
   padding: 15px 20px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   width: 95%;
-  max-width: 550px;
+  max-width: 600px; /* Consistent width */
   text-align: center;
   box-sizing: border-box;
   border-width: 1px;
@@ -203,29 +193,24 @@
 }
 .feedback::before {
     font-family: 'Segoe UI Symbol', sans-serif;
-    font-size: 1.2rem; /* Slightly smaller icon */
+    font-size: 1.3rem; /* Consistent icon size */
     line-height: 1;
 }
 .correctFeedback {
-  color: #0f5132;
+  color: #0a3622;
   background-color: var(--success-light);
-  border-color: #badbcc;
+  border-color: #a3cfbb;
 }
 .correctFeedback::before { content: '✓'; }
-
 .incorrectFeedback {
-  color: #842029;
+  color: #58151c;
   background-color: var(--error-light);
-  border-color: #f5c2c7;
+  border-color: #f1b0b7;
 }
 .incorrectFeedback::before { content: '✗'; }
 
 
-/* Next/Completion Buttons */
-/* General button styles from App.css are inherited */
-.nextButton {
-    margin-top: 10px; /* Space above next */
-}
+/* Uses global button styles from App.css for Next/Completion */
 .completionActions {
     display: flex;
     gap: 15px;
@@ -234,25 +219,4 @@
     flex-wrap: wrap;
 }
 
-
-/* Loading, Completion, Error States */
-.loading, .error {
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--text-light);
-    padding: 50px 20px;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-.completionMessage {
-    font-size: 1.6rem; /* Larger completion */
-    font-weight: 600;
-    color: var(--text-dark); /* Darker completion text */
-    margin-bottom: 15px;
-}
-.completionSubMessage {
-     font-size: 1rem;
-    color: var(--text-light);
-    margin-bottom: 25px;
-}
+/* Loading, Error, Completion Messages use global styles */

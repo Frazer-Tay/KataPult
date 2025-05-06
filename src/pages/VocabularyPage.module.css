@@ -3,141 +3,108 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px 20px 40px 20px;
-  max-width: 800px;
+  padding: 30px 20px 50px 20px; /* Added more padding */
+  max-width: 900px; /* Wider container */
   margin: 30px auto;
   background-color: var(--card-background);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px var(--shadow-color);
-  border: 1px solid var(--border-color);
-  position: relative; /* For progress bar potentially */
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg); /* More prominent shadow */
+  border: 1px solid var(--border-color-light);
 }
 
-/* --- Progress Bar Placeholder Style --- */
-/* Actual progress bar styles would be in ProgressBar.module.css */
-/* Add some spacing if using a progress bar component */
-.progressBarContainer { /* Wrap the ProgressBar component in this */
-    width: 90%;
-    margin-bottom: 25px;
-}
+/* --- Progress Bar --- */
+/* ProgressBar styles are in its own component CSS */
 
-
-.progressIndicator { /* Can be removed if using ProgressBar component */
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 20px;
-    font-weight: 500;
-    width: 100%;
-    text-align: right;
-    padding-right: 15px;
-    opacity: 0.8;
-}
-
+/* --- Card Styling --- */
 .card {
-  background-color: #f8f9fc;
-  border-radius: 10px;
-  padding: 35px 40px;
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg); /* Consistent rounding */
+  padding: 40px 50px; /* Generous padding */
   width: 100%;
   text-align: center;
-  margin-bottom: 30px;
+  margin-top: 10px; /* Space below progress */
+  margin-bottom: 40px; /* More space below card */
   box-sizing: border-box;
-  border: 1px solid #e9ecef;
+  box-shadow: var(--shadow-sm);
 }
 
 .word {
-  font-size: 2.6rem;
+  font-size: 3rem; /* Larger */
   font-weight: 700;
   margin-bottom: 15px;
-  color: var(--primary-color);
-  letter-spacing: 0.5px;
+  color: var(--primary-dark);
+  line-height: 1.3;
 }
 
 .definition {
-  font-size: 1.1rem;
-  color: var(--text-dark);
+  font-size: 1.25rem; /* Larger */
+  color: var(--text-medium);
   line-height: 1.7;
-  margin-bottom: 25px;
+  margin-top: 10px;
+  margin-bottom: 35px;
   font-style: italic;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .exampleSection {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--border-color);
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed var(--border-color); /* Clearer dashed line */
     text-align: left;
 }
 
-.exampleLabel, .translationLabel {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-bottom: 8px;
+.sectionTitle {
+    font-size: 1.2rem; /* Larger section title */
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 18px; /* More space */
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--primary-light);
+    display: inline-block;
 }
 
-.exampleSentence, .translationText {
-    font-size: 1.05rem;
+.exampleSentence {
+    font-size: 1.1rem;
     color: var(--text-dark);
-    line-height: 1.65;
-    margin-bottom: 15px;
+    line-height: 1.75;
+    margin-bottom: 20px;
+    font-style: italic;
+    background-color: var(--background-medium);
+    padding: 20px; /* More padding */
+    border-radius: var(--border-radius-md);
+    border-left: 5px solid var(--secondary-color); /* Thicker accent */
+    box-shadow: var(--shadow-xs);
 }
 
 .translationSection {
-    margin-top: 15px;
+    margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid #f1f3f5;
-}
-
-.translationLabel {
-    color: var(--text-light);
+    border-top: 1px solid var(--border-color-light);
 }
 
 .translationText {
+    font-size: 1rem;
+    color: var(--text-light); /* Lighter grey */
+    line-height: 1.6;
     font-style: italic;
-    color: #555;
 }
 
-.nextButton {
-    /* Inherits from App.css */
-    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
-    color: white;
-}
-.arrowIcon {
-    font-size: 1.4rem;
-    line-height: 1;
-    transition: transform 0.2s ease;
-}
-.nextButton:hover .arrowIcon {
-    transform: translateX(3px);
+/* Next Button - uses global style */
+
+/* Completion Container */
+.completionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px; /* Add padding */
+    min-height: 40vh;
 }
 
-.loading, .completionMessage, .error {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: var(--text-light);
-    padding: 50px 20px;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-.completionMessage {
-    color: var(--success-color);
-    margin-bottom: 25px;
-    font-size: 1.6rem;
-    font-weight: 600;
-}
-.error {
-    color: var(--error-color);
-}
-
-/* Primary button style for reshuffle */
-.primaryButton {
-  /* Inherits from App.css */
-  background-color: var(--primary-color);
-  color: white;
-  margin-top: 10px; /* Add space */
-}
-.primaryButton:hover {
-  background-color: var(--primary-light);
-}
+/* Loading, Error, Completion Message use global styles */
+/* Primary button style for reshuffle - uses global from App.css */

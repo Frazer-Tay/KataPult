@@ -4,69 +4,99 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
-  padding: 30px 20px;
+  flex-grow: 1; /* Allow container to grow */
+  padding: 40px 20px; /* More padding */
   text-align: center;
 }
 
 .title {
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  color: var(--text-dark);
+  font-size: 2.8rem; /* Larger title */
+  margin-bottom: 15px;
+  color: var(--primary-dark); /* Use primary color */
   font-weight: 700;
+  line-height: 1.2;
 }
 
-.buttonContainer {
-  width: 90%;
-  max-width: 400px;
-  margin: 12px 0;
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--text-medium);
+    margin-bottom: 50px; /* More space */
+    max-width: 600px;
 }
 
-/* Base button styles inherited from App.css */
-.button {
+.buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 30px; /* Increased Grid gap */
+    width: 100%;
+    max-width: 950px; /* Slightly Wider grid */
+}
+
+.buttonCard {
+  /* Inherits base button styles from App.css */
   display: flex;
+  flex-direction: column; /* Stack icon and text */
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 15px 25px;
+  padding: 35px 25px; /* Generous padding */
   font-size: 1.1rem;
-  border-radius: 10px;
+  border-radius: var(--border-radius-lg); /* More rounded */
   text-decoration: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-  border: none;
+  box-shadow: var(--shadow-md); /* More prominent shadow */
   font-weight: 600;
+  text-align: center;
+  min-height: 160px; /* Ensure consistent height */
+  border: none; /* Remove default border */
+  background-color: var(--card-background); /* Use card background */
+  transition: all 0.25s ease-in-out;
 }
 
-/* Specific button colors - Using CSS Variables */
-.vocabButton {
-  background-color: var(--secondary-color); /* Blue */
-  color: white;
+.buttonCard:hover {
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: var(--shadow-lg); /* Increase shadow on hover */
 }
-.vocabButton:hover {
-  background-color: #2980b9; /* Darker blue */
+
+
+.buttonIcon {
+    font-size: 2.8rem; /* Larger icon */
+    margin-bottom: 18px;
+    line-height: 1;
+}
+
+.buttonText {
+    line-height: 1.4;
+    color: var(--text-dark); /* Ensure text color contrasts */
+}
+
+/* Specific button colors using CSS Variables - Applied to Icon/Text potentially */
+/* Or use borders/backgrounds */
+
+.vocabButton {
+  border-bottom: 5px solid var(--secondary-color); /* Blue accent */
+}
+.vocabButton:hover .buttonIcon {
+    color: var(--secondary-color);
 }
 
 .imbuhanButton {
-  background-color: #9b59b6; /* Purple */
-  color: white;
+  border-bottom: 5px solid #9b59b6; /* Purple accent */
 }
-.imbuhanButton:hover {
-  background-color: #8e44ad;
+.imbuhanButton:hover .buttonIcon {
+    color: #9b59b6;
 }
+
 
 .persamaanButton {
-  background-color: var(--success-color); /* Green */
-  color: white;
+   border-bottom: 5px solid var(--success-color); /* Green accent */
 }
-.persamaanButton:hover {
-  background-color: #27ae60;
+.persamaanButton:hover .buttonIcon {
+    color: var(--success-color);
 }
 
+
 .karanganButton {
-  background-color: #f39c12; /* Orange */
-  color: white;
+   border-bottom: 5px solid var(--accent-color); /* Gold/Yellow accent */
 }
-.karanganButton:hover {
-  background-color: #e67e22;
+.karanganButton:hover .buttonIcon {
+     color: var(--accent-color);
 }
