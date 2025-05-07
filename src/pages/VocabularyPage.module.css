@@ -1,13 +1,113 @@
 /* src/pages/VocabularyPage.module.css */
-.container { display: flex; flex-direction: column; align-items: center; padding: 30px 15px 50px 15px; max-width: 850px; margin: 20px auto; background-color: var(--card-background); border-radius: var(--border-radius-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--border-color-light); }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px 40px 15px; /* Adjusted for mobile */
+  max-width: 95vw; /* Use viewport width for very small screens */
+  margin: 20px auto;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+}
 .container:focus { outline: none; }
-.card { background-color: var(--background-light); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: 30px 35px; width: 100%; text-align: center; margin-top: 10px; margin-bottom: 35px; box-sizing: border-box; box-shadow: var(--shadow-sm); }
-.word { font-size: 2.8rem; font-weight: 700; margin-bottom: 18px; color: var(--primary-dark); line-height: 1.3; }
-.definition { font-size: 1.15rem; color: var(--text-medium); line-height: 1.7; margin-top: 10px; margin-bottom: 30px; font-style: italic; max-width: 90%; margin-left: auto; margin-right: auto; }
-.exampleSection { margin-top: 30px; padding-top: 25px; border-top: 2px dashed var(--border-color); text-align: left; }
-.sectionTitle { font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.8px; padding-bottom: 8px; border-bottom: 3px solid var(--primary-light); display: inline-block; }
-.exampleSentence { font-size: 1.1rem; color: var(--text-dark); line-height: 1.75; margin-bottom: 20px; font-style: italic; background-color: var(--background-medium); padding: 18px; border-radius: var(--border-radius-md); border-left: 5px solid var(--secondary-color); box-shadow: var(--shadow-xs); }
-.translationSection { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border-color-light); }
-.translationText { font-size: 0.95rem; color: var(--text-light); line-height: 1.6; font-style: italic; }
-.completionContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; min-height: 40vh; }
-@media (min-width: 768px) { .container { padding: 30px 20px 50px 20px; } .card { padding: 40px 50px; } .word { font-size: 3.2rem; } .definition { font-size: 1.25rem; max-width: 680px; } .sectionTitle { font-size: 1.1rem; } .exampleSentence { font-size: 1.1rem; } .translationText { font-size: 1rem; } }
+
+.card {
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md); /* Less rounding for content card */
+  padding: 25px 20px; /* Reduced padding */
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 30px; /* Less space */
+  box-sizing: border-box;
+  box-shadow: var(--shadow-xs); /* Lighter shadow */
+}
+
+.word {
+  font-size: 2.2rem; /* Smaller for mobile */
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.definition {
+  font-size: 1.05rem; /* Smaller */
+  color: var(--text-medium);
+  line-height: 1.6;
+  margin-top: 8px;
+  margin-bottom: 25px;
+  font-style: italic;
+  max-width: 100%; /* Full width on mobile */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.exampleSection {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+    text-align: left;
+}
+
+.sectionTitle {
+    font-size: 1rem; /* Smaller */
+    font-weight: 600; /* Less bold */
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px; /* Less letter spacing */
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--primary-light); /* Thinner border */
+    display: inline-block;
+}
+
+.exampleSentence {
+    font-size: 1rem; /* Smaller */
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-style: italic;
+    background-color: var(--background-medium);
+    padding: 15px; /* Less padding */
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--secondary-color); /* Thinner accent */
+    box-shadow: var(--shadow-xs);
+}
+
+.translationSection {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color-light);
+}
+
+.translationText {
+    font-size: 0.9rem; /* Smaller */
+    color: var(--text-light);
+    line-height: 1.5;
+    font-style: italic;
+}
+
+.completionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 15px; /* Adjusted padding */
+    min-height: 40vh;
+}
+
+/* Desktop Overrides */
+@media (min-width: 768px) {
+    .container { padding: 30px 20px 50px 20px; max-width: 850px; }
+    .card { padding: 40px 50px; border-radius: var(--border-radius-lg); }
+    .word { font-size: 3.2rem; }
+    .definition { font-size: 1.25rem; max-width: 680px; }
+    .sectionTitle { font-size: 1.1rem; }
+    .exampleSentence { font-size: 1.1rem; padding: 20px; }
+    .translationText { font-size: 1rem; }
+    .completionContainer { padding: 50px 20px; }
+}

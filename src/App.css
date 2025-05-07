@@ -1,6 +1,8 @@
 /* src/App.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 :root {
+  /* ... (CSS Variables remain the same as previous "Overhaul" version) ... */
   --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -35,32 +37,140 @@
   --border-radius-xl: 16px;
   --progress-bar-background: #e9ecef;
 }
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; font-family: var(--font-family-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: var(--background-dark); color: var(--text-dark); line-height: 1.65; font-size: 15px; }
-#root { display: flex; flex-direction: column; min-height: 100vh; }
-.app-header { background: var(--primary-dark); padding: 16px 30px; text-align: center; box-shadow: 0 4px 8px var(--shadow-color-light); flex-shrink: 0; border-bottom: 4px solid var(--accent-color); position: sticky; top: 0; z-index: 100; }
-.home-link { color: white; font-size: 1.7rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s ease; letter-spacing: 0.5px; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%; /* Base for rem units */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+  line-height: 1.6; /* Slightly reduced for better mobile fit */
+  font-size: 15px; /* Default mobile-friendly base */
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling on mobile */
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+  background: var(--primary-dark);
+  padding: 14px 20px;
+  text-align: center;
+  box-shadow: 0 3px 6px var(--shadow-color-light);
+  flex-shrink: 0;
+  border-bottom: 3px solid var(--accent-color); /* Thinner accent */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.home-link {
+  color: white;
+  font-size: 1.4rem; /* Adjusted for mobile */
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
 .home-link:hover { opacity: 0.9; text-decoration: none; }
-main { padding: 35px 15px; flex-grow: 1; display: flex; flex-direction: column; width: 100%; max-width: 1200px; margin: 0 auto; box-sizing: border-box; }
-.app-footer { text-align: center; margin-top: 60px; padding: 25px; color: var(--text-light); font-size: 0.9rem; border-top: 1px solid var(--border-color-light); background-color: var(--background-light); flex-shrink: 0; }
-.loading-page, .loading, .error, .completionMessage { display: flex; justify-content: center; align-items: center; flex-direction: column; min-height: 50vh; font-size: 1.4rem; font-weight: 500; color: var(--text-light); padding: 40px 20px; text-align: center; width: 100%; box-sizing: border-box; }
-.error { color: var(--error-color); font-weight: 600; }
-.completionMessage { color: var(--primary-dark); font-size: 2rem; font-weight: 700; margin-bottom: 15px; line-height: 1.3; }
-.completionSubMessage { font-size: 1.1rem; color: var(--text-medium); margin-bottom: 30px; }
-.completionActions { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
-button, .button, a.buttonCard { cursor: pointer; border: none; border-radius: var(--border-radius-md); padding: 12px 24px; font-size: 1rem; font-weight: 600; transition: all 0.2s ease-in-out; box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.5; text-decoration: none; font-family: inherit; color: inherit; }
+
+main {
+  padding: 20px 10px; /* Reduced padding for mobile */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.app-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 15px; /* Adjusted padding */
+  color: var(--text-light);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color-light);
+  background-color: var(--background-light);
+  flex-shrink: 0;
+}
+
+.loading-page, .loading, .error, .completionMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 40vh;
+    font-size: 1.2rem; /* Smaller for mobile */
+    font-weight: 500;
+    color: var(--text-light);
+    padding: 30px 15px; /* Adjusted padding */
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.error { color: var(--error-color); font-weight: 600; font-size: 1.1rem; }
+.completionMessage { color: var(--primary-dark); font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+.completionSubMessage { font-size: 1rem; color: var(--text-medium); margin-bottom: 20px; }
+.completionActions { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+
+button, .button, a.buttonCard {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 10px 20px; /* Default smaller padding */
+  font-size: 0.95rem; /* Default smaller font */
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1.5;
+  text-decoration: none;
+  font-family: inherit;
+  color: inherit;
+}
+
 button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 button:active:not(:disabled), .button:active:not(:disabled), a.buttonCard:active { transform: translateY(0px); box-shadow: var(--shadow-xs); }
 button:disabled { cursor: not-allowed; background-color: #e9ecef !important; color: #adb5bd !important; border-color: #ced4da !important; box-shadow: none !important; opacity: 0.7; }
 .primaryButton { background: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; }
 .primaryButton:hover:not(:disabled) { opacity: 0.9; }
-.secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid #e6b300; }
+.secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid var(--accent-dark); }
 .secondaryButton:hover:not(:disabled) { background-color: #e6b300; }
 .nextButton { background-color: var(--secondary-color); color: white; }
 .nextButton:hover:not(:disabled) { background-color: #0069d9; }
-.arrowIcon { font-size: 1.3rem; line-height: 1; transition: transform 0.2s ease; }
-.nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(4px); }
+.arrowIcon { font-size: 1.2rem; line-height: 1; transition: transform 0.2s ease; }
+.nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(3px); }
+
 *:focus-visible { outline: 3px solid var(--secondary-light); outline-offset: 2px; border-radius: var(--border-radius-sm); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
 input:focus-visible { border-color: var(--primary-light) !important; }
 a.buttonCard:focus-visible { border-color: var(--primary-color); }
-@media (min-width: 768px) { body { font-size: 16px; } .app-header { padding: 18px 50px; text-align: left; } .home-link { font-size: 1.7rem; } main { padding: 50px 40px; } .app-footer { margin-top: 60px; padding: 25px; font-size: 0.9rem; } .loading-page, .loading, .error, .completionMessage { font-size: 1.4rem; } .completionMessage { font-size: 2rem; } .completionSubMessage { font-size: 1.1rem; } button, .button, a.buttonCard { padding: 14px 30px; font-size: 1.05rem; } .arrowIcon { font-size: 1.3rem; } }
+
+/* Desktop and Larger Tablet Overrides */
+@media (min-width: 768px) {
+  body { font-size: 16px; }
+  .app-header { padding: 18px 50px; text-align: left; }
+  .home-link { font-size: 1.7rem; }
+  main { padding: 40px; } /* Restore some padding */
+  .app-footer { margin-top: 60px; padding: 25px; font-size: 0.9rem; }
+  .loading-page, .loading, .error, .completionMessage { font-size: 1.4rem; }
+  .completionMessage { font-size: 2rem; }
+  .completionSubMessage { font-size: 1.1rem; }
+  button, .button, a.buttonCard { padding: 14px 30px; font-size: 1.05rem; }
+  .arrowIcon { font-size: 1.3rem; }
+}
