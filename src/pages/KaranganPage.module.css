@@ -1,152 +1,20 @@
 /* src/pages/KaranganPage.module.css */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 15px 30px 15px; /* Reduced padding for mobile */
-  max-width: 95vw; /* Use viewport width for very small screens */
-  min-height: auto; /* Allow content to define height on mobile */
-  margin: 20px auto;
-  background-color: var(--card-background);
-  border-radius: var(--border-radius-lg); /* Slightly less rounding for mobile */
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color-light);
-  position: relative;
-}
+.container { display: flex; flex-direction: column; align-items: center; padding: 20px 15px 30px 15px; max-width: 95vw; min-height: auto; margin: 20px auto; background-color: var(--card-background); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color-light); position: relative; }
 .container:focus { outline: none; }
-
-/* Progress Bar Container */
-/* Styles applied via ProgressBar component */
-
-.card {
-  background-color: var(--background-medium);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-md); /* Less rounding */
-  padding: 20px 25px; /* Reduced padding */
-  width: 100%;
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 20px; /* Less space */
-  box-sizing: border-box;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); /* Softer shadow */
-}
-
-.word {
-  font-size: 2rem; /* Smaller for mobile */
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid var(--accent-color);
-  display: inline-block;
-  line-height: 1.2;
-}
-
-/* Synonym Section */
-.synonymSection {
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border-color);
-    text-align: center;
-}
-.synonymLabel {
-    font-size: 0.85rem; /* Smaller */
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-.synonymText {
-    font-size: 0.95rem; /* Smaller */
-    color: var(--text-medium);
-    line-height: 1.5;
-    font-style: italic;
-    background-color: #fff;
-    padding: 8px 12px;
-    border-radius: var(--border-radius-sm);
-    display: inline-block;
-    border: 1px solid var(--border-color-light);
-    max-width: 100%; /* Allow wrapping */
-}
-
-/* Options */
-.optionsContainer {
-  width: 100%;
-  max-width: 100%; /* Full width on mobile */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px; /* Reduced gap */
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.instruction {
-  font-size: 1.1rem; /* Smaller */
-  margin-bottom: 15px;
-  color: var(--text-dark);
-  font-weight: 600;
-  text-align: center;
-}
-
-/* Option Buttons */
-.optionButton {
-  position: relative;
-  padding: 12px 20px 12px 50px; /* Adjusted padding for mobile */
-  font-size: 0.95rem; /* Smaller text */
-  line-height: 1.5;
-  color: var(--text-dark);
-  background-color: #ffffff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--border-radius-md); /* Consistent rounding */
-  cursor: pointer;
-  transition: all 0.20s ease-in-out;
-  width: 100%;
-  text-align: left;
-  box-sizing: border-box;
-  font-weight: 400;
-  box-shadow: var(--shadow-xs);
-  display: flex;
-  align-items: center;
-}
-
-.optionButton:hover:not(:disabled) { background-color: #f1f3f5; border-color: var(--primary-color); box-shadow: var(--shadow-sm); transform: translateY(-1px); } /* Subtle hover */
+.progressBarContainer { width: 95%; margin-bottom: 30px; }
+.card { background-color: var(--background-medium); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 25px 20px; width: 100%; text-align: center; margin-top: 10px; margin-bottom: 20px; box-sizing: border-box; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); }
+.word { font-size: 2.2rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--accent-color); display: inline-block; line-height: 1.2; }
+.synonymSection { margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--border-color); text-align: center; }
+.synonymLabel { font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.synonymText { font-size: 0.95rem; color: var(--text-medium); line-height: 1.5; font-style: italic; background-color: #fff; padding: 8px 12px; border-radius: var(--border-radius-sm); display: inline-block; border: 1px solid var(--border-color-light); max-width: 100%; }
+.optionsContainer { width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; margin-bottom: 20px; }
+.instruction { font-size: 1.05rem; margin-bottom: 15px; color: var(--text-dark); font-weight: 600; text-align: center; }
+.optionButton { position: relative; padding: 12px 20px 12px 50px; font-size: 0.95rem; line-height: 1.5; color: var(--text-dark); background-color: #ffffff; border: 2px solid var(--border-color); border-radius: var(--border-radius-md); cursor: pointer; transition: all 0.20s ease-in-out; width: 100%; text-align: left; box-sizing: border-box; font-weight: 400; box-shadow: var(--shadow-xs); display: flex; align-items: center; }
+.optionButton:hover:not(:disabled) { background-color: #f1f3f5; border-color: var(--primary-color); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
 .optionButton:focus { outline: none; }
 .optionButton:disabled { cursor: not-allowed; }
-
-/* Button Icons */
-.optionButton::before {
-    content: '';
-    font-family: 'Segoe UI Symbol', sans-serif;
-    position: absolute;
-    left: 15px; /* Icon closer to edge */
-    top: 50%;
-    transform: translateY(-50%) scale(0.7); /* Smaller icon scale */
-    font-size: 1.4rem; /* Smaller icon */
-    font-weight: bold;
-    transition: all 0.25s ease-in-out;
-    opacity: 0;
-}
-.optionNumber {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-weight: 600; /* Bolder number */
-    color: var(--text-light);
-    font-size: 0.9rem;
-    width: 20px; /* Narrower number area */
-    text-align: center;
-}
-/* Adjust text padding if number is outside icon space */
-.optionButton .optionText {
-    margin-left: 25px; /* Space for number and icon (if icons were inside number's space) */
-}
-.optionButton::before { /* Icon after number */
-    left: 40px;
-}
-
-
+.optionNumber { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-weight: 600; color: var(--text-light); font-size: 0.9rem; width: 20px; text-align: center; }
+.optionButton::before { content: ''; font-family: 'Segoe UI Symbol', sans-serif; position: absolute; left: 40px; top: 50%; transform: translateY(-50%) scale(0.7); font-size: 1.4rem; font-weight: bold; transition: all 0.25s ease-in-out; opacity: 0; }
 .optionButton.correct { background-color: var(--success-light); border-color: var(--success-color); color: #0a3622; font-weight: 500; opacity: 1 !important; }
 .optionButton.correct .optionNumber { color: var(--success-dark); }
 .optionButton.correct::before { content: '✓'; color: var(--success-color); opacity: 1; transform: translateY(-50%) scale(1.1); }
@@ -158,48 +26,12 @@
 .optionButton.disabled::before { display: none; }
 .optionButton.disabled .optionNumber { color: #ced4da; }
 .optionButton.correct.disabled::before { display: block; opacity: 1; transform: translateY(-50%) scale(1.1); }
-
-.optionText { display: inline-block; }
-
-/* Feedback Area */
-.feedback {
-  font-size: 1rem; /* Smaller feedback */
-  font-weight: 500;
-  margin: 8px 0 15px 0; /* Tighter margins */
-  padding: 12px 15px; /* Adjusted padding */
-  border-radius: 8px;
-  width: 95%;
-  max-width: 100%; /* Full width for mobile */
-  text-align: center;
-  box-sizing: border-box;
-  border-width: 1px;
-  border-style: solid;
-  line-height: 1.5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+.optionText { display: inline-block; margin-left: 25px; }
+.feedback { font-size: 1rem; font-weight: 500; margin: 8px 0 15px 0; padding: 10px 15px; border-radius: 8px; width: 95%; max-width: 100%; text-align: center; box-sizing: border-box; border-width: 1px; border-style: solid; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.5; }
 .feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.1rem; line-height: 1; }
 .correctFeedback { color: #0f5132; background-color: var(--success-light); border-color: #badbcc; }
 .correctFeedback::before { content: '✓'; }
 .incorrectFeedback { color: #842029; background-color: var(--error-light); border-color: #f5c2c7; }
 .incorrectFeedback::before { content: '✗'; }
-
 .completionActions { display: flex; gap: 10px; margin-top: 10px; justify-content: center; flex-wrap: wrap; }
-
-/* Desktop Overrides */
-@media (min-width: 768px) {
-    .container { padding: 25px 20px 40px 20px; max-width: 800px; margin: 30px auto; }
-    .card { padding: 30px 40px; margin-bottom: 30px; }
-    .word { font-size: 2.8rem; }
-    .synonymLabel { font-size: 0.95rem; }
-    .synonymText { font-size: 1.05rem; }
-    .optionsContainer { max-width: 700px; gap: 18px; margin-top: 15px; margin-bottom: 30px; }
-    .instruction { font-size: 1.25rem; margin-bottom: 25px; }
-    .optionButton { padding: 16px 25px 16px 70px; font-size: 1rem; }
-    .optionButton::before { left: 45px; font-size: 1.6rem; }
-    .optionNumber { left: 18px; font-size: 1rem; }
-    .feedback { font-size: 1.05rem; padding: 15px 20px; max-width: 650px; }
-    .completionActions { gap: 15px; }
-}
+@media (min-width: 768px) { .container { padding: 25px 20px 40px 20px; max-width: 800px; } .card { padding: 30px 40px; margin-bottom: 30px; } .word { font-size: 2.8rem; } .synonymLabel { font-size: 0.95rem; } .synonymText { font-size: 1.05rem; } .optionsContainer { max-width: 700px; gap: 18px; margin-top: 15px; margin-bottom: 30px; } .instruction { font-size: 1.25rem; margin-bottom: 25px; } .optionButton { padding: 16px 25px 16px 70px; font-size: 1rem; } .optionButton::before { left: 45px; font-size: 1.6rem; } .optionNumber { left: 18px; font-size: 1rem; } .optionText { margin-left: 0; } .feedback { font-size: 1.05rem; padding: 15px 20px; max-width: 650px; } .completionActions { gap: 15px; } }
