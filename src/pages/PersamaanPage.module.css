@@ -1,206 +1,35 @@
 /* src/pages/PersamaanPage.module.css */
-
-/* Base container */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 25px 20px 40px 20px;
-  max-width: 720px;
-  min-height: 75vh;
-  margin: 30px auto;
-  background-color: var(--card-background);
-  border-radius: var(--border-radius-xl);
-  box-shadow: 0 8px 30px var(--shadow-color);
-  border: 1px solid var(--border-color-light);
-  position: relative;
-}
-/* Remove outline for keyboard listener */
+.container { display: flex; flex-direction: column; align-items: center; padding: 20px 15px 40px 15px; max-width: 700px; min-height: 75vh; margin: 20px auto; background-color: var(--card-background); border-radius: var(--border-radius-xl); box-shadow: 0 8px 30px var(--shadow-color); border: 1px solid var(--border-color-light); position: relative; }
 .container:focus { outline: none; }
-
-/* Progress Bar Container */
-/* Uses component styles */
-
-/* Card holding the main word */
-.card {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  border-radius: var(--border-radius-lg);
-  padding: 35px 40px;
-  width: 100%;
-  text-align: center;
-  margin-top: 10px; /* Space below progress */
-  margin-bottom: 40px; /* More space below */
-  box-sizing: border-box;
-  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.1);
-  color: white;
-}
-
-.label {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.word {
-  font-size: 2.8rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-top: 5px;
-  letter-spacing: 0.5px;
-  word-wrap: break-word;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-/* Options container */
-.optionsContainer {
-  width: 100%;
-  max-width: 600px; /* Adjusted width */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px; /* Increased gap */
-  margin-bottom: 30px;
-}
-
-.instruction {
-  font-size: 1.2rem;
-  margin-bottom: 25px;
-  color: var(--text-dark);
-  font-weight: 600;
-  text-align: center;
-}
-
-/* --- Option Button Styling --- */
-.optionButton {
-  position: relative;
-  padding: 16px 25px 16px 70px; /* Increased left padding for number + icon */
-  font-size: 1.1rem;
-  color: var(--text-dark);
-  background-color: #ffffff;
-  border: 2px solid var(--border-color);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.20s ease-in-out;
-  width: 100%;
-  text-align: left;
-  box-sizing: border-box;
-  font-weight: 500;
-  box-shadow: var(--shadow-xs);
-  display: flex; /* Align number and text */
-  align-items: center;
-}
-
-.optionButton:hover:not(:disabled) {
-  background-color: #f1f9ff; /* Lighter blue hover */
-  border-color: var(--secondary-color);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-2px);
-}
-
-/* Use global focus visible */
-.optionButton:focus { outline: none; } /* Let global handle focus */
-
+.progressIndicator { font-size: 0.9rem; color: #6c757d; margin-bottom: 20px; font-weight: 500; position: absolute; top: 15px; right: 20px; opacity: 0.9; } /* Kept for reference, but ProgressBar component is used */
+.card { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); border-radius: var(--border-radius-lg); padding: 35px 40px; width: 100%; text-align: center; margin-top: 10px; margin-bottom: 40px; box-sizing: border-box; box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.15); color: white; }
+.label { font-size: 1rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 8px; font-weight: 500; }
+.word { font-size: 2.8rem; font-weight: 700; color: #ffffff; margin-top: 5px; letter-spacing: 0.5px; word-wrap: break-word; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+.optionsContainer { width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; gap: 18px; margin-bottom: 30px; }
+.instruction { font-size: 1.2rem; margin-bottom: 25px; color: var(--text-dark); font-weight: 600; text-align: center; }
+.optionButton { position: relative; padding: 16px 25px 16px 70px; font-size: 1.1rem; color: var(--text-dark); background-color: #ffffff; border: 2px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.20s ease-in-out; width: 100%; text-align: left; box-sizing: border-box; font-weight: 500; box-shadow: var(--shadow-xs); display: flex; align-items: center; }
+.optionButton:hover:not(:disabled) { background-color: #f1f9ff; border-color: var(--secondary-color); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+.optionButton:focus { outline: none; } /* Let global focus-visible handle it */
 .optionButton:disabled { cursor: not-allowed; }
-
-/* Option Number */
-.optionNumber {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-weight: 700;
-    color: var(--text-light);
-    font-size: 1rem;
-    width: 24px; /* Fixed width */
-    text-align: center;
-}
-
-/* Icon Styling (position adjusted) */
-.optionButton::before {
-    content: '';
-    font-family: 'Segoe UI Symbol', sans-serif;
-    position: absolute;
-    left: 45px; /* Position icon after number */
-    top: 50%;
-    transform: translateY(-50%) scale(0.8);
-    font-size: 1.5rem; /* Adjusted icon size */
-    font-weight: bold;
-    transition: all 0.25s ease-in-out;
-    opacity: 0;
-}
-
-/* Correct State */
-.optionButton.correct {
-  background-color: var(--success-light);
-  border-color: var(--success-color);
-  color: #0a3622;
-  font-weight: 600;
-  opacity: 1 !important;
-}
+.optionNumber { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--text-light); font-size: 1rem; width: 24px; text-align: center; }
+.optionButton::before { content: ''; font-family: 'Segoe UI Symbol', sans-serif; position: absolute; left: 45px; top: 50%; transform: translateY(-50%) scale(0.8); font-size: 1.5rem; font-weight: bold; transition: all 0.25s ease-in-out; opacity: 0; }
+.optionButton.correct { background-color: var(--success-light); border-color: var(--success-color); color: #0a3622; font-weight: 600; opacity: 1 !important; }
 .optionButton.correct .optionNumber { color: var(--success-dark); }
-.optionButton.correct::before {
-    content: '✓'; color: var(--success-color); opacity: 1; transform: translateY(-50%) scale(1.15);
-}
-
-/* Incorrect State (Selected) */
-.optionButton.incorrect {
-  background-color: var(--error-light);
-  border-color: var(--error-color);
-  color: #58151c;
-  font-weight: 600;
-  opacity: 1 !important;
-}
+.optionButton.correct::before { content: '✓'; color: var(--success-color); opacity: 1; transform: translateY(-50%) scale(1.15); }
+.optionButton.incorrect { background-color: var(--error-light); border-color: var(--error-color); color: #58151c; font-weight: 600; opacity: 1 !important; }
 .optionButton.incorrect .optionNumber { color: var(--error-dark); }
-.optionButton.incorrect::before {
-    content: '✗'; color: var(--error-color); opacity: 1; transform: translateY(-50%) scale(1.15);
-}
-
-/* Disabled State (non-selected incorrect) */
-.optionButton.disabled {
-    background-color: #f8f9fa;
-    border-color: #e9ecef;
-    color: #adb5bd;
-    opacity: 0.55;
-    box-shadow: none;
-    transform: none;
-}
+.optionButton.incorrect::before { content: '✗'; color: var(--error-color); opacity: 1; transform: translateY(-50%) scale(1.15); }
+.optionButton.disabled { background-color: #f8f9fa; border-color: #e9ecef; color: #adb5bd; opacity: 0.55; box-shadow: none; transform: none; }
 .optionButton.disabled:hover { transform: none; box-shadow: none; }
 .optionButton.disabled::before { display: none; }
-.optionButton.disabled .optionNumber { color: #ced4da; } /* Muted number */
-
-/* Ensure correct icon shows */
+.optionButton.disabled .optionNumber { color: #ced4da; }
 .optionButton.correct.disabled::before { display: block; opacity: 1; transform: translateY(-50%) scale(1.15); }
-
 .optionText { display: inline-block; }
-
-/* Feedback Area */
-.feedback {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 15px 0 20px 0;
-  padding: 15px 20px;
-  border-radius: var(--border-radius-md);
-  width: 95%;
-  max-width: 600px;
-  text-align: center;
-  box-sizing: border-box;
-  border-width: 1px;
-  border-style: solid;
-  line-height: 1.6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
+.feedback { font-size: 1.1rem; font-weight: 500; margin: 15px 0 20px 0; padding: 15px 20px; border-radius: var(--border-radius-md); width: 95%; max-width: 600px; text-align: center; box-sizing: border-box; border-width: 1px; border-style: solid; line-height: 1.6; display: flex; align-items: center; justify-content: center; gap: 10px; }
 .feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.3rem; line-height: 1; }
 .correctFeedback { color: #0a3622; background-color: var(--success-light); border-color: #a3cfbb; }
 .correctFeedback::before { content: '✓'; }
 .incorrectFeedback { color: #58151c; background-color: var(--error-light); border-color: #f1b0b7; }
 .incorrectFeedback::before { content: '✗'; }
-
-
-/* Next/Completion Buttons - use global styles */
-/* .completionActions defined globally */
-
-/* Loading, Error, Completion uses global styles */
+.completionActions { display: flex; gap: 15px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+@media (min-width: 768px) { .container { padding: 25px 20px 40px 20px; max-width: 720px; margin: 30px auto; } .card { padding: 35px 40px; margin-bottom: 40px; margin-top: 10px; } .word { font-size: 2.8rem; } .instruction { font-size: 1.2rem; margin-bottom: 25px; } .optionButton { padding: 16px 25px 16px 70px; font-size: 1.1rem; } .optionButton::before { left: 45px; font-size: 1.6rem; } .optionNumber { left: 18px; font-size: 1rem; } .feedback { font-size: 1.1rem; padding: 15px 20px; margin: 10px 0 20px 0; } }

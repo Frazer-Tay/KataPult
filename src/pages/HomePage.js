@@ -8,7 +8,6 @@ const HomePage = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Selamat Datang di KataPult!</h1>
       <p className={styles.subtitle}>Pilih mode latihan untuk mengasah Bahasa Indonesia Anda.</p>
-      {/* Use a nav element for semantic structure */}
       <nav className={styles.buttonGrid} aria-label="Mode Latihan">
         <Link to="/vocabulary" className={`${styles.buttonCard} ${styles.vocabButton}`} role="button">
           <span className={styles.buttonIcon}>📚</span>

@@ -1,42 +1,45 @@
 /* src/components/ProgressBar.module.css */
 .progressBarContainer {
-    width: 95%;
-    max-width: 600px; /* Match content width */
-    margin-bottom: 30px; /* Space below progress bar */
-    padding: 0 5px; /* Small horizontal padding */
+    width: 100%; /* Take full width of its parent */
+    max-width: 700px; /* Max width */
+    margin-bottom: 35px; /* More space below */
+    padding: 0 5px;
     box-sizing: border-box;
 }
 
 .progressLabels {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: var(--text-light);
-    font-weight: 500;
+    align-items: baseline;
+    margin-bottom: 12px; /* Increased space */
+    font-size: 1rem; /* Slightly larger */
+    color: var(--text-medium); /* Use medium text color */
+    font-weight: 600; /* Semi-bold */
 }
 
 .progressLabel {
     text-align: left;
+    color: var(--text-dark);
 }
 
 .progressText {
     text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 .progressBarBackground {
     width: 100%;
-    height: 12px; /* Increased height */
-    background-color: var(--progress-bar-background); /* Use CSS Variable */
-    border-radius: 10px; /* Rounded ends */
-    overflow: hidden; /* Ensure fill stays inside */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+    height: 16px; /* Thicker bar */
+    background-color: var(--progress-bar-background);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Deeper inner shadow */
 }
 
 .progressBarFill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%); /* Gradient fill */
-    border-radius: 10px; /* Match background */
-    transition: width 0.4s ease-in-out; /* Smooth transition */
-    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.2); /* Slight inner highlight */
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%); /* Purple gradient */
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother, slightly longer transition */
+    box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.1); /* Inner shadow on fill */
 }

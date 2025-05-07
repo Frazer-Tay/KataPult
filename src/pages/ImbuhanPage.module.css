@@ -4,72 +4,68 @@
   flex-direction: column;
   align-items: center;
   padding: 25px 20px 40px 20px;
-  max-width: 750px;
+  max-width: 750px; /* Adjusted width */
   margin: 30px auto;
-  background-color: var(--card-background);
-  border-radius: var(--border-radius-xl);
-  box-shadow: 0 8px 30px var(--shadow-color);
-  border: 1px solid var(--border-color-light);
-  position: relative;
+  background-color: var(--card-background); /* Use variable */
+  border-radius: var(--border-radius-xl); /* Use variable */
+  box-shadow: 0 8px 30px var(--shadow-color); /* Use variable */
+  border: 1px solid var(--border-color-light); /* Use variable */
+  position: relative; /* For potential absolute elements */
 }
-/* Remove default outline when programmatically focused */
-.container:focus {
-    outline: none;
-}
+.container:focus { outline: none; }
 
 /* Progress Bar Container */
 /* Styles applied via ProgressBar component */
 
 /* Card Styling */
 .card {
-  background-color: var(--background-medium);
-  border-radius: var(--border-radius-lg);
+  background-color: var(--background-medium); /* Use variable */
+  border-radius: var(--border-radius-lg); /* Use variable */
   padding: 30px 40px;
   width: 100%;
   box-sizing: border-box;
-  margin-top: 10px; /* Space below progress */
-  margin-bottom: 30px;
-  border: 1px solid var(--border-color);
+  margin-top: 10px;
+  margin-bottom: 35px; /* More space */
+  border: 1px solid var(--border-color); /* Use variable */
+  text-align: left; /* Align sentence left */
 }
 
 .label {
   font-size: 1rem;
   color: var(--text-light);
-  margin-bottom: 8px;
-  font-weight: 600;
-  text-align: center;
+  margin-bottom: 8px; /* Increased space */
+  font-weight: 600; /* Bolder label */
 }
 
 .sentence {
-    font-size: 1.35rem; /* Larger sentence */
-    line-height: 1.8;
-    margin-bottom: 30px;
+    font-size: 1.3rem; /* Smaller sentence for mobile */
+    line-height: 1.7;
+    margin-bottom: 30px; /* Space below sentence */
     color: var(--text-dark);
-    text-align: center;
+    text-align: center; /* Center sentence */
     padding: 15px; /* Padding around sentence */
     background-color: #fff; /* White background for sentence */
     border-radius: var(--border-radius-sm);
     border: 1px solid var(--border-color);
 }
 
-/* Style the blank placeholder within the sentence */
 .blankPlaceholder {
     display: inline-block;
-    min-width: 90px; /* Wider blank */
+    min-width: 80px; /* Smaller blank */
     border-bottom: 2px solid var(--primary-color);
-    margin: 0 5px;
-    padding: 0 5px;
+    margin: 0 3px;
+    padding: 0 3px;
     font-weight: 700; /* Bolder blank */
     color: var(--primary-light); /* Lighter color for placeholder */
     vertical-align: baseline;
-    letter-spacing: 1px; /* Spacing inside blank */
+    letter-spacing: 0.5px; /* Less spacing */
 }
 
 .promptSection {
     display: flex;
-    justify-content: space-evenly; /* Evenly space prompts */
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column; /* Stack prompts on mobile */
+    align-items: center; /* Center stacked prompts */
+    gap: 15px; /* Space between stacked items */
     margin-top: 25px;
     padding-top: 20px;
     border-top: 1px dashed var(--border-color);
@@ -78,14 +74,15 @@
 .promptItem {
     text-align: center;
     background-color: #fff;
-    padding: 10px 15px;
+    padding: 10px 15px; /* Smaller padding */
     border-radius: var(--border-radius-md);
     border: 1px solid var(--border-color-light);
-    min-width: 150px; /* Ensure items have some width */
+    width: 90%; /* Take more width when stacked */
+    max-width: 300px; /* Limit max width */
 }
 
 .promptLabel {
-    font-size: 0.9rem;
+    font-size: 0.9rem; /* Smaller */
     color: var(--text-light);
     margin-bottom: 5px;
     font-weight: 500;
@@ -93,7 +90,7 @@
 }
 
 .promptValue {
-    font-size: 1.15rem; /* Slightly larger */
+    font-size: 1.1rem; /* Slightly smaller */
     font-weight: 600;
     color: var(--text-dark);
 }
@@ -110,18 +107,18 @@
 }
 
 .instruction {
-  font-size: 1.2rem;
+  font-size: 1.15rem; /* Smaller instruction */
   margin-bottom: 18px;
   color: var(--text-dark);
   font-weight: 600;
-  max-width: 600px;
+  max-width: 95%; /* Allow full width */
 }
 
 .input {
   width: 90%;
-  max-width: 450px;
-  padding: 16px 22px;
-  font-size: 1.25rem; /* Larger input */
+  max-width: 400px;
+  padding: 15px 20px; /* Increased padding */
+  font-size: 1.2rem;
   border: 2px solid var(--border-color);
   border-radius: var(--border-radius-md);
   box-sizing: border-box;
@@ -131,31 +128,15 @@
   box-shadow: inset 0 2px 4px var(--shadow-color-light);
 }
 
-/* Use more specific :focus-visible for keyboard focus */
 .input:focus-visible {
     border-color: var(--primary-light);
     outline: 0;
-    box-shadow: 0 0 0 3px rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
+    box-shadow: 0 0 0 0.25rem rgba(74, 85, 162, 0.25), inset 0 2px 4px var(--shadow-color-light);
 }
-
-.inputCorrect {
-    border-color: var(--success-color) !important; /* Use important to override focus */
-    background-color: var(--success-light);
-    color: var(--success-dark);
-}
-.inputCorrect:focus-visible {
-     box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.25), inset 0 2px 4px var(--shadow-color-light);
-}
-
-.inputIncorrect {
-    border-color: var(--error-color) !important; /* Use important to override focus */
-    background-color: var(--error-light);
-    color: var(--error-dark);
-}
-.inputIncorrect:focus-visible {
-     box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light);
-}
-
+.inputCorrect { border-color: var(--success-color) !important; background-color: var(--success-light); color: var(--success-dark); }
+.inputCorrect:focus-visible { box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25), inset 0 2px 4px var(--shadow-color-light); }
+.inputIncorrect { border-color: var(--error-color) !important; background-color: var(--error-light); color: var(--error-dark); }
+.inputIncorrect:focus-visible { box-shadow: 0 0 0 0.25rem rgba(248, 81, 73, 0.25), inset 0 2px 4px var(--shadow-color-light); }
 
 /* Feedback Area */
 .feedback {
@@ -176,23 +157,10 @@
   gap: 10px;
   line-height: 1.6;
 }
-.feedback::before {
-    font-family: 'Segoe UI Symbol', sans-serif;
-    font-size: 1.4rem;
-    line-height: 1;
-}
-.correctFeedback {
-  color: #0a3622;
-  background-color: var(--success-light);
-  border-color: #a3cfbb;
-}
+.feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.4rem; line-height: 1; }
+.correctFeedback { color: #0a3622; background-color: var(--success-light); border-color: #a3cfbb; }
 .correctFeedback::before { content: '✓'; }
-
-.incorrectFeedback {
-  color: #58151c;
-  background-color: var(--error-light);
-  border-color: #f1b0b7;
-}
+.incorrectFeedback { color: #58151c; background-color: var(--error-light); border-color: #f1b0b7; }
 .incorrectFeedback::before { content: '✗'; }
 
 /* Buttons */
@@ -206,7 +174,6 @@
 }
 
 /* Uses global button styles from App.css */
-
 /* Completion State Styles - uses global classes */
 .completionActions {
     display: flex;
@@ -217,6 +184,24 @@
 }
 
 /* Loading, Error inherited */
-.loading, .error {
-    min-height: 300px;
+.loading, .error { min-height: 250px; }
+
+@media (min-width: 600px) {
+    .promptSection {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .promptItem {
+        width: auto;
+        min-width: 200px;
+    }
+    .sentence {
+        font-size: 1.3rem;
+    }
+    .blankPlaceholder {
+        min-width: 80px;
+    }
+     .input {
+        max-width: 450px;
+    }
 }
