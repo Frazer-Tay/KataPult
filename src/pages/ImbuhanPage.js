@@ -1,7 +1,6 @@
 // src/pages/ImbuhanPage.js
-// Latest version with sentence-based learning, show/hide hint, persistence, review, keyboard nav, and mobile optimizations
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { imbuhanData } from '../data/imbuhan'; // Ensure this data file is updated with sentence & hint
+import { imbuhanData } from '../data/imbuhan';
 import styles from './ImbuhanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -16,7 +15,7 @@ const shuffleArray = (array) => {
     return array;
 };
 
-const LOCAL_STORAGE_KEY = 'kataPultImbuhanState_v3'; // Keep or update version if structure changes drastically
+const LOCAL_STORAGE_KEY = 'kataPultImbuhanState_v3';
 
 const ImbuhanPage = () => {
   const [allItems, setAllItems] = useState([]);
@@ -30,7 +29,8 @@ const ImbuhanPage = () => {
   const [error, setError] = useState(null);
   const [missedItems, setMissedItems] = useState(new Set());
   const [isReviewing, setIsReviewing] = useState(false);
-  const [showHint, setShowHint] = useState(false); // State for hint visibility
+  const [showHint, setShowHint] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false); // New state for explanation
 
   const inputRef = useRef(null);
   const pageRef = useRef(null);
@@ -54,19 +54,19 @@ const ImbuhanPage = () => {
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
       setIsLoading(true); setError(null);
       try {
-          const validItems = itemsToLoad.filter(item => item.root && item.targetWord && item.sentence && item.hint);
+          const validItems = itemsToLoad.filter(item => item.root && item.targetWord && item.sentence && item.hint && item.explanation); // Ensure explanation exists
           if (!validItems || validItems.length === 0) {
-              throw new Error("Tidak ada data Imbuhan yang valid (dengan kalimat/hint) untuk dimuat.");
+              throw new Error("Tidak ada data Imbuhan yang valid (dengan kalimat/hint/penjelasan) untuk dimuat.");
           }
           setDisplayItems(shuffleArray([...validItems]));
           setCurrentIndex(0); setIsReviewing(isReviewSession);
           setIsAnswered(false); setFeedback(''); setUserInput(''); setIsCorrect(false);
-          setShowHint(false); // Reset hint visibility
+          setShowHint(false);
+          setShowExplanation(false); // Reset explanation visibility
           isCompletedRef.current = false;
           if (!isReviewSession) {
               setMissedItems(new Set());
               localStorage.removeItem(LOCAL_STORAGE_KEY);
-              console.log("Starting fresh full Imbuhan run, cleared saved state.");
           }
       } catch (err) { console.error("Error loading Imbuhan data:", err); setError(err.message || "Gagal memuat data Imbuhan."); setDisplayItems([]); }
       finally { setIsLoading(false); }
@@ -76,8 +76,8 @@ const ImbuhanPage = () => {
     setIsLoading(true); setError(null); let initialLoadItems = [];
     try {
         if (!imbuhanData || !Array.isArray(imbuhanData)) throw new Error("Data Imbuhan dasar tidak valid.");
-        const filteredData = imbuhanData.filter(item => item.root && item.targetWord && item.sentence && item.hint);
-        if (filteredData.length === 0) throw new Error("Tidak ada data Imbuhan yang memenuhi format (root, targetWord, sentence, hint).");
+        const filteredData = imbuhanData.filter(item => item.root && item.targetWord && item.sentence && item.hint && item.explanation); // Ensure explanation exists
+        if (filteredData.length === 0) throw new Error("Tidak ada data Imbuhan yang memenuhi format (root, targetWord, sentence, hint, explanation).");
         setAllItems(filteredData); initialLoadItems = filteredData;
         const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedStateJSON) {
@@ -88,7 +88,7 @@ const ImbuhanPage = () => {
                  if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
                     setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
                     setMissedItems(new Set(savedState.missedItems)); setIsReviewing(savedState.isReviewing || false);
-                    setIsAnswered(false); setIsCorrect(false); setShowHint(false);
+                    setIsAnswered(false); setIsCorrect(false); setShowHint(false); setShowExplanation(false);
                  } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
             } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(initialLoadItems, false); }
         } else { loadData(initialLoadItems, false); }
@@ -111,28 +111,42 @@ const ImbuhanPage = () => {
   useEffect(() => {
        if (!isLoading && currentItemFromMemo) {
          setUserInput(''); setFeedback(''); setIsCorrect(false); setIsAnswered(false);
-         setShowHint(false); // Reset hint for new item
+         setShowHint(false);
+         setShowExplanation(false); // Reset explanation for new item
          setTimeout(() => inputRef.current?.focus(), 50);
        }
    }, [currentItemFromMemo, isLoading]);
 
   const handleReshuffleAll = () => { if (allItems.length === 0) return; setIsReviewing(false); loadData(allItems, false); };
   const handleReviewMistakes = () => { const mistakeIds = Array.from(missedItems); if (mistakeIds.length === 0) return; const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id)); if (itemsToReview.length > 0) { setIsReviewing(true); loadData(itemsToReview, true); } else { setError("Tidak dapat memulai review kesalahan."); } };
-  const loadNextItem = useCallback(() => { if (!displayItems || displayItems.length === 0) return; if (currentIndex < displayItems.length) { setCurrentIndex(prevIndex => prevIndex + 1); } }, [currentIndex, displayItems]);
+  const loadNextItem = useCallback(() => {
+    if (!displayItems || displayItems.length === 0) return;
+    if (currentIndex < totalItemsInSet) { // Use totalItemsInSet for condition
+        setCurrentIndex(prevIndex => prevIndex + 1);
+        setShowExplanation(false); // Hide explanation for the next item
+        setShowHint(false); // Hide hint for the next item
+    } else {
+        // This case should ideally be handled by the completion check earlier
+        isCompletedRef.current = true;
+    }
+  }, [currentIndex, displayItems, totalItemsInSet]);
+
   useEffect(() => { isAnsweredRef.current = isAnswered; isCorrectRef.current = isCorrect; }, [isAnswered, isCorrect]);
 
   const checkAnswer = useCallback(() => {
     if (!currentItemRef.current || isAnsweredRef.current) return;
     setIsAnswered(true);
+    setShowExplanation(true); // Show explanation after answering
     const correctAnswer = currentItemRef.current.targetWord ? currentItemRef.current.targetWord.toLowerCase() : '';
     const userAnswer = userInput.trim().toLowerCase();
     const correct = correctAnswer && userAnswer === correctAnswer;
     setIsCorrect(correct);
-    if (correct) { setFeedback('Tepat! Jawaban Benar. 👍'); setTimeout(loadNextItem, 1500); }
-    else { setFeedback(`Kurang Tepat. Jawaban: ${currentItemRef.current.targetWord || '[N/A]'}`); if (!isReviewing) { setMissedItems(prev => new Set(prev).add(currentItemRef.current.id)); } setTimeout(() => nextButtonRef.current?.focus(), 50); }
+    if (correct) { setFeedback('Tepat! Jawaban Benar. 👍'); setTimeout(loadNextItem, 2500); } // Slightly longer for reading explanation
+    else { setFeedback(`Kurang Tepat. Jawaban yang benar adalah: ${currentItemRef.current.targetWord || '[N/A]'}`); if (!isReviewing) { setMissedItems(prev => new Set(prev).add(currentItemRef.current.id)); } setTimeout(() => nextButtonRef.current?.focus(), 50); }
   }, [userInput, isReviewing, loadNextItem]);
 
   const handleInputKeyPress = useCallback((event) => { if (event.key === 'Enter' && !isAnsweredRef.current && userInput.trim()) { checkAnswer(); } }, [checkAnswer, userInput]);
+
   useEffect(() => {
     const handlePageKeyDown = (event) => {
         const localIsCompleted = currentIndex >= (displayItems?.length || 0);
@@ -157,7 +171,7 @@ const ImbuhanPage = () => {
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) { const completionText = isReviewing ? "✨ Sesi Review Imbuhan Selesai! ✨" : "✨ Latihan Imbuhan Selesai! ✨"; const mistakesToShow = finalMistakeCount; return ( <div className={styles.container}> <p className="completionMessage">{completionText}</p> {!isReviewing && mistakesToShow > 0 && ( <p className="completionSubMessage"> Anda membuat {mistakesToShow} kesalahan pada putaran awal. </p> )} <div className={styles.completionActions}> {finalMistakeCount > 0 && !isReviewing && ( <button className="secondaryButton" onClick={handleReviewMistakes}> 🔁 Ulangi Kesalahan ({finalMistakeCount}) </button> )} <button className="primaryButton" onClick={handleReshuffleAll}> {isReviewing ? 'Mulai Lagi Semua' : 'Ulangi Semua'} </button> </div> </div> ); }
   if (!currentItemFromMemo) { return <div className="loading">Tidak ada data imbuhan untuk ditampilkan.</div>; }
-  const displaySentenceWithBlank = () => { if (!currentItemFromMemo || !currentItemFromMemo.sentence) return "[Kalimat tidak tersedia]"; return currentItemFromMemo.sentence.replace(/___|\[____\]/g, `<span class="${styles.blankPlaceholder}">[____]</span>`); };
+  const displaySentenceWithBlank = () => { if (!currentItemFromMemo || !currentItemFromMemo.sentence) return "[Kalimat tidak tersedia]"; return currentItemFromMemo.sentence.replace(/___|\[____\]|\[_____\]|\[______\]/g, `<span class="${styles.blankPlaceholder}">[____]</span>`); };
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
@@ -171,7 +185,7 @@ const ImbuhanPage = () => {
                     <p className={styles.promptValue}>{currentItemFromMemo.root || '[N/A]'}</p>
                 </div>
                 <div className={styles.promptItem}>
-                    {!showHint && !isAnswered ? ( // Hide hint button after answering too
+                    {!showHint && !isAnswered ? (
                         <button onClick={toggleHint} className={styles.hintButton}>
                             💡 Tampilkan Hint
                         </button>
@@ -192,11 +206,17 @@ const ImbuhanPage = () => {
                 placeholder="Jawaban Anda..." value={userInput} onChange={(e) => setUserInput(e.target.value)}
                 onKeyPress={handleInputKeyPress} disabled={isAnswered}
                 autoFocus={!isAnswered && !isLoading}
-                autoCapitalize="none" aria-describedby="feedbackArea" aria-invalid={isAnswered && !isCorrect}
+                autoCapitalize="none" aria-describedby="feedbackArea explanationArea" aria-invalid={isAnswered && !isCorrect}
             />
         </div>
         {isAnswered && feedback && (
             <div id="feedbackArea" className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`} role="alert">{feedback}</div>
+        )}
+        {isAnswered && showExplanation && currentItemFromMemo.explanation && (
+            <div id="explanationArea" className={styles.explanationBox} role="note">
+                <p className={styles.explanationTitle}>Penjelasan:</p>
+                <p>{currentItemFromMemo.explanation}</p>
+            </div>
         )}
         <div className={styles.buttonRow}>
             {!isAnswered && (<button className="primaryButton" onClick={checkAnswer} disabled={!userInput.trim()}>Periksa Jawaban</button> )}
