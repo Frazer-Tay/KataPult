@@ -6,8 +6,9 @@ import VocabularyPage from './pages/VocabularyPage';
 import ImbuhanPage from './pages/ImbuhanPage';
 import PersamaanPage from './pages/PersamaanPage';
 import KaranganPage from './pages/KaranganPage';
-import TestSetupPage from './pages/TestSetupPage'; // New Import
-import ImbuhanTestPage from './pages/ImbuhanTestPage'; // New Import
+import TestSetupPage from './pages/TestSetupPage';
+import ImbuhanTestPage from './pages/ImbuhanTestPage';
+import PersamaanTestPage from './pages/PersamaanTestPage'; // <-- NEW IMPORT
 import './App.css';
 
 function App() {
@@ -24,9 +25,10 @@ function App() {
             <Route path="/imbuhan" element={<ImbuhanPage />} />
             <Route path="/persamaan" element={<PersamaanPage />} />
             <Route path="/karangan" element={<KaranganPage />} />
-            <Route path="/test-setup" element={<TestSetupPage />} /> {/* New Route */}
-            <Route path="/test/imbuhan" element={<ImbuhanTestPage />} /> {/* New Route */}
-            {/* Add routes for PersamaanTestPage, KaranganTestPage later */}
+            <Route path="/test-setup" element={<TestSetupPage />} />
+            <Route path="/test/imbuhan" element={<ImbuhanTestPage />} />
+            <Route path="/test/persamaan" element={<PersamaanTestPage />} /> {/* <-- NEW ROUTE */}
+            {/* Add route for KaranganTestPage later */}
             <Route path="*" element={
               <div style={{ padding: '20px', textAlign: 'center' }}>
                 <h2>404 - Halaman Tidak Ditemukan</h2>

@@ -4,17 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import styles from './TestSetupPage.module.css';
 
 const TestSetupPage = () => {
-  const [module, setModule] = useState('imbuhan'); // Default to imbuhan
-  const [numQuestions, setNumQuestions] = useState(10); // Default to 10 questions
+  const [module, setModule] = useState('imbuhan');
+  const [numQuestions, setNumQuestions] = useState(10);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!module || numQuestions < 5) { // Basic validation
+    if (!module || numQuestions < 5) {
       alert("Silakan pilih modul dan minimal 5 pertanyaan.");
       return;
     }
-    // Navigate to the specific test page with state
     navigate(`/test/${module}`, { state: { numQuestions: parseInt(numQuestions, 10) } });
   };
 
@@ -31,8 +30,8 @@ const TestSetupPage = () => {
             className={styles.selectInput}
           >
             <option value="imbuhan">Imbuhan (Affixes)</option>
-            <option value="persamaan" disabled>Persamaan (Synonyms) - Segera Hadir</option> {/* Disabled for now */}
-            <option value="karangan" disabled>Karangan Vocab - Segera Hadir</option> {/* Disabled for now */}
+            <option value="persamaan">Persamaan (Synonyms)</option> {/* <-- ENABLED */}
+            <option value="karangan" disabled>Karangan Vocab - Segera Hadir</option>
           </select>
         </div>
 
@@ -43,14 +42,13 @@ const TestSetupPage = () => {
             id="numQuestions"
             value={numQuestions}
             onChange={(e) => setNumQuestions(e.target.value)}
-            min="5" // Minimum 5 questions
-            max="50" // Maximum 50 questions (adjust as needed)
+            min="5"
+            max="50"
             step="5"
             className={styles.numberInput}
           />
         </div>
         <p className={styles.inputNote}>(Min: 5, Max: 50, Kelipatan: 5)</p>
-
 
         <button type="submit" className={`primaryButton ${styles.submitButton}`}>
           Mulai Tes
