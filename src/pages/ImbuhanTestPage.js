@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { imbuhanData } from '../data/imbuhan';
-import styles from './ImbuhanTestPage.module.css'; // We'll create this
+import styles from './ImbuhanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
@@ -17,33 +17,53 @@ const shuffleArray = (array) => {
 };
 
 const QUESTION_TIME_LIMIT = 30; // seconds per question
+const LIVES_START_COUNT = 3;
+const BASE_POINTS_PER_CORRECT_ANSWER = 10;
+const HINT_PENALTY = 5;
+
 
 const ImbuhanTestPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { numQuestions = 10 } = location.state || {}; // Get numQuestions from route state
+  const { numQuestions = 10 } = location.state || {};
 
   const [testItems, setTestItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
-  const [isCorrect, setIsCorrect] = useState(null); // null, true, or false
+  const [isCorrect, setIsCorrect] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3); // Number of chances
+  const [lives, setLives] = useState(LIVES_START_COUNT);
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_LIMIT);
   const [showHint, setShowHint] = useState(false);
+  const [hintUsedThisQuestion, setHintUsedThisQuestion] = useState(false); // Track if hint was used for current q
   const [isTestOver, setIsTestOver] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0); // New state for counting correct answers
 
   const inputRef = useRef(null);
   const timerRef = useRef(null);
   const nextButtonRef = useRef(null);
+  const isAnsweredRef = useRef(isAnswered); // Ref to keep track of isAnswered for timeouts
+
+  useEffect(() => {
+    isAnsweredRef.current = isAnswered;
+  }, [isAnswered]);
 
   const currentItem = useMemo(() => {
     return (testItems && testItems.length > 0 && currentIndex < testItems.length)
       ? testItems[currentIndex]
       : null;
   }, [testItems, currentIndex]);
+
+
+  const handleTimeOut = useCallback(() => {
+    if (isAnsweredRef.current) return; // Check ref, as state might be stale in interval
+    setIsAnswered(true);
+    setIsCorrect(false);
+    setLives(prevLives => prevLives - 1);
+    setTimeout(() => nextButtonRef.current?.focus(), 50);
+  }, []); // No dependencies needed if using ref for isAnswered
 
   const startTimer = useCallback(() => {
     setTimeLeft(QUESTION_TIME_LIMIT);
@@ -52,44 +72,50 @@ const ImbuhanTestPage = () => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerRef.current);
-          handleTimeOut();
+          handleTimeOut(); // Call the stable handleTimeOut
           return 0;
         }
         return prevTime - 1;
       });
     }, 1000);
-  }, []); // Add handleTimeOut to dependency array if it's defined outside or changes
-
-  const handleTimeOut = useCallback(() => {
-    if (isAnswered) return; // Already answered
-    setIsAnswered(true);
-    setIsCorrect(false); // Mark as incorrect if time runs out
-    setLives(prevLives => prevLives - 1);
-    // No direct score penalty for timeout, just loss of life and incorrect answer
-    setTimeout(() => nextButtonRef.current?.focus(), 50);
-  }, [isAnswered]); // Added isAnswered
+  }, [handleTimeOut]); // Add handleTimeOut to dependency array
 
   useEffect(() => {
-    startTimer(); // Start timer when component mounts or currentItem changes
-    return () => clearInterval(timerRef.current); // Cleanup on unmount
-  }, [currentItem, startTimer]);
+    if (currentItem && !isTestOver) { // Only start timer if there's a current item and test is not over
+        startTimer();
+    }
+    return () => clearInterval(timerRef.current);
+  }, [currentItem, startTimer, isTestOver]);
 
 
-  useEffect(()_ => {
+  useEffect(() => {
+    setIsLoading(true); // Set loading true at the start of this effect
     const allValidImbuhan = imbuhanData.filter(
       item => item.root && item.targetWord && item.sentence && item.hint && item.explanation
     );
-    if (allValidImbuhan.length < numQuestions) {
-        alert(`Tidak cukup data Imbuhan (${allValidImbuhan.length}) untuk tes ${numQuestions} pertanyaan. Harap kurangi jumlah pertanyaan atau tambahkan data.`);
+    if (allValidImbuhan.length === 0) {
+        alert(`Tidak ada data Imbuhan yang valid. Tidak dapat memulai tes.`);
         navigate('/test-setup');
+        setIsLoading(false);
         return;
     }
-    const shuffled = shuffleArray([...allValidImbuhan]);
-    setTestItems(shuffled.slice(0, numQuestions));
+    if (allValidImbuhan.length < numQuestions) {
+        alert(`Tidak cukup data Imbuhan (${allValidImbuhan.length}) untuk tes ${numQuestions} pertanyaan. Jumlah pertanyaan diatur ke ${allValidImbuhan.length}.`);
+        const shuffled = shuffleArray([...allValidImbuhan]);
+        setTestItems(shuffled.slice(0, allValidImbuhan.length));
+    } else {
+        const shuffled = shuffleArray([...allValidImbuhan]);
+        setTestItems(shuffled.slice(0, numQuestions));
+    }
     setCurrentIndex(0);
     setScore(0);
-    setLives(3);
+    setCorrectAnswersCount(0);
+    setLives(LIVES_START_COUNT);
     setIsTestOver(false);
+    setIsAnswered(false);
+    setIsCorrect(null);
+    setShowHint(false);
+    setHintUsedThisQuestion(false);
     setIsLoading(false);
   }, [numQuestions, navigate]);
 
@@ -100,18 +126,19 @@ const ImbuhanTestPage = () => {
       setIsAnswered(false);
       setIsCorrect(null);
       setShowHint(false);
-      startTimer(); // Restart timer for the new question
+      setHintUsedThisQuestion(false);
+      // Timer will be restarted by the useEffect for currentItem
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
       setIsTestOver(true);
       clearInterval(timerRef.current);
     }
-  }, [currentIndex, testItems.length, lives, startTimer]);
+  }, [currentIndex, testItems.length, lives]);
 
   const checkAnswer = useCallback(() => {
-    if (isAnswered || !currentItem) return;
+    if (isAnsweredRef.current || !currentItem) return;
 
-    clearInterval(timerRef.current); // Stop timer on answer
+    clearInterval(timerRef.current);
     setIsAnswered(true);
     const correctAnswer = currentItem.targetWord.toLowerCase();
     const userAnswer = userInput.trim().toLowerCase();
@@ -119,13 +146,16 @@ const ImbuhanTestPage = () => {
 
     setIsCorrect(correct);
     if (correct) {
-      setScore(prevScore => prevScore + 10 + Math.max(0, timeLeft - (QUESTION_TIME_LIMIT / 2))); // Points + bonus for speed
+      setCorrectAnswersCount(prev => prev + 1);
+      // Bonus points: more points for faster correct answers
+      // Example: Max bonus is 10 (QUESTION_TIME_LIMIT / 3 roughly), min is 0
+      const timeBonus = Math.max(0, Math.floor((timeLeft / QUESTION_TIME_LIMIT) * BASE_POINTS_PER_CORRECT_ANSWER));
+      setScore(prevScore => prevScore + BASE_POINTS_PER_CORRECT_ANSWER + timeBonus);
     } else {
       setLives(prevLives => prevLives - 1);
     }
-    // Focus next button after a short delay to allow feedback to be seen
     setTimeout(() => nextButtonRef.current?.focus(), 100);
-  }, [userInput, currentItem, isAnswered, timeLeft]);
+  }, [userInput, currentItem, timeLeft]);
 
   useEffect(() => {
     if (lives <= 0 && !isTestOver) {
@@ -134,9 +164,19 @@ const ImbuhanTestPage = () => {
     }
   }, [lives, isTestOver]);
 
-  const handleInputKeyPress = (event) => {
+  const handleInputKeyDown = (event) => { // Changed from onKeyPress
     if (event.key === 'Enter' && !isAnswered && userInput.trim()) {
       checkAnswer();
+    }
+  };
+
+  const handleShowHint = () => {
+    if (!hintUsedThisQuestion && !isAnswered) {
+        setShowHint(true);
+        setHintUsedThisQuestion(true);
+        setScore(prevScore => Math.max(0, prevScore - HINT_PENALTY)); // Deduct points for hint
+    } else if (isAnswered) {
+        setShowHint(true); // Allow viewing hint after answer without penalty
     }
   };
 
@@ -150,15 +190,17 @@ const ImbuhanTestPage = () => {
   }
 
   if (isTestOver) {
+    const accuracy = testItems.length > 0 ? ((correctAnswersCount / testItems.length) * 100).toFixed(1) : 0;
     return (
       <div className={styles.container}>
         <h2 className={styles.pageTitle}>Tes Selesai!</h2>
         <div className={styles.resultsCard}>
           <p className={styles.score}>Skor Akhir Anda: {score}</p>
           <p className={styles.accuracy}>
-            Jawaban Benar: {score / 10 > 0 ? Math.floor(score/10) : 0} / {testItems.length} {/* Simplistic, improve if bonus is complex */}
+            Jawaban Benar: {correctAnswersCount} / {testItems.length} ({accuracy}%)
           </p>
-          {lives <= 0 && <p className={styles.gameOverMessage}>Kesempatan Habis!</p>}
+          {lives <= 0 && ! (correctAnswersCount === testItems.length) && <p className={styles.gameOverMessage}>Kesempatan Habis!</p>}
+          {correctAnswersCount === testItems.length && lives > 0 && <p className={styles.perfectScoreMessage}>Sempurna! ⭐</p> }
           <button className="primaryButton" style={{marginTop: '20px'}} onClick={() => navigate('/test-setup')}>
             Coba Tes Lain
           </button>
@@ -180,7 +222,7 @@ const ImbuhanTestPage = () => {
       <div className={styles.gameStats}>
         <span className={styles.statItem}>Skor: {score}</span>
         <span className={styles.statItem}>Sisa Waktu: {timeLeft}s</span>
-        <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + '💔'.repeat(3 - lives)}</span>
+        <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + (lives < LIVES_START_COUNT ? '💔'.repeat(LIVES_START_COUNT - lives) : '')}</span>
       </div>
 
       <div className={styles.questionCard}>
@@ -192,9 +234,9 @@ const ImbuhanTestPage = () => {
             <p className={styles.promptValue}>{currentItem.root}</p>
           </div>
           <div className={styles.promptItem}>
-            {!showHint && !isAnswered ? (
-              <button onClick={() => setShowHint(true)} className={styles.hintButton}>
-                💡 Tampilkan Hint (-5 Poin)
+            {!showHint || isAnswered ? ( // Show hint button if not shown OR if answered (to re-show)
+              <button onClick={handleShowHint} className={styles.hintButton} disabled={isAnswered && showHint}>
+                💡 {showHint && isAnswered ? "Lihat Hint Lagi" : `Tampilkan Hint (-${HINT_PENALTY} Poin)`}
               </button>
             ) : (
               <>
@@ -216,7 +258,7 @@ const ImbuhanTestPage = () => {
           placeholder="Jawaban Anda..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          onKeyPress={handleInputKeyPress}
+          onKeyDown={handleInputKeyDown} // Changed to onKeyDown
           disabled={isAnswered}
           autoFocus
           autoCapitalize="none"
@@ -225,8 +267,8 @@ const ImbuhanTestPage = () => {
 
       {isAnswered && (
         <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`}>
-          {isCorrect ? "Benar! 👍" : `Salah. Jawaban: ${currentItem.targetWord}`}
-          {timeLeft === 0 && !isCorrect && " (Waktu Habis)"}
+          {isCorrect ? "Benar! 👍" : `Salah. Jawaban yang benar: ${currentItem.targetWord}`}
+          {timeLeft === 0 && !isCorrect && isAnswered && " (Waktu Habis)"}
         </div>
       )}
        {isAnswered && currentItem.explanation && (
@@ -236,7 +278,6 @@ const ImbuhanTestPage = () => {
             </div>
         )}
 
-
       <div className={styles.buttonRow}>
         {!isAnswered && (
           <button className="primaryButton" onClick={checkAnswer} disabled={!userInput.trim()}>
@@ -245,7 +286,8 @@ const ImbuhanTestPage = () => {
         )}
         {isAnswered && (
           <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion}>
-            Lanjut <span className="arrowIcon">→</span>
+            {currentIndex === testItems.length - 1 || lives <= 0 ? "Lihat Hasil" : "Lanjut"}
+            <span className="arrowIcon">→</span>
           </button>
         )}
       </div>
