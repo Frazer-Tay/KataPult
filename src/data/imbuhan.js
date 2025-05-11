@@ -539,20 +539,20 @@ export const imbuhanData = [
     explanation: "The root 'dagang' (trade) takes the suffix '-an' to form the noun 'dagangan' (merchandise/goods for sale). 'Dagangan' is the subject of the sentence, referring to the items sold."
   },
   {
-    id: 90,
+    id: 90, // Keeping original ID for replacement
     root: 'dalih',
-    targetWord: 'dalih',
-    sentence: 'Dia menggunakan sakit sebagai ___ untuk tidak masuk kerja.',
-    hint: 'excuse, pretext',
-    explanation: "This is a root word used as a noun. 'Dalih' (excuse/pretext) directly fits the sentence as the thing used as an excuse. No affix is applied or needed to change 'dalih' here for this meaning."
+    targetWord: 'berdalih',
+    sentence: 'Ketika ditanya mengapa terlambat, dia selalu ___ dengan berbagai alasan.',
+    hint: 'to make excuses, to quibble',
+    explanation: "The root noun 'dalih' (excuse) takes the prefix 'ber-' to form the verb 'berdalih' (to make excuses). This indicates the action of presenting excuses."
   },
   {
-    id: 94,
-    root: 'daya saing',
-    targetWord: 'daya saing',
-    sentence: 'Peningkatan kualitas produk penting untuk ___ global.',
-    hint: 'competitiveness',
-    explanation: "'Daya saing' (competitiveness) is a compound noun phrase. 'Daya' means power/ability and 'saing' means compete. Together, they form the concept of 'competitiveness'. No single affix creates this; it's a fixed lexical item required by the sentence."
+    id: 94, // Keeping original ID
+    root: 'saing',
+    targetWord: 'persaingan',
+    sentence: '___ yang sehat antar perusahaan akan menguntungkan konsumen.',
+    hint: 'competition, rivalry',
+    explanation: "The root 'saing' (compete) takes the circumfix 'per-an' to form the noun 'persaingan' (competition/rivalry). The sentence needs a noun as the subject."
   },
   {
     id: 96,
@@ -1779,12 +1779,12 @@ export const imbuhanData = [
     explanation: "The root 'harap' (hope) takes the suffix '-an' to form the noun 'harapan' (hope). His last hope (subject) is to see his child succeed."
   },
   {
-    id: 263,
+    id: 263, // Keeping original ID
     root: 'hasil',
-    targetWord: 'hasil',
-    sentence: '___ ujian akan diumumkan minggu depan.',
-    hint: 'the result',
-    explanation: "This is a root word used as a noun. 'Hasil' (result/outcome) fits directly as the subject of the sentence. No affix is needed for this meaning."
+    targetWord: 'menghasilkan',
+    sentence: 'Pabrik itu ___ ribuan unit mobil setiap tahun.',
+    hint: 'to produce',
+    explanation: "The root noun 'hasil' (result/product) takes the prefix 'meN-' (becoming 'mengh-') and suffix '-kan' to form the active transitive verb 'menghasilkan' (to produce). The factory (subject) produces cars (object)."
   },
   {
     id: 265,
@@ -1811,12 +1811,12 @@ export const imbuhanData = [
     explanation: "The root 'ingat' (remember) takes the suffix '-an' to form the noun 'ingatan' (memory/recollection). He has a strong memory."
   },
   {
-    id: 274,
+    id: 274, // Keeping original ID
     root: 'isi',
-    targetWord: 'isi',
-    sentence: 'Tolong periksa ___ tas Anda sebelum meninggalkan ruangan.',
-    hint: 'contents',
-    explanation: "This is the root word used as a noun. 'Isi' (contents) fits directly. Check the contents of your bag. No affix needed here."
+    targetWord: 'mengisi',
+    sentence: 'Dia ___ formulir pendaftaran dengan data yang benar.',
+    hint: 'to fill',
+    explanation: "The root noun 'isi' (content/fill) takes the prefix 'meN-' (becoming 'meng-') and suffix '-i' to form the active transitive verb 'mengisi' (to fill). He (subject) fills the registration form (object)."
   },
   {
     id: 276,
@@ -2163,12 +2163,12 @@ export const imbuhanData = [
     explanation: "The root noun 'saksi' (witness) takes the circumfix 'ke-an' to form the noun 'kesaksian' (testimony). The witness's testimony implicated the defendant."
   },
   {
-    id: 322,
+    id: 322, // Keeping original ID
     root: 'kesan',
-    targetWord: 'kesan',
-    sentence: 'Dia memberikan ___ pertama yang baik saat wawancara.',
-    hint: 'impression',
-    explanation: "This is the root word used as a noun. 'Kesan' (impression) fits directly. He gave a good first impression. No affix needed here."
+    targetWord: 'berkesan',
+    sentence: 'Pidatonya sangat ___ dan memotivasi banyak orang.',
+    hint: 'memorable, impressive',
+    explanation: "The root noun 'kesan' (impression) takes the prefix 'ber-' to form the adjective 'berkesan' (memorable/impressive). It describes his speech."
   },
   {
     id: 323,
@@ -2323,12 +2323,12 @@ export const imbuhanData = [
     explanation: "The root 'ledak' (explode) takes the suffix '-an' to form the noun 'ledakan' (explosion). The bomb explosion was heard for several kilometers."
   },
   {
-    id: 351,
+    id: 351, // Keeping original ID
     root: 'manfaat',
-    targetWord: 'manfaat',
-    sentence: 'Jelaskan ___ produk ini bagi konsumen.',
-    hint: 'the benefit',
-    explanation: "This is the root word used as a noun. 'Manfaat' (benefit/use) fits directly. Explain the benefit of this product. No affix needed here."
+    targetWord: 'bermanfaat',
+    sentence: 'Olahraga teratur sangat ___ bagi kesehatan tubuh.',
+    hint: 'beneficial, useful',
+    explanation: "The root noun 'manfaat' (benefit) takes the prefix 'ber-' to form the adjective 'bermanfaat' (beneficial/useful). It describes regular exercise."
   },
   {
     id: 352,
@@ -4691,12 +4691,12 @@ export const imbuhanData = [
     explanation: "The root 'sasar' (target/aim) takes the suffix '-an' to form the noun 'sasaran' (target/goal). His shot's target hit the mark."
   },
   {
-    id: 733,
+    id: 733, // Keeping original ID
     root: 'segel',
-    targetWord: 'segel',
-    sentence: 'Pintu ruangan itu diberi ___ oleh polisi.',
-    hint: 'seal',
-    explanation: "This is the root word used as a noun. 'Segel' (seal) fits directly. The door was given a seal by the police. No affix needed here."
+    targetWord: 'menyegel',
+    sentence: 'Petugas ___ ruangan itu untuk penyelidikan lebih lanjut.',
+    hint: 'to seal',
+    explanation: "The root noun 'segel' (seal) takes the prefix 'meN-' (becoming 'meny-') to form the active transitive verb 'menyegel' (to seal). The officer (subject) seals the room (object)."
   },
   {
     id: 734,
@@ -4771,12 +4771,12 @@ export const imbuhanData = [
     explanation: "The root 'temu' (meet/find) takes the suffix '-an' to form the noun 'temuan' (finding/discovery). New findings in science change old views."
   },
   {
-    id: 750,
+    id: 750, // Keeping original ID
     root: 'tenggelam',
-    targetWord: 'tenggelam',
-    sentence: 'Kapal tua itu ___ di dasar laut.',
-    hint: 'is drowned',
-    explanation: "This is the root word used as an intransitive verb. 'Tenggelam' (to sink/drown) fits directly. The old ship sank to the seabed. No affix needed here."
+    targetWord: 'menenggelamkan',
+    sentence: 'Badai besar itu berhasil ___ beberapa kapal kecil di pelabuhan.',
+    hint: 'to cause to sink, to submerge (something)',
+    explanation: "The root verb 'tenggelam' (to sink) takes the prefix 'meN-' (becoming 'men-') and suffix '-kan' to form the causative transitive verb 'menenggelamkan' (to cause to sink). The storm (subject) sank several small ships (object)."
   },
   {
     id: 752,
@@ -5219,12 +5219,12 @@ export const imbuhanData = [
     explanation: "The root 'jual' (sell) takes the prefix 'ter-' to form the passive verb 'terjual' (sold/has been sold). The house was finally sold after being offered for a long time."
   },
   {
-    id: 812,
+    id: 812, // Keeping original ID
     root: 'timbul',
-    targetWord: 'timbul',
-    sentence: 'Masalah bisa ___ jika tidak ada komunikasi.',
-    hint: 'arise',
-    explanation: "This is the root word used as an intransitive verb. 'Timbul' (to arise/emerge) fits directly. Problems can arise if there's no communication. No affix needed here."
+    targetWord: 'menimbulkan',
+    sentence: 'Komentar negatifnya dapat ___ kesalahpahaman.',
+    hint: 'to cause, to give rise to',
+    explanation: "The root verb 'timbul' (to arise/emerge) takes the prefix 'meN-' (becoming 'men-') and suffix '-kan' to form the causative transitive verb 'menimbulkan' (to cause/give rise to). His negative comments (subject) can cause misunderstanding (object)."
   },
   {
     id: 813,
@@ -5291,36 +5291,36 @@ export const imbuhanData = [
     explanation: "The root 'unggul' (superior) takes the suffix '-an' to form the noun/adjective 'unggulan' (flagship/superior/favored). Our flagship product always sells well."
   },
   {
-    id: 824,
+    id: 824, // Keeping original ID
     root: 'untung',
-    targetWord: 'untung',
-    sentence: 'Dia mendapat ___ besar dari investasinya.',
-    hint: 'profit',
-    explanation: "This is the root word used as a noun. 'Untung' (profit/luck) fits directly. He got a big profit from his investment. No affix needed here."
+    targetWord: 'keuntungan',
+    sentence: 'Perusahaan mendapatkan ___ besar dari penjualan produk baru itu.',
+    hint: 'profit, advantage',
+    explanation: "The root noun/adjective 'untung' (profit/luck) takes the circumfix 'ke-an' to form the noun 'keuntungan' (profit/advantage). The company (subject) gained a large profit (object)."
   },
   {
-    id: 825,
+    id: 825, // Keeping original ID
     root: 'upaya',
-    targetWord: 'upaya',
-    sentence: '___ kerasnya akhirnya membuahkan hasil.',
-    hint: 'effort',
-    explanation: "This is the root word used as a noun. 'Upaya' (effort) fits directly. His hard effort finally paid off. No affix needed here."
+    targetWord: 'berupaya',
+    sentence: 'Tim penyelamat ___ keras mencari korban yang hilang.',
+    hint: 'to make an effort, to strive',
+    explanation: "The root noun 'upaya' (effort) takes the prefix 'ber-' to form the verb 'berupaya' (to make an effort/strive). The rescue team (subject) strives hard."
   },
   {
-    id: 826,
+    id: 826, // Keeping original ID
     root: 'usaha',
-    targetWord: 'usaha',
-    sentence: 'Membuka ___ sendiri membutuhkan modal.',
-    hint: 'effort; business',
-    explanation: "This is the root word used as a noun. 'Usaha' (effort/business) fits directly. Opening your own business requires capital. No affix needed here."
+    targetWord: 'pengusaha',
+    sentence: 'Seorang ___ sukses harus memiliki visi yang jelas dan kerja keras.',
+    hint: 'entrepreneur, businessman',
+    explanation: "The root noun 'usaha' (effort/business) takes the prefix 'peN-' (becoming 'peng-') to form the noun 'pengusaha' (entrepreneur/businessman), referring to the person who undertakes a business."
   },
   {
-    id: 828,
+    id: 828, // Keeping original ID
     root: 'wakil',
-    targetWord: 'wakil',
-    sentence: '___ ketua OSIS menyampaikan sambutan.',
-    hint: 'vice, deputy; representative',
-    explanation: "This is the root word used as a noun/modifier. 'Wakil' (deputy/vice/representative) fits directly. The vice chairman of OSIS delivered remarks. No affix needed here."
+    targetWord: 'mewakili',
+    sentence: 'Dia ditunjuk untuk ___ negaranya dalam konferensi internasional.',
+    hint: 'to represent',
+    explanation: "The root noun 'wakil' (representative) takes the prefix 'meN-' (becoming 'mew-') and suffix '-i' to form the active transitive verb 'mewakili' (to represent). He (subject) was appointed to represent his country (object)."
   },
   {
     id: 830,
