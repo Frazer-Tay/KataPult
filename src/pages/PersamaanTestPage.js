@@ -45,6 +45,7 @@ const PersamaanTestPage = () => {
   const nextButtonRef = useRef(null);
   const optionButtonRefs = useRef([]);
   const isAnsweredRef = useRef(isAnswered);
+  const pageRef = useRef(null); // <-------------------- CORRECTED: Added declaration
 
   useEffect(() => {
     isAnsweredRef.current = isAnswered;
@@ -61,7 +62,6 @@ const PersamaanTestPage = () => {
     if (!Array.isArray(allItems) || !currentItemForDistractors || !Array.isArray(currentItemForDistractors.synonyms)) return [];
 
     const correctSynonymsLower = currentItemForDistractors.synonyms.map(s => s.toLowerCase());
-    // Filter for words that are NOT the current word and NOT one of its correct synonyms
     const potentialDistractorItems = allItems.filter(item =>
         item.id !== currentItemForDistractors.id &&
         item.word.toLowerCase() !== currentItemForDistractors.word.toLowerCase() &&
@@ -80,7 +80,6 @@ const PersamaanTestPage = () => {
             }
         }
     }
-    // Fallback if not enough unique distractors found
     let fallbackCounter = 1;
     const allWordsForFallback = allItems.map(i => i.word).filter(Boolean);
     while (distractors.size < count && fallbackCounter <= allItems.length + 10) {
@@ -95,7 +94,7 @@ const PersamaanTestPage = () => {
         }
         fallbackCounter++;
     }
-     while (distractors.size < count) { // Absolute fallback
+     while (distractors.size < count) { 
          distractors.add(`[Opsi Acak ${distractors.size + Date.now() % 100}]`);
      }
     return Array.from(distractors);
@@ -108,7 +107,7 @@ const PersamaanTestPage = () => {
       return;
     }
     const correctSynonym = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
-    const distractors = getDistractors(persamaanData, currentItem, 3); // Get 3 distractors for 4 total options
+    const distractors = getDistractors(persamaanData, currentItem, 3); 
     const allGeneratedOptions = shuffleArray([correctSynonym, ...distractors]);
     setOptions(allGeneratedOptions);
     optionButtonRefs.current = allGeneratedOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef());
@@ -120,9 +119,9 @@ const PersamaanTestPage = () => {
     setIsAnswered(true);
     setIsCorrect(false);
     setLives(prevLives => prevLives - 1);
-    setStreak(0); // Reset streak on timeout
+    setStreak(0); 
     setTimeout(() => nextButtonRef.current?.focus(), 50);
-  }, []);
+  }, []); 
 
   const startTimer = useCallback(() => {
     setTimeLeft(QUESTION_TIME_LIMIT);
@@ -137,7 +136,7 @@ const PersamaanTestPage = () => {
         return prevTime - 1;
       });
     }, 1000);
-  }, [handleTimeOut]);
+  }, [handleTimeOut]); 
 
   useEffect(() => {
     if (currentItem && !isTestOver) {
@@ -183,7 +182,6 @@ const PersamaanTestPage = () => {
       setSelectedAnswer(null);
       setIsAnswered(false);
       setIsCorrect(null);
-      // Timer and options will be reset by currentItem change useEffect
     } else {
       setIsTestOver(true);
       clearInterval(timerRef.current);
@@ -206,16 +204,16 @@ const PersamaanTestPage = () => {
       const currentStreak = streak + 1;
       setStreak(currentStreak);
       let pointsEarned = BASE_POINTS_PER_CORRECT;
-      if (currentStreak >= 2) { // Apply streak bonus from 2nd consecutive correct answer
+      if (currentStreak >= 2) { 
         pointsEarned += STREAK_BONUS_POINTS * Math.min(currentStreak -1, MAX_STREAK_BONUS_MULTIPLIER);
       }
       setScore(prevScore => prevScore + pointsEarned);
     } else {
       setLives(prevLives => prevLives - 1);
-      setStreak(0); // Reset streak
+      setStreak(0); 
     }
     setTimeout(() => nextButtonRef.current?.focus(), 100);
-  }, [currentItem, streak, timeLeft]); // Added timeLeft to deps for potential future time bonus
+  }, [currentItem, streak, timeLeft]);
 
   useEffect(() => {
     if (lives <= 0 && !isTestOver) {
@@ -288,7 +286,7 @@ const PersamaanTestPage = () => {
             if (selectedAnswer === option) {
               buttonClassName += isCorrect ? ` ${styles.correctSelected}` : ` ${styles.incorrectSelected}`;
             } else if (isCorrectOption) {
-              buttonClassName += ` ${styles.correctUnselected}`; // Highlight correct if user chose wrong
+              buttonClassName += ` ${styles.correctUnselected}`; 
             } else {
                 buttonClassName += ` ${styles.disabled}`;
             }
