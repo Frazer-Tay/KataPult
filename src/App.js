@@ -6,7 +6,9 @@ import VocabularyPage from './pages/VocabularyPage';
 import ImbuhanPage from './pages/ImbuhanPage';
 import PersamaanPage from './pages/PersamaanPage';
 import KaranganPage from './pages/KaranganPage';
-import './App.css'; // Import the global styles
+import TestSetupPage from './pages/TestSetupPage'; // New Import
+import ImbuhanTestPage from './pages/ImbuhanTestPage'; // New Import
+import './App.css';
 
 function App() {
   return (
@@ -15,13 +17,16 @@ function App() {
         <Link to="/" className="home-link">KataPult Bahasa Prep</Link>
       </header>
       <main>
-        <React.Suspense fallback={<div className="loading-page">Loading Page...</div>}>
+        <React.Suspense fallback={<div className="loading-page">Memuat Halaman...</div>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/vocabulary" element={<VocabularyPage />} />
             <Route path="/imbuhan" element={<ImbuhanPage />} />
             <Route path="/persamaan" element={<PersamaanPage />} />
             <Route path="/karangan" element={<KaranganPage />} />
+            <Route path="/test-setup" element={<TestSetupPage />} /> {/* New Route */}
+            <Route path="/test/imbuhan" element={<ImbuhanTestPage />} /> {/* New Route */}
+            {/* Add routes for PersamaanTestPage, KaranganTestPage later */}
             <Route path="*" element={
               <div style={{ padding: '20px', textAlign: 'center' }}>
                 <h2>404 - Halaman Tidak Ditemukan</h2>

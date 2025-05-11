@@ -1,104 +1,168 @@
 /* src/pages/HomePage.module.css */
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  padding: 30px 15px; /* Adjusted for mobile */
-  text-align: center;
-}
-
-.title {
-  font-size: 2.2rem; /* Adjusted for mobile */
-  margin-bottom: 15px;
-  color: var(--primary-dark);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.subtitle {
-    font-size: 1.1rem; /* Adjusted for mobile */
-    color: var(--text-medium);
-    margin-bottom: 40px; /* Adjusted space */
-    max-width: 90%; /* Use percentage for mobile */
-}
-
-.buttonGrid {
-    display: grid;
-    grid-template-columns: 1fr; /* Stack buttons on mobile */
-    gap: 20px; /* Adjusted gap */
-    width: 100%;
-    max-width: 400px; /* Limit width on mobile */
-}
-
-.buttonCard {
-  display: flex;
-  flex-direction: row; /* Icon and text side-by-side */
-  align-items: center;
-  justify-content: flex-start; /* Align items to the start */
-  padding: 18px 20px; /* Adjusted padding */
-  font-size: 1rem; /* Adjusted font size */
-  border-radius: var(--border-radius-lg);
-  text-decoration: none;
-  box-shadow: var(--shadow-md);
-  font-weight: 600;
-  text-align: left; /* Align text left */
-  border: 2px solid transparent;
-  background-color: var(--card-background);
-  transition: all 0.25s ease-in-out !important; /* !important to override global potentially */
-}
-
-.buttonCard:focus-visible {
-    border-color: var(--primary-color) !important; /* !important for specificity */
-    box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light) !important;
-    outline: none;
-}
-.buttonCard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-
-.buttonIcon {
-    font-size: 1.8rem; /* Smaller icon */
-    margin-right: 15px; /* Space between icon and text */
-    line-height: 1;
-    width: 30px; /* Fixed width for icon area */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding: 30px 15px; /* Adjusted for mobile */
     text-align: center;
-    transition: transform 0.2s ease-out;
-}
-.buttonCard:hover .buttonIcon { transform: scale(1.1); }
-.buttonText { line-height: 1.4; color: var(--text-dark); flex-grow: 1; }
-
-.vocabButton { border-left: 5px solid var(--secondary-color); }
-.vocabButton:hover .buttonIcon { color: var(--secondary-color); }
-.imbuhanButton { border-left: 5px solid #9b59b6; }
-.imbuhanButton:hover .buttonIcon { color: #9b59b6; }
-.persamaanButton { border-left: 5px solid var(--success-color); }
-.persamaanButton:hover .buttonIcon { color: var(--success-color); }
-.karanganButton { border-left: 5px solid var(--accent-color); }
-.karanganButton:hover .buttonIcon { color: var(--accent-color); }
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-    .container { padding: 40px 20px; }
-    .title { font-size: 2.8rem; }
-    .subtitle { font-size: 1.2rem; max-width: 600px;}
-    .buttonGrid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-        max-width: 950px;
-    }
-    .buttonCard {
-        flex-direction: column; /* Stack icon and text on desktop */
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        min-height: 160px;
-        padding: 35px 25px;
-        font-size: 1.1rem;
-    }
-    .buttonIcon {
-        font-size: 2.8rem;
-        margin-right: 0; /* No right margin when stacked */
-        margin-bottom: 18px;
-        width: auto;
-    }
-}
+  }
+  
+  .title {
+    font-size: 2.2rem; /* Adjusted for mobile */
+    margin-bottom: 10px; /* Reduced for tighter subtitle */
+    color: var(--primary-dark);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  
+  .subtitle {
+      font-size: 1.1rem; /* Adjusted for mobile */
+      color: var(--text-medium);
+      margin-bottom: 30px; /* Space before first section */
+      max-width: 90%; /* Use percentage for mobile */
+  }
+  
+  .buttonGrid {
+      display: grid;
+      grid-template-columns: 1fr; /* Stack buttons on mobile */
+      gap: 20px; /* Adjusted gap */
+      width: 100%;
+      max-width: 400px; /* Limit width on mobile for single column */
+  }
+  
+  .sectionTitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-top: 25px; /* Space above section title */
+    margin-bottom: 15px;
+    grid-column: 1 / -1; /* Span across all columns in the grid */
+    text-align: center;
+    padding-bottom: 8px; /* Space for the border */
+    border-bottom: 2px solid var(--primary-light);
+    width: fit-content; /* Make border only as wide as text */
+    margin-left: auto; /* Center the title with fit-content */
+    margin-right: auto;
+  }
+  
+  .testModeTitle {
+    margin-top: 40px; /* More space before test mode section */
+  }
+  
+  .buttonCard {
+    display: flex;
+    flex-direction: row; /* Icon and text side-by-side */
+    align-items: center;
+    justify-content: flex-start; /* Align items to the start */
+    padding: 18px 20px; /* Adjusted padding */
+    font-size: 1rem; /* Adjusted font size */
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    font-weight: 600;
+    text-align: left; /* Align text left */
+    border: 2px solid transparent;
+    background-color: var(--background-light); /* Changed from card-background for more contrast */
+    transition: all 0.25s ease-in-out !important; /* !important to override global potentially */
+    color: var(--text-dark); /* Ensure text color is set */
+  }
+  
+  .buttonCard:focus-visible {
+      border-color: var(--primary-color) !important; /* !important for specificity */
+      box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light) !important;
+      outline: none;
+  }
+  .buttonCard:hover {
+    transform: translateY(-3px) scale(1.02); /* Slight scale on hover */
+    box-shadow: var(--shadow-lg);
+  }
+  .buttonCard:active {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  
+  .buttonIcon {
+      font-size: 1.8rem; /* Smaller icon */
+      margin-right: 15px; /* Space between icon and text */
+      line-height: 1;
+      width: 30px; /* Fixed width for icon area */
+      text-align: center;
+      transition: transform 0.2s ease-out;
+  }
+  .buttonCard:hover .buttonIcon {
+    transform: scale(1.15); /* Slightly larger icon scale on hover */
+  }
+  .buttonText {
+    line-height: 1.4;
+    flex-grow: 1; /* Allow text to take remaining space */
+  }
+  
+  .vocabButton { border-left: 5px solid var(--secondary-color); }
+  .vocabButton:hover { border-color: var(--secondary-color); } /* Keep border color consistent on hover */
+  .vocabButton:hover .buttonIcon { color: var(--secondary-color); }
+  
+  .imbuhanButton { border-left: 5px solid #9b59b6; } /* Purple */
+  .imbuhanButton:hover { border-color: #9b59b6; }
+  .imbuhanButton:hover .buttonIcon { color: #9b59b6; }
+  
+  .persamaanButton { border-left: 5px solid var(--success-color); } /* Teal Green */
+  .persamaanButton:hover { border-color: var(--success-color); }
+  .persamaanButton:hover .buttonIcon { color: var(--success-color); }
+  
+  .karanganButton { border-left: 5px solid var(--accent-color); } /* Amber/Gold */
+  .karanganButton:hover { border-color: var(--accent-color); }
+  .karanganButton:hover .buttonIcon { color: var(--accent-color); }
+  
+  .testButton {
+    border-left: 5px solid #e74c3c; /* Distinct Red for test mode */
+    background-color: #fef3f2; /* Very light red background for subtle distinction */
+  }
+  .testButton:hover {
+    border-color: #c0392b; /* Darker red border on hover */
+    background-color: #fdecea;
+  }
+  .testButton:hover .buttonIcon {
+    color: #e74c3c;
+  }
+  
+  /* Desktop adjustments */
+  @media (min-width: 768px) {
+      .container {
+          padding: 40px 20px;
+      }
+      .title {
+          font-size: 2.8rem;
+      }
+      .subtitle {
+          font-size: 1.2rem;
+          max-width: 600px;
+          margin-bottom: 40px;
+      }
+      .buttonGrid {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+          gap: 25px; /* Slightly increased gap for desktop */
+          max-width: 1000px; /* Wider grid for desktop */
+      }
+      .sectionTitle {
+          font-size: 1.6rem;
+          margin-top: 40px;
+      }
+      .buttonCard {
+          flex-direction: column; /* Stack icon and text on desktop */
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          min-height: 170px; /* Increased min-height */
+          padding: 30px 25px; /* Adjusted padding */
+          font-size: 1.05rem; /* Slightly larger font */
+      }
+      .buttonIcon {
+          font-size: 2.8rem;
+          margin-right: 0; /* No right margin when stacked */
+          margin-bottom: 18px;
+          width: auto;
+      }
+  }

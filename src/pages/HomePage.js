@@ -7,8 +7,9 @@ const HomePage = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Selamat Datang di KataPult!</h1>
-      <p className={styles.subtitle}>Pilih mode latihan untuk mengasah Bahasa Indonesia Anda.</p>
-      <nav className={styles.buttonGrid} aria-label="Mode Latihan">
+      <p className={styles.subtitle}>Pilih mode latihan atau uji kemampuan Anda.</p>
+      <nav className={styles.buttonGrid} aria-label="Mode Aplikasi">
+        <div className={styles.sectionTitle}>Mode Latihan</div>
         <Link to="/vocabulary" className={`${styles.buttonCard} ${styles.vocabButton}`} role="button">
           <span className={styles.buttonIcon}>📚</span>
           <span className={styles.buttonText}>Vocabulary (Contoh Kalimat)</span>
@@ -24,6 +25,12 @@ const HomePage = () => {
         <Link to="/karangan" className={`${styles.buttonCard} ${styles.karanganButton}`} role="button">
           <span className={styles.buttonIcon}>📝</span>
           <span className={styles.buttonText}>Karangan Vocab (MCQ)</span>
+        </Link>
+
+        <div className={`${styles.sectionTitle} ${styles.testModeTitle}`}>Mode Tes</div>
+        <Link to="/test-setup" className={`${styles.buttonCard} ${styles.testButton}`} role="button">
+          <span className={styles.buttonIcon}>⏱️</span>
+          <span className={styles.buttonText}>Mulai Tes Kustom</span>
         </Link>
       </nav>
     </div>
