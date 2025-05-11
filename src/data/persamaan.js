@@ -42,8 +42,7 @@ export const persamaanData = [
   { id: 38, word: 'berbahagia', synonyms: ['senang', 'gembira', 'suka cita'] },
   { id: 39, word: 'mengobrol', synonyms: ['berbicara', 'berbincang', 'bercakap-cakap', 'berbual'] }, // REVIEWED: Flipped, added berbual
   { id: 40, word: 'bercakap-cakap', synonyms: ['berbicara', 'berbincang', 'mengobrol'] }, // REVIEWED: Made 'bercakap-cakap' the primary
-  { id: 41, word: 'berbohong', synonyms: ['berdusta', 'berpura-pura'] }, // REVIEWED: 'membual' is more like 'bragging falsely'
-  { id: 42, word: 'berinvestasi', synonyms: ['menanam modal', 'bermodal'] }, // REVIEWED: Added bermodal
+  { id: 41, word: 'berbohong', synonyms: ['berdusta', 'membohongi (transitive)', 'berdalih (to make false excuses)'] },  { id: 42, word: 'berinvestasi', synonyms: ['menanam modal', 'bermodal'] }, // REVIEWED: Added bermodal
   { id: 43, word: 'berkaitan', synonyms: ['berhubungan', 'bersangkutan', 'relevan'] }, // REVIEWED: Added relevan
   { id: 44, word: 'bilang', synonyms: ['berkata', 'mengatakan', 'berucap'] }, // REVIEWED: Flipped
   { id: 45, word: 'berisik', synonyms: ['bising', 'gaduh', 'riuh'] }, // REVIEWED: Added riuh
@@ -154,8 +153,7 @@ export const persamaanData = [
   { id: 149, word: 'keinginan', synonyms: ['kehendak', 'kemauan', 'hasrat', 'cita-cita'] }, // REVIEWED: Broke down & added
   // { id: 150, word: 'kehendak, kemauan', synonyms: ['keinginan'] }, // REVIEWED: Covered by 149
   // { id: 151, word: 'keinginan, kemauan', synonyms: ['kehendak'] }, // REVIEWED: Covered by 149
-  { id: 152, word: 'kembang', synonyms: ['bunga', 'puspa', 'mekar'] }, // REVIEWED: Added mekar (verb form as adjective)
-  { id: 153, word: 'kegaduhan', synonyms: ['kekacauan', 'keributan', 'kericuhan', 'kerusuhan', 'hiruk-pikuk'] }, // REVIEWED: Flipped, added
+  { id: 152, word: 'kembang', synonyms: ['bunga', 'puspa'] },  { id: 153, word: 'kegaduhan', synonyms: ['kekacauan', 'keributan', 'kericuhan', 'kerusuhan', 'hiruk-pikuk'] }, // REVIEWED: Flipped, added
   { id: 154, word: 'kekurangan', synonyms: ['kelemahan', 'defisit', 'cacat', 'minus'] }, // REVIEWED: Added
   { id: 155, word: 'keliru', synonyms: ['salah', 'khilaf', 'tidak tepat'] }, // REVIEWED: Added
   { id: 156, word: 'kemakmuran', synonyms: ['kesejahteraan', 'kejayaan', 'kemajuan'] }, // REVIEWED: Added
@@ -210,8 +208,7 @@ export const persamaanData = [
   { id: 205, word: 'mendiskusikan', synonyms: ['membahas', 'membicarakan', 'merundingkan'] }, // REVIEWED: Flipped, added
   { id: 206, word: 'mengasuh', synonyms: ['membesarkan', 'merawat', 'mendidik'] }, // REVIEWED: Flipped, added
   { id: 207, word: 'membiayai', synonyms: ['menghidupi', 'mendanai', 'menanggung'] }, // REVIEWED: Added
-  { id: 208, word: 'berbohong', synonyms: ['berdusta', 'membual', 'mengarang'] }, // REVIEWED: Flipped word/synonyms, added mengarang
-  { id: 209, word: 'membutuhkan', synonyms: ['memerlukan', 'menghendaki'] },
+  { id: 208, word: 'berbohong', synonyms: ['berdusta', 'tidak jujur'] }, // 'tidak jujur' (not honest) is a good general one.  { id: 209, word: 'membutuhkan', synonyms: ['memerlukan', 'menghendaki'] },
   { id: 210, word: 'menyelesaikan', synonyms: ['memecahkan (masalah)', 'menuntaskan', 'merampungkan'] }, // REVIEWED: Clarified '(masalah)'
   { id: 211, word: 'memperbolehkan', synonyms: ['mengizinkan', 'menyetujui'] },
   { id: 212, word: 'memperoleh', synonyms: ['mendapat(kan)', 'meraih', 'mendulang'] }, // REVIEWED: Added mendulang
@@ -247,8 +244,7 @@ export const persamaanData = [
   { id: 242, word: 'menikah', synonyms: ['kawin', 'berumah tangga', 'bersuami/beristri'] },
   { id: 243, word: 'meningkat', synonyms: ['bertambah', 'naik', 'membesar', 'menanjak'] }, // REVIEWED: Added
   { id: 244, word: 'menjelaskan', synonyms: ['menerangkan', 'menguraikan', 'memaparkan'] },
-  { id: 245, word: 'mendalami', synonyms: ['menyelami', 'mempelajari (lebih dalam)', 'menghayati'] }, // REVIEWED: Flipped
-  { id: 246, word: 'menyelesaikan', synonyms: ['menuntaskan', 'merampungkan', 'memecahkan (masalah)'] }, // REVIEWED: Added, clarified
+  { id: 245, word: 'mendalami', synonyms: ['menyelami', 'mengkaji', 'menghayati'] }, // 'mengkaji' (to study in depth)  { id: 246, word: 'menyelesaikan', synonyms: ['menuntaskan', 'merampungkan', 'memecahkan (masalah)'] }, // REVIEWED: Added, clarified
   { id: 247, word: 'menyelenggarakan', synonyms: ['mengadakan', 'menggelar', 'melaksanakan'] }, // REVIEWED: Flipped
   { id: 248, word: 'menyerah', synonyms: ['putus asa', 'kalah', 'takluk'] }, // REVIEWED: Added
   { id: 249, word: 'menyaksikan', synonyms: ['melihat', 'menonton', 'mengamati'] }, // REVIEWED: Added
@@ -258,8 +254,7 @@ export const persamaanData = [
   { id: 253, word: 'trendi', synonyms: ['modern', 'mutakhir', 'terbaru', 'terkini', 'populer'] }, // REVIEWED: Flipped, added
   { id: 254, word: 'motivasi', synonyms: ['dorongan', 'semangat', 'inspirasi', 'stimulus'] }, // REVIEWED: Added
   { id: 255, word: 'mudah', synonyms: ['gampang', 'enteng', 'sederhana'] },
-  { id: 256, word: 'rentan', synonyms: ['mudah (terkena)', 'rawan', 'peka', 'sensitif'] }, // REVIEWED: 'mudah' alone is too general for rentan
-  { id: 257, word: 'mudah-mudahan', synonyms: ['semoga', 'moga-moga'] },
+  { id: 256, word: 'rentan', synonyms: ['rawan', 'peka', 'sensitif', 'rapuh (fragile)'] },  { id: 257, word: 'mudah-mudahan', synonyms: ['semoga', 'moga-moga'] },
   { id: 258, word: 'mujur', synonyms: ['beruntung', 'bernasib baik'] },
   { id: 259, word: 'mula-mula', synonyms: ['awalnya', 'semula', 'pertama-tama'] },
   { id: 260, word: 'awalnya', synonyms: ['mula-mula', 'semula', 'pada permulaan'] }, // REVIEWED: Flipped from mulanya
@@ -274,8 +269,7 @@ export const persamaanData = [
   { id: 269, word: 'tradisi', synonyms: ['adat', 'budaya', 'norma', 'kebiasaan'] }, // REVIEWED: Flipped
   { id: 270, word: 'nyaris', synonyms: ['hampir', 'mendekati'] },
   { id: 271, word: 'nyata', synonyms: ['konkret', 'jelas', 'riil', 'faktual'] }, // REVIEWED: Added
-  { id: 272, word: 'olahragawan', synonyms: ['atlet', 'sportif'] }, // REVIEWED: sportif might be adj.
-  { id: 273, word: 'opini', synonyms: ['pendapat', 'pandangan', 'gagasan'] },
+  { id: 272, word: 'olahragawan', synonyms: ['atlet', 'atlit (common variant)'] },  { id: 273, word: 'opini', synonyms: ['pendapat', 'pandangan', 'gagasan'] },
   { id: 274, word: 'orisinil', synonyms: ['asli', 'autentik', 'murni'] },
   { id: 275, word: 'otomatis', synonyms: ['spontan', 'dengan sendirinya', 'langsung'] },
   { id: 276, word: 'pakar', synonyms: ['ahli', 'spesialis', 'ekspert'] },
@@ -350,13 +344,10 @@ export const persamaanData = [
   { id: 345, word: 'semula', synonyms: ['awalnya', 'mula-mula', 'dahulu'] },
   { id: 346, word: 'senantiasa', synonyms: ['selalu', 'terus-menerus', 'setiap saat'] },
   { id: 347, word: 'sengsara', synonyms: ['menderita', 'merana', 'nelangsa'] },
-  { id: 348, word: 'seniman', synonyms: ['artis', 'pelukis', 'pematung', 'budayawan'] }, // REVIEWED: Specific examples might be too narrow
-  { id: 349, word: 'seolah-olah', synonyms: ['seakan-akan', 'seperti', 'seumpama'] },
+  { id: 348, word: 'seniman', synonyms: ['artis', 'pelaku seni', 'pekerja seni'] },  { id: 349, word: 'seolah-olah', synonyms: ['seakan-akan', 'seperti', 'seumpama'] },
   { id: 350, word: 'sependapat', synonyms: ['setuju', 'sepaham', 'sejalan'] },
-  { id: 351, word: 'sepenuhnya', synonyms: ['seluruhnya', 'seutuhnya', 'totaliter'] }, // REVIEWED: totaliter not quite
-  { id: 352, word: 'serasi', synonyms: ['harmonis', 'selaras', 'cocok', 'padan'] }, // REVIEWED: Added
-  { id: 353, word: 'sering', synonyms: ['kerap', 'acap kali', 'kekerapan'] }, // REVIEWED: kekerapan is noun
-  { id: 354, word: 'serta', synonyms: ['dan', 'juga', 'beserta', 'turut'] },
+  { id: 351, word: 'sepenuhnya', synonyms: ['seluruhnya', 'seutuhnya', 'total', 'komplet'] },  { id: 352, word: 'serasi', synonyms: ['harmonis', 'selaras', 'cocok', 'padan'] }, // REVIEWED: Added
+  { id: 353, word: 'sering', synonyms: ['kerap', 'acap kali', 'selalu (implies high frequency)'] },  { id: 354, word: 'serta', synonyms: ['dan', 'juga', 'beserta', 'turut'] },
   { id: 355, word: 'serupa', synonyms: ['mirip', 'sama', 'seiras', 'identik'] },
   { id: 356, word: 'sesuai', synonyms: ['cocok', 'pas', 'selaras', 'serasi'] },
   { id: 357, word: 'sesudah', synonyms: ['setelah', 'sehabis', 'selepas', 'usai'] },
@@ -405,8 +396,7 @@ export const persamaanData = [
   { id: 400, word: 'umum', synonyms: ['generik', 'lazim', 'publik', 'awam'] },
   { id: 401, word: 'biasanya', synonyms: ['umumnya', 'lazimnya', 'pada umumnya', 'kebanyakan'] }, // REVIEWED: Flipped
   { id: 402, word: 'umur', synonyms: ['usia', 'masa hidup'] },
-  { id: 403, word: 'unik', synonyms: ['khas', 'istimewa', 'langka', 'aneh (positif)'] },
-  { id: 404, word: 'untuk', synonyms: ['bagi', 'buat', 'guna', 'demi', 'kepada'] },
+  { id: 403, word: 'unik', synonyms: ['khas', 'istimewa', 'langka', 'lain dari yang lain'] },  { id: 404, word: 'untuk', synonyms: ['bagi', 'buat', 'guna', 'demi', 'kepada'] },
   { id: 405, word: 'upah', synonyms: ['gaji', 'pendapatan', 'honorarium', 'imbalan'] },
   { id: 406, word: 'usia', synonyms: ['umur', 'masa hidup', 'zaman'] },
   { id: 407, word: 'usul', synonyms: ['anjuran', 'saran', 'proposal', 'rekomendasi'] },
