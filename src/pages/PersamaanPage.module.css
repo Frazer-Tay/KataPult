@@ -1,35 +1,332 @@
 /* src/pages/PersamaanPage.module.css */
-.container { display: flex; flex-direction: column; align-items: center; padding: 20px 15px 30px 15px; max-width: 95vw; min-height: auto; margin: 20px auto; background-color: var(--card-background); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color-light); position: relative; }
-.container:focus { outline: none; }
-.progressIndicator { font-size: 0.9rem; color: #6c757d; margin-bottom: 20px; font-weight: 500; position: absolute; top: 15px; right: 20px; opacity: 0.9; }
-.card { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); border-radius: var(--border-radius-md); padding: 25px 20px; width: 100%; text-align: center; margin-top: 10px; margin-bottom: 25px; box-sizing: border-box; box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.1); color: white; }
-.label { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 6px; font-weight: 500; }
-.word { font-size: 2.2rem; font-weight: 700; color: #ffffff; margin-top: 4px; letter-spacing: 0.3px; word-wrap: break-word; text-shadow: 1px 1px 2px rgba(0,0,0,0.15); }
-.optionsContainer { width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px; }
-.instruction { font-size: 1.05rem; margin-bottom: 15px; color: var(--text-dark); font-weight: 600; text-align: center; }
-.optionButton { position: relative; padding: 12px 20px 12px 50px; font-size: 0.95rem; color: var(--text-dark); background-color: #ffffff; border: 2px solid var(--border-color); border-radius: var(--border-radius-md); cursor: pointer; transition: all 0.20s ease-in-out; width: 100%; text-align: left; box-sizing: border-box; font-weight: 500; box-shadow: var(--shadow-xs); display: flex; align-items: center; }
-.optionButton:hover:not(:disabled) { background-color: #f1f9ff; border-color: var(--secondary-color); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-.optionButton:focus { outline: none; }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px 30px 15px;
+  max-width: 95vw;
+  min-height: auto;
+  margin: 20px auto;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+  position: relative;
+}
+.container:focus {
+  outline: none;
+}
+
+.progressIndicator {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 20px;
+  font-weight: 500;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  opacity: 0.9;
+}
+
+.card {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: var(--border-radius-md);
+  padding: 25px 20px;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.word {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 4px;
+  margin-bottom: 8px; /* Added margin below word */
+  letter-spacing: 0.3px;
+  word-wrap: break-word;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+}
+
+/* Styles for the target word's example sentence */
+.exampleSentenceTarget {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9); /* Slightly less prominent */
+  font-size: 0.9rem;
+  margin-top: 10px; /* Space above it */
+  line-height: 1.5;
+  max-width: 90%; /* Ensure it doesn't stretch too wide in the card */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.optionsContainer {
+  width: 100%;
+  max-width: 100%; /* Can be more specific if needed, e.g., 500px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.instruction {
+  font-size: 1.05rem;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  font-weight: 600;
+  text-align: center;
+}
+
+.optionButton {
+  position: relative;
+  padding: 12px 20px 12px 50px; /* Space for number and icon */
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.20s ease-in-out;
+  width: 100%; /* Full width options */
+  text-align: left;
+  box-sizing: border-box;
+  font-weight: 500;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  align-items: center;
+}
+.optionButton:hover:not(:disabled) {
+  background-color: #f1f9ff; /* Light blueish hover */
+  border-color: var(--secondary-color);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.optionButton:focus { outline: none; } /* Or custom focus */
 .optionButton:disabled { cursor: not-allowed; }
-.optionNumber { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-weight: 600; color: var(--text-light); font-size: 0.9rem; width: 20px; text-align: center; }
-.optionButton::before { content: ''; font-family: 'Segoe UI Symbol', sans-serif; position: absolute; left: 40px; top: 50%; transform: translateY(-50%) scale(0.7); font-size: 1.4rem; font-weight: bold; transition: all 0.25s ease-in-out; opacity: 0; }
-.optionButton.correct { background-color: var(--success-light); border-color: var(--success-color); color: #0a3622; font-weight: 600; opacity: 1 !important; }
+
+.optionNumber {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  width: 20px; /* Ensure space for two digits if needed */
+  text-align: center;
+}
+
+/* Icon placeholder for correct/incorrect */
+.optionButton::before {
+  content: '';
+  font-family: 'Segoe UI Symbol', sans-serif; /* For check/cross marks */
+  position: absolute;
+  left: 40px; /* Adjust if number width changes */
+  top: 50%;
+  transform: translateY(-50%) scale(0.7);
+  font-size: 1.4rem;
+  font-weight: bold;
+  transition: all 0.25s ease-in-out;
+  opacity: 0;
+}
+
+.optionButton.correct {
+  background-color: var(--success-light);
+  border-color: var(--success-color);
+  color: #0a3622; /* Darker green for text on light green bg */
+  font-weight: 600;
+  opacity: 1 !important;
+}
 .optionButton.correct .optionNumber { color: var(--success-dark); }
-.optionButton.correct::before { content: '✓'; color: var(--success-color); opacity: 1; transform: translateY(-50%) scale(1.1); }
-.optionButton.incorrect { background-color: var(--error-light); border-color: var(--error-color); color: #58151c; font-weight: 600; opacity: 1 !important; }
+.optionButton.correct::before {
+  content: '✓';
+  color: var(--success-color);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.optionButton.incorrect {
+  background-color: var(--error-light);
+  border-color: var(--error-color);
+  color: #58151c; /* Darker red for text */
+  font-weight: 600;
+  opacity: 1 !important;
+}
 .optionButton.incorrect .optionNumber { color: var(--error-dark); }
-.optionButton.incorrect::before { content: '✗'; color: var(--error-color); opacity: 1; transform: translateY(-50%) scale(1.1); }
-.optionButton.disabled { background-color: #f8f9fa; border-color: #e9ecef; color: #adb5bd; opacity: 0.55; box-shadow: none; transform: none; }
+.optionButton.incorrect::before {
+  content: '✗';
+  color: var(--error-color);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* When an option is not selected AND it's not the correct one (after answering) */
+.optionButton.disabled {
+  background-color: #f8f9fa; /* Very light grey */
+  border-color: #e9ecef;
+  color: #adb5bd; /* Muted text */
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
+}
 .optionButton.disabled:hover { transform: none; box-shadow: none; }
-.optionButton.disabled::before { display: none; }
+.optionButton.disabled::before { display: none; } /* No icon for simply disabled */
 .optionButton.disabled .optionNumber { color: #ced4da; }
-.optionButton.correct.disabled::before { display: block; opacity: 1; transform: translateY(-50%) scale(1.1); }
-.optionText { display: inline-block; margin-left: 25px; }
-.feedback { font-size: 1rem; font-weight: 500; margin: 8px 0 15px 0; padding: 10px 15px; border-radius: var(--border-radius-md); width: 95%; max-width: 100%; text-align: center; box-sizing: border-box; border-width: 1px; border-style: solid; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.5; }
-.feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.2rem; line-height: 1; }
-.correctFeedback { color: #0a3622; background-color: var(--success-light); border-color: #a3cfbb; }
-.correctFeedback::before { content: '✓'; }
-.incorrectFeedback { color: #58151c; background-color: var(--error-light); border-color: #f1b0b7; }
-.incorrectFeedback::before { content: '✗'; }
-.completionActions { display: flex; gap: 10px; margin-top: 10px; justify-content: center; flex-wrap: wrap; }
-@media (min-width: 768px) { .container { padding: 25px 20px 40px 20px; max-width: 720px; margin: 30px auto; } .card { padding: 35px 40px; margin-bottom: 40px; margin-top: 10px; } .word { font-size: 2.8rem; } .instruction { font-size: 1.2rem; margin-bottom: 25px; } .optionButton { padding: 16px 25px 16px 70px; font-size: 1.1rem; } .optionButton::before { left: 45px; font-size: 1.6rem; } .optionNumber { left: 18px; font-size: 1rem; } .feedback { font-size: 1.1rem; padding: 15px 20px; max-width: 600px; } .completionActions { gap: 15px; } }
+
+/* Special case: if it's disabled BUT it was the correct one (user picked wrong) */
+.optionButton.correct.disabled::before {
+  display: block; /* Still show the checkmark */
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.optionText {
+  display: inline-block;
+  margin-left: 25px; /* Space after the number area + icon placeholder */
+}
+
+.feedback {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 8px 0 15px 0;
+  padding: 10px 15px;
+  border-radius: var(--border-radius-md);
+  width: 95%;
+  max-width: 100%; /* Can be more specific, e.g., 600px */
+  text-align: center;
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  flex-direction: column; /* To stack main feedback and example */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.feedback::before {
+  font-family: 'Segoe UI Symbol', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1;
+  align-self: flex-start; /* Align icon to the start of the main feedback text line if needed */
+  margin-right: 5px; /* Space between icon and text */
+}
+
+.correctFeedback {
+  color: #0a3622; /* Darker green for contrast */
+  background-color: var(--success-light);
+  border-color: #a3cfbb; /* Slightly darker border for definition */
+}
+.correctFeedback::before {
+  content: '✓';
+}
+
+.incorrectFeedback {
+  color: #58151c; /* Darker red text */
+  background-color: var(--error-light);
+  border-color: #f1b0b7;
+  text-align: left; /* For multi-line incorrect feedback */
+}
+.incorrectFeedback::before {
+  content: '✗';
+}
+
+/* Style for example sentence within feedback */
+.feedbackExample {
+  font-style: italic;
+  font-size: 0.9em; /* Slightly smaller than main feedback text */
+  margin-top: 8px;
+  color: var(--text-medium); /* Or match the feedback text color */
+  display: block; /* Ensure it's on its own line */
+  white-space: pre-line; /* Preserve line breaks in example if any */
+  text-align: left; /* Align example text left within feedback box */
+  width: 100%;
+}
+
+/* For feedback with multiple lines/examples (from previous implementation) */
+.feedback span {
+    display: block;
+    white-space: pre-line;
+    margin-bottom: 5px; /* Space between lines in feedback */
+    width: 100%; /* Ensure span takes full width for left alignment */
+}
+.feedback span:last-child {
+    margin-bottom: 0;
+}
+.feedback span strong {
+  color: var(--primary-dark); /* Or whatever color you prefer for the synonym itself */
+}
+
+
+.completionActions {
+    display: flex;
+    gap: 10px; /* Consistent gap */
+    margin-top: 10px; /* Space above buttons */
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 25px 20px 40px 20px;
+        max-width: 720px; /* Consistent max-width */
+        margin: 30px auto;
+    }
+    .card {
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        margin-top: 10px;
+    }
+    .word {
+        font-size: 2.8rem;
+    }
+    .exampleSentenceTarget {
+      font-size: 1rem;
+    }
+    .instruction {
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+    }
+    .optionsContainer {
+        max-width: 600px; /* Limit width on desktop for better readability */
+    }
+    .optionButton {
+        padding: 16px 25px 16px 70px; /* More padding */
+        font-size: 1.1rem;
+    }
+    .optionButton::before {
+        left: 45px;
+        font-size: 1.6rem;
+    }
+    .optionNumber {
+        left: 18px;
+        font-size: 1rem;
+    }
+    .optionText {
+      margin-left: 0; /* Reset margin if icon + number are well-spaced */
+    }
+    .feedback {
+        font-size: 1.1rem;
+        padding: 15px 20px;
+        max-width: 600px;
+    }
+    .feedbackExample {
+      font-size: 0.95em;
+    }
+    .completionActions {
+      gap: 15px;
+    }
+}

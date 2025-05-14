@@ -15,7 +15,7 @@
     position: relative;
   }
   .container:focus { outline: none; }
-  
+
   .pageTitle {
     font-size: 1.7rem;
     color: var(--primary-dark);
@@ -23,7 +23,7 @@
     text-align: center;
     font-weight: 700;
   }
-  
+
   .gameStats {
     display: flex;
     justify-content: space-between;
@@ -37,7 +37,7 @@
     box-shadow: var(--shadow-sm);
     border-bottom: 3px solid var(--primary-color);
   }
-  
+
   .statItem {
     font-size: 0.9rem;
     font-weight: 600;
@@ -58,13 +58,13 @@
     font-weight: 700;
     animation: pulse 1s infinite alternate;
   }
-  
+
   @keyframes pulse {
     from { transform: scale(1); }
     to { transform: scale(1.1); }
   }
-  
-  
+
+
   .questionCard {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
     color: white;
@@ -76,22 +76,35 @@
     box-sizing: border-box;
     box-shadow: var(--shadow-md);
   }
-  
+
   .instructionPersamaan {
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 8px;
     font-weight: 500;
   }
-  
+
   .wordToFind {
     font-size: 2rem;
     font-weight: 700;
     margin-top: 5px;
+    margin-bottom: 8px; /* Added margin for example sentence */
     letter-spacing: 0.5px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   }
-  
+
+  /* Styles for the target word's example sentence in test mode */
+  .exampleSentenceTarget {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin-top: 10px;
+    line-height: 1.5;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .optionsGrid {
     display: grid;
     grid-template-columns: 1fr; /* Single column on mobile */
@@ -100,7 +113,7 @@
     max-width: 500px; /* Limit width of options grid */
     margin-bottom: 20px;
   }
-  
+
   .optionButton {
     padding: 15px 20px;
     font-size: 1rem;
@@ -129,7 +142,7 @@
     cursor: not-allowed;
     opacity: 0.7;
   }
-  
+
   .correctSelected {
     background-color: var(--success-color) !important;
     color: white !important;
@@ -159,23 +172,57 @@
       transform: none;
       box-shadow: var(--shadow-sm);
   }
-  
-  
+
+
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
   }
-  
-  
-  .feedback { font-size: 1rem; font-weight: 600; margin: 15px 0; padding: 12px 18px; border-radius: var(--border-radius-md); width: 95%; text-align: center; box-sizing: border-box; border-width: 1px; border-style: solid; display: flex; align-items: center; justify-content: center; gap: 10px; line-height: 1.5; }
-  .feedback::before { font-family: 'Segoe UI Symbol', sans-serif; font-size: 1.3rem; line-height: 1; }
+
+
+  .feedback {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 15px 0;
+    padding: 12px 18px;
+    border-radius: var(--border-radius-md);
+    width: 95%;
+    text-align: center;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    display: flex;
+    flex-direction: column; /* Stack main feedback and example */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .feedback::before {
+    font-family: 'Segoe UI Symbol', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1;
+    align-self: flex-start;
+    margin-right: 5px;
+  }
+
   .correctFeedback { color: #0f5132; background-color: var(--success-light); border-color: #a3cfbb; }
   .correctFeedback::before { content: '🎉'; } /* Different emoji */
   .incorrectFeedback { color: #58151c; background-color: var(--error-light); border-color: #f1b0b7; }
   .incorrectFeedback::before { content: '🙁'; } /* Different emoji */
-  
-  
+
+  /* Style for example sentence within feedback in test mode */
+  .feedbackExample {
+    font-style: italic;
+    font-size: 0.9em;
+    margin-top: 8px;
+    color: inherit; /* Inherit color from feedback box */
+    display: block;
+    text-align: left; /* Align example text left */
+    width: 100%;
+  }
+
   /* Results Screen */
   .resultsCard { background-color: var(--background-medium); padding: 25px 20px; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); text-align: center; width: 100%; max-width: 450px; margin-top: 20px; }
   .rank { font-size: 1.5rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 15px; }
@@ -183,8 +230,8 @@
   .accuracy { font-size: 1.1rem; color: var(--text-medium); margin-bottom: 20px; }
   .gameOverMessage { font-size: 1.2rem; color: var(--error-dark); font-weight: 600; margin-bottom: 20px; }
   .perfectScoreMessage { font-size: 1.3rem; color: var(--success-dark); font-weight: 700; margin-bottom: 20px; }
-  
-  
+
+
   @media (min-width: 600px) {
       .container { max-width: 700px; padding: 25px; }
       .pageTitle { font-size: 2rem; }
@@ -194,6 +241,7 @@
       .questionCard { padding: 25px; }
       .instructionPersamaan { font-size: 1.05rem; }
       .wordToFind { font-size: 2.4rem; }
+      .exampleSentenceTarget { font-size: 1rem; }
       .optionsGrid {
           grid-template-columns: 1fr 1fr; /* Two columns on wider screens */
           gap: 15px;
@@ -201,6 +249,7 @@
       }
       .optionButton { font-size: 1.05rem; padding: 18px 20px; }
       .feedback { font-size: 1.1rem; }
+      .feedbackExample { font-size: 0.95em; }
       .resultsCard { padding: 30px; }
       .rank { font-size: 1.8rem; }
       .score { font-size: 2rem; }
