@@ -1,5 +1,5 @@
 // src/pages/PersamaanPage.js
-// ADDED: Previous/Next navigation buttons
+// REVISED: To address "Memuat kata berikutnya..." stuck issue
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
@@ -75,34 +75,48 @@ const PersamaanPage = () => {
     setFeedback('');
     setIsCorrect(false);
     setIsAnswered(false);
-    setCorrectSynonymObject(null); // This will be set by generateOptions
-    // Focus first option button after a short delay to ensure it's rendered
-    setTimeout(() => {
-        if (optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
-            optionButtonRefs.current[0].current.focus();
-        }
-    }, 50);
-  }, []);
+    // Do not nullify correctSynonymObject here, generateOptions will handle it
+    // Only focus if there are options to focus on
+    if (options.length > 0 && optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
+        setTimeout(() => {
+            if (optionButtonRefs.current[0]?.current) { // Double check ref
+                 optionButtonRefs.current[0].current.focus();
+            }
+        }, 50);
+    }
+  }, [options.length]); // Add options.length as dependency
+
 
   const generateOptions = useCallback(() => {
-    if (!currentItemRef.current || !Array.isArray(currentItemRef.current.synonyms) || currentItemRef.current.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
-       setOptions([]); setCorrectSynonymObject(null); return;
-    }
-    const chosenCorrectSynonymObj = currentItemRef.current.synonyms[Math.floor(Math.random() * currentItemRef.current.synonyms.length)];
-    setCorrectSynonymObject(chosenCorrectSynonymObj);
-    const distractors = getDistractors(allItems, currentItemRef.current, 2);
-    const allOptionStrings = shuffleArray([chosenCorrectSynonymObj.synonym, ...distractors]);
-    setOptions(allOptionStrings);
-    optionButtonRefs.current = allOptionStrings.map((_, i) => optionButtonRefs.current[i] || React.createRef());
-  }, [allItems]); // allItems as dependency
+     if (!currentItemRef.current || !Array.isArray(currentItemRef.current.synonyms) || currentItemRef.current.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
+       setOptions([]);
+       setCorrectSynonymObject(null); // Explicitly set to null
+       return;
+     }
+     const chosenCorrectSynonymObj = currentItemRef.current.synonyms[Math.floor(Math.random() * currentItemRef.current.synonyms.length)];
+     setCorrectSynonymObject(chosenCorrectSynonymObj); // Set this first
 
+     const distractors = getDistractors(allItems, currentItemRef.current, 2);
+     const allOptionStrings = shuffleArray([chosenCorrectSynonymObj.synonym, ...distractors]);
+     setOptions(allOptionStrings); // Then set options
+
+     optionButtonRefs.current = allOptionStrings.map((_, i) => optionButtonRefs.current[i] || React.createRef());
+  }, [allItems]);
+
+  // This useEffect handles preparing a new question (generating options, resetting UI)
   useEffect(() => {
     if (!isLoading && currentItemFromMemo) {
-      generateOptions(); // This will also set correctSynonymObject
-      resetItemState(); // Reset interaction states for the new/navigated item
+      // console.log("PersamaanPage: Current item changed, generating options and resetting state.", currentItemFromMemo.word);
+      generateOptions(); // This will set correctSynonymObject and options
+      resetItemState();   // Reset user interaction for the new item
     } else if (!isLoading && !currentItemFromMemo && totalItemsInSet > 0 && currentIndex >= totalItemsInSet) {
+      // console.log("PersamaanPage: Reached end of items.");
       isCompletedRef.current = true;
-      setCurrentIndex(totalItemsInSet); // Ensure consistent state for completion
+      // No need to call setCurrentIndex here if it's already at totalItemsInSet
+    } else if (!isLoading && !currentItemFromMemo) {
+      // console.log("PersamaanPage: No current item, clearing options.");
+      setOptions([]);
+      setCorrectSynonymObject(null);
     }
   }, [currentItemFromMemo, isLoading, generateOptions, resetItemState, totalItemsInSet, currentIndex]);
 
@@ -112,19 +126,23 @@ const PersamaanPage = () => {
       try {
           const validItems = itemsToLoad.filter(item => item.word && item.synonyms && item.synonyms.length > 0 && item.example_sentence_target && item.synonyms.every(s => s.synonym && s.example_sentence_synonym));
           if (!validItems || validItems.length === 0) throw new Error("Tidak ada data Persamaan yang valid dengan contoh kalimat.");
+
+          console.log(`PersamaanPage: Loading data. ${itemsToLoad.length} items provided, ${validItems.length} valid items. Review: ${isReviewSession}`);
+
           setDisplayItems(shuffleArray([...validItems]));
-          setCurrentIndex(0);
+          setCurrentIndex(0); // Reset to first item of the new set
           setIsReviewingMistakes(isReviewSession);
-          // resetItemState will be called by the useEffect for currentItemFromMemo
           isCompletedRef.current = false;
+
           if (!isReviewSession) {
               setMissedItemsMaster(new Set()); setRetestQueue([]); setCorrectStreak(0);
               setRetestThreshold(getRandomThreshold());
               localStorage.removeItem(LOCAL_STORAGE_KEY);
           }
+          // Resetting UI for the first item will be handled by the useEffect that depends on currentItemFromMemo
       } catch (err) { console.error("Error loading Persamaan:", err); setError(err.message); setDisplayItems([]); }
       finally { setIsLoading(false); }
-  }, []); // Removed resetItemState from here, will be handled by currentItemFromMemo effect
+  }, []); // Removed resetItemState, generateOptions from here
 
   useEffect(() => {
     setIsLoading(true); setError(null);
@@ -175,18 +193,20 @@ const PersamaanPage = () => {
             if (retestItem) {
                 let nextDisplayItems = displayItems.filter(item => item.id !== retestItemId);
                 const currentActualIndexInDisplay = nextDisplayItems.findIndex(item => item.id === currentItemRef.current?.id);
-                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length) {
+                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length -1) { // Ensure not inserting past new end
                     nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
                 } else { nextDisplayItems.push(retestItem); }
-                setDisplayItems(nextDisplayItems);
+                setDisplayItems(nextDisplayItems); // This will trigger the useMemo and useEffect for currentItemFromMemo
                 nextIndex = nextDisplayItems.findIndex(item => item.id === retestItemId);
+                if(nextIndex === -1) nextIndex = currentIndex + 1; // Fallback if somehow not found
                 setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
             } else { setRetestQueue(prev => prev.slice(1)); nextIndex = Math.min(currentIndex + 1, displayItems.length); }
         } else { nextIndex = Math.min(currentIndex + 1, displayItems.length); }
     } else if (direction === 'previous') {
         nextIndex = Math.max(currentIndex - 1, 0);
     }
-    setCurrentIndex(nextIndex);
+    // console.log(`PersamaanPage: Advancing from ${currentIndex} to ${nextIndex}`);
+    setCurrentIndex(nextIndex); // This will trigger the re-render and the useEffect for currentItemFromMemo
   }, [currentIndex, displayItems, allItems, retestQueue, correctStreak, isReviewingMistakes, retestThreshold]);
 
   const checkAnswer = useCallback((selectedOptionString) => {
@@ -235,7 +255,7 @@ const PersamaanPage = () => {
             event.preventDefault();
         } else if (event.key === 'Enter' && isAnswered) {
              if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement) &&
-                  document.activeElement?.tagName !== 'BUTTON') { // Avoid double action on button
+                  document.activeElement?.tagName !== 'BUTTON') {
                  advanceItem('next');
                  event.preventDefault();
             }
@@ -244,7 +264,7 @@ const PersamaanPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect]); // isCorrect for Enter logic if it matters
+  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect]);
 
   const handleOptionKeyDown = (event, optionString) => {
       if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
@@ -259,7 +279,15 @@ const PersamaanPage = () => {
   if (isLoading) { return <div className="loading">Memuat sinonim...</div>; }
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) { const completionText = isReviewingMistakes ? "✨ Sesi Review Persamaan Selesai! ✨" : "✨ Latihan Persamaan Selesai! ✨"; const mistakesToShow = finalMistakeCountForDisplay; return ( <div className={styles.container}> <p className="completionMessage">{completionText}</p> {!isReviewingMistakes && mistakesToShow > 0 && ( <p className="completionSubMessage">Anda memiliki {mistakesToShow} item yang salah pada putaran awal.</p> )} <div className={styles.completionActions}> {finalMistakeCountForDisplay > 0 && !isReviewingMistakes && ( <button className="secondaryButton" onClick={handleReviewMistakes}>🔁 Ulangi Kesalahan ({finalMistakeCountForDisplay})</button> )} <button className="primaryButton" onClick={handleReshuffleAll}>{isReviewingMistakes ? 'Mulai Lagi Semua' : 'Ulangi Semua'}</button> </div> </div> ); }
-  if (!currentItemFromMemo || !correctSynonymObject) { return <div className="loading">Memuat kata berikutnya...</div>; }
+
+  // Conditional rendering for "Memuat kata berikutnya..."
+  // This condition should now be hit less often or only very briefly if `currentItemFromMemo`
+  // and `correctSynonymObject` are correctly managed by their respective useEffects.
+  if (!currentItemFromMemo || (options.length > 0 && !correctSynonymObject) ) {
+    // console.log("PersamaanPage: Still in loading state for next word/options", { currentItemFromMemo, correctSynonymObject, optionsLength: options.length });
+    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat kata berikutnya...</div>;
+  }
+
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
@@ -332,8 +360,8 @@ const PersamaanPage = () => {
             >
                 <span className="arrowIcon">←</span> Sebelumnya
             </button>
-            {!isAnswered && ( // Show Periksa only if not answered
-                <button className="primaryButton" onClick={checkAnswer} disabled={!selectedAnswer && options.length > 0}> {/* Assuming checkAnswer uses selectedAnswer if no direct option is passed */}
+            {!isAnswered && options.length > 0 && (
+                 <button className="primaryButton" onClick={checkAnswer} disabled={!selectedAnswer}> {/* checkAnswer will use selectedAnswer state */}
                     Periksa
                 </button>
             )}
