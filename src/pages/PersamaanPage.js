@@ -1,5 +1,5 @@
 // src/pages/PersamaanPage.js
-// CORRECTED: Example sentence integration, feedback enhancement
+// ADDED: Previous/Next navigation buttons
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import styles from './PersamaanPage.module.css';
@@ -7,53 +7,44 @@ import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 
-// Adjusted getDistractors to pick words that are not the target or its synonyms
 const getDistractors = (allItems, currentItem, count = 2) => {
   const distractors = new Set();
   if (!Array.isArray(allItems) || !currentItem || !currentItem.word || !Array.isArray(currentItem.synonyms)) {
-    console.error("Invalid input to getDistractors in PersamaanPage (Revised)");
+    console.error("Invalid input to getDistractors in PersamaanPage (Nav update)");
     return [];
   }
-
   const currentWordLower = currentItem.word.toLowerCase();
   const correctSynonymStringsLower = currentItem.synonyms.map(sObj => sObj.synonym.toLowerCase());
-
   const potentialDistractorWords = allItems
-    .map(item => item.word) // Get all words from the dataset
+    .map(item => item.word)
     .filter(Boolean)
     .filter(word => {
       const wordLower = word.toLowerCase();
       return wordLower !== currentWordLower && !correctSynonymStringsLower.includes(wordLower);
     });
-
-  const shuffledPool = shuffleArray([...new Set(potentialDistractorWords)]); // Ensure unique distractors
-
+  const shuffledPool = shuffleArray([...new Set(potentialDistractorWords)]);
   for (const word of shuffledPool) {
     if (distractors.size >= count) break;
     distractors.add(word);
   }
-
   let fallbackCounter = 1;
   while (distractors.size < count) {
     const fallback = `[Opsi Salah ${fallbackCounter++}]`;
-    if (![...distractors].includes(fallback)) { // Ensure fallback is unique too
-        distractors.add(fallback);
-    }
-    if (fallbackCounter > count + 10) break; // Safety break for fallback
+    if (![...distractors].includes(fallback)) { distractors.add(fallback); }
+    if (fallbackCounter > count + 10) break;
   }
   return Array.from(distractors);
 };
 
-
-const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v4'; // Keep or increment if structure changes significantly
+const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v4';
 const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
 
 const PersamaanPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [options, setOptions] = useState([]); // Will store synonym strings for display
-  const [correctSynonymObject, setCorrectSynonymObject] = useState(null); // Stores the chosen correct synonym object
+  const [options, setOptions] = useState([]);
+  const [correctSynonymObject, setCorrectSynonymObject] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
@@ -68,16 +59,53 @@ const PersamaanPage = () => {
 
   const optionButtonRefs = useRef([]);
   const pageRef = useRef(null);
-  const nextButtonRef = useRef(null);
+  const isCompletedRef = useRef(false);
   const currentItemRef = useRef(null);
 
   const { currentItem: currentItemFromMemo, totalItemsInSet } = useMemo(() => {
-      const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
-          ? displayItems[currentIndex]
-          : null;
-      currentItemRef.current = item;
-      return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
+    const item = (displayItems && displayItems.length > 0 && currentIndex >= 0 && currentIndex < displayItems.length)
+        ? displayItems[currentIndex]
+        : null;
+    currentItemRef.current = item;
+    return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
+
+  const resetItemState = useCallback(() => {
+    setSelectedAnswer(null);
+    setFeedback('');
+    setIsCorrect(false);
+    setIsAnswered(false);
+    setCorrectSynonymObject(null); // This will be set by generateOptions
+    // Focus first option button after a short delay to ensure it's rendered
+    setTimeout(() => {
+        if (optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
+            optionButtonRefs.current[0].current.focus();
+        }
+    }, 50);
+  }, []);
+
+  const generateOptions = useCallback(() => {
+    if (!currentItemRef.current || !Array.isArray(currentItemRef.current.synonyms) || currentItemRef.current.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
+       setOptions([]); setCorrectSynonymObject(null); return;
+    }
+    const chosenCorrectSynonymObj = currentItemRef.current.synonyms[Math.floor(Math.random() * currentItemRef.current.synonyms.length)];
+    setCorrectSynonymObject(chosenCorrectSynonymObj);
+    const distractors = getDistractors(allItems, currentItemRef.current, 2);
+    const allOptionStrings = shuffleArray([chosenCorrectSynonymObj.synonym, ...distractors]);
+    setOptions(allOptionStrings);
+    optionButtonRefs.current = allOptionStrings.map((_, i) => optionButtonRefs.current[i] || React.createRef());
+  }, [allItems]); // allItems as dependency
+
+  useEffect(() => {
+    if (!isLoading && currentItemFromMemo) {
+      generateOptions(); // This will also set correctSynonymObject
+      resetItemState(); // Reset interaction states for the new/navigated item
+    } else if (!isLoading && !currentItemFromMemo && totalItemsInSet > 0 && currentIndex >= totalItemsInSet) {
+      isCompletedRef.current = true;
+      setCurrentIndex(totalItemsInSet); // Ensure consistent state for completion
+    }
+  }, [currentItemFromMemo, isLoading, generateOptions, resetItemState, totalItemsInSet, currentIndex]);
+
 
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
       setIsLoading(true); setError(null);
@@ -85,8 +113,10 @@ const PersamaanPage = () => {
           const validItems = itemsToLoad.filter(item => item.word && item.synonyms && item.synonyms.length > 0 && item.example_sentence_target && item.synonyms.every(s => s.synonym && s.example_sentence_synonym));
           if (!validItems || validItems.length === 0) throw new Error("Tidak ada data Persamaan yang valid dengan contoh kalimat.");
           setDisplayItems(shuffleArray([...validItems]));
-          setCurrentIndex(0); setIsReviewingMistakes(isReviewSession);
-          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false); setCorrectSynonymObject(null);
+          setCurrentIndex(0);
+          setIsReviewingMistakes(isReviewSession);
+          // resetItemState will be called by the useEffect for currentItemFromMemo
+          isCompletedRef.current = false;
           if (!isReviewSession) {
               setMissedItemsMaster(new Set()); setRetestQueue([]); setCorrectStreak(0);
               setRetestThreshold(getRandomThreshold());
@@ -94,7 +124,7 @@ const PersamaanPage = () => {
           }
       } catch (err) { console.error("Error loading Persamaan:", err); setError(err.message); setDisplayItems([]); }
       finally { setIsLoading(false); }
-  }, []);
+  }, []); // Removed resetItemState from here, will be handled by currentItemFromMemo effect
 
   useEffect(() => {
     setIsLoading(true); setError(null);
@@ -112,73 +142,51 @@ const PersamaanPage = () => {
                     setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
                     setMissedItemsMaster(new Set(savedState.missedItemsMaster)); setIsReviewingMistakes(savedState.isReviewingMistakes || false);
                     setRetestQueue(savedState.retestQueue); setCorrectStreak(savedState.correctStreak);
-                    setRetestThreshold(savedState.retestThreshold || getRandomThreshold()); setIsAnswered(false); setIsCorrect(false); setCorrectSynonymObject(null);
-                } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(filteredData, false); }
-            } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(filteredData, false); }
+                    setRetestThreshold(savedState.retestThreshold || getRandomThreshold());
+                } else { loadData(filteredData, false); }
+            } else { loadData(filteredData, false); }
         } else { loadData(filteredData, false); }
     } catch (err) { console.error("Error init Persamaan:", err); setError(err.message); setAllItems([]); setDisplayItems([]); }
     finally { setIsLoading(false); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
       if (isLoading || error || !displayItems || displayItems.length === 0) return;
       const isCompletedNow = currentIndex >= displayItems.length;
-      if (isCompletedNow) { localStorage.removeItem(LOCAL_STORAGE_KEY); return; }
+      isCompletedRef.current = isCompletedNow;
+      if (isCompletedNow) { if (localStorage.getItem(LOCAL_STORAGE_KEY)) { localStorage.removeItem(LOCAL_STORAGE_KEY); } return; }
       try {
           const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => item.id ), missedItemsMaster: Array.from(missedItemsMaster), isReviewingMistakes: isReviewingMistakes, retestQueue: retestQueue, correctStreak: correctStreak, retestThreshold: retestThreshold };
           localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
       } catch (err) { console.error("Failed to save Persamaan state:", err); }
   }, [currentIndex, displayItems, missedItemsMaster, isReviewingMistakes, retestQueue, correctStreak, retestThreshold, isLoading, error]);
 
-  const generateOptions = useCallback(() => {
-     if (!currentItemRef.current || !Array.isArray(currentItemRef.current.synonyms) || currentItemRef.current.synonyms.length === 0 || !Array.isArray(allItems) || allItems.length === 0) {
-        setOptions([]); setCorrectSynonymObject(null); return;
-     }
-     const chosenCorrectSynonymObj = currentItemRef.current.synonyms[Math.floor(Math.random() * currentItemRef.current.synonyms.length)];
-     setCorrectSynonymObject(chosenCorrectSynonymObj);
-
-     const distractors = getDistractors(allItems, currentItemRef.current, 2); // Get 2 distractor words
-     const allOptionStrings = shuffleArray([chosenCorrectSynonymObj.synonym, ...distractors]);
-     setOptions(allOptionStrings);
-     optionButtonRefs.current = allOptionStrings.map((_, i) => optionButtonRefs.current[i] || React.createRef());
-  }, [allItems]);
-
-  useEffect(() => {
-    if (!isLoading && currentItemFromMemo) {
-        generateOptions();
-        setSelectedAnswer(null); setFeedback(''); setIsAnswered(false); setIsCorrect(false);
-        setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
-    } else if (!currentItemFromMemo) {
-       setOptions([]); setCorrectSynonymObject(null);
-    }
-  }, [currentItemFromMemo, isLoading, generateOptions]);
 
   const handleReshuffleAll = () => { if(allItems.length > 0) loadData(allItems, false); };
-  const handleReviewMistakes = () => { const mistakeIds = Array.from(missedItemsMaster); if (mistakeIds.length === 0) return; const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id)); if (itemsToReview.length > 0) { loadData(itemsToReview, true); } else { setError("Tidak ada kesalahan untuk di-review."); } };
+  const handleReviewMistakes = () => { const mistakeIds = Array.from(missedItemsMaster); if (mistakeIds.length === 0) {setFeedback("Tidak ada kesalahan untuk di-review."); return;} const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id)); if (itemsToReview.length > 0) { loadData(itemsToReview, true); } else { setError("Tidak ada kesalahan untuk di-review, atau data item salah tidak ditemukan."); } };
 
-  const loadNextItem = useCallback(() => {
+  const advanceItem = useCallback((direction) => {
     if (!displayItems || displayItems.length === 0) return;
-    const isLastItemInCurrentSet = currentIndex >= displayItems.length - 1;
-
-    if (!isReviewingMistakes && retestQueue.length > 0 && correctStreak >= retestThreshold && !isLastItemInCurrentSet) {
-        const retestItemId = retestQueue[0];
-        const retestItem = allItems.find(item => item.id === retestItemId);
-        if (retestItem) {
-            let nextDisplayItems = [...displayItems];
-            nextDisplayItems = nextDisplayItems.filter(item => item.id !== retestItemId);
-            const currentActualIndexInDisplay = nextDisplayItems.findIndex(item => item.id === currentItemRef.current?.id);
-            if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length) {
-                 nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
-            } else { nextDisplayItems.push(retestItem); }
-            setDisplayItems(nextDisplayItems);
-            const newIndexOfRetestItem = nextDisplayItems.findIndex(item => item.id === retestItemId);
-            setCurrentIndex(newIndexOfRetestItem !== -1 ? newIndexOfRetestItem : currentIndex + 1);
-            setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
-            return;
-        } else { setRetestQueue(prev => prev.slice(1)); }
+    let nextIndex = currentIndex;
+    if (direction === 'next') {
+        if (!isReviewingMistakes && retestQueue.length > 0 && correctStreak >= retestThreshold && currentIndex < displayItems.length -1) {
+            const retestItemId = retestQueue[0];
+            const retestItem = allItems.find(item => item.id === retestItemId);
+            if (retestItem) {
+                let nextDisplayItems = displayItems.filter(item => item.id !== retestItemId);
+                const currentActualIndexInDisplay = nextDisplayItems.findIndex(item => item.id === currentItemRef.current?.id);
+                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length) {
+                    nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
+                } else { nextDisplayItems.push(retestItem); }
+                setDisplayItems(nextDisplayItems);
+                nextIndex = nextDisplayItems.findIndex(item => item.id === retestItemId);
+                setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
+            } else { setRetestQueue(prev => prev.slice(1)); nextIndex = Math.min(currentIndex + 1, displayItems.length); }
+        } else { nextIndex = Math.min(currentIndex + 1, displayItems.length); }
+    } else if (direction === 'previous') {
+        nextIndex = Math.max(currentIndex - 1, 0);
     }
-    setCurrentIndex(prevIndex => prevIndex + 1);
+    setCurrentIndex(nextIndex);
   }, [currentIndex, displayItems, allItems, retestQueue, correctStreak, isReviewingMistakes, retestThreshold]);
 
   const checkAnswer = useCallback((selectedOptionString) => {
@@ -192,9 +200,7 @@ const PersamaanPage = () => {
       setFeedback(`Tepat! "${selectedOptionString}" adalah sinonim yang benar. 👍`);
       setCorrectStreak(prev => prev + 1);
       setRetestQueue(prevQ => prevQ.filter(id => id !== currentItemRef.current.id));
-      setTimeout(loadNextItem, 2000); // Longer time to read example if correct
     } else {
-      // Build feedback with all correct synonyms and their examples
       let incorrectFeedback = `Kurang Tepat. Sinonim yang benar untuk "${currentItemRef.current.word}" antara lain:`;
       currentItemRef.current.synonyms.forEach(synObj => {
         incorrectFeedback += `\n- **${synObj.synonym}**: "${synObj.example_sentence_synonym}"`;
@@ -208,25 +214,29 @@ const PersamaanPage = () => {
             setRetestQueue(prevQ => [...prevQ, currentItemRef.current.id]);
         }
       }
-      setTimeout(() => nextButtonRef.current?.focus(), 50);
     }
-  }, [isAnswered, correctSynonymObject, isReviewingMistakes, loadNextItem, retestQueue]);
+  }, [isAnswered, correctSynonymObject, isReviewingMistakes, retestQueue]);
 
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        const localIsCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0;
-        if (localIsCompleted) return;
+        if (isCompletedRef.current) return;
 
-        if (!isAnswered && ['1', '2', '3', '4'].includes(event.key)) { // Assuming max 4 options
+        if (!isAnswered && ['1', '2', '3', '4'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex] && optionButtonRefs.current[optionIndex]?.current) {
-                checkAnswer(options[optionIndex]); // Pass the string
+                checkAnswer(options[optionIndex]);
                 event.preventDefault();
             }
-        }
-        else if (event.key === 'Enter' && isAnswered && !isCorrect) {
-             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
-                 loadNextItem();
+        } else if (event.key === 'ArrowRight') {
+            advanceItem('next');
+            event.preventDefault();
+        } else if (event.key === 'ArrowLeft') {
+            advanceItem('previous');
+            event.preventDefault();
+        } else if (event.key === 'Enter' && isAnswered) {
+             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement) &&
+                  document.activeElement?.tagName !== 'BUTTON') { // Avoid double action on button
+                 advanceItem('next');
                  event.preventDefault();
             }
         }
@@ -234,7 +244,7 @@ const PersamaanPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  }, [options, checkAnswer, loadNextItem, currentIndex, totalItemsInSet, isAnswered, isCorrect]);
+  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect]); // isCorrect for Enter logic if it matters
 
   const handleOptionKeyDown = (event, optionString) => {
       if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
@@ -264,7 +274,7 @@ const PersamaanPage = () => {
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-persamaan">
             <p className={styles.instruction} id="instruction-persamaan">Pilih salah satu persamaannya (Gunakan tombol 1, 2, 3, dst.):</p>
             {options.map((optionString, index) => {
-              const isTheCorrectAnswer = optionString.toLowerCase() === correctSynonymObject.synonym.toLowerCase();
+              const isTheCorrectAnswer = correctSynonymObject && optionString.toLowerCase() === correctSynonymObject.synonym.toLowerCase();
               let buttonClassName = styles.optionButton;
               if (isAnswered) {
                   if (isTheCorrectAnswer) buttonClassName += ` ${styles.correct}`;
@@ -313,7 +323,29 @@ const PersamaanPage = () => {
                 )}
             </div>
         )}
-        {isAnswered && !isCorrect && (<button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>Lanjut <span className="arrowIcon">→</span></button>)}
+        <div className={styles.buttonRow} style={{ marginTop: '20px' }}>
+            <button
+                className="secondaryButton"
+                onClick={() => advanceItem('previous')}
+                disabled={currentIndex === 0 || isLoading}
+                aria-label="Pertanyaan Sebelumnya"
+            >
+                <span className="arrowIcon">←</span> Sebelumnya
+            </button>
+            {!isAnswered && ( // Show Periksa only if not answered
+                <button className="primaryButton" onClick={checkAnswer} disabled={!selectedAnswer && options.length > 0}> {/* Assuming checkAnswer uses selectedAnswer if no direct option is passed */}
+                    Periksa
+                </button>
+            )}
+            <button
+                className="nextButton"
+                onClick={() => advanceItem('next')}
+                disabled={isLoading || (currentIndex >= totalItemsInSet -1 && isCompletedRef.current)}
+                aria-label="Pertanyaan Berikutnya"
+            >
+                {currentIndex >= totalItemsInSet - 1 ? "Lihat Hasil" : "Lanjut"} <span className="arrowIcon">→</span>
+            </button>
+        </div>
     </div>
   );
 };

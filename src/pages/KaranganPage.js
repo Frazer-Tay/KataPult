@@ -1,61 +1,44 @@
 // src/pages/KaranganPage.js
-// CORRECTED: JSX structure, getDistractors for definitions, and other fixes
+// ADDED: Previous/Next navigation buttons
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { karanganData } from '../data/karangan';
-import styles from './KaranganPage.module.css'; // Assuming you have or will create this CSS module
+import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
-const shuffleArray = (array) => {
-  if (!Array.isArray(array)) return [];
-  let currentIndex = array.length, randomIndex;
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-  return array;
-};
+const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 
-// getDistractors for definitions
 const getDistractors = (allItems, currentItem, count = 2) => {
   const distractors = new Set();
   if (!Array.isArray(allItems) || !currentItem || !currentItem.definition) {
-    console.error("Invalid input to getDistractors in KaranganPage");
+    console.error("Invalid input to getDistractors in KaranganPage (Nav update)");
     return [];
   }
-
   const correctDefinitionLower = currentItem.definition.toLowerCase();
-
   const potentialDistractorItems = allItems.filter(item =>
     item.id !== currentItem.id &&
     item.definition &&
     item.definition.toLowerCase() !== correctDefinitionLower
   );
-
   const shuffledPool = shuffleArray([...potentialDistractorItems]);
-
   for (const item of shuffledPool) {
     if (distractors.size >= count) break;
     if (item.definition) {
       const potentialDistractor = item.definition;
-      // Ensure distractor itself is not a duplicate if allItems has duplicate definitions
       if (![...distractors].map(d => d.toLowerCase()).includes(potentialDistractor.toLowerCase())) {
         distractors.add(potentialDistractor);
       }
     }
   }
-
   let fallbackCounter = 1;
   while (distractors.size < count) {
     const fallback = `[Definisi Acak ${fallbackCounter++}]`;
     if (![...distractors].map(d => d.toLowerCase()).includes(fallback.toLowerCase())) {
         distractors.add(fallback);
     }
-    if (fallbackCounter > count + 20) break; // Safety break
+    if (fallbackCounter > count + 20) break;
   }
   return Array.from(distractors);
 };
-
 
 const LOCAL_STORAGE_KEY = 'kataPultKaranganState_v4';
 const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
@@ -64,7 +47,7 @@ const KaranganPage = () => {
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [options, setOptions] = useState([]); // Will store definition strings
+  const [options, setOptions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
@@ -79,16 +62,49 @@ const KaranganPage = () => {
 
   const optionButtonRefs = useRef([]);
   const pageRef = useRef(null);
-  const nextButtonRef = useRef(null);
+  const isCompletedRef = useRef(false);
   const currentItemRef = useRef(null);
 
   const { currentItem: currentItemFromMemo, totalItemsInSet } = useMemo(() => {
-    const item = (displayItems && displayItems.length > 0 && currentIndex < displayItems.length)
+    const item = (displayItems && displayItems.length > 0 && currentIndex >=0 && currentIndex < displayItems.length)
         ? displayItems[currentIndex]
         : null;
     currentItemRef.current = item;
     return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
+
+  const resetItemState = useCallback(() => {
+    setSelectedAnswer(null);
+    setFeedback('');
+    setIsCorrect(false);
+    setIsAnswered(false);
+    setTimeout(() => {
+        if (optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
+            optionButtonRefs.current[0].current.focus();
+        }
+    }, 50);
+  }, []);
+
+  const generateOptions = useCallback(() => {
+    if (!currentItemRef.current || !currentItemRef.current.definition || !Array.isArray(allItems) || allItems.length === 0) {
+      setOptions([]); return;
+    }
+    const correctDefinition = currentItemRef.current.definition;
+    const distractors = getDistractors(allItems, currentItemRef.current, 2);
+    const allOptions = shuffleArray([correctDefinition, ...distractors]);
+    setOptions(allOptions);
+    optionButtonRefs.current = allOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef());
+  }, [allItems]);
+
+  useEffect(() => {
+    if (!isLoading && currentItemFromMemo) {
+      generateOptions();
+      resetItemState();
+    } else if (!isLoading && !currentItemFromMemo && totalItemsInSet > 0 && currentIndex >= totalItemsInSet) {
+      isCompletedRef.current = true;
+      setCurrentIndex(totalItemsInSet);
+    }
+  }, [currentItemFromMemo, isLoading, generateOptions, resetItemState, totalItemsInSet, currentIndex]);
 
   const loadData = useCallback((itemsToLoad, isReviewSession) => {
       setIsLoading(true); setError(null);
@@ -98,11 +114,9 @@ const KaranganPage = () => {
           setDisplayItems(shuffleArray([...validItems]));
           setCurrentIndex(0);
           setIsReviewingMistakes(isReviewSession);
-          setIsAnswered(false); setFeedback(''); setSelectedAnswer(null); setIsCorrect(false);
+          isCompletedRef.current = false;
           if (!isReviewSession) {
-              setMissedItemsMaster(new Set());
-              setRetestQueue([]);
-              setCorrectStreak(0);
+              setMissedItemsMaster(new Set()); setRetestQueue([]); setCorrectStreak(0);
               setRetestThreshold(getRandomThreshold());
               localStorage.removeItem(LOCAL_STORAGE_KEY);
           }
@@ -126,77 +140,50 @@ const KaranganPage = () => {
                     setDisplayItems(validSavedDisplayItems); setCurrentIndex(savedState.currentIndex);
                     setMissedItemsMaster(new Set(savedState.missedItemsMaster)); setIsReviewingMistakes(savedState.isReviewingMistakes || false);
                     setRetestQueue(savedState.retestQueue); setCorrectStreak(savedState.correctStreak);
-                    setRetestThreshold(savedState.retestThreshold || getRandomThreshold()); setIsAnswered(false); setIsCorrect(false);
-                } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(filteredData, false); }
-            } else { localStorage.removeItem(LOCAL_STORAGE_KEY); loadData(filteredData, false); }
+                    setRetestThreshold(savedState.retestThreshold || getRandomThreshold());
+                } else { loadData(filteredData, false); }
+            } else { loadData(filteredData, false); }
         } else { loadData(filteredData, false); }
     } catch (err) { console.error("Error init Karangan:", err); setError(err.message); setAllItems([]); setDisplayItems([]); }
     finally { setIsLoading(false); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
      if (isLoading || error || !displayItems || displayItems.length === 0) return;
     const isCompletedNow = currentIndex >= displayItems.length;
-    if (isCompletedNow) { localStorage.removeItem(LOCAL_STORAGE_KEY); return; }
+    isCompletedRef.current = isCompletedNow;
+    if (isCompletedNow) { if(localStorage.getItem(LOCAL_STORAGE_KEY)) { localStorage.removeItem(LOCAL_STORAGE_KEY); } return; }
     try {
       const stateToSave = { currentIndex: currentIndex, displayItemIds: displayItems.map(item => item.id), missedItemsMaster: Array.from(missedItemsMaster), isReviewingMistakes: isReviewingMistakes, retestQueue: retestQueue, correctStreak: correctStreak, retestThreshold: retestThreshold };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
     } catch (err) { console.error("Failed to save Karangan state:", err); }
   }, [currentIndex, displayItems, missedItemsMaster, isReviewingMistakes, retestQueue, correctStreak, retestThreshold, isLoading, error]);
 
-  const generateOptions = useCallback(() => {
-    if (!currentItemRef.current || !currentItemRef.current.definition || !Array.isArray(allItems) || allItems.length === 0) {
-      setOptions([]); return;
-    }
-    const correctDefinition = currentItemRef.current.definition;
-    const distractors = getDistractors(allItems, currentItemRef.current, 2); // Get 2 definition distractors
-    const allOptions = shuffleArray([correctDefinition, ...distractors]);
-    setOptions(allOptions);
-    optionButtonRefs.current = allOptions.map((_, i) => optionButtonRefs.current[i] || React.createRef());
-  }, [allItems]);
-
-  useEffect(() => {
-    if (!isLoading && currentItemFromMemo) {
-        generateOptions();
-        setSelectedAnswer(null); setFeedback(''); setIsAnswered(false); setIsCorrect(false);
-        setTimeout(() => optionButtonRefs.current[0]?.current?.focus(), 100);
-    } else if (!currentItemFromMemo) {
-       setOptions([]);
-    }
-  }, [currentItemFromMemo, isLoading, generateOptions]);
-
   const handleReshuffleAll = () => { if (allItems.length > 0) loadData(allItems, false); };
-  const handleReviewMistakes = () => {
-    const mistakeIds = Array.from(missedItemsMaster);
-    if (mistakeIds.length === 0) return;
-    const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id));
-    if (itemsToReview.length > 0) { loadData(itemsToReview, true); }
-    else { setError("Tidak ada kesalahan untuk di-review."); }
-  };
+  const handleReviewMistakes = () => { const mistakeIds = Array.from(missedItemsMaster); if (mistakeIds.length === 0) {setFeedback("Tidak ada kesalahan untuk di-review."); return;}; const itemsToReview = allItems.filter(item => mistakeIds.includes(item.id)); if (itemsToReview.length > 0) { loadData(itemsToReview, true); } else { setError("Tidak ada kesalahan untuk di-review, atau data item salah tidak ditemukan."); } };
 
-  const loadNextItem = useCallback(() => {
+  const advanceItem = useCallback((direction) => {
     if (!displayItems || displayItems.length === 0) return;
-    if (!isReviewingMistakes && retestQueue.length > 0 && correctStreak >= retestThreshold) {
-        const retestItemId = retestQueue[0];
-        const retestItem = allItems.find(item => item.id === retestItemId);
-        if (retestItem) {
-            console.log("Karangan: Retesting item:", retestItem.word);
-            const currentActualIndexInDisplay = displayItems.findIndex(item => item.id === currentItemRef.current?.id);
-            let nextDisplayItems = [...displayItems];
-            const existingRetestIndex = nextDisplayItems.findIndex(item => item.id === retestItemId);
-            if (existingRetestIndex > -1 && existingRetestIndex > currentActualIndexInDisplay) { nextDisplayItems.splice(existingRetestIndex, 1); }
-            if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length -1 ) {
-                 nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
-            } else { nextDisplayItems.push(retestItem); }
-            setDisplayItems(nextDisplayItems);
-            const newIndexOfRetestItem = nextDisplayItems.findIndex(item => item.id === retestItemId);
-            setCurrentIndex(newIndexOfRetestItem !== -1 ? newIndexOfRetestItem : currentIndex + 1);
-            setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
-            return;
-        } else { setRetestQueue(prev => prev.slice(1)); }
+    let nextIndex = currentIndex;
+    if (direction === 'next') {
+        if (!isReviewingMistakes && retestQueue.length > 0 && correctStreak >= retestThreshold && currentIndex < displayItems.length -1) {
+            const retestItemId = retestQueue[0];
+            const retestItem = allItems.find(item => item.id === retestItemId);
+            if (retestItem) {
+                let nextDisplayItems = displayItems.filter(item => item.id !== retestItemId);
+                const currentActualIndexInDisplay = nextDisplayItems.findIndex(item => item.id === currentItemRef.current?.id);
+                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length) {
+                    nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
+                } else { nextDisplayItems.push(retestItem); }
+                setDisplayItems(nextDisplayItems);
+                nextIndex = nextDisplayItems.findIndex(item => item.id === retestItemId);
+                setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
+            } else { setRetestQueue(prev => prev.slice(1)); nextIndex = Math.min(currentIndex + 1, displayItems.length); }
+        } else { nextIndex = Math.min(currentIndex + 1, displayItems.length); }
+    } else if (direction === 'previous') {
+        nextIndex = Math.max(currentIndex - 1, 0);
     }
-    if (currentIndex < displayItems.length) { setCurrentIndex(prevIndex => prevIndex + 1); }
+    setCurrentIndex(nextIndex);
   }, [currentIndex, displayItems, allItems, retestQueue, correctStreak, isReviewingMistakes, retestThreshold]);
 
   const checkAnswer = useCallback((selectedOptionDefinition) => {
@@ -205,12 +192,10 @@ const KaranganPage = () => {
     const correct = selectedOptionDefinition.toLowerCase() === currentItemRef.current.definition.toLowerCase();
     setIsCorrect(correct);
     setSelectedAnswer(selectedOptionDefinition);
-
     if (correct) {
       setFeedback('Tepat! Definisi Benar. 👍');
       setCorrectStreak(prev => prev + 1);
       setRetestQueue(prevQ => prevQ.filter(id => id !== currentItemRef.current.id));
-      setTimeout(loadNextItem, 1500);
     } else {
       setFeedback(`Kurang Tepat. Definisi yang benar untuk "${currentItemRef.current.word}" adalah: "${currentItemRef.current.definition}"`);
       setCorrectStreak(0);
@@ -221,25 +206,28 @@ const KaranganPage = () => {
             setRetestQueue(prevQ => [...prevQ, currentItemRef.current.id]);
         }
       }
-      setTimeout(() => nextButtonRef.current?.focus(), 50);
     }
-  }, [isAnswered, isReviewingMistakes, loadNextItem, retestQueue]);
+  }, [isAnswered, isReviewingMistakes, retestQueue]); // Removed loadNextItem as it's manual now
 
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        const localIsCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0;
-        if (localIsCompleted) return;
-
+        if (isCompletedRef.current) return;
         if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex] && optionButtonRefs.current[optionIndex]?.current) {
                 checkAnswer(options[optionIndex]);
                 event.preventDefault();
             }
-        }
-        else if (event.key === 'Enter' && isAnswered && !isCorrect) {
-             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement)) {
-                 loadNextItem();
+        } else if (event.key === 'ArrowRight') {
+            advanceItem('next');
+            event.preventDefault();
+        } else if (event.key === 'ArrowLeft') {
+            advanceItem('previous');
+            event.preventDefault();
+        } else if (event.key === 'Enter' && isAnswered) {
+             if (!optionButtonRefs.current.some(ref => ref.current === document.activeElement) &&
+                  document.activeElement?.tagName !== 'BUTTON') {
+                 advanceItem('next');
                  event.preventDefault();
             }
         }
@@ -247,7 +235,7 @@ const KaranganPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  }, [options, checkAnswer, loadNextItem, currentIndex, totalItemsInSet, isAnswered, isCorrect]);
+  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect]);
 
   const handleOptionKeyDown = (event, option) => {
       if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
@@ -290,7 +278,6 @@ const KaranganPage = () => {
         <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewingMistakes ? "Review Kesalahan Karangan" : "Kosakata Karangan"} />
         <div className={styles.card}>
             <h2 className={styles.word}>{currentItemFromMemo.word || '[N/A]'}</h2>
-            {/* Display synonyms if they exist - for Karangan, this part might be less relevant or differently styled */}
             {currentItemFromMemo.synonyms && currentItemFromMemo.synonyms.length > 0 && (
                 <div className={styles.synonymSection}>
                     <p className={styles.synonymLabel}>Persamaan Kata:</p>
@@ -310,7 +297,7 @@ const KaranganPage = () => {
               }
               return (
                 <button
-                  key={`${currentItemFromMemo.id}-option-${index}-${option.substring(0, 10)}`} // Key from option string
+                  key={`${currentItemFromMemo.id}-option-${index}-${option.substring(0,10)}`}
                   ref={el => optionButtonRefs.current[index] = el}
                   className={buttonClassName}
                   onClick={() => checkAnswer(option)}
@@ -334,11 +321,29 @@ const KaranganPage = () => {
               {feedback}
             </div>
         )}
-        {isAnswered && !isCorrect && (
-            <button className="nextButton" ref={nextButtonRef} onClick={loadNextItem}>
-                Lanjut <span className="arrowIcon">→</span>
+        <div className={styles.buttonRow} style={{ marginTop: '20px' }}>
+            <button
+                className="secondaryButton"
+                onClick={() => advanceItem('previous')}
+                disabled={currentIndex === 0 || isLoading}
+                aria-label="Pertanyaan Sebelumnya"
+            >
+                <span className="arrowIcon">←</span> Sebelumnya
             </button>
-        )}
+            {!isAnswered && options.length > 0 && ( // Show "Periksa" only if not answered and options are available
+                <button className="primaryButton" onClick={() => {if(selectedAnswer) checkAnswer(selectedAnswer)}} disabled={!selectedAnswer}>
+                    Periksa
+                </button>
+            )}
+             <button
+                className="nextButton"
+                onClick={() => advanceItem('next')}
+                disabled={isLoading || (currentIndex >= totalItemsInSet -1 && isCompletedRef.current)}
+                aria-label="Pertanyaan Berikutnya"
+            >
+                {currentIndex >= totalItemsInSet - 1 ? "Lihat Hasil" : "Lanjut"} <span className="arrowIcon">→</span>
+            </button>
+        </div>
     </div>
   );
 };
