@@ -1,12 +1,12 @@
 // src/pages/VocabularyPage.js
-// ADDED: Previous/Next navigation buttons
+// CORRECTED: Keyboard navigation dependency for arrow keys
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { vocabularyData } from '../data/vocabulary';
 import styles from './VocabularyPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
-const LOCAL_STORAGE_KEY = 'kataPultVocabularyState_v1'; // Keep v1 or increment if structure changes drastically
+const LOCAL_STORAGE_KEY = 'kataPultVocabularyState_v1';
 
 const VocabularyPage = () => {
   const [allItems, setAllItems] = useState([]);
@@ -15,13 +15,13 @@ const VocabularyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const pageRef = useRef(null);
-  // No nextButtonRef needed for auto-focus here as it's always visible
-  const isCompletedRef = useRef(false);
+  const isCompletedRef = useRef(false); // Ref to track completion status
 
   const { currentItem, totalItemsInSet } = useMemo(() => {
     const item = (displayItems && displayItems.length > 0 && currentIndex >= 0 && currentIndex < displayItems.length)
         ? displayItems[currentIndex]
         : null;
+    isCompletedRef.current = (currentIndex >= (displayItems?.length || 0) && (displayItems?.length || 0) > 0); // Update ref
     return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
@@ -33,8 +33,8 @@ const VocabularyPage = () => {
       }
       setDisplayItems(shuffleArray([...itemsToLoad]));
       setCurrentIndex(0);
-      isCompletedRef.current = false;
-      localStorage.removeItem(LOCAL_STORAGE_KEY); // Fresh start for vocab always
+      isCompletedRef.current = false; // Reset completion ref on new data load
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
       setError(null);
     } catch (err) {
       console.error("Error processing vocabulary data:", err);
@@ -70,7 +70,7 @@ const VocabularyPage = () => {
       setError(err.message || "Gagal memuat data Vocabulary.");
       setAllItems([]); setDisplayItems([]);
     } finally { setIsLoading(false); }
-  }, [loadData]); // loadData is now a dependency
+  }, [loadData]);
 
   useEffect(() => {
     if (isLoading || error || !displayItems || displayItems.length === 0) return;
@@ -93,7 +93,7 @@ const VocabularyPage = () => {
     if (allItems.length === 0) return;
     setIsLoading(true);
     loadData(allItems);
-    pageRef.current?.focus();
+    // No need to focus pageRef here as the main focus will be on the next button
   };
 
   const advanceItem = useCallback((direction) => {
@@ -105,11 +105,16 @@ const VocabularyPage = () => {
       nextIdx = Math.max(currentIndex - 1, 0);
     }
     setCurrentIndex(nextIdx);
+    // Focus logic for next/prev buttons can be handled by their own onFocus if needed
+    // or ensure pageRef gets focus if buttons are disabled.
+     if (pageRef.current) {
+        pageRef.current.focus(); // Refocus container for subsequent key events
+    }
   }, [currentIndex, displayItems]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-        if (isCompletedRef.current) return;
+        if (isCompletedRef.current) return; // Use ref for immediate check
         if (event.key === 'ArrowRight' || event.key === 'Enter') {
             advanceItem('next');
             event.preventDefault();
@@ -119,12 +124,14 @@ const VocabularyPage = () => {
         }
     };
     const pageElement = pageRef.current;
-    if (pageElement && currentItem && !isLoading) { // Add currentItem check
+    // Add currentItem and !isLoading to ensure pageRef is focused only when content is ready
+    if (pageElement && currentItem && !isLoading) {
         pageElement.addEventListener('keydown', handleKeyDown);
-        pageElement.focus(); // Focus the container for keyboard events
+        pageElement.focus(); // Ensure page container has focus for arrow keys
     }
     return () => { if (pageElement) { pageElement.removeEventListener('keydown', handleKeyDown); }};
-  }, [advanceItem, currentItem, isLoading]); // Add currentItem and isLoading
+  // CRITICAL FIX: Added currentIndex, totalItemsInSet to dependency array
+  }, [advanceItem, currentItem, isLoading, currentIndex, totalItemsInSet]);
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
 
@@ -170,7 +177,7 @@ const VocabularyPage = () => {
                   <span className="arrowIcon">←</span> Sebelumnya
               </button>
               <button
-                  className="nextButton" // Using primary button style for "Next"
+                  className="nextButton"
                   onClick={() => advanceItem('next')}
                   disabled={isLoading || (currentIndex >= totalItemsInSet -1 && isCompletedRef.current)}
                   aria-label="Kata Berikutnya"

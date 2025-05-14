@@ -1,5 +1,5 @@
 // src/pages/KaranganPage.js
-// ADDED: Previous/Next navigation buttons
+// CORRECTED: Keyboard navigation dependency for arrow keys
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { karanganData } from '../data/karangan';
 import styles from './KaranganPage.module.css';
@@ -70,6 +70,7 @@ const KaranganPage = () => {
         ? displayItems[currentIndex]
         : null;
     currentItemRef.current = item;
+    isCompletedRef.current = (currentIndex >= (displayItems?.length || 0) && (displayItems?.length || 0) > 0);
     return { currentItem: item, totalItemsInSet: displayItems?.length || 0 };
   }, [displayItems, currentIndex]);
 
@@ -78,12 +79,14 @@ const KaranganPage = () => {
     setFeedback('');
     setIsCorrect(false);
     setIsAnswered(false);
-    setTimeout(() => {
-        if (optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
-            optionButtonRefs.current[0].current.focus();
+    if (options.length > 0 && optionButtonRefs.current && optionButtonRefs.current[0] && optionButtonRefs.current[0].current) {
+      setTimeout(() => {
+        if (optionButtonRefs.current[0]?.current) {
+          optionButtonRefs.current[0].current.focus();
         }
-    }, 50);
-  }, []);
+      }, 50);
+    }
+  }, [options.length]);
 
   const generateOptions = useCallback(() => {
     if (!currentItemRef.current || !currentItemRef.current.definition || !Array.isArray(allItems) || allItems.length === 0) {
@@ -102,7 +105,8 @@ const KaranganPage = () => {
       resetItemState();
     } else if (!isLoading && !currentItemFromMemo && totalItemsInSet > 0 && currentIndex >= totalItemsInSet) {
       isCompletedRef.current = true;
-      setCurrentIndex(totalItemsInSet);
+    } else if (!isLoading && !currentItemFromMemo) {
+      setOptions([]);
     }
   }, [currentItemFromMemo, isLoading, generateOptions, resetItemState, totalItemsInSet, currentIndex]);
 
@@ -172,11 +176,12 @@ const KaranganPage = () => {
             if (retestItem) {
                 let nextDisplayItems = displayItems.filter(item => item.id !== retestItemId);
                 const currentActualIndexInDisplay = nextDisplayItems.findIndex(item => item.id === currentItemRef.current?.id);
-                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length) {
+                if (currentActualIndexInDisplay !== -1 && currentActualIndexInDisplay < nextDisplayItems.length -1 ) {
                     nextDisplayItems.splice(currentActualIndexInDisplay + 1, 0, retestItem);
                 } else { nextDisplayItems.push(retestItem); }
                 setDisplayItems(nextDisplayItems);
                 nextIndex = nextDisplayItems.findIndex(item => item.id === retestItemId);
+                if(nextIndex === -1) nextIndex = currentIndex + 1;
                 setRetestQueue(prev => prev.slice(1)); setCorrectStreak(0); setRetestThreshold(getRandomThreshold());
             } else { setRetestQueue(prev => prev.slice(1)); nextIndex = Math.min(currentIndex + 1, displayItems.length); }
         } else { nextIndex = Math.min(currentIndex + 1, displayItems.length); }
@@ -207,11 +212,11 @@ const KaranganPage = () => {
         }
       }
     }
-  }, [isAnswered, isReviewingMistakes, retestQueue]); // Removed loadNextItem as it's manual now
+  }, [isAnswered, isReviewingMistakes, retestQueue]);
 
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        if (isCompletedRef.current) return;
+        if (isCompletedRef.current) return; // Use ref here
         if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex] && optionButtonRefs.current[optionIndex]?.current) {
@@ -235,7 +240,8 @@ const KaranganPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect]);
+  // CRITICAL FIX: Added currentIndex and totalItemsInSet to dependency array
+  }, [options, checkAnswer, advanceItem, isAnswered, isCorrect, currentIndex, totalItemsInSet]);
 
   const handleOptionKeyDown = (event, option) => {
       if (!isAnswered && (event.key === 'Enter' || event.key === ' ')) {
@@ -330,8 +336,8 @@ const KaranganPage = () => {
             >
                 <span className="arrowIcon">←</span> Sebelumnya
             </button>
-            {!isAnswered && options.length > 0 && ( // Show "Periksa" only if not answered and options are available
-                <button className="primaryButton" onClick={() => {if(selectedAnswer) checkAnswer(selectedAnswer)}} disabled={!selectedAnswer}>
+            {!isAnswered && options.length > 0 && (
+                 <button className="primaryButton" onClick={() => {if(selectedAnswer) checkAnswer(selectedAnswer)}} disabled={!selectedAnswer}>
                     Periksa
                 </button>
             )}
