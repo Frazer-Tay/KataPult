@@ -31,6 +31,7 @@
   padding: 20px;
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
+  margin-bottom: 20px; /* Added margin if multiple sets are shown or before nav buttons */
 }
 .phraseList {
   list-style: decimal; /* Or none if you prefer */
