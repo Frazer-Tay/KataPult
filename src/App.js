@@ -1,22 +1,21 @@
 // src/App.js
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Or BrowserRouter
 import HomePage from './pages/HomePage';
 import VocabularyPage from './pages/VocabularyPage';
 import ImbuhanPage from './pages/ImbuhanPage';
 import PersamaanPage from './pages/PersamaanPage';
 import KaranganPage from './pages/KaranganPage';
-import FlashcardsPage from './pages/FlashcardsPage'; // Unified flashcards page
+import FlashcardsPage from './pages/FlashcardsPage';
 import TestSetupPage from './pages/TestSetupPage';
 import ImbuhanTestPage from './pages/ImbuhanTestPage';
 import PersamaanTestPage from './pages/PersamaanTestPage';
-// KaranganTestPage will be added later
-import AnalyticsTracker from './components/AnalyticsTracker'; // <--- CHECK THIS PATH
+import AnalyticsTracker from './components/AnalyticsTracker';
 import './App.css';
 
 function App() {
   return (
-    <Router basename="/KataPult">
+    <Router> {/* <--- REMOVED BASENAME PROP */}
       <AnalyticsTracker />
       <header className="app-header">
         <Link to="/" className="logo-link">KataPult Bahasa Prep</Link>
