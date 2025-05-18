@@ -1,19 +1,20 @@
-/* src/pages/FlashcardsPages.module.css */
+/* src/pages/FlashcardsPages.module.css (or FlashcardsPage.module.css) */
 .flashcardsContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px 15px 40px 15px;
-  max-width: 95vw; /* Good for mobile */
+  max-width: 95vw;
   margin: 20px auto;
   background-color: var(--background-dark);
   color: var(--text-dark);
-  box-sizing: border-box; /* Ensure padding is included in width/height */
+  box-sizing: border-box;
 }
 .flashcardsContainer:focus {
   outline: none;
 }
 
+/* General Title for Phrase List Set */
 .setTitle {
   color: var(--primary-dark);
   margin-bottom: 20px;
@@ -27,7 +28,7 @@
   width: 100%;
   max-width: 800px;
   background-color: var(--background-light);
-  padding: 25px 20px; /* Adjusted padding */
+  padding: 25px 20px;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   margin-bottom: 30px;
@@ -37,7 +38,7 @@
   list-style: decimal;
   padding-left: 25px;
   width: 100%;
-  margin: 0; /* Reset default margin */
+  margin: 0;
 }
 .phraseItem {
   background-color: #fff;
@@ -65,152 +66,137 @@
   line-height: 1.4;
 }
 
-/* Styles for Topic Card type */
-.flashcard {
-  background-color: transparent; /* Let inner divs handle background */
+/* Styles for Topic Essay Points Card type */
+.topicEssayCardContainer { /* This is the main visible card */
+  background-color: var(--background-light);
   width: 100%;
   max-width: 800px;
-  /* min-height will be determined by content or .flashcardFront min-height */
-  border: none;
-  perspective: 1000px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  display: flex; /* Added */
-  flex-direction: column; /* Added */
-}
-
-.flashcardInner {
-  position: relative;
-  width: 100%;
-  flex-grow: 1; /* Allow inner to grow */
-  text-align: center;
-  transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
-  transform-style: preserve-3d;
-  /* min-height is important for the flip effect to have a consistent base */
-  min-height: 250px; /* Base min-height, adjust if front content is taller */
-}
-
-.flashcard.flipped .flashcardInner {
-  transform: rotateY(180deg);
-}
-
-.flashcardFront, .flashcardBack {
-  position: absolute;
-  width: 100%;
-  height: 100%; /* Front and back should fill the inner container */
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-  box-sizing: border-box;
-  border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-lg);
+  padding: 25px 30px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-lg);
+  text-align: left;
+  display: flex;
+  flex-direction: column; /* Ensure content flows vertically */
 }
 
-.flashcardFront {
-  background-color: var(--background-medium);
-  align-items: center; /* Center front content */
-  justify-content: center; /* Center front content */
+.topicHeader {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--primary-light);
 }
 
-.flashcardFront h2.cardTitle {
+.cardTitle { /* For English title in topic card */
   color: var(--primary-dark);
-  font-size: 1.7rem; /* Adjusted for mobile */
-  margin-bottom: 15px;
+  font-size: 1.7rem; /* Mobile first */
+  font-weight: 700;
+  margin-bottom: 5px;
   line-height: 1.3;
 }
-
-.flipInstruction {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  margin-top: 10px;
-}
-
-.flashcardBack {
-  background-color: var(--background-light);
-  color: var(--text-dark);
-  transform: rotateY(180deg);
-  text-align: left;
-  overflow-y: auto; /* Enable scroll if content overflows */
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.flashcardBack h3.cardTitleBack {
-  color: var(--primary-dark);
-  text-align: center;
-  width: 100%;
-  margin: 0 0 15px 0; /* Adjust margin */
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 1.5rem;
-  /* Sticky title behavior */
-  position: sticky;
-  top: -25px; /* Should be negative of .flashcardBack's padding-top */
-  background-color: var(--background-light); /* Match back's background for sticky header */
-  z-index: 10; /* Ensure it's above other scrolled content */
-  padding-top: 25px; /* Add padding to compensate for sticky positioning if parent has padding */
-  /* Adjust margins if parent (.flashcardBack) has padding to make it full width */
-  margin-left: -25px; /* Compensate for parent padding-left */
-  margin-right: -25px; /* Compensate for parent padding-right */
-  padding-left: 25px; /* Re-apply padding within the sticky title */
-  padding-right: 25px;
-}
-
-.flashcardBack .mainPoint {
-    margin-bottom: 20px; /* More space between points */
-    width: 100%;
-}
-.flashcardBack .mainPoint:last-of-type { /* Remove bottom border from last point */
-  border-bottom: none;
-  margin-bottom: 10px;
-}
-
-.flashcardBack .mainPoint h4 {
-  color: var(--secondary-color);
-  margin-top: 0; /* Remove default top margin for h4 inside point */
-  margin-bottom: 10px; /* Increased space */
-  font-size: 1.15rem; /* Slightly larger */
-  font-weight: 600;
-}
-.pointTitleMalay { /* Class added in JS for Malay title part */
-  font-size: 0.9em;
+.cardTitleMalay { /* For Malay title in topic card */
+  font-size: 1.1rem; /* Mobile first */
   font-weight: 500;
   color: var(--text-medium);
-  display: block; /* Ensure it's on a new line or styled as preferred */
+  margin-top: 0;
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+.topicDetails { /* Container for the collapsible content */
+  margin-top: 20px;
+  width: 100%;
+}
+
+.clickToReveal {
+  text-align: center;
+  padding: 30px 15px;
+  color: var(--text-light);
+  font-style: italic;
+  border: 2px dashed var(--border-color-light);
+  border-radius: var(--border-radius-md);
+  margin-top: 20px;
+  background-color: var(--background-medium);
+}
+
+.essayPromptSection {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa; /* Lightest grey */
+  border-left: 4px solid var(--accent-color);
+  border-radius: var(--border-radius-sm);
+}
+.promptTitle {
+  font-size: 1.1rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+.promptTextEng, .promptTextMalay {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 5px;
+}
+.promptTextMalay {
+  font-style: italic;
+  color: var(--text-medium);
+}
+
+.mainPoint {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed var(--border-color-light);
+}
+.mainPoint:last-of-type {
+  border-bottom: none;
+  margin-bottom: 15px;
+}
+.pointTitle {
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.pointTitleMalay {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--text-medium); /* Differentiate Malay title slightly */
+  display: block;
   margin-top: 3px;
 }
 
 .elaboration, .example {
   font-size: 1rem;
-  line-height: 1.65; /* Slightly more line height for readability */
-  margin-bottom: 10px; /* Space after elaboration/example */
+  line-height: 1.65;
+  margin-bottom: 10px;
   padding-left: 15px;
   color: var(--text-dark);
+}
+.elaboration strong, .example strong {
+    font-weight: 600;
+    color: var(--primary-dark);
+    display: block;
+    margin-bottom: 3px;
 }
 .elaborationMalay, .exampleMalay {
   font-style: italic;
   color: var(--text-medium);
   display: block;
   margin-top: 4px;
-  font-size: 0.95em; /* Slightly smaller for translation */
+  font-size: 0.95em;
 }
-.elaboration strong, .example strong {
-    font-weight: 600;
-    color: var(--primary-dark);
-}
-
 
 .keyVocabularySection, .linkingPhrasesSection {
-  margin-top: 20px;
+  margin-top: 25px;
   padding-top: 15px;
   border-top: 1px solid var(--border-color);
   width: 100%;
 }
 .sectionSubTitle {
-  font-size: 1.1rem; /* Adjusted size */
+  font-size: 1.15rem;
   color: var(--primary-dark);
   margin-bottom: 12px;
   font-weight: 600;
@@ -221,7 +207,7 @@
 }
 .vocabularyList li {
   margin-bottom: 8px;
-  font-size: 0.95rem; /* Adjusted size */
+  font-size: 0.95rem;
 }
 .vocabularyList strong {
   color: var(--text-dark);
@@ -230,17 +216,17 @@
 
 .linkingPair {
   display: flex;
-  gap: 25px; /* Slightly reduced gap */
+  gap: 25px;
   flex-wrap: wrap;
 }
 .linkingPair > div {
   flex: 1;
-  min-width: 200px; /* Adjusted min-width */
+  min-width: 200px;
 }
 .linkingPair ul {
   list-style: '→ ';
   padding-left: 20px;
-  font-size: 0.95rem; /* Adjusted size */
+  font-size: 0.95rem;
 }
 .linkingPair strong {
     font-weight: 600;
@@ -249,43 +235,6 @@
     margin-bottom: 5px;
 }
 
-
-.essayPromptSection {
-  margin: 25px 0;
-  padding: 15px;
-  background-color: #e9ecef; /* Slightly different background for prompts */
-  border-left: 4px solid var(--accent-dark);
-  border-radius: var(--border-radius-sm);
-}
-.promptTitle {
-  font-size: 1.05rem; /* Adjusted */
-  color: var(--primary-dark);
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-.promptTextEng, .promptTextMalay {
-  font-size: 0.95rem; /* Adjusted */
-  line-height: 1.55;
-  margin-bottom: 5px;
-}
-.promptTextMalay {
-  font-style: italic;
-  color: var(--text-medium);
-}
-
-.revealButton { /* For the "Lihat Detail Poin & Frasa" button on the front */
-  display: block;
-  margin: 20px auto 0 auto;
-  width: fit-content;
-  background-color: var(--secondary-color);
-  color: white;
-}
-.revealButton:hover {
-    background-color: var(--secondary-light);
-}
-
-
 .navigationButtons {
   display: flex;
   justify-content: space-between;
@@ -293,36 +242,35 @@
   width: 100%;
   max-width: 800px;
   margin-top: 30px;
-  padding: 0 10px; /* Add some padding to prevent buttons touching edges on mobile */
+  padding: 0 10px;
   box-sizing: border-box;
 }
 .navigationButtons button {
-    min-width: 100px; /* Slightly smaller min-width for mobile */
-    padding: 10px 15px; /* Adjust padding for nav buttons */
+    min-width: 100px;
+    padding: 10px 15px;
     font-size: 0.9rem;
 }
 
-
 /* Desktop adjustments */
 @media (min-width: 768px) {
-  .flashcardsContainer { max-width: 900px; padding: 30px; }
-  .flashcardsContainer h1, .setTitle, .cardTitle, .cardTitleBack { font-size: 2rem; }
+  .flashcardsContainer h1, .setTitle { font-size: 2rem; }
   .cardTitle { font-size: 2rem; }
   .cardTitleMalay {font-size: 1.3rem;}
-  .flashcardFront h2.cardTitle { font-size: 2.2rem; }
-
 
   .phraseSet { padding: 30px 40px; }
   .phraseItem { padding: 15px 20px; }
   .phraseEnglish { font-size: 1.15rem; }
   .phraseMalay { font-size: 1rem; }
 
-  .topicEssayCard { padding: 30px 40px; }
-  .flashcardBack h3.cardTitleBack { font-size: 1.8rem; }
-  .flashcardBack .mainPoint h4 { font-size: 1.25rem; }
-  .elaboration, .example, .vocabularyList li { font-size: 1.05rem; }
+  .topicEssayCardContainer { padding: 30px 40px; }
+  .topicHeader .cardTitle { font-size: 2.2rem; } /* Targeting within specific layout */
+  .topicHeader .cardTitleMalay { font-size: 1.4rem; }
+  
   .promptTitle {font-size: 1.2rem;}
   .promptTextEng, .promptTextMalay { font-size: 1rem; }
+
+  .mainPoint h4 { font-size: 1.25rem; } /* Targeting within mainPoint */
+  .elaboration, .example, .vocabularyList li { font-size: 1.05rem; }
   .sectionSubTitle {font-size: 1.25rem;}
   .linkingPair ul { font-size: 1rem; }
 
