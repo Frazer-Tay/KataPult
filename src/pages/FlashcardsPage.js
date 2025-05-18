@@ -17,10 +17,10 @@ const shuffleArray = (array) => {
 
 const FlashcardsPage = () => {
   const [allSets, setAllSets] = useState([]);
-  const [currentSetIndex, setCurrentSetIndex] = useState(0);
+  const [currentSetIndex, setCurrentSetIndex] = useState(0); // DEFINED HERE
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Start with loading true
-  const [error, setError] = useState(null); // Add error state
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const pageRef = useRef(null);
 
   useEffect(() => {
@@ -28,25 +28,26 @@ const FlashcardsPage = () => {
       if (flashcardsData && flashcardsData.length > 0) {
         const shuffledSets = shuffleArray([...flashcardsData]);
         setAllSets(shuffledSets);
-        setCurrentSetIndex(0); // Set initial index
+        setCurrentSetIndex(0); // CORRECTLY SETTING THE INDEX
         setIsDetailsRevealed(false);
-        // console.log("Flashcards data loaded and shuffled:", shuffledSets);
+        setError(null); 
       } else {
         console.warn("No flashcards data found or data is empty.");
         setError("Tidak ada data flashcard untuk ditampilkan saat ini.");
-        setAllSets([]); // Ensure it's an empty array if no data
+        setAllSets([]);
+        setCurrentSetIndex(0); 
       }
     } catch (e) {
       console.error("Error processing flashcards data:", e);
       setError("Terjadi kesalahan saat memuat data flashcard.");
       setAllSets([]);
+      setCurrentSetIndex(0); 
     } finally {
-      setIsLoading(false); // Set loading to false after attempting to process data
+      setIsLoading(false);
     }
-  }, []); // Runs only once on mount
+  }, []); 
 
   const currentSet = useMemo(() => {
-    // console.log("Calculating currentSet:", allSets, currentSetIndex);
     if (!isLoading && allSets && allSets.length > 0 && currentSetIndex < allSets.length) {
         return allSets[currentSetIndex];
     }
@@ -73,7 +74,7 @@ const FlashcardsPage = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (!currentSet || isLoading) return; // Also check isLoading here
+      if (!currentSet || isLoading) return;
       if (currentSet.type === 'topic-essay-points' && (event.key === ' ' || event.key === 'Enter')) {
         if(document.activeElement?.tagName !== 'BUTTON'){
             toggleDetails();
@@ -88,14 +89,12 @@ const FlashcardsPage = () => {
       }
     };
     const pageElement = pageRef.current;
-    if (pageElement && !isLoading) { // Only add listener when not loading
+    if (pageElement && !isLoading) { 
       pageElement.addEventListener('keydown', handleKeyDown);
       pageElement.focus();
     }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handleKeyDown); };
-  }, [advanceSet, currentSet, toggleDetails, isLoading]); // Add isLoading
-
-  // --- Render Logic ---
+  }, [advanceSet, currentSet, toggleDetails, isLoading]);
 
   if (isLoading) {
     return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat Flashcards...</div>;
@@ -106,8 +105,6 @@ const FlashcardsPage = () => {
   }
 
   if (!currentSet) {
-    // This case should ideally be covered by error or if flashcardsData is truly empty
-    // Or it might briefly show if allSets is being updated.
     return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan.</div>;
   }
 
@@ -199,7 +196,6 @@ const FlashcardsPage = () => {
     <div className={styles.flashcardsContainer} ref={pageRef} tabIndex={-1}>
       <ProgressBar current={currentSetIndex + 1} total={allSets.length} label="Set Flashcard" />
       
-      {/* Render content only if currentSet is available */}
       {currentSet && currentSet.type === 'phrase-list' && renderPhraseList(currentSet)}
       {currentSet && currentSet.type === 'topic-essay-points' && renderTopicEssayPoints(currentSet)}
 
