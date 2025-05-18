@@ -1,7 +1,8 @@
 // src/pages/FlashcardsPage.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { flashcardsData } from '../data/flashcardsData'; // Adjust path
-import styles from './FlashcardsPage.module.css'; // New CSS module
+// In src/pages/FlashcardsPage.js
+import styles from './FlashcardsPages.module.css'; // <--- Ensure this matches the CSS filename
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
