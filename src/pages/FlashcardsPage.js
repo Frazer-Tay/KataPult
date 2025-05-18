@@ -18,22 +18,40 @@ const shuffleArray = (array) => {
 const FlashcardsPage = () => {
   const [allSets, setAllSets] = useState([]);
   const [currentSetIndex, setCurrentSetIndex] = useState(0);
-  const [isDetailsRevealed, setIsDetailsRevealed] = useState(false); // For topic cards
-  const [isLoading, setIsLoading] = useState(true);
+  const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [error, setError] = useState(null); // Add error state
   const pageRef = useRef(null);
 
   useEffect(() => {
-    if (flashcardsData && flashcardsData.length > 0) {
-      setAllSets(shuffleArray([...flashcardsData]));
-      setCurrentSetIndex(0);
-      setIsDetailsRevealed(false); // Start with details hidden for topic cards
+    try {
+      if (flashcardsData && flashcardsData.length > 0) {
+        const shuffledSets = shuffleArray([...flashcardsData]);
+        setAllSets(shuffledSets);
+        setCurrentSetIndex(0); // Set initial index
+        setIsDetailsRevealed(false);
+        // console.log("Flashcards data loaded and shuffled:", shuffledSets);
+      } else {
+        console.warn("No flashcards data found or data is empty.");
+        setError("Tidak ada data flashcard untuk ditampilkan saat ini.");
+        setAllSets([]); // Ensure it's an empty array if no data
+      }
+    } catch (e) {
+      console.error("Error processing flashcards data:", e);
+      setError("Terjadi kesalahan saat memuat data flashcard.");
+      setAllSets([]);
+    } finally {
+      setIsLoading(false); // Set loading to false after attempting to process data
     }
-    setIsLoading(false);
-  }, []);
+  }, []); // Runs only once on mount
 
   const currentSet = useMemo(() => {
-    return allSets && allSets.length > 0 ? allSets[currentSetIndex] : null;
-  }, [allSets, currentSetIndex]);
+    // console.log("Calculating currentSet:", allSets, currentSetIndex);
+    if (!isLoading && allSets && allSets.length > 0 && currentSetIndex < allSets.length) {
+        return allSets[currentSetIndex];
+    }
+    return null;
+  }, [allSets, currentSetIndex, isLoading]);
 
   const toggleDetails = useCallback(() => {
     if (currentSet && currentSet.type === 'topic-essay-points') {
@@ -49,13 +67,13 @@ const FlashcardsPage = () => {
     } else if (direction === 'previous') {
       nextIdx = (currentSetIndex - 1 + allSets.length) % allSets.length;
     }
-    setCurrentSetIndex(nextIdx);
-    setIsDetailsRevealed(false); // Reset details visibility for the new set
+    setCurrentIndex(nextIdx);
+    setIsDetailsRevealed(false);
   }, [currentSetIndex, allSets]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (!currentSet) return;
+      if (!currentSet || isLoading) return; // Also check isLoading here
       if (currentSet.type === 'topic-essay-points' && (event.key === ' ' || event.key === 'Enter')) {
         if(document.activeElement?.tagName !== 'BUTTON'){
             toggleDetails();
@@ -70,19 +88,27 @@ const FlashcardsPage = () => {
       }
     };
     const pageElement = pageRef.current;
-    if (pageElement) {
+    if (pageElement && !isLoading) { // Only add listener when not loading
       pageElement.addEventListener('keydown', handleKeyDown);
       pageElement.focus();
     }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handleKeyDown); };
-  }, [advanceSet, currentSet, toggleDetails]);
+  }, [advanceSet, currentSet, toggleDetails, isLoading]); // Add isLoading
+
+  // --- Render Logic ---
 
   if (isLoading) {
-    return <div className="loading">Memuat Flashcards...</div>;
+    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat Flashcards...</div>;
+  }
+
+  if (error) {
+    return <div className="error" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{error}</div>;
   }
 
   if (!currentSet) {
-    return <div className={styles.flashcardsContainer}>Tidak ada data flashcard untuk ditampilkan.</div>;
+    // This case should ideally be covered by error or if flashcardsData is truly empty
+    // Or it might briefly show if allSets is being updated.
+    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan.</div>;
   }
 
   const renderPhraseList = (set) => (
@@ -100,14 +126,12 @@ const FlashcardsPage = () => {
   );
 
   const renderTopicEssayPoints = (set) => (
-    // This is the non-flipping card structure
     <div className={styles.topicEssayCardContainer}>
         <div className={styles.topicHeader}>
             <h2 className={styles.cardTitle}>{set.title_english}</h2>
             {set.title_malay && <p className={styles.cardTitleMalay}><em>({set.title_malay})</em></p>}
         </div>
 
-        {/* Prompts can be always visible or part of toggleDetails */}
         {set.introduction_prompt_english && (
             <div className={styles.essayPromptSection}>
                 <h3 className={styles.promptTitle}>Arahan Pendahuluan:</h3>
@@ -175,19 +199,20 @@ const FlashcardsPage = () => {
     <div className={styles.flashcardsContainer} ref={pageRef} tabIndex={-1}>
       <ProgressBar current={currentSetIndex + 1} total={allSets.length} label="Set Flashcard" />
       
-      {currentSet.type === 'phrase-list' && renderPhraseList(currentSet)}
-      {currentSet.type === 'topic-essay-points' && renderTopicEssayPoints(currentSet)}
+      {/* Render content only if currentSet is available */}
+      {currentSet && currentSet.type === 'phrase-list' && renderPhraseList(currentSet)}
+      {currentSet && currentSet.type === 'topic-essay-points' && renderTopicEssayPoints(currentSet)}
 
       <div className={styles.navigationButtons}>
-        <button className="secondaryButton" onClick={() => advanceSet('previous')} disabled={allSets.length <= 1}>
+        <button className="secondaryButton" onClick={() => advanceSet('previous')} disabled={allSets.length <= 1 || isLoading}>
           <span className="arrowIcon">←</span> Set Sebelumnya
         </button>
-        {currentSet.type === 'topic-essay-points' && (
-          <button className="primaryButton" onClick={toggleDetails}>
+        {currentSet && currentSet.type === 'topic-essay-points' && (
+          <button className="primaryButton" onClick={toggleDetails} disabled={isLoading}>
             {isDetailsRevealed ? 'Sembunyikan Detail' : 'Lihat Detail'}
           </button>
         )}
-        <button className="nextButton" onClick={() => advanceSet('next')} disabled={allSets.length <= 1}>
+        <button className="nextButton" onClick={() => advanceSet('next')} disabled={allSets.length <= 1 || isLoading}>
           Set Berikutnya <span className="arrowIcon">→</span>
         </button>
       </div>
