@@ -61,72 +61,87 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    position: relative; /* For mobile nav overlay context */
 }
 
 .app-header {
   background: var(--primary-dark);
-  padding: 14px 20px; /* Default padding */
+  padding: 12px 15px; /* Adjusted for mobile */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Direct shadow value */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
-  border-bottom: 3px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color); /* Slightly thinner accent */
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  color: white; /* Text color for header content */
+  color: white;
 }
 
-.logo-link { /* Assuming your Link in App.js uses className="logo-link" */
+.logo-link {
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.3rem; /* Adjusted for mobile */
   font-weight: 700;
   text-decoration: none;
   transition: opacity 0.2s ease;
+  z-index: 1001; /* Above nav when open */
+  padding: 5px 0; /* Add some padding for easier tap */
 }
 .logo-link:hover {
-  opacity: 0.9;
+  opacity: 0.85;
   text-decoration: none;
 }
 
+/* Hamburger Button Styles */
+.hamburger-button {
+  display: none; /* Hidden by default, shown on mobile */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.9rem; /* Slightly larger hamburger */
+  cursor: pointer;
+  padding: 5px; /* Make it easier to tap */
+  margin-left: 10px; /* Space from other elements if any */
+  z-index: 1001; /* Above nav */
+  line-height: 1; /* Ensure icon is vertically centered */
+}
+
+/* Default Nav for Desktop (will be overridden for mobile) */
 .app-nav {
   display: flex;
-  gap: 10px; /* Spacing between nav items */
+  gap: 10px; /* Initial gap, will be overridden for mobile */
 }
 
 .app-nav a {
-  color: #e0e0e0; /* Lighter color for nav links for contrast */
+  color: #e0e0e0;
   text-decoration: none;
-  padding: 8px 10px; /* Padding for clickable area */
+  padding: 8px 10px;
   border-radius: var(--border-radius-sm);
   transition: background-color 0.2s ease, color 0.2s ease;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .app-nav a:hover,
-.app-nav a.active { /* Assuming react-router adds 'active' class */
+.app-nav a.active-link { /* Class from NavLink */
   color: white;
-  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover/active background */
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
-
-/* This targets the <main> element directly as used in your App.js structure */
 main {
   padding: 20px 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1100px; /* Or your preferred max-width for content */
-  margin: 0 auto; /* Center content */
+  max-width: 1100px;
+  margin: 0 auto;
   box-sizing: border-box;
-  /*
-    IMPORTANT: Adjust this value based on your actual header height.
-    Estimate: padding (14px*2) + logo font-size (~22px for 1.4rem) + border (3px) = ~53px.
-    Add some buffer. 70px-80px might be a good starting point for mobile.
-  */
-  padding-top: 75px;
+  /* Mobile header height approx: 12px*2 (padding) + ~21px (1.3rem logo) + 2px (border) = ~47px. Add buffer. */
+  padding-top: 65px; /* ADJUST THIS based on your ACTUAL mobile header height */
 }
 
 .app-footer {
@@ -159,7 +174,7 @@ main {
 .completionSubMessage { font-size: 1rem; color: var(--text-medium); margin-bottom: 20px; }
 .completionActions { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
 
-/* Global Button Styles - these will be inherited by module-specific buttons unless overridden */
+/* Global Button Styles */
 button, .button, a.buttonCard {
   cursor: pointer;
   border: none;
@@ -176,7 +191,7 @@ button, .button, a.buttonCard {
   line-height: 1.5;
   text-decoration: none;
   font-family: inherit;
-  color: inherit; /* Default color, will be overridden by specific button styles */
+  color: inherit;
 }
 
 button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
@@ -187,55 +202,123 @@ button:disabled { cursor: not-allowed; background-color: #e9ecef !important; col
 .primaryButton:hover:not(:disabled) { opacity: 0.9; }
 
 .secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid var(--accent-dark); }
-.secondaryButton:hover:not(:disabled) { background-color: #e6b300; } /* Darker gold for hover */
+.secondaryButton:hover:not(:disabled) { background-color: #e6b300; }
 
-.nextButton { background-color: var(--secondary-color); color: white; border: 1px solid var(--secondary-color); } /* Added border for consistency */
-.nextButton:hover:not(:disabled) { background-color: #0056b3; border-color: #0056b3;} /* Darker blue for hover */
+.nextButton { background-color: var(--secondary-color); color: white; border: 1px solid var(--secondary-color); }
+.nextButton:hover:not(:disabled) { background-color: #0056b3; border-color: #0056b3;}
 
 .arrowIcon { font-size: 1.2rem; line-height: 1; transition: transform 0.2s ease; }
 .nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(3px); }
 
-/* Global focus style for better accessibility */
 *:focus-visible {
-  outline: 3px solid var(--secondary-light); /* A light blue outline */
+  outline: 3px solid var(--secondary-light);
   outline-offset: 2px;
-  border-radius: var(--border-radius-sm); /* Slight rounding for the outline itself */
-  /* Optional: a subtle box-shadow for focus can also work if preferred over outline */
-  /* box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); */
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
 }
-/* Specific input focus to ensure border color changes are also visible */
 input:focus-visible {
-  border-color: var(--primary-light) !important; /* Keep your original input focus border */
+  border-color: var(--primary-light) !important;
 }
-/* Specific focus for HomePage button cards if they have a different base border */
 a.buttonCard:focus-visible {
-  border-color: var(--primary-color); /* Or a distinct focus border color */
+  border-color: var(--primary-color);
+}
+
+/* --- Mobile Navigation Specific Styles --- */
+@media (max-width: 767px) {
+
+  .hamburger-button {
+    display: block; /* Show hamburger on mobile */
+  }
+
+  .app-nav {
+    display: flex;
+    flex-direction: column; /* Stack links vertically */
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background-color: var(--primary-dark); /* Or a slightly different shade */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 10px 0; /* Padding for the dropdown container */
+    transform: translateY(-250%); /* Hide it off-screen above (adjust if needed) */
+    transition: transform 0.3s ease-in-out, visibility 0s 0.3s; /* Delay visibility change */
+    visibility: hidden; /* Hide when not open for accessibility */
+    z-index: 999;
+    max-height: calc(100vh - 60px); /* Example: prevent overly long menu on short screens, 60px is an est. header height */
+    overflow-y: auto;
+  }
+
+  .app-nav.open {
+    transform: translateY(0%); /* Slide it into view */
+    visibility: visible;
+    transition: transform 0.3s ease-in-out, visibility 0s 0s;
+  }
+
+  .app-nav a {
+    padding: 14px 20px; /* Larger tap targets */
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Subtle separator */
+    color: #f0f0f0; /* Lighter text for mobile nav items */
+    font-size: 1rem; /* Ensure readable font size */
+  }
+  .app-nav a:last-child {
+    border-bottom: none;
+  }
+  .app-nav a:hover,
+  .app-nav a.active-link {
+    background-color: var(--primary-color); /* More distinct active/hover for mobile */
+    color: white;
+  }
 }
 
 
-/* Desktop and Larger Tablet Overrides */
+/* --- Desktop and Larger Tablet Overrides --- */
 @media (min-width: 768px) {
   body { font-size: 16px; }
   .app-header {
-    padding: 18px 50px;
+    padding: 15px 40px; /* Desktop header padding */
   }
-  .logo-link { /* Changed from .home-link to match App.js if that's what you used */
-    font-size: 1.7rem;
+  .logo-link {
+    font-size: 1.6rem; /* Larger logo on desktop */
   }
+
+  .hamburger-button {
+    display: none; /* Hide hamburger on desktop */
+  }
+
   .app-nav {
-    gap: 20px; /* More space for desktop nav */
+    /* Restore horizontal layout for desktop */
+    flex-direction: row;
+    position: static; /* Back to normal flow */
+    width: auto;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+    transform: none; /* Reset mobile transform */
+    visibility: visible; /* Always visible on desktop */
+    max-height: none;
+    overflow-y: visible;
+    gap: 20px; /* Space between desktop nav links */
   }
   .app-nav a {
-    padding: 8px 15px; /* Adjust padding for desktop */
+    padding: 8px 12px; /* Desktop padding for nav links */
+    border-bottom: none; /* Remove mobile separator */
+    color: #e0e0e0; /* Original desktop link color */
+    font-size: 0.95rem; /* Original desktop font size */
   }
+  .app-nav a:hover,
+  .app-nav a.active-link {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.15); /* Original desktop hover/active */
+    border-bottom: 2px solid var(--accent-color); /* Optional: Add back underline for desktop active */
+  }
+
   main {
     padding: 40px;
-    /*
-      IMPORTANT: Adjust this value based on your actual DESKTOP header height.
-      Estimate: padding (18px*2) + logo font-size (~27px for 1.7rem) + border (3px) = ~66px.
-      Add some buffer. 85px-95px might be a good starting point for desktop.
-    */
-    padding-top: 90px;
+    /* Desktop header height approx: 15px*2 (padding) + ~26px (1.6rem logo) + 2px (border) = ~58px. Add buffer. */
+    padding-top: 80px; /* ADJUST THIS based on your ACTUAL DESKTOP header height */
   }
   .app-footer { margin-top: 60px; padding: 25px; font-size: 0.9rem; }
   .loading-page, .loading, .error, .completionMessage { font-size: 1.4rem; }
