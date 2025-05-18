@@ -1,7 +1,7 @@
 // src/pages/FlashcardsPage.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { flashcardsData } from '../data/flashcardsData';
-import styles from './FlashcardsPages.module.css'; // Ensure this filename matches yours
+import { flashcardsData } from '../data/flashcardsData'; // Ensure this path is correct
+import styles from './FlashcardsPages.module.css'; // Ensure this filename matches your CSS module
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => {
@@ -17,38 +17,42 @@ const shuffleArray = (array) => {
 
 const FlashcardsPage = () => {
   const [allSets, setAllSets] = useState([]);
-  const [currentSetIndex, setCurrentSetIndex] = useState(0); // DEFINED HERE
+  // --- इंश्योर करें कि यह यहां परिभाषित है ---
+  const [currentSetIndex, setCurrentIndex] = useState(0);
+  // --- ---
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const pageRef = useRef(null);
 
   useEffect(() => {
+    // This effect runs once on component mount to load and process data
+    setIsLoading(true); // Set loading true at the start
+    setError(null); // Clear previous errors
     try {
       if (flashcardsData && flashcardsData.length > 0) {
         const shuffledSets = shuffleArray([...flashcardsData]);
         setAllSets(shuffledSets);
-        setCurrentSetIndex(0); // CORRECTLY SETTING THE INDEX
+        setCurrentIndex(0); // Initialize the index for the first set
         setIsDetailsRevealed(false);
-        setError(null); 
       } else {
         console.warn("No flashcards data found or data is empty.");
         setError("Tidak ada data flashcard untuk ditampilkan saat ini.");
-        setAllSets([]);
-        setCurrentSetIndex(0); 
+        setAllSets([]); // Ensure it's an empty array if no data
+        setCurrentIndex(0); // Still set index to 0
       }
     } catch (e) {
       console.error("Error processing flashcards data:", e);
       setError("Terjadi kesalahan saat memuat data flashcard.");
       setAllSets([]);
-      setCurrentSetIndex(0); 
+      setCurrentIndex(0); // Reset index on error too
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Set loading to false after attempting to process data
     }
-  }, []); 
+  }, []); // Empty dependency array means this runs once on mount
 
   const currentSet = useMemo(() => {
-    if (!isLoading && allSets && allSets.length > 0 && currentSetIndex < allSets.length) {
+    if (!isLoading && allSets && allSets.length > 0 && currentSetIndex >= 0 && currentSetIndex < allSets.length) {
         return allSets[currentSetIndex];
     }
     return null;
@@ -68,9 +72,9 @@ const FlashcardsPage = () => {
     } else if (direction === 'previous') {
       nextIdx = (currentSetIndex - 1 + allSets.length) % allSets.length;
     }
-    setCurrentIndex(nextIdx);
+    setCurrentIndex(nextIdx); // This uses the correctly defined setCurrentIndex
     setIsDetailsRevealed(false);
-  }, [currentSetIndex, allSets]);
+  }, [currentSetIndex, allSets]); // Removed setCurrentIndex from deps as it's stable
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -104,9 +108,13 @@ const FlashcardsPage = () => {
     return <div className="error" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{error}</div>;
   }
 
-  if (!currentSet) {
-    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan.</div>;
+  if (!currentSet && !isLoading) { // Show "no data" only if not loading and currentSet is still null
+    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan. Periksa `src/data/flashcardsData.js`.</div>;
   }
+  if (!currentSet) { // Fallback if still null for some reason during transitions, though less likely now
+    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat set berikutnya...</div>;
+  }
+
 
   const renderPhraseList = (set) => (
     <div className={styles.phraseSet}>
