@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-  /* ... (CSS Variables remain the same as previous "Overhaul" version) ... */
   --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -53,9 +52,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-dark);
   color: var(--text-dark);
-  line-height: 1.6; /* Slightly reduced for better mobile fit */
-  font-size: 15px; /* Default mobile-friendly base */
-  -webkit-text-size-adjust: 100%; /* Prevent font scaling on mobile */
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-text-size-adjust: 100%;
 }
 
 #root {
@@ -66,40 +65,74 @@ body {
 
 .app-header {
   background: var(--primary-dark);
-  padding: 14px 20px;
-  text-align: center;
-  box-shadow: 0 3px 6px var(--shadow-color-light);
+  padding: 14px 20px; /* Default padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Direct shadow value */
   flex-shrink: 0;
-  border-bottom: 3px solid var(--accent-color); /* Thinner accent */
+  border-bottom: 3px solid var(--accent-color);
   position: sticky;
   top: 0;
-  z-index: 1000; /* Ensure it's above other content */
+  z-index: 1000;
+  color: white; /* Text color for header content */
 }
 
-.home-link {
+.logo-link { /* Assuming your Link in App.js uses className="logo-link" */
   color: white;
-  font-size: 1.4rem; /* Adjusted for mobile */
+  font-size: 1.4rem;
   font-weight: 700;
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
-.home-link:hover { opacity: 0.9; text-decoration: none; }
+.logo-link:hover {
+  opacity: 0.9;
+  text-decoration: none;
+}
 
+.app-nav {
+  display: flex;
+  gap: 10px; /* Spacing between nav items */
+}
+
+.app-nav a {
+  color: #e0e0e0; /* Lighter color for nav links for contrast */
+  text-decoration: none;
+  padding: 8px 10px; /* Padding for clickable area */
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-weight: 500;
+}
+
+.app-nav a:hover,
+.app-nav a.active { /* Assuming react-router adds 'active' class */
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover/active background */
+}
+
+
+/* This targets the <main> element directly as used in your App.js structure */
 main {
-  padding: 20px 10px; /* Reduced padding for mobile */
+  padding: 20px 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width: 1100px; /* Or your preferred max-width for content */
+  margin: 0 auto; /* Center content */
   box-sizing: border-box;
+  /*
+    IMPORTANT: Adjust this value based on your actual header height.
+    Estimate: padding (14px*2) + logo font-size (~22px for 1.4rem) + border (3px) = ~53px.
+    Add some buffer. 70px-80px might be a good starting point for mobile.
+  */
+  padding-top: 75px;
 }
 
 .app-footer {
   text-align: center;
   margin-top: 40px;
-  padding: 20px 15px; /* Adjusted padding */
+  padding: 20px 15px;
   color: var(--text-light);
   font-size: 0.85rem;
   border-top: 1px solid var(--border-color-light);
@@ -113,10 +146,10 @@ main {
     align-items: center;
     flex-direction: column;
     min-height: 40vh;
-    font-size: 1.2rem; /* Smaller for mobile */
+    font-size: 1.2rem;
     font-weight: 500;
     color: var(--text-light);
-    padding: 30px 15px; /* Adjusted padding */
+    padding: 30px 15px;
     text-align: center;
     width: 100%;
     box-sizing: border-box;
@@ -126,12 +159,13 @@ main {
 .completionSubMessage { font-size: 1rem; color: var(--text-medium); margin-bottom: 20px; }
 .completionActions { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
 
+/* Global Button Styles - these will be inherited by module-specific buttons unless overridden */
 button, .button, a.buttonCard {
   cursor: pointer;
   border: none;
   border-radius: var(--border-radius-md);
-  padding: 10px 20px; /* Default smaller padding */
-  font-size: 0.95rem; /* Default smaller font */
+  padding: 10px 20px;
+  font-size: 0.95rem;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
   box-shadow: var(--shadow-sm);
@@ -142,31 +176,67 @@ button, .button, a.buttonCard {
   line-height: 1.5;
   text-decoration: none;
   font-family: inherit;
-  color: inherit;
+  color: inherit; /* Default color, will be overridden by specific button styles */
 }
 
 button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 button:active:not(:disabled), .button:active:not(:disabled), a.buttonCard:active { transform: translateY(0px); box-shadow: var(--shadow-xs); }
 button:disabled { cursor: not-allowed; background-color: #e9ecef !important; color: #adb5bd !important; border-color: #ced4da !important; box-shadow: none !important; opacity: 0.7; }
+
 .primaryButton { background: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; }
 .primaryButton:hover:not(:disabled) { opacity: 0.9; }
+
 .secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid var(--accent-dark); }
-.secondaryButton:hover:not(:disabled) { background-color: #e6b300; }
-.nextButton { background-color: var(--secondary-color); color: white; }
-.nextButton:hover:not(:disabled) { background-color: #0069d9; }
+.secondaryButton:hover:not(:disabled) { background-color: #e6b300; } /* Darker gold for hover */
+
+.nextButton { background-color: var(--secondary-color); color: white; border: 1px solid var(--secondary-color); } /* Added border for consistency */
+.nextButton:hover:not(:disabled) { background-color: #0056b3; border-color: #0056b3;} /* Darker blue for hover */
+
 .arrowIcon { font-size: 1.2rem; line-height: 1; transition: transform 0.2s ease; }
 .nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(3px); }
 
-*:focus-visible { outline: 3px solid var(--secondary-light); outline-offset: 2px; border-radius: var(--border-radius-sm); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
-input:focus-visible { border-color: var(--primary-light) !important; }
-a.buttonCard:focus-visible { border-color: var(--primary-color); }
+/* Global focus style for better accessibility */
+*:focus-visible {
+  outline: 3px solid var(--secondary-light); /* A light blue outline */
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm); /* Slight rounding for the outline itself */
+  /* Optional: a subtle box-shadow for focus can also work if preferred over outline */
+  /* box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); */
+}
+/* Specific input focus to ensure border color changes are also visible */
+input:focus-visible {
+  border-color: var(--primary-light) !important; /* Keep your original input focus border */
+}
+/* Specific focus for HomePage button cards if they have a different base border */
+a.buttonCard:focus-visible {
+  border-color: var(--primary-color); /* Or a distinct focus border color */
+}
+
 
 /* Desktop and Larger Tablet Overrides */
 @media (min-width: 768px) {
   body { font-size: 16px; }
-  .app-header { padding: 18px 50px; text-align: left; }
-  .home-link { font-size: 1.7rem; }
-  main { padding: 40px; } /* Restore some padding */
+  .app-header {
+    padding: 18px 50px;
+  }
+  .logo-link { /* Changed from .home-link to match App.js if that's what you used */
+    font-size: 1.7rem;
+  }
+  .app-nav {
+    gap: 20px; /* More space for desktop nav */
+  }
+  .app-nav a {
+    padding: 8px 15px; /* Adjust padding for desktop */
+  }
+  main {
+    padding: 40px;
+    /*
+      IMPORTANT: Adjust this value based on your actual DESKTOP header height.
+      Estimate: padding (18px*2) + logo font-size (~27px for 1.7rem) + border (3px) = ~66px.
+      Add some buffer. 85px-95px might be a good starting point for desktop.
+    */
+    padding-top: 90px;
+  }
   .app-footer { margin-top: 60px; padding: 25px; font-size: 0.9rem; }
   .loading-page, .loading, .error, .completionMessage { font-size: 1.4rem; }
   .completionMessage { font-size: 2rem; }
