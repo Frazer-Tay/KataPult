@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/KataPult/static/css/main.79df7560.css",
-    "main.js": "/KataPult/static/js/main.63663c43.js",
+    "main.css": "/KataPult/static/css/main.80142d41.css",
+    "main.js": "/KataPult/static/js/main.0a7bf401.js",
     "static/js/453.e1a2ee0c.chunk.js": "/KataPult/static/js/453.e1a2ee0c.chunk.js",
     "index.html": "/KataPult/index.html",
-    "main.79df7560.css.map": "/KataPult/static/css/main.79df7560.css.map",
-    "main.63663c43.js.map": "/KataPult/static/js/main.63663c43.js.map",
+    "main.80142d41.css.map": "/KataPult/static/css/main.80142d41.css.map",
+    "main.0a7bf401.js.map": "/KataPult/static/js/main.0a7bf401.js.map",
     "453.e1a2ee0c.chunk.js.map": "/KataPult/static/js/453.e1a2ee0c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.79df7560.css",
-    "static/js/main.63663c43.js"
+    "static/css/main.80142d41.css",
+    "static/js/main.0a7bf401.js"
   ]
 }
