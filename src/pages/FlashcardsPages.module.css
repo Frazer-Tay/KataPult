@@ -1,0 +1,187 @@
+/* src/pages/FlashcardsPage.module.css */
+.flashcardsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px 40px 15px;
+  max-width: 95vw;
+  margin: 20px auto;
+  background-color: var(--background-light); /* Or var(--card-background) if preferred */
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+  color: var(--text-dark);
+}
+.flashcardsContainer:focus {
+  outline: none;
+}
+
+.setTitle {
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+/* Styles for Phrase List type */
+.phraseSet {
+  width: 100%;
+  max-width: 750px;
+  background-color: var(--background-medium);
+  padding: 20px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.phraseList {
+  list-style: decimal; /* Or none if you prefer */
+  padding-left: 20px; /* Indent for numbers if using decimal */
+  width: 100%;
+}
+.phraseItem {
+  background-color: #fff; /* White background for each phrase item */
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color-light);
+  box-shadow: var(--shadow-xs);
+}
+.phraseEnglish {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0 0 5px 0;
+  color: var(--text-dark);
+}
+.phraseMalay {
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Styles for Topic Card type */
+.flashcard {
+  background-color: transparent;
+  width: 100%;
+  max-width: 750px; /* Consistent max-width */
+  min-height: 350px; /* Adjust as needed */
+  border: none; /* Card itself might not need a border if inner parts have it */
+  perspective: 1000px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.flashcardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1); /* Smoother flip */
+  transform-style: preserve-3d;
+  min-height: 350px;
+}
+.flashcard.flipped .flashcardInner {
+  transform: rotateY(180deg);
+}
+.flashcardFront, .flashcardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  box-sizing: border-box;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--background-medium); /* Front background */
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+.flashcardFront h2.cardTitle { /* More specific selector */
+  color: var(--primary-dark);
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+.flipInstruction {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-top: 10px;
+}
+
+.flashcardBack {
+  background-color: var(--background-light); /* Slightly different for back */
+  color: var(--text-dark);
+  transform: rotateY(180deg);
+  text-align: left;
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-items: flex-start; /* Align content to top-left */
+}
+.flashcardBack h3.cardTitleBack { /* More specific selector */
+  color: var(--primary-dark);
+  text-align: center;
+  width: 100%;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1.5rem;
+}
+.flashcardBack .mainPoint {
+    margin-bottom: 15px;
+    width: 100%;
+}
+.flashcardBack .mainPoint h4 {
+  color: var(--secondary-color);
+  margin-top: 15px;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+.flashcardBack ul {
+  list-style: disc;
+  padding-left: 25px;
+  margin-bottom: 10px;
+}
+.flashcardBack li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.flashcardBack .keyPhrasesSection {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--border-color);
+  width: 100%;
+}
+.flashcardBack .keyPhrasesSection h4 {
+    font-size: 1.1rem;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 750px; /* Match card width */
+  margin-top: 20px;
+}
+.navigationButtons button {
+    min-width: 120px; /* Ensure buttons have some width */
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .flashcardsContainer h1, .setTitle { font-size: 2rem; }
+  .phraseSet { padding: 25px 30px; }
+  .phraseItem { padding: 15px 20px; }
+  .phraseEnglish { font-size: 1.15rem; }
+  .phraseMalay { font-size: 1rem; }
+
+  .flashcard { min-height: 450px; }
+  .flashcardFront h2.cardTitle { font-size: 2.4rem; }
+  .flashcardBack { padding: 30px; }
+  .flashcardBack h3.cardTitleBack { font-size: 1.8rem; }
+  .flashcardBack .mainPoint h4 { font-size: 1.25rem; }
+  .flashcardBack li { font-size: 1.05rem; }
+  .flashcardBack .keyPhrasesSection h4 { font-size: 1.2rem; }
+  .navigationButtons { max-width: 750px; }
+}
