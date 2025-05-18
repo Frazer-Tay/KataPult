@@ -1,6 +1,6 @@
 // src/pages/FlashcardsPage.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { flashcardsData } from '../data/flashcardsData'; // Ensure this path is correct
+import { flashcardsData } from '../data/flashcardsData'; // Adjust path if needed
 import styles from './FlashcardsPages.module.css'; // Ensure this filename matches your CSS module
 import ProgressBar from '../components/ProgressBar';
 
@@ -17,39 +17,37 @@ const shuffleArray = (array) => {
 
 const FlashcardsPage = () => {
   const [allSets, setAllSets] = useState([]);
-  // --- इंश्योर करें कि यह यहां परिभाषित है ---
   const [currentSetIndex, setCurrentIndex] = useState(0);
-  // --- ---
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const pageRef = useRef(null);
 
   useEffect(() => {
-    // This effect runs once on component mount to load and process data
-    setIsLoading(true); // Set loading true at the start
-    setError(null); // Clear previous errors
+    setIsLoading(true);
+    setError(null);
     try {
       if (flashcardsData && flashcardsData.length > 0) {
         const shuffledSets = shuffleArray([...flashcardsData]);
         setAllSets(shuffledSets);
-        setCurrentIndex(0); // Initialize the index for the first set
+        setCurrentIndex(0);
         setIsDetailsRevealed(false);
+        setError(null);
       } else {
         console.warn("No flashcards data found or data is empty.");
         setError("Tidak ada data flashcard untuk ditampilkan saat ini.");
-        setAllSets([]); // Ensure it's an empty array if no data
-        setCurrentIndex(0); // Still set index to 0
+        setAllSets([]);
+        setCurrentIndex(0);
       }
     } catch (e) {
       console.error("Error processing flashcards data:", e);
       setError("Terjadi kesalahan saat memuat data flashcard.");
       setAllSets([]);
-      setCurrentIndex(0); // Reset index on error too
+      setCurrentIndex(0);
     } finally {
-      setIsLoading(false); // Set loading to false after attempting to process data
+      setIsLoading(false);
     }
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
   const currentSet = useMemo(() => {
     if (!isLoading && allSets && allSets.length > 0 && currentSetIndex >= 0 && currentSetIndex < allSets.length) {
@@ -72,9 +70,9 @@ const FlashcardsPage = () => {
     } else if (direction === 'previous') {
       nextIdx = (currentSetIndex - 1 + allSets.length) % allSets.length;
     }
-    setCurrentIndex(nextIdx); // This uses the correctly defined setCurrentIndex
+    setCurrentIndex(nextIdx);
     setIsDetailsRevealed(false);
-  }, [currentSetIndex, allSets]); // Removed setCurrentIndex from deps as it's stable
+  }, [currentSetIndex, allSets]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -93,7 +91,7 @@ const FlashcardsPage = () => {
       }
     };
     const pageElement = pageRef.current;
-    if (pageElement && !isLoading) { 
+    if (pageElement && !isLoading) {
       pageElement.addEventListener('keydown', handleKeyDown);
       pageElement.focus();
     }
@@ -108,13 +106,12 @@ const FlashcardsPage = () => {
     return <div className="error" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{error}</div>;
   }
 
-  if (!currentSet && !isLoading) { // Show "no data" only if not loading and currentSet is still null
+  if (!currentSet && !isLoading) {
     return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan. Periksa `src/data/flashcardsData.js`.</div>;
   }
-  if (!currentSet) { // Fallback if still null for some reason during transitions, though less likely now
+  if (!currentSet) {
     return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat set berikutnya...</div>;
   }
-
 
   const renderPhraseList = (set) => (
     <div className={styles.phraseSet}>
@@ -149,19 +146,31 @@ const FlashcardsPage = () => {
             <div className={styles.topicDetails}>
                 {set.main_points.map((point, pIdx) => (
                     <div key={`${set.id}-point-${pIdx}`} className={styles.mainPoint}>
-                    <h4 className={styles.pointTitle}>{pIdx + 1}. {point.point_title_english} <em className={styles.pointTitleMalay}>({point.point_title_malay})</em></h4>
-                    <p className={styles.elaboration}><strong>Elaborasi:</strong> {point.elaboration_english} <em className={styles.elaborationMalay}>({point.elaboration_malay})</em></p>
-                    <p className={styles.example}><strong>Contoh:</strong> {point.example_english} <em className={styles.exampleMalay}>({point.example_malay})</em></p>
+                    <h4 className={styles.pointTitle}>{pIdx + 1}. {point.title_english} <em className={styles.pointTitleMalay}>({point.title_malay})</em></h4>
+                    
+                    {/* Examples are an array within each point */}
+                    {point.examples && point.examples.length > 0 && (
+                        <div className={styles.examplesList}>
+                            {/* Optional: <p style={{fontWeight: '600', marginBottom: '5px'}}>Contoh:</p> */}
+                            <ul>
+                                {point.examples.map((ex, exIdx) => (
+                                    <li key={exIdx}>
+                                        {ex.english} <em className={styles.exampleMalay}>({ex.malay})</em>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     </div>
                 ))}
 
-                {set.key_vocabulary && set.key_vocabulary.length > 0 && (
-                    <div className={styles.keyVocabularySection}>
-                    <h3 className={styles.sectionSubTitle}>Kosakata Kunci:</h3>
-                    <ul className={styles.vocabularyList}>
-                        {set.key_vocabulary.map((vocab, vIdx) => (
-                        <li key={`${set.id}-vocab-${vIdx}`}>
-                            <strong>{vocab.english}:</strong> {vocab.malay}
+                {set.key_phrases && set.key_phrases.length > 0 && (
+                    <div className={styles.keyVocabularySection}> {/* Changed from key_vocabulary to key_phrases based on data */}
+                    <h3 className={styles.sectionSubTitle}>Frasa Kunci:</h3> {/* Changed from Kosakata Kunci */}
+                    <ul className={styles.vocabularyList}> {/* Reused class, can be renamed */}
+                        {set.key_phrases.map((phrase, kIdx) => ( // Changed vocab to phrase
+                        <li key={`${set.id}-keyphrase-${kIdx}`}>
+                            <strong>{phrase.english}:</strong> {phrase.malay}
                         </li>
                         ))}
                     </ul>
