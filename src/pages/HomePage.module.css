@@ -5,77 +5,78 @@
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    padding: 30px 15px; /* Adjusted for mobile */
+    padding: 30px 15px;
     text-align: center;
   }
   
   .title {
-    font-size: 2.2rem; /* Adjusted for mobile */
-    margin-bottom: 10px; /* Reduced for tighter subtitle */
+    font-size: 2.2rem;
+    margin-bottom: 10px;
     color: var(--primary-dark);
     font-weight: 700;
     line-height: 1.2;
   }
   
   .subtitle {
-      font-size: 1.1rem; /* Adjusted for mobile */
+      font-size: 1.1rem;
       color: var(--text-medium);
-      margin-bottom: 30px; /* Space before first section */
-      max-width: 90%; /* Use percentage for mobile */
+      margin-bottom: 30px;
+      max-width: 90%;
   }
   
   .buttonGrid {
       display: grid;
-      grid-template-columns: 1fr; /* Stack buttons on mobile */
-      gap: 20px; /* Adjusted gap */
+      grid-template-columns: 1fr;
+      gap: 18px; /* Slightly adjusted gap */
       width: 100%;
-      max-width: 400px; /* Limit width on mobile for single column */
+      max-width: 450px; /* Max width for single column buttons on mobile */
   }
   
   .sectionTitle {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--primary-dark);
-    margin-top: 25px; /* Space above section title */
+    margin-top: 25px;
     margin-bottom: 15px;
-    grid-column: 1 / -1; /* Span across all columns in the grid */
+    grid-column: 1 / -1;
     text-align: center;
-    padding-bottom: 8px; /* Space for the border */
+    padding-bottom: 8px;
     border-bottom: 2px solid var(--primary-light);
-    width: fit-content; /* Make border only as wide as text */
-    margin-left: auto; /* Center the title with fit-content */
+    width: fit-content;
+    margin-left: auto;
     margin-right: auto;
   }
   
   .testModeTitle {
-    margin-top: 40px; /* More space before test mode section */
+    margin-top: 40px;
   }
   
   .buttonCard {
     display: flex;
-    flex-direction: row; /* Icon and text side-by-side */
+    flex-direction: row;
     align-items: center;
-    justify-content: flex-start; /* Align items to the start */
-    padding: 18px 20px; /* Adjusted padding */
-    font-size: 1rem; /* Adjusted font size */
+    justify-content: flex-start;
+    padding: 15px 18px; /* Adjusted padding for two lines of text */
+    font-size: 1rem;
     border-radius: var(--border-radius-lg);
     text-decoration: none;
     box-shadow: var(--shadow-md);
     font-weight: 600;
-    text-align: left; /* Align text left */
-    border: 2px solid transparent;
-    background-color: var(--background-light); /* Changed from card-background for more contrast */
-    transition: all 0.25s ease-in-out !important; /* !important to override global potentially */
-    color: var(--text-dark); /* Ensure text color is set */
+    text-align: left;
+    border: 2px solid transparent; /* For focus state */
+    background-color: var(--background-light);
+    transition: all 0.25s ease-in-out !important;
+    color: var(--text-dark);
+    min-height: 70px; /* Ensure enough height for two lines */
   }
   
   .buttonCard:focus-visible {
-      border-color: var(--primary-color) !important; /* !important for specificity */
+      border-color: var(--primary-color) !important;
       box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light) !important;
       outline: none;
   }
   .buttonCard:hover {
-    transform: translateY(-3px) scale(1.02); /* Slight scale on hover */
+    transform: translateY(-3px) scale(1.01); /* Subtler scale */
     box-shadow: var(--shadow-lg);
   }
   .buttonCard:active {
@@ -83,45 +84,61 @@
     box-shadow: var(--shadow-sm);
   }
   
-  
   .buttonIcon {
-      font-size: 1.8rem; /* Smaller icon */
-      margin-right: 15px; /* Space between icon and text */
+      font-size: 1.6rem; /* Slightly smaller icon for mobile card */
+      margin-right: 15px;
       line-height: 1;
       width: 30px; /* Fixed width for icon area */
       text-align: center;
       transition: transform 0.2s ease-out;
+      flex-shrink: 0; /* Prevent icon from shrinking */
   }
   .buttonCard:hover .buttonIcon {
-    transform: scale(1.15); /* Slightly larger icon scale on hover */
+    transform: scale(1.1);
   }
-  .buttonText {
-    line-height: 1.4;
-    flex-grow: 1; /* Allow text to take remaining space */
+
+  .buttonTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
   }
   
+  .buttonText {
+    line-height: 1.3;
+    margin-bottom: 3px; /* Space between title and subtext */
+    font-size: 1rem; /* Main text size */
+  }
+  
+  .buttonSubtext {
+    font-size: 0.75rem; /* Smaller subtext */
+    color: var(--text-medium);
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  
+  /* Specific Button Colors (reusing existing ones, add new if needed) */
   .vocabButton { border-left: 5px solid var(--secondary-color); }
-  .vocabButton:hover { border-color: var(--secondary-color); } /* Keep border color consistent on hover */
   .vocabButton:hover .buttonIcon { color: var(--secondary-color); }
   
   .imbuhanButton { border-left: 5px solid #9b59b6; } /* Purple */
-  .imbuhanButton:hover { border-color: #9b59b6; }
   .imbuhanButton:hover .buttonIcon { color: #9b59b6; }
   
   .persamaanButton { border-left: 5px solid var(--success-color); } /* Teal Green */
-  .persamaanButton:hover { border-color: var(--success-color); }
   .persamaanButton:hover .buttonIcon { color: var(--success-color); }
   
   .karanganButton { border-left: 5px solid var(--accent-color); } /* Amber/Gold */
-  .karanganButton:hover { border-color: var(--accent-color); }
   .karanganButton:hover .buttonIcon { color: var(--accent-color); }
   
+  .flashcardsButton { border-left: 5px solid #3498db; } /* A different blue for Flashcards */
+  .flashcardsButton:hover .buttonIcon { color: #3498db; }
+
   .testButton {
     border-left: 5px solid #e74c3c; /* Distinct Red for test mode */
-    background-color: #fef3f2; /* Very light red background for subtle distinction */
+    background-color: #fef3f2;
   }
   .testButton:hover {
-    border-color: #c0392b; /* Darker red border on hover */
+    border-color: #c0392b;
     background-color: #fdecea;
   }
   .testButton:hover .buttonIcon {
@@ -142,27 +159,36 @@
           margin-bottom: 40px;
       }
       .buttonGrid {
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
-          gap: 25px; /* Slightly increased gap for desktop */
-          max-width: 1000px; /* Wider grid for desktop */
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Adjusted minmax */
+          gap: 25px;
+          max-width: 1000px;
       }
       .sectionTitle {
           font-size: 1.6rem;
           margin-top: 40px;
       }
       .buttonCard {
-          flex-direction: column; /* Stack icon and text on desktop */
+          flex-direction: column;
           justify-content: center;
           align-items: center;
           text-align: center;
-          min-height: 170px; /* Increased min-height */
-          padding: 30px 25px; /* Adjusted padding */
-          font-size: 1.05rem; /* Slightly larger font */
+          min-height: 180px; /* Slightly increased min-height for desktop */
+          padding: 25px;
       }
       .buttonIcon {
-          font-size: 2.8rem;
-          margin-right: 0; /* No right margin when stacked */
-          margin-bottom: 18px;
+          font-size: 2.5rem; /* Larger icon on desktop */
+          margin-right: 0;
+          margin-bottom: 15px; /* Space below icon */
           width: auto;
+      }
+      .buttonTextContainer {
+        align-items: center; /* Center text when icon is above */
+      }
+      .buttonText {
+        font-size: 1.1rem; /* Slightly larger main text on desktop */
+      }
+      .buttonSubtext {
+        font-size: 0.85rem; /* Slightly larger subtext on desktop */
+        text-align: center;
       }
   }
