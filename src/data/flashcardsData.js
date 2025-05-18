@@ -3,701 +3,723 @@ export const flashcardsData = [
   {
     id: 'general-phrases',
     type: 'phrase-list',
-    title: "Frasa Umum Berguna (General Useful Phrases)",
+    title: "Frasa Umum Berguna untuk Penulisan Esai (General Useful Phrases for Essay Writing)",
     phrases: [
       {
-        english: "The government plays a crucial role in...",
-        malay: "Kerajaan memainkan peranan penting dalam..."
+        english: "The government plays a pivotal/crucial role in...",
+        malay: "Pemerintah memainkan peran penting/krusial dalam..." // Indonesian
       },
       {
-        english: "Proactive measures that have been/can be taken include...",
-        malay: "Antara langkah proaktif yang telah/boleh diambil termasuklah..."
+        english: "A multi-faceted approach is imperative to address...",
+        malay: "Pendekatan multi-aspek sangat penting untuk mengatasi..." // Indonesian
       },
       {
-        english: "A concerted effort from various stakeholders is essential.",
-        malay: "Usaha bersepadu daripada pelbagai pihak amat diperlukan."
+        english: "Among the key strategies implemented/that can be adopted are...",
+        malay: "Di antara strategi utama yang diterapkan/dapat diadopsi adalah..." // Indonesian
       },
       {
-        english: "Public awareness needs to be heightened through campaigns and education.",
-        malay: "Kesedaran awam perlu ditingkatkan melalui kempen dan pendidikan."
+        english: "This is clearly evidenced by...",
+        malay: "Hal ini terbukti dengan jelas melalui..." // Indonesian
       },
       {
-        english: "The main challenge faced is...",
-        malay: "Cabaran utama yang dihadapi ialah..."
+        english: "For instance, the implementation of [Program Name] aims to...",
+        malay: "Sebagai contoh, implementasi [Nama Program] bertujuan untuk..." // Indonesian
       },
       {
-        english: "This aligns with the nation's aspiration to become...",
-        malay: "Ini selaras dengan aspirasi negara untuk menjadi..."
+        english: "Furthermore, another significant factor is...",
+        malay: "Lebih lanjut, faktor penting lainnya adalah..." // Indonesian
       },
       {
-        english: "A multi-pronged approach is necessary.",
-        malay: "Pendekatan serampang dua mata diperlukan."
+        english: "However, challenges remain, such as...",
+        malay: "Namun, tantangan tetap ada, seperti..." // Indonesian
       },
       {
-        english: "To kill two birds with one stone.",
-        malay: "Sambil menyelam minum air / serampang dua mata."
+        english: "It is therefore crucial to consider...",
+        malay: "Oleh karena itu, sangat penting untuk mempertimbangkan..." // Indonesian
       },
       {
-        english: "Prevention is better than cure.",
-        malay: "Mencegah lebih baik daripada mengubati / sediakan payung sebelum hujan."
+        english: "The long-term implications of these measures include...",
+        malay: "Implikasi jangka panjang dari langkah-langkah ini meliputi..." // Indonesian
       },
       {
-        english: "Where there's a will, there's a way.",
-        malay: "Di mana ada kemahuan, di situ ada jalan."
+        english: "In conclusion, while significant strides have been made, continuous effort is required to...",
+        malay: "Kesimpulannya, meskipun kemajuan signifikan telah dicapai, upaya berkelanjutan diperlukan untuk..." // Indonesian
+      },
+      {
+        english: "This underscores the importance of...",
+        malay: "Hal ini menggarisbawahi pentingnya..." // Indonesian
+      },
+      {
+        english: "A holistic and sustainable solution necessitates...",
+        malay: "Solusi yang holistik dan berkelanjutan memerlukan..." // Indonesian
+      },
+      {
+        english: "The synergy between governmental policies and community participation is vital.",
+        malay: "Sinergi antara kebijakan pemerintah dan partisipasi masyarakat sangatlah penting." // Indonesian
       }
     ]
   },
   {
     id: 'topic-population-growth',
     type: 'topic-card',
-    title: "Ways to increase Singapore's population growth",
+    title: "Strategies to Bolster Singapore's Population Growth and Sustainability",
     main_points: [
       {
-        title_english: "Implementing Pro-natalist Policies",
-        title_malay: "Melaksanakan Dasar Pro-natalis",
+        title_english: "Strengthening Pro-natalist Policies to Encourage Family Formation",
+        title_malay: "Memperkuat Kebijakan Pro-natalis untuk Mendorong Pembentukan Keluarga", // Indonesian
         examples: [
-          { english: "Baby Bonus Scheme offering cash gifts and grants.", malay: "Skim Bonus Bayi menawarkan hadiah tunai dan geran." },
-          { english: "Enhanced maternity and paternity leave for working parents.", malay: "Cuti bersalin dan paterniti yang dipertingkatkan untuk ibu bapa bekerja." },
-          { english: "Subsidies for infant and childcare services.", malay: "Subsidi untuk perkhidmatan penjagaan bayi dan kanak-kanak." }
+          { english: "The 'Baby Bonus Scheme' offers direct financial assistance (cash gifts and CDA grants) to alleviate the economic burden of child-rearing for parents.", malay: "'Baby Bonus Scheme' menawarkan bantuan keuangan langsung (hadiah tunai dan hibah CDA) untuk meringankan beban ekonomi membesarkan anak bagi orang tua." }, // Indonesian
+          { english: "Enhanced paid maternity and paternity leave provisions aim to foster shared parental responsibility and support work-life harmony for new parents.", malay: "Ketentuan cuti melahirkan dan cuti ayah berbayar yang ditingkatkan bertujuan untuk menumbuhkan tanggung jawab orang tua bersama dan mendukung harmoni kerja-kehidupan bagi orang tua baru." }, // Indonesian
+          { english: "Substantial government subsidies for infant care and childcare centres (e.g., Anchor Operator scheme) improve affordability and accessibility of early childhood development services.", malay: "Subsidi pemerintah yang besar untuk penitipan bayi dan pusat penitipan anak (misalnya, skema Anchor Operator) meningkatkan keterjangkauan dan aksesibilitas layanan pengembangan anak usia dini." } // Indonesian
         ]
       },
       {
-        title_english: "Attracting Skilled Immigrants",
-        title_malay: "Menarik Imigran Berkemahiran",
+        title_english: "Strategic Immigration Policies to Augment the Local Talent Pool and Workforce",
+        title_malay: "Kebijakan Imigrasi Strategis untuk Menambah Kelompok Bakat dan Tenaga Kerja Lokal", // Indonesian
         examples: [
-          { english: "Offering Employment Passes and S Passes for foreign professionals and mid-skilled workers.", malay: "Menawarkan Pas Pekerjaan dan Pas S untuk profesional asing dan pekerja berkemahiran sederhana." },
-          { english: "Schemes for Permanent Residency (PR) to attract and retain talent.", malay: "Skim untuk Taraf Penduduk Tetap (PR) bagi menarik dan mengekalkan bakat." }
+          { english: "Schemes like the Employment Pass and S Pass facilitate the entry of qualified foreign professionals and mid-skilled workers to fill critical skill gaps in the economy.", malay: "Skema seperti Employment Pass dan S Pass memfasilitasi masuknya profesional asing yang memenuhi syarat dan pekerja berketerampilan menengah untuk mengisi kesenjangan keterampilan kritis dalam ekonomi." }, // Indonesian
+          { english: "Permanent Residency (PR) schemes are designed to attract and retain individuals who can contribute significantly to Singapore's economic and social fabric.", malay: "Skema Izin Tinggal Permanen (PR) dirancang untuk menarik dan mempertahankan individu yang dapat berkontribusi secara signifikan terhadap tatanan ekonomi dan sosial Singapura." } // Indonesian
         ]
       },
       {
-        title_english: "Fostering a Family-Friendly Environment",
-        title_malay: "Memupuk Persekitaran Mesra Keluarga",
+        title_english: "Cultivating a Conducive and Supportive Pro-Family Societal Environment",
+        title_malay: "Menumbuhkan Lingkungan Masyarakat Pro-Keluarga yang Kondusif dan Mendukung", // Indonesian
         examples: [
-          { english: "Promoting flexible work arrangements.", malay: "Menggalakkan aturan kerja fleksibel." },
-          { english: "Ensuring affordable and accessible public housing for young families.", malay: "Memastikan perumahan awam yang mampu milik dan mudah diakses untuk keluarga muda." }
+          { english: "Promotion of flexible work arrangements (FWAs) by tripartite partners (government, employers, unions) to help employees better manage work and family commitments.", malay: "Promosi pengaturan kerja fleksibel (FWA) oleh mitra tripartit (pemerintah, pengusaha, serikat pekerja) untuk membantu karyawan mengelola komitmen kerja dan keluarga dengan lebih baik." }, // Indonesian
+          { english: "Development of family-centric public housing and community amenities that cater to the needs of young families and multi-generational living.", malay: "Pengembangan perumahan umum yang berpusat pada keluarga dan fasilitas komunitas yang memenuhi kebutuhan keluarga muda dan kehidupan multi-generasi." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Addressing low fertility rates", malay: "Menangani kadar kesuburan rendah" },
-      { english: "future workforce", malay: "tenaga kerja masa depan" },
-      { english: "work-life balance", malay: "keseimbangan kerja-hidup" }
+      { english: "Addressing demographic shifts and low fertility", malay: "Mengatasi pergeseran demografis dan kesuburan rendah" }, // Indonesian
+      { english: "Ensuring long-term population sustainability", malay: "Memastikan keberlanjutan populasi jangka panjang" }, // Indonesian
+      { english: "Balancing economic needs with social cohesion", malay: "Menyeimbangkan kebutuhan ekonomi dengan kohesi sosial" }, // Indonesian
+      { english: "Fostering a pro-family societal ethos", malay: "Menumbuhkan etos masyarakat pro-keluarga" } // Indonesian
     ]
   },
   {
     id: 'topic-healthy-lifestyle',
     type: 'topic-card',
-    title: "Government efforts to promote a healthy lifestyle in Singapore",
+    title: "Government Initiatives to Cultivate a National Culture of Healthy Living",
     main_points: [
       {
-        title_english: "Nationwide Health Promotion Campaigns",
-        title_malay: "Kempen Promosi Kesihatan Peringkat Kebangsaan",
+        title_english: "Spearheading National Health Promotion Campaigns and Education",
+        title_malay: "Memelopori Kampanye Promosi Kesehatan dan Pendidikan Nasional", // Indonesian
         examples: [
-          { english: "Health Promotion Board (HPB) initiatives like the National Steps Challenge.", malay: "Inisiatif Lembaga Promosi Kesihatan (HPB) seperti Cabaran Langkah Kebangsaan." },
-          { english: "Campaigns promoting healthier food choices (e.g., \"Eat Healthy, Get More from Life\").", malay: "Kempen mempromosikan pilihan makanan lebih sihat." }
+          { english: "The Health Promotion Board (HPB) spearheads initiatives like the 'National Steps Challenge' and 'Eat, Drink, Shop Healthy Challenge' to gamify and encourage active living and healthier dietary choices.", malay: "Health Promotion Board (HPB) memelopori inisiatif seperti 'National Steps Challenge' dan 'Eat, Drink, Shop Healthy Challenge' untuk menggamifikasi dan mendorong gaya hidup aktif serta pilihan diet yang lebih sehat." }, // Indonesian
+          { english: "Public awareness campaigns utilizing various media to educate citizens on chronic disease prevention, mental well-being, and the benefits of regular health screenings.", malay: "Kampanye kesadaran publik yang menggunakan berbagai media untuk mendidik warga tentang pencegahan penyakit kronis, kesejahteraan mental, dan manfaat pemeriksaan kesehatan rutin." } // Indonesian
         ]
       },
       {
-        title_english: "Developing Supportive Infrastructure & Policies",
-        title_malay: "Membangunkan Infrastruktur & Dasar Sokongan",
+        title_english: "Creating a Supportive Ecosystem through Infrastructure and Policy Interventions",
+        title_malay: "Menciptakan Ekosistem Pendukung melalui Intervensi Infrastruktur dan Kebijakan", // Indonesian
         examples: [
-          { english: "Increasing accessibility to parks, cycling paths, and community sports facilities.", malay: "Meningkatkan akses kepada taman, laluan basikal, dan kemudahan sukan komuniti." },
-          { english: "Implementing sugar tax on pre-packaged sweetened beverages.", malay: "Melaksanakan cukai gula ke atas minuman bergula pra-bungkus." },
-          { english: "Nutri-Grade labelling for beverages to inform consumer choices.", malay: "Pelabelan Nutri-Grade untuk minuman bagi memaklumkan pilihan pengguna." }
+          { english: "Development of accessible public sports facilities, parks, and park connectors (e.g., 'Park Connector Network') to facilitate physical activity across the island.", malay: "Pengembangan fasilitas olahraga publik yang mudah diakses, taman, dan penghubung taman (misalnya, 'Park Connector Network') untuk memfasilitasi aktivitas fisik di seluruh pulau." }, // Indonesian
+          { english: "Policy measures such as the sugar tax on pre-packaged sweetened beverages and the 'Nutri-Grade' labelling system aim to influence consumer behaviour towards healthier options.", malay: "Langkah-langkah kebijakan seperti pajak gula pada minuman manis dalam kemasan dan sistem pelabelan 'Nutri-Grade' bertujuan untuk memengaruhi perilaku konsumen menuju pilihan yang lebih sehat." }, // Indonesian
+          { english: "The 'Screen for Life' programme provides subsidised health screenings for early detection and management of chronic conditions.", malay: "Program 'Screen for Life' menyediakan pemeriksaan kesehatan bersubsidi untuk deteksi dini dan pengelolaan kondisi kronis." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Preventing chronic diseases", malay: "Mencegah penyakit kronik" },
-      { english: "active living culture", malay: "budaya hidup aktif" },
-      { english: "quality of life", malay: "kualiti hidup" }
+      { english: "Preventive healthcare strategies", malay: "Strategi perawatan kesehatan preventif" }, // Indonesian
+      { english: "Fostering a national culture of wellness", malay: "Menumbuhkan budaya kesejahteraan nasional" }, // Indonesian
+      { english: "Combating sedentary lifestyles and unhealthy diets", malay: "Memerangi gaya hidup kurang gerak dan diet tidak sehat" }, // Indonesian
+      { english: "Empowering individuals to take ownership of health", malay: "Memberdayakan individu untuk bertanggung jawab atas kesehatan mereka" } // Indonesian
     ]
   },
   {
     id: 'topic-dengue-fever',
     type: 'topic-card',
-    title: "Government measures to combat dengue fever in Singapore",
+    title: "Comprehensive Government Strategies to Combat Dengue Fever Outbreaks",
     main_points: [
       {
-        title_english: "Strict Enforcement and Surveillance",
-        title_malay: "Penguatkuasaan dan Pengawasan Ketat",
+        title_english: "Implementing Robust Surveillance and Stringent Enforcement Measures",
+        title_malay: "Menerapkan Pengawasan yang Kuat dan Tindakan Penegakan yang Ketat", // Indonesian
         examples: [
-          { english: "Heavy fines for households and premises found breeding Aedes mosquitoes.", malay: "Denda berat untuk isi rumah dan premis yang didapati membiak nyamuk Aedes." },
-          { english: "Regular inspections of potential breeding sites by National Environment Agency (NEA) officers.", malay: "Pemeriksaan berkala tapak pembiakan berpotensi oleh pegawai Agensi Sekitaran Kebangsaan (NEA)." }
+          { english: "The National Environment Agency (NEA) conducts regular inspections of residential and commercial premises, imposing heavy fines for Aedes mosquito breeding habitats to ensure compliance.", malay: "National Environment Agency (NEA) melakukan inspeksi rutin terhadap bangunan tempat tinggal dan komersial, memberlakukan denda berat untuk habitat perkembangbiakan nyamuk Aedes guna memastikan kepatuhan." }, // Indonesian
+          { english: "Utilising Gravitraps and other surveillance tools to monitor Aedes mosquito populations and identify high-risk dengue clusters for targeted interventions.", malay: "Menggunakan Gravitrap dan alat pengawasan lainnya untuk memantau populasi nyamuk Aedes dan mengidentifikasi klaster demam berdarah berisiko tinggi untuk intervensi yang ditargetkan." } // Indonesian
         ]
       },
       {
-        title_english: "Public Education and Community Engagement",
-        title_malay: "Pendidikan Awam dan Penglibatan Komuniti",
+        title_english: "Mobilising Community Participation through Public Education and Outreach",
+        title_malay: "Memobilisasi Partisipasi Masyarakat melalui Pendidikan Publik dan Penjangkauan", // Indonesian
         examples: [
-          { english: "\"Mozzie Wipeout\" campaign promoting the \"5-Step Block\" routine.", malay: "Kempen \"Hapuskan Nyamuk\" mempromosikan rutin \"5 Langkah Blok\"." },
-          { english: "Engaging community volunteers for outreach and dengue prevention efforts.", malay: "Melibatkan sukarelawan komuniti untuk usaha jangkauan dan pencegahan denggi." }
+          { english: "The nationwide 'Mozzie Wipeout' campaign educates residents on crucial preventive actions, such as the '5-Step B-L-O-C-K' routine, to eliminate breeding spots.", malay: "Kampanye 'Mozzie Wipeout' nasional mendidik penduduk tentang tindakan pencegahan penting, seperti rutinitas '5-Langkah B-L-O-C-K', untuk menghilangkan tempat perkembangbiakan." }, // Indonesian
+          { english: "Engaging Dengue Prevention Volunteers and community leaders to disseminate information and encourage collective responsibility in maintaining a dengue-free environment.", malay: "Melibatkan Relawan Pencegahan Demam Berdarah dan tokoh masyarakat untuk menyebarkan informasi dan mendorong tanggung jawab kolektif dalam menjaga lingkungan bebas demam berdarah." } // Indonesian
         ]
       },
       {
-        title_english: "Leveraging Technology and Innovation",
-        title_malay: "Memanfaatkan Teknologi dan Inovasi",
+        title_english: "Leveraging Technological Innovations for Enhanced Vector Control",
+        title_malay: "Memanfaatkan Inovasi Teknologi untuk Pengendalian Vektor yang Ditingkatkan", // Indonesian
         examples: [
-          { english: "Project Wolbachia, releasing male Wolbachia-Aedes mosquitoes to suppress the Aedes mosquito population.", malay: "Projek Wolbachia, melepaskan nyamuk Aedes-Wolbachia jantan untuk menekan populasi nyamuk Aedes." },
-          { english: "Using data analytics and predictive modelling to identify high-risk dengue clusters.", malay: "Menggunakan analitik data dan pemodelan ramalan untuk mengenal pasti kluster denggi berisiko tinggi." }
+          { english: "'Project Wolbachia' involves releasing male Wolbachia-carrying Aedes mosquitoes, which, upon mating with urban female Aedes mosquitoes, result in non-viable eggs, thus suppressing the mosquito population.", malay: "'Project Wolbachia' melibatkan pelepasan nyamuk Aedes jantan pembawa Wolbachia, yang setelah kawin dengan nyamuk Aedes betina perkotaan, menghasilkan telur yang tidak dapat hidup, sehingga menekan populasi nyamuk." }, // Indonesian
+          { english: "Deployment of data analytics and AI-driven predictive modelling to forecast potential dengue outbreaks and allocate resources more effectively for preventive fogging and inspections.", malay: "Penerapan analitik data dan pemodelan prediktif berbasis AI untuk meramalkan potensi wabah demam berdarah dan mengalokasikan sumber daya secara lebih efektif untuk pengasapan preventif dan inspeksi." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Public health", malay: "Kesihatan awam" },
-      { english: "vector control", malay: "kawalan vektor" },
-      { english: "community participation", malay: "penyertaan komuniti" }
+      { english: "Integrated vector management strategies", malay: "Strategi manajemen vektor terpadu" }, // Indonesian
+      { english: "Public health imperative", malay: "Keharusan kesehatan masyarakat" }, // Indonesian
+      { english: "Community-centric prevention efforts", malay: "Upaya pencegahan yang berpusat pada komunitas" }, // Indonesian
+      { english: "Technological advancements in disease control", malay: "Kemajuan teknologi dalam pengendalian penyakit" } // Indonesian
     ]
   },
   {
     id: 'topic-cybercrime-protection',
     type: 'topic-card',
-    title: "How the Singapore government protects the nation and society from cybercrime",
+    title: "Singapore's Multi-Layered Defence Against Cybercrime and Digital Threats",
     main_points: [
       {
-        title_english: "Establishing Robust Legal and Institutional Frameworks",
-        title_malay: "Mewujudkan Rangka Kerja Perundangan dan Institusi yang Kukuh",
+        title_english: "Establishing Strong Legal Frameworks and Dedicated Cybersecurity Agencies",
+        title_malay: "Membangun Kerangka Hukum yang Kuat dan Badan Keamanan Siber Khusus", // Indonesian
         examples: [
-          { english: "The Cyber Security Agency of Singapore (CSA) spearheads national cybersecurity efforts.", malay: "Agensi Keselamatan Siber Singapura (CSA) menerajui usaha keselamatan siber negara." },
-          { english: "Enacting laws like the Cybersecurity Act and Computer Misuse Act.", malay: "Menggubal undang-undang seperti Akta Keselamatan Siber dan Akta Penyalahgunaan Komputer." }
+          { english: "The Cyber Security Agency of Singapore (CSA) is the central agency overseeing national cybersecurity strategy, operations, and promoting a resilient cyber ecosystem.", malay: "Cyber Security Agency of Singapore (CSA) adalah badan pusat yang mengawasi strategi keamanan siber nasional, operasi, dan mempromosikan ekosistem siber yang tangguh." }, // Indonesian
+          { english: "Legislation such as the Cybersecurity Act and the Computer Misuse Act provide legal powers for preventing, detecting, and prosecuting cybercrimes.", malay: "Undang-undang seperti Cybersecurity Act dan Computer Misuse Act memberikan kewenangan hukum untuk mencegah, mendeteksi, dan menuntut kejahatan siber." } // Indonesian
         ]
       },
       {
-        title_english: "Enhancing Public Awareness and Digital Literacy",
-        title_malay: "Meningkatkan Kesedaran Awam dan Literasi Digital",
+        title_english: "Enhancing National Cyber Resilience through Public Awareness and Digital Literacy",
+        title_malay: "Meningkatkan Ketahanan Siber Nasional melalui Kesadaran Publik dan Literasi Digital", // Indonesian
         examples: [
-          { english: "National campaigns like \"ACT\" (Anti-Scam Campaign) to educate on phishing, malware, and online scams.", malay: "Kempen kebangsaan seperti \"ACT\" (Kempen Anti-Penipuan) untuk mendidik mengenai pancingan data, perisian hasad, dan penipuan dalam talian." },
-          { english: "Promoting cyber hygiene practices such as using strong passwords and two-factor authentication.", malay: "Mempromosikan amalan kebersihan siber seperti penggunaan kata laluan kukuh dan pengesahan dua faktor." }
+          { english: "Nationwide campaigns like the 'ACT' (Anti-Scam Campaign) and initiatives by the Media Literacy Council educate the public on identifying and protecting themselves from online threats like phishing, malware, and various scams.", malay: "Kampanye nasional seperti 'ACT' (Kampanye Anti-Penipuan) dan inisiatif oleh Media Literacy Council mendidik masyarakat tentang cara mengidentifikasi dan melindungi diri dari ancaman online seperti phishing, malware, dan berbagai penipuan." }, // Indonesian
+          { english: "Promotion of essential cyber hygiene practices, including the use of strong, unique passwords, two-factor authentication (2FA), and regular software updates.", malay: "Promosi praktik kebersihan siber yang esensial, termasuk penggunaan kata sandi yang kuat dan unik, autentikasi dua faktor (2FA), dan pembaruan perangkat lunak secara berkala." } // Indonesian
         ]
       },
       {
-        title_english: "Fostering International Cooperation and Talent Development",
-        title_malay: "Memupuk Kerjasama Antarabangsa dan Pembangunan Bakat",
+        title_english: "Fostering International Cooperation and Developing a Skilled Cybersecurity Workforce",
+        title_malay: "Mendorong Kerja Sama Internasional dan Mengembangkan Tenaga Kerja Keamanan Siber yang Terampil", // Indonesian
         examples: [
-          { english: "Collaborating with international partners to share threat intelligence.", malay: "Bekerjasama dengan rakan kongsi antarabangsa untuk berkongsi risikan ancaman." },
-          { english: "Investing in training and developing a skilled cybersecurity workforce.", malay: "Melabur dalam latihan dan membangunkan tenaga kerja keselamatan siber yang mahir." }
+          { english: "Active participation in international platforms and bilateral partnerships for sharing cyber threat intelligence and coordinating responses to cross-border cyber incidents.", malay: "Partisipasi aktif dalam platform internasional dan kemitraan bilateral untuk berbagi intelijen ancaman siber dan mengoordinasikan respons terhadap insiden siber lintas batas." }, // Indonesian
+          { english: "Investing in cybersecurity talent development through educational programs, scholarships (e.g., CSA's Cybersecurity Development Programme), and industry training to build a robust pipeline of professionals.", malay: "Berinvestasi dalam pengembangan bakat keamanan siber melalui program pendidikan, beasiswa (misalnya, CSA's Cybersecurity Development Programme), dan pelatihan industri untuk membangun jalur profesional yang kuat." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Digital threats", malay: "Ancaman digital" },
-      { english: "critical infrastructure security", malay: "keselamatan infrastruktur kritikal" },
-      { english: "cyber resilience", malay: "daya tahan siber" }
+      { english: "Protecting critical information infrastructure (CII)", malay: "Melindungi infrastruktur informasi kritis (CII)" }, // Indonesian
+      { english: "Combating transnational cyber threats", malay: "Memerangi ancaman siber transnasional" }, // Indonesian
+      { english: "Building a 'whole-of-nation' cyber defence", malay: "Membangun pertahanan siber 'seluruh bangsa'" }, // Indonesian
+      { english: "The evolving landscape of digital security", malay: "Lanskap keamanan digital yang terus berkembang" } // Indonesian
     ]
   },
-  {
+    {
     id: 'topic-clean-energy-support',
     type: 'topic-card',
-    title: "How the Singapore government supports the use of clean energy",
+    title: "Government Strategies to Accelerate Singapore's Transition to Clean Energy",
     main_points: [
       {
-        title_english: "Investing in Solar Energy Deployment",
-        title_malay: "Melabur dalam Penggunaan Tenaga Solar",
+        title_english: "Maximising Solar Energy Deployment as a Key Renewable Source",
+        title_malay: "Memaksimalkan Penerapan Energi Surya sebagai Sumber Energi Terbarukan Utama", // Indonesian
         examples: [
-          { english: "SolarNova programme to aggregate demand for solar panel installation on government building rooftops.", malay: "Program SolarNova untuk mengagregat permintaan pemasangan panel solar di bumbung bangunan kerajaan." },
-          { english: "Development of large-scale floating solar farms on reservoirs (e.g., Tengeh Reservoir).", malay: "Pembangunan ladang solar terapung berskala besar di takungan (cth: Takungan Tengeh)." }
+          { english: "The 'SolarNova' programme aggregates solar demand from public sector entities to promote large-scale solar panel installations on rooftops of HDB flats and government buildings.", malay: "Program 'SolarNova' mengagregasi permintaan energi surya dari entitas sektor publik untuk mempromosikan instalasi panel surya skala besar di atap flat HDB dan gedung-gedung pemerintah." }, // Indonesian
+          { english: "Development of innovative solutions like large-scale floating solar farms on reservoirs (e.g., Tengeh Reservoir solar farm) to overcome land constraints for solar deployment.", malay: "Pengembangan solusi inovatif seperti ladang surya terapung skala besar di waduk (misalnya, ladang surya Waduk Tengeh) untuk mengatasi keterbatasan lahan untuk penerapan energi surya." } // Indonesian
         ]
       },
       {
-        title_english: "Promoting Energy Efficiency and Conservation",
-        title_malay: "Mempromosikan Kecekapan dan Penjimatan Tenaga",
+        title_english: "Driving Energy Efficiency and Conservation Across All Sectors",
+        title_malay: "Mendorong Efisiensi dan Konservasi Energi di Semua Sektor", // Indonesian
         examples: [
-          { english: "Green Mark Scheme for buildings, encouraging energy-efficient designs.", malay: "Skim Green Mark untuk bangunan, menggalakkan reka bentuk cekap tenaga." },
-          { english: "Mandatory Energy Labelling Scheme (MELS) for appliances to help consumers make informed choices.", malay: "Skim Pelabelan Tenaga Mandatori (MELS) untuk peralatan bagi membantu pengguna membuat pilihan termaklum." }
+          { english: "The 'Green Mark Scheme' for buildings sets standards for energy-efficient designs and operations, encouraging sustainable construction practices.", malay: "'Green Mark Scheme' untuk bangunan menetapkan standar untuk desain dan operasi hemat energi, mendorong praktik konstruksi berkelanjutan." }, // Indonesian
+          { english: "Mandatory Energy Labelling Scheme (MELS) and Minimum Energy Performance Standards (MEPS) for household appliances empower consumers to choose more energy-efficient products.", malay: "Skema Pelabelan Energi Wajib (MELS) dan Standar Kinerja Energi Minimum (MEPS) untuk peralatan rumah tangga memberdayakan konsumen untuk memilih produk yang lebih hemat energi." } // Indonesian
         ]
       },
       {
-        title_english: "Exploring and Investing in Emerging Low-Carbon Alternatives",
-        title_malay: "Meneroka dan Melabur dalam Alternatif Rendah Karbon Baharu",
+        title_english: "Investing in Research and Piloting of Emerging Low-Carbon Technologies",
+        title_malay: "Berinvestasi dalam Riset dan Uji Coba Teknologi Rendah Karbon Baru", // Indonesian
         examples: [
-          { english: "Research and development into hydrogen as a potential clean fuel.", malay: "Penyelidikan dan pembangunan hidrogen sebagai bahan api bersih berpotensi." },
-          { english: "Piloting carbon capture, utilisation, and storage (CCUS) technologies.", malay: "Merintis teknologi penangkapan, penggunaan, dan penyimpanan karbon (CCUS)." }
+          { english: "Significant investment in research and development (R&D) for low-carbon alternatives like hydrogen, exploring its potential as a clean fuel for power generation and transport.", malay: "Investasi signifikan dalam penelitian dan pengembangan (R&D) untuk alternatif rendah karbon seperti hidrogen, mengeksplorasi potensinya sebagai bahan bakar bersih untuk pembangkit listrik dan transportasi." }, // Indonesian
+          { english: "Exploring the viability of carbon capture, utilisation, and storage (CCUS) technologies to decarbonise emissions from hard-to-abate industrial sectors.", malay: "Mengeksplorasi kelayakan teknologi penangkapan, pemanfaatan, dan penyimpanan karbon (CCUS) untuk mendekarbontasi emisi dari sektor industri yang sulit dikurangi." }, // Indonesian
+          { english: "Piloting regional power grids to import low-carbon electricity from neighbouring countries, diversifying Singapore's energy mix.", malay: "Menguji coba jaringan listrik regional untuk mengimpor listrik rendah karbon dari negara tetangga, mendiversifikasi bauran energi Singapura." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Reducing carbon footprint", malay: "Mengurangkan jejak karbon" },
-      { english: "sustainable development", malay: "pembangunan mampan" },
-      { english: "climate change", malay: "perubahan iklim" }
+      { english: "Decarbonisation pathways for an alternative energy-disadvantaged nation", malay: "Jalur dekarbonisasi untuk negara yang kurang beruntung dalam energi alternatif" }, // Indonesian
+      { english: "Enhancing energy security and sustainability", malay: "Meningkatkan keamanan dan keberlanjutan energi" }, // Indonesian
+      { english: "The 'Four Switches' strategy for energy supply", malay: "Strategi 'Empat Saklar' untuk pasokan energi" }, // Indonesian
+      { english: "Mitigating climate change through energy transition", malay: "Mengurangi perubahan iklim melalui transisi energi" } // Indonesian
     ]
   },
   {
     id: 'topic-environmental-awareness',
     type: 'topic-card',
-    title: "How the Singapore government raises public awareness about the environment",
+    title: "Government Efforts to Cultivate Environmental Consciousness and Stewardship",
     main_points: [
       {
-        title_english: "Implementing National Campaigns and Initiatives",
-        title_malay: "Melaksanakan Kempen dan Inisiatif Kebangsaan",
+        title_english: "Spearheading National Sustainability Movements and Public Campaigns",
+        title_malay: "Memelopori Gerakan Keberlanjutan Nasional dan Kampanye Publik", // Indonesian
         examples: [
-          { english: "The Singapore Green Plan 2030, a whole-of-nation movement towards sustainable development.", malay: "Pelan Hijau Singapura 2030, gerakan seluruh negara ke arah pembangunan mampan." },
-          { english: "\"Year Towards Zero Waste\" campaign to promote the 3Rs (Reduce, Reuse, Recycle).", malay: "Kempen \"Tahun Ke Arah Sifar Sisa\" untuk mempromosikan 3R (Kurangkan, Guna Semula, Kitar Semula)." }
+          { english: "The 'Singapore Green Plan 2030' outlines ambitious national targets and initiatives across various pillars like 'City in Nature' and 'Sustainable Living', encouraging a whole-of-nation effort.", malay: "'Singapore Green Plan 2030' menguraikan target dan inisiatif nasional yang ambisius di berbagai pilar seperti 'Kota dalam Alam' dan 'Hidup Berkelanjutan', mendorong upaya seluruh bangsa." }, // Indonesian
+          { english: "Campaigns such as 'Say YES to Waste Less' and the mandatory charge for plastic bags in supermarkets aim to shift consumer behaviour towards reducing waste and resource consumption.", malay: "Kampanye seperti 'Say YES to Waste Less' dan biaya wajib untuk kantong plastik di supermarket bertujuan untuk mengubah perilaku konsumen menuju pengurangan limbah dan konsumsi sumber daya." } // Indonesian
         ]
       },
       {
-        title_english: "Integrating Environmental Education into Curriculum",
-        title_malay: "Mengintegrasikan Pendidikan Alam Sekitar ke dalam Kurikulum",
+        title_english: "Integrating Environmental Education into Formal and Informal Learning",
+        title_malay: "Mengintegrasikan Pendidikan Lingkungan ke dalam Pembelajaran Formal dan Informal", // Indonesian
         examples: [
-          { english: "Incorporating environmental sustainability topics in school subjects.", malay: "Memasukkan topik kelestarian alam sekitar dalam mata pelajaran sekolah." },
-          { english: "Supporting eco-clubs and green initiatives in educational institutions.", malay: "Menyokong kelab eko dan inisiatif hijau di institusi pendidikan." }
+          { english: "Incorporation of environmental sustainability concepts into school curricula across different subjects and levels to inculcate eco-consciousness from a young age.", malay: "Penggabungan konsep keberlanjutan lingkungan ke dalam kurikulum sekolah di berbagai mata pelajaran dan tingkatan untuk menanamkan kesadaran lingkungan sejak usia muda." }, // Indonesian
+          { english: "Support for school-based environmental clubs (e.g., Environment Champions) and community programmes that offer hands-on learning experiences in conservation and sustainability.", malay: "Dukungan untuk klub lingkungan berbasis sekolah (misalnya, Environment Champions) dan program komunitas yang menawarkan pengalaman belajar langsung dalam konservasi dan keberlanjutan." } // Indonesian
         ]
       },
       {
-        title_english: "Engaging Community and Grassroots Organisations",
-        title_malay: "Melibatkan Komuniti dan Pertubuhan Akar Umbi",
+        title_english: "Empowering Community Action and Fostering Ground-Up Environmental Initiatives",
+        title_malay: "Memberdayakan Aksi Komunitas dan Mendorong Inisiatif Lingkungan dari Bawah", // Indonesian
         examples: [
-          { english: "Providing grants and support for community-led environmental projects.", malay: "Menyediakan geran dan sokongan untuk projek alam sekitar yang diterajui komuniti." },
-          { english: "Partnering with NGOs and volunteer groups for outreach and conservation efforts.", malay: "Bekerjasama dengan NGO dan kumpulan sukarelawan untuk usaha jangkauan dan pemuliharaan." }
+          { english: "Providing grants like the 'SG Eco Fund' to support community-led projects that advance environmental sustainability and involve local residents.", malay: "Memberikan hibah seperti 'SG Eco Fund' untuk mendukung proyek yang dipimpin komunitas yang memajukan keberlanjutan lingkungan dan melibatkan penduduk setempat." }, // Indonesian
+          { english: "Partnering with Non-Governmental Organisations (NGOs) and volunteer welfare organisations (VWOs) to co-create and deliver environmental outreach programmes and conservation efforts.", malay: "Bermitra dengan Organisasi Non-Pemerintah (LSM) dan organisasi kesejahteraan sukarela (VWO) untuk bersama-sama menciptakan dan menyampaikan program penjangkauan lingkungan dan upaya konservasi." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Environmental sustainability", malay: "Kelestarian alam sekitar" },
-      { english: "collective responsibility", malay: "tanggungjawab bersama" },
-      { english: "future generations", malay: "generasi akan datang" }
+      { english: "Fostering environmental stewardship", malay: "Menumbuhkan kepedulian terhadap lingkungan" }, // Indonesian
+      { english: "Promoting a circular economy mindset", malay: "Mempromosikan pola pikir ekonomi sirkular" }, // Indonesian
+      { english: "Collective responsibility for environmental protection", malay: "Tanggung jawab kolektif untuk perlindungan lingkungan" }, // Indonesian
+      { english: "Nurturing a 'City in Nature'", malay: "Memelihara 'Kota dalam Alam'" } // Indonesian
     ]
   },
   {
     id: 'topic-foreign-investment',
     type: 'topic-card',
-    title: "Ways Singapore attracts foreign investment",
+    title: "Singapore's Enduring Appeal as a Premier Destination for Foreign Investment",
     main_points: [
       {
-        title_english: "Maintaining a Pro-Business and Stable Environment",
-        title_malay: "Mengekalkan Persekitaran Pro-Perniagaan dan Stabil",
+        title_english: "Maintaining a Stable, Pro-Business Environment with Strong Governance",
+        title_malay: "Mempertahankan Lingkungan yang Stabil dan Pro-Bisnis dengan Tata Kelola yang Kuat", // Indonesian
         examples: [
-          { english: "Strong rule of law, political stability, and low corruption rates.", malay: "Kedaulatan undang-undang yang kukuh, kestabilan politik, dan kadar rasuah yang rendah." },
-          { english: "Efficient bureaucracy and transparent regulatory framework.", malay: "Birokrasi yang cekap dan rangka kerja kawal selia yang telus." }
+          { english: "A robust legal framework, strong adherence to the rule of law, low corruption levels (consistently ranked high in global indices), and political stability create a predictable and secure investment climate.", malay: "Kerangka hukum yang kuat, kepatuhan yang kuat terhadap supremasi hukum, tingkat korupsi yang rendah (secara konsisten berperingkat tinggi dalam indeks global), dan stabilitas politik menciptakan iklim investasi yang dapat diprediksi dan aman." }, // Indonesian
+          { english: "Efficient and transparent bureaucracy, coupled with streamlined regulatory processes administered by agencies like the Economic Development Board (EDB), facilitates ease of doing business.", malay: "Birokrasi yang efisien dan transparan, ditambah dengan proses regulasi yang disederhanakan yang dikelola oleh badan-badan seperti Economic Development Board (EDB), memfasilitasi kemudahan berusaha." } // Indonesian
         ]
       },
       {
-        title_english: "Offering World-Class Infrastructure and Connectivity",
-        title_malay: "Menawarkan Infrastruktur dan Kesalinghubungan Bertaraf Dunia",
+        title_english: "Offering World-Class Infrastructure and Unparalleled Global Connectivity",
+        title_malay: "Menawarkan Infrastruktur Kelas Dunia dan Konektivitas Global yang Tak Tertandingi", // Indonesian
         examples: [
-          { english: "Top-ranked airport (Changi Airport) and seaport, facilitating global trade and logistics.", malay: "Lapangan terbang (Lapangan Terbang Changi) dan pelabuhan laut bertaraf teratas, memudahkan perdagangan dan logistik global." },
-          { english: "Advanced digital infrastructure and high-speed internet connectivity.", malay: "Infrastruktur digital canggih dan kesalinghubungan internet berkelajuan tinggi." }
+          { english: "Changi Airport, a leading global air hub, and the Port of Singapore, one of the world's busiest transshipment hubs, provide exceptional logistical capabilities for international trade.", malay: "Bandara Changi, pusat udara global terkemuka, dan Pelabuhan Singapura, salah satu pusat transshipment tersibuk di dunia, menyediakan kemampuan logistik yang luar biasa untuk perdagangan internasional." }, // Indonesian
+          { english: "State-of-the-art digital infrastructure, including extensive fibre optic networks and high-speed internet, supports data-intensive industries and digital economy growth.", malay: "Infrastruktur digital canggih, termasuk jaringan serat optik yang luas dan internet berkecepatan tinggi, mendukung industri padat data dan pertumbuhan ekonomi digital." } // Indonesian
         ]
       },
       {
-        title_english: "Providing a Skilled Workforce and Attractive Incentives",
-        title_malay: "Menyediakan Tenaga Kerja Berkemahiran dan Insentif Menarik",
+        title_english: "Leveraging a Highly Skilled Workforce and Attractive, Targeted Incentives",
+        title_malay: "Memanfaatkan Tenaga Kerja Berketerampilan Tinggi dan Insentif Menarik yang Ditargetkan", // Indonesian
         examples: [
-          { english: "Highly educated and skilled talent pool, with strong emphasis on STEM.", malay: "Kumpulan bakat yang berpendidikan tinggi dan berkemahiran, dengan penekanan kuat pada STEM." },
-          { english: "Competitive corporate tax rates and targeted investment incentives for strategic industries.", malay: "Kadar cukai korporat yang kompetitif dan insentif pelaburan yang disasarkan untuk industri strategik." }
+          { english: "A well-educated, multilingual, and adaptable talent pool, with strong emphasis on STEM skills and continuous learning through initiatives like 'SkillsFuture'.", malay: "Kelompok bakat yang berpendidikan baik, multibahasa, dan mudah beradaptasi, dengan penekanan kuat pada keterampilan STEM dan pembelajaran berkelanjutan melalui inisiatif seperti 'SkillsFuture'." }, // Indonesian
+          { english: "Competitive corporate tax rates and a suite of targeted investment incentives, grants, and schemes offered by EDB to attract high-value investments in strategic growth sectors.", malay: "Tarif pajak perusahaan yang kompetitif dan serangkaian insentif investasi, hibah, dan skema yang ditargetkan yang ditawarkan oleh EDB untuk menarik investasi bernilai tinggi di sektor pertumbuhan strategis." }, // Indonesian
+          { english: "An extensive network of Free Trade Agreements (FTAs) provides preferential access to key global markets for businesses based in Singapore.", malay: "Jaringan Perjanjian Perdagangan Bebas (FTA) yang luas memberikan akses preferensial ke pasar global utama untuk bisnis yang berbasis di Singapura." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Global business hub", malay: "Hab perniagaan global" },
-      { english: "economic competitiveness", malay: "daya saing ekonomi" },
-      { english: "knowledge-based economy", malay: "ekonomi berasaskan pengetahuan" }
+      { english: "Strategic hub for global commerce and innovation", malay: "Pusat strategis untuk perdagangan dan inovasi global" }, // Indonesian
+      { english: "Maintaining economic competitiveness and dynamism", malay: "Mempertahankan daya saing dan dinamisme ekonomi" }, // Indonesian
+      { english: "Value creation through high-value investments", malay: "Penciptaan nilai melalui investasi bernilai tinggi" }, // Indonesian
+      { english: "A trusted and reliable investment destination", malay: "Tujuan investasi yang tepercaya dan andal" } // Indonesian
     ]
   },
   {
     id: 'topic-aging-population-impact',
     type: 'topic-card',
-    title: "Impact of an aging population on Singapore's economy and society",
+    title: "Addressing the Multifaceted Impacts of an Aging Population in Singapore",
     main_points: [
       {
-        title_english: "Economic Implications",
-        title_malay: "Implikasi Ekonomi",
+        title_english: "Navigating Economic Shifts: Healthcare Costs, Workforce Dynamics, and the Silver Economy",
+        title_malay: "Menavigasi Pergeseran Ekonomi: Biaya Perawatan Kesehatan, Dinamika Tenaga Kerja, dan Ekonomi Perak", // Indonesian
         examples: [
-          { english: "Increased healthcare expenditure and demand for eldercare services.", malay: "Peningkatan perbelanjaan penjagaan kesihatan dan permintaan untuk perkhidmatan penjagaan warga emas." },
-          { english: "Potential shrinking workforce and need for productivity improvements.", malay: "Potensi pengecutan tenaga kerja dan keperluan untuk peningkatan produktiviti." },
-          { english: "Growth of the \"silver economy\" – products and services catering to seniors.", malay: "Pertumbuhan \"ekonomi perak\" – produk dan perkhidmatan untuk warga emas." }
+          { english: "Rising healthcare expenditure due to increased prevalence of chronic diseases among seniors, necessitating sustainable healthcare financing models like 'MediShield Life'.", malay: "Meningkatnya pengeluaran perawatan kesehatan karena meningkatnya prevalensi penyakit kronis di kalangan lansia, yang memerlukan model pembiayaan perawatan kesehatan berkelanjutan seperti 'MediShield Life'." }, // Indonesian
+          { english: "Potential for a shrinking workforce and dependency ratio challenges, addressed by promoting lifelong employability (e.g., 'SkillsFuture', senior employment credits) and productivity enhancements.", malay: "Potensi menyusutnya tenaga kerja dan tantangan rasio ketergantungan, diatasi dengan mempromosikan kelayakan kerja seumur hidup (misalnya, 'SkillsFuture', kredit pekerjaan senior) dan peningkatan produktivitas." }, // Indonesian
+          { english: "Emergence and growth of the 'silver economy', creating new business opportunities in sectors like eldercare services, assistive technologies, and age-friendly products.", malay: "Munculnya dan pertumbuhan 'ekonomi perak', menciptakan peluang bisnis baru di sektor-sektor seperti layanan perawatan lansia, teknologi bantu, dan produk ramah lansia." } // Indonesian
         ]
       },
       {
-        title_english: "Social and Healthcare System Challenges",
-        title_malay: "Cabaran Sistem Sosial dan Penjagaan Kesihatan",
+        title_english: "Adapting Social Infrastructure and Healthcare Systems for an Aging Society",
+        title_malay: "Menyesuaikan Infrastruktur Sosial dan Sistem Perawatan Kesehatan untuk Masyarakat yang Menua", // Indonesian
         examples: [
-          { english: "Increased demand for caregivers, both formal and informal.", malay: "Peningkatan permintaan untuk penjaga, formal dan tidak formal." },
-          { english: "Need for age-friendly infrastructure and housing.", malay: "Keperluan untuk infrastruktur dan perumahan mesra usia." },
-          { english: "Addressing issues of social isolation and loneliness among seniors.", malay: "Menangani isu pengasingan sosial dan kesunyian di kalangan warga emas." }
-        ]
-      },
-      {
-        title_english: "Government Responses",
-        title_malay: "Tindak Balas Kerajaan",
-        examples: [
-          { english: "CPF Life (annuity scheme), MediShield Life (health insurance), CareShield Life (long-term care insurance).", malay: "CPF Hayat (skim anuiti), MediShield Hayat (insurans kesihatan), CareShield Hayat (insurans jagaan jangka panjang)." }
+          { english: "Increased demand for a spectrum of eldercare services, from home-based care and day care centres to nursing homes, supported by schemes like 'CareShield Life' for long-term care financing.", malay: "Peningkatan permintaan untuk berbagai layanan perawatan lansia, mulai dari perawatan di rumah dan pusat penitipan harian hingga panti jompo, didukung oleh skema seperti 'CareShield Life' untuk pembiayaan perawatan jangka panjang." }, // Indonesian
+          { english: "Developing age-friendly physical environments, including barrier-free access in public housing estates (e.g., HDB's EASE programme) and transportation systems.", malay: "Mengembangkan lingkungan fisik yang ramah lansia, termasuk akses bebas hambatan di kawasan perumahan umum (misalnya, program EASE HDB) dan sistem transportasi." }, // Indonesian
+          { english: "Addressing social and psychological well-being through initiatives to combat loneliness and promote active aging, such as community-based activities and intergenerational programmes.", malay: "Mengatasi kesejahteraan sosial dan psikologis melalui inisiatif untuk memerangi kesepian dan mempromosikan penuaan aktif, seperti kegiatan berbasis komunitas dan program antargenerasi." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Aging society", malay: "Masyarakat menua" },
-      { english: "active aging", malay: "penuaan aktif" },
-      { english: "intergenerational support", malay: "sokongan antara generasi" }
+      { english: "Population aging as a societal megatrend", malay: "Penuaan populasi sebagai megatren masyarakat" }, // Indonesian
+      { english: "Promoting 'active and healthy aging'", malay: "Mempromosikan 'penuaan aktif dan sehat'" }, // Indonesian
+      { english: "Ensuring intergenerational equity and support", malay: "Memastikan keadilan dan dukungan antargenerasi" }, // Indonesian
+      { english: "Sustainable healthcare and social care models", malay: "Model perawatan kesehatan dan sosial yang berkelanjutan" } // Indonesian
     ]
   },
   {
     id: 'topic-clean-healthy-housing',
     type: 'topic-card',
-    title: "Creating clean and healthy public housing in Singapore",
+    title: "Ensuring Clean, Healthy, and Sustainable Public Housing Environments",
     main_points: [
       {
-        title_english: "Integrated Urban Planning and Design by HDB",
-        title_malay: "Perancangan dan Reka Bentuk Bandar Bersepadu oleh HDB",
+        title_english: "Integrated Urban Planning and Design for Liveable HDB Estates",
+        title_malay: "Perencanaan dan Desain Kota Terpadu untuk Kawasan HDB yang Layak Huni", // Indonesian
         examples: [
-          { english: "Designing estates with green spaces, good ventilation, and natural lighting.", malay: "Mereka bentuk estet dengan ruang hijau, pengudaraan yang baik, dan pencahayaan semula jadi." },
-          { english: "Co-locating amenities like hawker centres, markets, and recreational facilities within housing estates.", malay: "Menempatkan kemudahan seperti pusat penjaja, pasar, dan kemudahan rekreasi dalam estet perumahan." }
+          { english: "The Housing & Development Board (HDB) employs holistic town planning principles, incorporating green spaces (e.g., community gardens, rooftop gardens), good ventilation, and natural lighting into estate design to enhance well-being.", malay: "Housing & Development Board (HDB) menerapkan prinsip-prinsip perencanaan kota holistik, menggabungkan ruang hijau (misalnya, kebun komunitas, taman atap), ventilasi yang baik, dan pencahayaan alami ke dalam desain kawasan untuk meningkatkan kesejahteraan." }, // Indonesian
+          { english: "Strategic co-location of essential amenities such as hawker centres, markets, polyclinics, and recreational facilities within or near housing estates promotes convenience and community interaction.", malay: "Penempatan bersama strategis fasilitas penting seperti pusat jajanan, pasar, poliklinik, dan fasilitas rekreasi di dalam atau di dekat kawasan perumahan mendorong kemudahan dan interaksi komunitas." } // Indonesian
         ]
       },
       {
-        title_english: "Regular Maintenance and Upgrading Programmes",
-        title_malay: "Program Penyelenggaraan dan Naik Taraf Berkala",
+        title_english: "Systematic Maintenance, Upgrading, and Rejuvenation Programmes",
+        title_malay: "Program Pemeliharaan, Peningkatan, dan Peremajaan Sistematis", // Indonesian
         examples: [
-          { english: "Routine cleaning of common areas, refuse collection, and pest control.", malay: "Pembersihan rutin kawasan umum, kutipan sampah, dan kawalan perosak." },
-          { english: "Estate Upgrading Programmes (EUP) and Home Improvement Programme (HIP) to rejuvenate older estates.", malay: "Program Naik Taraf Estet (EUP) dan Program Pembaikan Rumah (HIP) untuk memulihkan estet lama." }
+          { english: "Regular and scheduled maintenance of common areas, including cleaning, lift maintenance, and pest control, is managed by Town Councils to uphold cleanliness and safety standards.", malay: "Pemeliharaan rutin dan terjadwal area umum, termasuk pembersihan, pemeliharaan lift, dan pengendalian hama, dikelola oleh Dewan Kota untuk menjaga standar kebersihan dan keselamatan." }, // Indonesian
+          { english: "HDB's various upgrading initiatives like the 'Home Improvement Programme (HIP)' and 'Neighbourhood Renewal Programme (NRP)' address aging infrastructure and enhance the living environment of older estates.", malay: "Berbagai inisiatif peningkatan HDB seperti 'Home Improvement Programme (HIP)' dan 'Neighbourhood Renewal Programme (NRP)' mengatasi infrastruktur yang menua dan meningkatkan lingkungan hidup kawasan lama." } // Indonesian
         ]
       },
       {
-        title_english: "Promoting Community Responsibility and Cleanliness Campaigns",
-        title_malay: "Mempromosikan Tanggungjawab Komuniti dan Kempen Kebersihan",
+        title_english: "Promoting Environmental Health through Effective Waste Management and Public Education",
+        title_malay: "Mempromosikan Kesehatan Lingkungan melalui Pengelolaan Sampah yang Efektif dan Pendidikan Publik", // Indonesian
         examples: [
-          { english: "Public education campaigns on proper waste disposal and anti-littering.", malay: "Kempen pendidikan awam mengenai pembuangan sisa yang betul dan anti-membuang sampah." },
-          { english: "Encouraging resident participation in keeping common areas clean through community initiatives.", malay: "Menggalakkan penyertaan penduduk dalam menjaga kebersihan kawasan umum melalui inisiatif komuniti." }
+          { english: "Efficient refuse collection systems, including centralized refuse chutes and initiatives promoting recycling (e.g., 'Bloobox' distribution for recyclables), contribute to a cleaner environment.", malay: "Sistem pengumpulan sampah yang efisien, termasuk saluran sampah terpusat dan inisiatif yang mempromosikan daur ulang (misalnya, distribusi 'Bloobox' untuk barang daur ulang), berkontribusi pada lingkungan yang lebih bersih." }, // Indonesian
+          { english: "Ongoing public education campaigns by NEA and Town Councils on responsible waste disposal, anti-littering, and dengue prevention (e.g., removing stagnant water) foster community ownership of environmental cleanliness.", malay: "Kampanye pendidikan publik yang berkelanjutan oleh NEA dan Dewan Kota tentang pembuangan sampah yang bertanggung jawab, anti-membuang sampah sembarangan, dan pencegahan demam berdarah (misalnya, menghilangkan genangan air) menumbuhkan rasa kepemilikan komunitas terhadap kebersihan lingkungan." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Urban liveability", malay: "Kebolehdiaman bandar" },
-      { english: "sustainable living environment", malay: "persekitaran hidup mampan" },
-      { english: "community well-being", malay: "kesejahteraan komuniti" }
+      { english: "Enhancing urban liveability and well-being", malay: "Meningkatkan kelayakan huni dan kesejahteraan perkotaan" }, // Indonesian
+      { english: "Sustainable public housing models", malay: "Model perumahan publik yang berkelanjutan" }, // Indonesian
+      { english: "Community stewardship for shared spaces", malay: "Kepedulian komunitas terhadap ruang bersama" }, // Indonesian
+      { english: "Integrated approach to environmental health", malay: "Pendekatan terpadu terhadap kesehatan lingkungan" } // Indonesian
     ]
   },
   {
     id: 'topic-social-inequality',
     type: 'topic-card',
-    title: "Reducing social inequality in Singapore",
+    title: "Strategies to Mitigate Social Inequality and Foster an Inclusive Society",
     main_points: [
       {
-        title_english: "Ensuring Access to Quality Education and Upskilling",
-        title_malay: "Memastikan Akses kepada Pendidikan Berkualiti dan Peningkatan Kemahiran",
+        title_english: "Ensuring Equitable Access to Quality Education and Lifelong Learning Opportunities",
+        title_malay: "Memastikan Akses yang Adil terhadap Pendidikan Berkualitas dan Peluang Belajar Seumur Hidup", // Indonesian
         examples: [
-          { english: "Financial assistance schemes like MOE FAS and Edusave for students from lower-income families.", malay: "Skim bantuan kewangan seperti MOE FAS dan Edusave untuk pelajar dari keluarga berpendapatan rendah." },
-          { english: "SkillsFuture movement for lifelong learning and workforce reskilling/upskilling.", malay: "Gerakan SkillsFuture untuk pembelajaran sepanjang hayat dan latihan semula/peningkatan kemahiran tenaga kerja." }
+          { english: "Significant financial assistance schemes like the Ministry of Education's 'Financial Assistance Scheme (FAS)' and Edusave grants aim to level the playing field for students from disadvantaged backgrounds.", malay: "Skema bantuan keuangan yang signifikan seperti 'Financial Assistance Scheme (FAS)' Kementerian Pendidikan dan hibah Edusave bertujuan untuk menyamakan kedudukan bagi siswa dari latar belakang kurang beruntung." }, // Indonesian
+          { english: "The 'SkillsFuture' national movement empowers all Singaporeans with opportunities for continuous upskilling and reskilling, promoting career mobility and adaptability in a changing economy.", malay: "Gerakan nasional 'SkillsFuture' memberdayakan semua warga Singapura dengan peluang untuk peningkatan keterampilan dan pelatihan ulang berkelanjutan, mempromosikan mobilitas karir dan kemampuan beradaptasi dalam ekonomi yang berubah." } // Indonesian
         ]
       },
       {
-        title_english: "Implementing Inclusive Housing and Social Support Policies",
-        title_malay: "Melaksanakan Dasar Perumahan Inklusif dan Sokongan Sosial",
+        title_english: "Implementing Progressive Social Support Systems and Inclusive Policies",
+        title_malay: "Menerapkan Sistem Dukungan Sosial Progresif dan Kebijakan Inklusif", // Indonesian
         examples: [
-          { english: "Subsidised public housing (HDB flats) with grants targeted at lower and middle-income households.", malay: "Perumahan awam bersubsidi (flat HDB) dengan geran yang disasarkan kepada isi rumah berpendapatan rendah dan sederhana." },
-          { english: "ComCare schemes providing social assistance for low-income individuals and families.", malay: "Skim ComCare yang menyediakan bantuan sosial untuk individu dan keluarga berpendapatan rendah." },
-          { english: "Workfare Income Supplement (WIS) to top up wages for lower-wage workers.", malay: "Tambahan Pendapatan Kerja (WIS) untuk menambah gaji pekerja bergaji rendah." }
+          { english: "Subsidised public housing (HDB flats) with targeted grants (e.g., Enhanced CPF Housing Grant) makes homeownership accessible across different income groups, fostering social mixing.", malay: "Perumahan publik bersubsidi (flat HDB) dengan hibah yang ditargetkan (misalnya, Enhanced CPF Housing Grant) membuat kepemilikan rumah dapat diakses oleh berbagai kelompok pendapatan, mendorong percampuran sosial." }, // Indonesian
+          { english: "Social safety nets like 'ComCare' provide financial and social support to low-income individuals and families, while 'Workfare Income Supplement (WIS)' tops up wages for lower-wage workers.", malay: "Jaring pengaman sosial seperti 'ComCare' memberikan dukungan keuangan dan sosial kepada individu dan keluarga berpenghasilan rendah, sementara 'Workfare Income Supplement (WIS)' menambah upah bagi pekerja berupah rendah." } // Indonesian
         ]
       },
       {
-        title_english: "Progressive Tax System and Wealth Distribution",
-        title_malay: "Sistem Cukai Progresif dan Pengagihan Kekayaan",
+        title_english: "Promoting Meritocracy with Strong Emphasis on Social Levellers and Uplifting the Disadvantaged",
+        title_malay: "Mempromosikan Meritokrasi dengan Penekanan Kuat pada Pemerataan Sosial dan Mengangkat Derajat Golongan Kurang Beruntung", // Indonesian
         examples: [
-          { english: "Progressive personal income tax rates where higher earners pay a larger percentage.", malay: "Kadar cukai pendapatan peribadi progresif di mana mereka yang berpendapatan lebih tinggi membayar peratusan yang lebih besar." },
-          { english: "Property taxes tiered based on annual value, with higher-end properties taxed more.", malay: "Cukai hartanah berperingkat berdasarkan nilai tahunan, dengan hartanah mewah dikenakan cukai lebih tinggi." }
+          { english: "While meritocracy is a core principle, policies are continually reviewed to ensure they do not inadvertently entrench privilege, with targeted programmes for at-risk students and families (e.g., 'KidSTART' for early childhood support).", malay: "Meskipun meritokrasi adalah prinsip inti, kebijakan terus ditinjau untuk memastikan tidak secara tidak sengaja melanggengkan privilese, dengan program yang ditargetkan untuk siswa dan keluarga berisiko (misalnya, 'KidSTART' untuk dukungan anak usia dini)." }, // Indonesian
+          { english: "Community initiatives and philanthropic efforts, often supported by government matching grants, play a crucial role in providing additional support and mentorship to those in need.", malay: "Inisiatif komunitas dan upaya filantropi, seringkali didukung oleh hibah padanan pemerintah, memainkan peran penting dalam memberikan dukungan tambahan dan bimbingan kepada mereka yang membutuhkan." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Social mobility", malay: "Mobiliti sosial" },
-      { english: "inclusive society", malay: "masyarakat inklusif" },
-      { english: "equal opportunities", malay: "peluang sama rata" }
+      { english: "Fostering social mobility and inclusivity", malay: "Mendorong mobilitas sosial dan inklusivitas" }, // Indonesian
+      { english: "Narrowing the income and opportunity gap", malay: "Mempersempit kesenjangan pendapatan dan peluang" }, // Indonesian
+      { english: "Strengthening social compact and cohesion", malay: "Memperkuat kesepakatan dan kohesi sosial" }, // Indonesian
+      { english: "Balancing meritocracy with compassion", malay: "Menyeimbangkan meritokrasi dengan kasih sayang" } // Indonesian
     ]
   },
   {
     id: 'topic-plastic-waste-reduction',
     type: 'topic-card',
-    title: "Reducing plastic waste in Singapore",
+    title: "Comprehensive Strategies for Reducing Plastic Waste and Promoting a Circular Economy",
     main_points: [
       {
-        title_english: "Implementing Policies to Reduce Single-Use Plastics",
-        title_malay: "Melaksanakan Dasar untuk Mengurangkan Plastik Sekali Guna",
+        title_english: "Implementing Regulatory Measures to Curb Single-Use Plastic Consumption",
+        title_malay: "Menerapkan Tindakan Regulasi untuk Mengurangi Konsumsi Plastik Sekali Pakai", // Indonesian
         examples: [
-          { english: "Mandatory charge for disposable carrier bags at larger supermarkets.", malay: "Caj mandatori untuk beg pembawa pakai buang di pasar raya besar." },
-          { english: "Encouraging F&B businesses to offer reusable alternatives or opt-out options for disposable cutlery.", malay: "Menggalakkan perniagaan F&B menawarkan alternatif boleh guna semula atau pilihan untuk tidak mengambil kutleri pakai buang." }
+          { english: "The mandatory charge for disposable carrier bags at larger supermarket outlets aims to directly influence consumer behaviour and reduce reliance on single-use plastics.", malay: "Biaya wajib untuk kantong belanja sekali pakai di gerai supermarket besar bertujuan untuk secara langsung memengaruhi perilaku konsumen dan mengurangi ketergantungan pada plastik sekali pakai." }, // Indonesian
+          { english: "Encouraging businesses, particularly in the F&B sector, to adopt sustainable practices such as offering reusable alternatives or default opt-out options for disposable cutlery.", malay: "Mendorong bisnis, terutama di sektor F&B, untuk mengadopsi praktik berkelanjutan seperti menawarkan alternatif yang dapat digunakan kembali atau opsi default untuk tidak menggunakan alat makan sekali pakai." } // Indonesian
         ]
       },
       {
-        title_english: "Promoting a Circular Economy and Enhancing Recycling Infrastructure",
-        title_malay: "Mempromosikan Ekonomi Kitaran dan Meningkatkan Infrastruktur Kitar Semula",
+        title_english: "Enhancing Waste Management Infrastructure and Promoting Effective Recycling",
+        title_malay: "Meningkatkan Infrastruktur Pengelolaan Sampah dan Mempromosikan Daur Ulang yang Efektif", // Indonesian
         examples: [
-          { english: "Public education on proper recycling practices (e.g., \"Bloo bin, Right Bin\" campaign).", malay: "Pendidikan awam mengenai amalan kitar semula yang betul (cth: kempen \"Tong Biru, Tong Betul\")." },
-          { english: "Investing in advanced waste sorting and recycling technologies.", malay: "Melabur dalam teknologi pengasingan dan kitar semula sisa yang canggih." },
-          { english: "Plans for an Extended Producer Responsibility (EPR) framework for packaging waste.", malay: "Rancangan untuk rangka kerja Tanggungjawab Pengeluar Lanjutan (EPR) bagi sisa pembungkusan." }
+          { english: "Public education campaigns like 'Recycle Right' aim to improve the quality and quantity of recyclables collected by informing residents on proper sorting and contamination avoidance.", malay: "Kampanye pendidikan publik seperti 'Recycle Right' bertujuan untuk meningkatkan kualitas dan kuantitas barang daur ulang yang dikumpulkan dengan memberi tahu penduduk tentang pemilahan yang benar dan penghindaran kontaminasi." }, // Indonesian
+          { english: "Investing in advanced waste sorting technologies and exploring chemical recycling solutions to process harder-to-recycle plastic types and increase overall recycling rates.", malay: "Berinvestasi dalam teknologi pemilahan sampah canggih dan menjajaki solusi daur ulang kimia untuk memproses jenis plastik yang lebih sulit didaur ulang dan meningkatkan tingkat daur ulang secara keseluruhan." }, // Indonesian
+          { english: "The planned implementation of an 'Extended Producer Responsibility (EPR)' framework for packaging waste will hold producers accountable for the collection and recycling of their packaging materials.", malay: "Implementasi kerangka kerja 'Extended Producer Responsibility (EPR)' yang direncanakan untuk sampah kemasan akan meminta pertanggungjawaban produsen atas pengumpulan dan daur ulang bahan kemasan mereka." } // Indonesian
         ]
       },
       {
-        title_english: "Fostering Public Awareness and Behavioural Change",
-        title_malay: "Memupuk Kesedaran Awam dan Perubahan Tingkah Laku",
+        title_english: "Fostering a National Culture of Sustainability and Resource Consciousness",
+        title_malay: "Menumbuhkan Budaya Keberlanjutan Nasional dan Kesadaran Sumber Daya", // Indonesian
         examples: [
-          { english: "Campaigns encouraging the use of reusable bags, water bottles, and containers.", malay: "Kempen menggalakkan penggunaan beg, botol air, dan bekas boleh guna semula." },
-          { english: "Supporting ground-up initiatives and community clean-ups to raise awareness about plastic pollution.", malay: "Menyokong inisiatif akar umbi dan pembersihan komuniti untuk meningkatkan kesedaran mengenai pencemaran plastik." }
+          { english: "The 'Zero Waste Masterplan' outlines national targets to reduce waste sent to landfill, encouraging a shift towards a circular economy where resources are reused and recycled.", malay: "'Zero Waste Masterplan' menguraikan target nasional untuk mengurangi sampah yang dikirim ke TPA, mendorong pergeseran menuju ekonomi sirkular di mana sumber daya digunakan kembali dan didaur ulang." }, // Indonesian
+          { english: "Supporting ground-up initiatives and community partnerships (e.g., beach clean-ups, repair workshops) that promote sustainable consumption habits and reduce plastic pollution.", malay: "Mendukung inisiatif dari bawah dan kemitraan komunitas (misalnya, pembersihan pantai, lokakarya perbaikan) yang mempromosikan kebiasaan konsumsi berkelanjutan dan mengurangi polusi plastik." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Circular economy", malay: "Ekonomi kitaran" },
-      { english: "sustainable consumption", malay: "penggunaan lestari" },
-      { english: "plastic pollution", malay: "pencemaran plastik" }
+      { english: "Transitioning towards a circular economy for plastics", malay: "Bertransisi menuju ekonomi sirkular untuk plastik" }, // Indonesian
+      { english: "Addressing the challenge of plastic pollution", malay: "Mengatasi tantangan polusi plastik" }, // Indonesian
+      { english: "Sustainable consumption and production patterns", malay: "Pola konsumsi dan produksi berkelanjutan" }, // Indonesian
+      { english: "Shared responsibility in waste management", malay: "Tanggung jawab bersama dalam pengelolaan sampah" } // Indonesian
     ]
   },
   {
     id: 'topic-online-scam-awareness',
     type: 'topic-card',
-    title: "Increasing public awareness about the dangers of online scams",
+    title: "Fortifying Public Defence Against Online Scams through Awareness and Education",
     main_points: [
       {
-        title_english: "Conducting Nationwide Public Education Campaigns",
-        title_malay: "Menjalankan Kempen Pendidikan Awam Peringkat Kebangsaan",
+        title_english: "Spearheading Nationwide Public Education Campaigns on Scam Prevention",
+        title_malay: "Memelopori Kampanye Pendidikan Publik Nasional tentang Pencegahan Penipuan", // Indonesian
         examples: [
-          { english: "The \"ACT\" (Spot the Signs. Stop the Crimes.) campaign by the National Crime Prevention Council (NCPC) and Police.", malay: "Kempen \"ACT\" (Kesan Tanda. Hentikan Jenayah.) oleh Majlis Pencegahan Jenayah Kebangsaan (NCPC) dan Polis." },
-          { english: "Using various media platforms (TV, social media, public transport ads) to disseminate anti-scam messages.", malay: "Menggunakan pelbagai platform media (TV, media sosial, iklan pengangkutan awam) untuk menyebarkan mesej anti-penipuan." }
+          { english: "The 'ACT' (Spot the Signs. Stop the Crimes.) campaign, a collaborative effort by the National Crime Prevention Council (NCPC) and the Singapore Police Force, utilizes various media to educate the public on prevalent scam typologies and red flags.", malay: "Kampanye 'ACT' (Kenali Tandanya. Hentikan Kejahatannya.), upaya kolaboratif oleh National Crime Prevention Council (NCPC) dan Kepolisian Singapura, menggunakan berbagai media untuk mendidik masyarakat tentang tipologi penipuan yang lazim dan tanda bahaya." }, // Indonesian
+          { english: "Regular dissemination of scam alerts and advisories through official channels, social media, and community platforms to keep the public informed about emerging scam tactics.", malay: "Penyebaran peringatan dan imbauan penipuan secara berkala melalui saluran resmi, media sosial, dan platform komunitas untuk menjaga masyarakat tetap terinformasi tentang taktik penipuan yang baru muncul." } // Indonesian
         ]
       },
       {
-        title_english: "Providing Tools and Resources for Scam Prevention",
-        title_malay: "Menyediakan Alat dan Sumber untuk Pencegahan Penipuan",
+        title_english: "Providing Accessible Tools and Resources for Scam Detection and Reporting",
+        title_malay: "Menyediakan Alat dan Sumber Daya yang Dapat Diakses untuk Deteksi dan Pelaporan Penipuan", // Indonesian
         examples: [
-          { english: "The ScamShield mobile app to filter scam messages and calls.", malay: "Aplikasi mudah alih ScamShield untuk menapis mesej dan panggilan penipuan." },
-          { english: "Online resources and hotlines for reporting scams and seeking advice.", malay: "Sumber dalam talian dan talian hotline untuk melaporkan penipuan dan mendapatkan nasihat." }
+          { english: "The 'ScamShield' mobile application helps to filter scam SMS messages and block calls from numbers known to be used in scams, providing a proactive layer of defence.", malay: "Aplikasi seluler 'ScamShield' membantu menyaring pesan SMS penipuan dan memblokir panggilan dari nomor yang diketahui digunakan dalam penipuan, menyediakan lapisan pertahanan proaktif." }, // Indonesian
+          { english: "Dedicated online portals (e.g., scamalert.sg) and hotlines are available for the public to report suspected scams, seek verification, and access information on scam prevention.", malay: "Portal online khusus (misalnya, scamalert.sg) dan hotline tersedia bagi publik untuk melaporkan dugaan penipuan, mencari verifikasi, dan mengakses informasi tentang pencegahan penipuan." } // Indonesian
         ]
       },
       {
-        title_english: "Collaborating with Stakeholders and Enhancing Digital Literacy",
-        title_malay: "Bekerjasama dengan Pihak Berkepentingan dan Meningkatkan Literasi Digital",
+        title_english: "Fostering Multi-Stakeholder Collaboration and Enhancing Digital Literacy",
+        title_malay: "Mendorong Kolaborasi Multi-Pemangku Kepentingan dan Meningkatkan Literasi Digital", // Indonesian
         examples: [
-          { english: "Partnering with banks, telcos, and e-commerce platforms to implement security measures and educate customers.", malay: "Bekerjasama dengan bank, syarikat telekomunikasi, dan platform e-dagang untuk melaksanakan langkah keselamatan dan mendidik pelanggan." },
-          { english: "Incorporating digital literacy and scam awareness into school curricula and community programmes.", malay: "Memasukkan literasi digital dan kesedaran penipuan ke dalam kurikulum sekolah dan program komuniti." }
+          { english: "Partnerships with banks, financial institutions, telecommunication companies, and e-commerce platforms to implement stronger security measures (e.g., transaction limits, enhanced verification) and educate their customers.", malay: "Kemitraan dengan bank, lembaga keuangan, perusahaan telekomunikasi, dan platform e-commerce untuk menerapkan langkah-langkah keamanan yang lebih kuat (misalnya, batas transaksi, verifikasi yang ditingkatkan) dan mendidik pelanggan mereka." }, // Indonesian
+          { english: "Integrating digital literacy programmes, including online safety and scam awareness, into school curricula and community outreach efforts to equip citizens of all ages with the necessary skills.", malay: "Mengintegrasikan program literasi digital, termasuk keamanan online dan kesadaran penipuan, ke dalam kurikulum sekolah dan upaya penjangkauan komunitas untuk membekali warga dari segala usia dengan keterampilan yang diperlukan." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Cybercrime", malay: "Jenayah siber" },
-      { english: "digital literacy", malay: "literasi digital" },
-      { english: "stay vigilant", malay: "sentiasa berwaspada" }
+      { english: "Combating the evolving sophistication of online scams", malay: "Memerangi kecanggihan penipuan online yang terus berkembang" }, // Indonesian
+      { english: "Cultivating a vigilant and discerning online populace", malay: "Menumbuhkan populasi online yang waspada dan cerdas" }, // Indonesian
+      { english: "The 'ACT' framework: Add, Check, Tell", malay: "Kerangka 'ACT': Tambah, Periksa, Beri Tahu" }, // Indonesian
+      { english: "Protecting vulnerable groups from digital fraud", malay: "Melindungi kelompok rentan dari penipuan digital" } // Indonesian
     ]
   },
   {
     id: 'topic-human-resource-quality',
     type: 'topic-card',
-    title: "Improving the quality of human resources",
+    title: "Enhancing the Quality and Competitiveness of Singapore's Human Capital",
     main_points: [
       {
-        title_english: "Strengthening the Education System from Early Years to Higher Learning",
-        title_malay: "Memperkukuh Sistem Pendidikan dari Peringkat Awal hingga Pengajian Tinggi",
+        title_english: "Strengthening the Educational Foundation from Early Childhood to Tertiary Levels",
+        title_malay: "Memperkuat Fondasi Pendidikan dari Usia Dini hingga Tingkat Perguruan Tinggi", // Indonesian
         examples: [
-          { english: "Investing in quality preschool education to build strong foundations.", malay: "Melabur dalam pendidikan prasekolah berkualiti untuk membina asas yang kukuh." },
-          { english: "Diversified educational pathways (e.g., ITE, Polytechnics, Universities) catering to different talents and interests.", malay: "Laluan pendidikan yang pelbagai (cth: ITE, Politeknik, Universiti) yang memenuhi bakat dan minat berbeza." },
-          { english: "Emphasis on STEM (Science, Technology, Engineering, Mathematics) education to meet future economic needs.", malay: "Penekanan pada pendidikan STEM untuk memenuhi keperluan ekonomi masa depan." }
+          { english: "Significant investment in quality and accessible preschool education (e.g., through MOE Kindergartens and Anchor Operators) to provide a strong start for all children.", malay: "Investasi signifikan dalam pendidikan prasekolah yang berkualitas dan dapat diakses (misalnya, melalui MOE Kindergartens dan Anchor Operators) untuk memberikan awal yang kuat bagi semua anak." }, // Indonesian
+          { english: "Offering diversified educational pathways through Institutes of Technical Education (ITEs), Polytechnics, and Autonomous Universities, catering to varied talents and equipping students with industry-relevant skills.", malay: "Menawarkan jalur pendidikan yang beragam melalui Institutes of Technical Education (ITE), Politeknik, dan Universitas Otonom, yang melayani berbagai bakat dan membekali siswa dengan keterampilan yang relevan dengan industri." }, // Indonesian
+          { english: "Strong emphasis on STEM (Science, Technology, Engineering, and Mathematics) education and future-oriented skills like critical thinking and digital literacy to prepare students for a knowledge-based economy.", malay: "Penekanan kuat pada pendidikan STEM (Sains, Teknologi, Teknik, dan Matematika) dan keterampilan berorientasi masa depan seperti berpikir kritis dan literasi digital untuk mempersiapkan siswa menghadapi ekonomi berbasis pengetahuan." } // Indonesian
         ]
       },
       {
-        title_english: "Promoting Lifelong Learning and Continuous Skills Development",
-        title_malay: "Mempromosikan Pembelajaran Sepanjang Hayat dan Pembangunan Kemahiran Berterusan",
+        title_english: "Championing Lifelong Learning and Continuous Skills Development for Workforce Adaptability",
+        title_malay: "Mengedepankan Pembelajaran Seumur Hidup dan Pengembangan Keterampilan Berkelanjutan untuk Adaptabilitas Tenaga Kerja", // Indonesian
         examples: [
-          { english: "SkillsFuture movement providing credits and subsidies for Singaporeans to pursue upskilling and reskilling.", malay: "Gerakan SkillsFuture menyediakan kredit dan subsidi untuk rakyat Singapura mengikuti peningkatan kemahiran dan latihan semula." },
-          { english: "Industry Transformation Maps (ITMs) identifying future skills needs and supporting workforce training.", malay: "Peta Transformasi Industri (ITM) mengenal pasti keperluan kemahiran masa depan dan menyokong latihan tenaga kerja." }
+          { english: "The 'SkillsFuture' national movement provides Singaporeans with credits, subsidies, and resources to pursue continuous learning, upskilling, and reskilling throughout their careers.", malay: "Gerakan nasional 'SkillsFuture' memberi warga Singapura kredit, subsidi, dan sumber daya untuk mengejar pembelajaran berkelanjutan, peningkatan keterampilan, dan pelatihan ulang sepanjang karier mereka." }, // Indonesian
+          { english: "Industry Transformation Maps (ITMs) identify sectoral skills needs and drive initiatives for workforce training and job redesign to ensure skills remain relevant to evolving industry demands.", malay: "Peta Transformasi Industri (ITM) mengidentifikasi kebutuhan keterampilan sektoral dan mendorong inisiatif untuk pelatihan tenaga kerja dan desain ulang pekerjaan guna memastikan keterampilan tetap relevan dengan tuntutan industri yang berkembang." } // Indonesian
         ]
       },
       {
-        title_english: "Attracting and Retaining Global Talent alongside Local Talent Development",
-        title_malay: "Menarik dan Mengekalkan Bakat Global di Samping Pembangunan Bakat Tempatan",
+        title_english: "Attracting and Integrating Global Talent to Complement and Enhance the Local Workforce",
+        title_malay: "Menarik dan Mengintegrasikan Bakat Global untuk Melengkapi dan Meningkatkan Tenaga Kerja Lokal", // Indonesian
         examples: [
-          { english: "Schemes to attract highly skilled foreign professionals to complement the local workforce.", malay: "Skim untuk menarik profesional asing berkemahiran tinggi bagi melengkapkan tenaga kerja tempatan." },
-          { english: "Creating a conducive environment for innovation and research to nurture local talent.", malay: "Mewujudkan persekitaran yang kondusif untuk inovasi dan penyelidikan bagi memupuk bakat tempatan." }
+          { english: "Selective immigration policies aim to attract highly skilled foreign professionals with expertise in niche areas to fill critical talent gaps and contribute to innovation.", malay: "Kebijakan imigrasi selektif bertujuan untuk menarik para profesional asing berketerampilan tinggi dengan keahlian di bidang khusus untuk mengisi kesenjangan bakat kritis dan berkontribusi pada inovasi." }, // Indonesian
+          { english: "Efforts to foster an inclusive work environment and facilitate the integration of foreign talent to ensure effective knowledge transfer and collaboration with local counterparts.", malay: "Upaya untuk menumbuhkan lingkungan kerja yang inklusif dan memfasilitasi integrasi bakat asing untuk memastikan transfer pengetahuan yang efektif dan kolaborasi dengan rekan kerja lokal." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Knowledge-based economy", malay: "Ekonomi berasaskan pengetahuan" },
-      { english: "human capital", malay: "modal insan" },
-      { english: "global competitiveness", malay: "daya saing global" }
+      { english: "Developing a future-ready and resilient workforce", malay: "Mengembangkan tenaga kerja yang siap menghadapi masa depan dan tangguh" }, // Indonesian
+      { english: "Investing in human capital as a key national resource", malay: "Berinvestasi dalam sumber daya manusia sebagai sumber daya nasional utama" }, // Indonesian
+      { english: "The nexus of education, skills, and economic competitiveness", malay: "Hubungan antara pendidikan, keterampilan, dan daya saing ekonomi" }, // Indonesian
+      { english: "Fostering a culture of lifelong learning and adaptability", malay: "Menumbuhkan budaya belajar seumur hidup dan kemampuan beradaptasi" } // Indonesian
     ]
   },
   {
     id: 'topic-mental-health-safeguarding',
     type: 'topic-card',
-    title: "Safeguarding mental health",
+    title: "Strengthening Mental Health Support and Promoting Well-being in Society",
     main_points: [
       {
-        title_english: "Increasing Accessibility and Affordability of Mental Health Services",
-        title_malay: "Meningkatkan Kebolehcapaian dan Keterjangkauan Perkhidmatan Kesihatan Mental",
+        title_english: "Enhancing Accessibility, Affordability, and Quality of Mental Health Services",
+        title_malay: "Meningkatkan Aksesibilitas, Keterjangkauan, dan Kualitas Layanan Kesehatan Mental", // Indonesian
         examples: [
-          { english: "Expanding the number of psychiatrists, psychologists, and counsellors in public healthcare and community settings.", malay: "Menambah bilangan pakar psikiatri, ahli psikologi, dan kaunselor dalam penjagaan kesihatan awam dan persekitaran komuniti." },
-          { english: "Integrating mental health support into primary care (e.g., GPs).", malay: "Mengintegrasikan sokongan kesihatan mental ke dalam rawatan primer (cth: GP)." },
-          { english: "Providing subsidies and financial assistance for mental health treatment.", malay: "Menyediakan subsidi dan bantuan kewangan untuk rawatan kesihatan mental." }
+          { english: "Expanding the capacity of mental health services in public hospitals (e.g., Institute of Mental Health) and integrating mental healthcare into primary care settings (polyclinics, GPs) for earlier detection and intervention.", malay: "Memperluas kapasitas layanan kesehatan mental di rumah sakit umum (misalnya, Institute of Mental Health) dan mengintegrasikan perawatan kesehatan mental ke dalam layanan primer (poliklinik, dokter umum) untuk deteksi dan intervensi lebih dini." }, // Indonesian
+          { english: "Providing subsidies and financial assistance (e.g., through MediSave and MediShield Life) to make mental health treatment more affordable and reduce financial barriers to seeking help.", malay: "Memberikan subsidi dan bantuan keuangan (misalnya, melalui MediSave dan MediShield Life) untuk membuat pengobatan kesehatan mental lebih terjangkau dan mengurangi hambatan finansial untuk mencari bantuan." }, // Indonesian
+          { english: "Increasing the pool of trained mental health professionals, including psychiatrists, psychologists, counsellors, and allied health workers, to meet growing demands.", malay: "Meningkatkan jumlah profesional kesehatan mental terlatih, termasuk psikiater, psikolog, konselor, dan tenaga kesehatan terkait, untuk memenuhi permintaan yang terus meningkat." } // Indonesian
         ]
       },
       {
-        title_english: "Reducing Stigma and Promoting Mental Wellness Awareness",
-        title_malay: "Mengurangkan Stigma dan Mempromosikan Kesedaran Kesejahteraan Mental",
+        title_english: "Combating Stigma and Fostering a Supportive Environment through Public Education",
+        title_malay: "Memerangi Stigma dan Menumbuhkan Lingkungan yang Mendukung melalui Pendidikan Publik", // Indonesian
         examples: [
-          { english: "National campaigns like \"Beyond the Label\" to encourage open conversations about mental health.", malay: "Kempen kebangsaan seperti \"Beyond the Label\" untuk menggalakkan perbualan terbuka mengenai kesihatan mental." },
-          { english: "Promoting mental wellness programmes in schools and workplaces.", malay: "Mempromosikan program kesejahteraan mental di sekolah dan tempat kerja." }
+          { english: "National anti-stigma campaigns like 'Beyond the Label' encourage open conversations about mental health, normalise help-seeking behaviours, and challenge misconceptions.", malay: "Kampanye anti-stigma nasional seperti 'Beyond the Label' mendorong percakapan terbuka tentang kesehatan mental, menormalkan perilaku mencari bantuan, dan menantang kesalahpahaman." }, // Indonesian
+          { english: "Promoting mental wellness programmes and resources in schools (e.g., school counsellors, peer support programmes) and workplaces (e.g., Employee Assistance Programmes) to build resilience and provide early support.", malay: "Mempromosikan program dan sumber daya kesejahteraan mental di sekolah (misalnya, konselor sekolah, program dukungan sebaya) dan tempat kerja (misalnya, Employee Assistance Programmes) untuk membangun ketahanan dan memberikan dukungan dini." } // Indonesian
         ]
       },
       {
-        title_english: "Strengthening Community Support Systems and Peer Support",
-        title_malay: "Memperkukuh Sistem Sokongan Komuniti dan Sokongan Rakan Sebaya",
+        title_english: "Strengthening Community-Based Support Systems and Empowering Individuals",
+        title_malay: "Memperkuat Sistem Dukungan Berbasis Komunitas dan Memberdayakan Individu", // Indonesian
         examples: [
-          { english: "Establishing community mental health teams and support groups.", malay: "Mewujudkan pasukan kesihatan mental komuniti dan kumpulan sokongan." },
-          { english: "Training peer support specialists who have lived experience with mental health conditions.", malay: "Melatih pakar sokongan rakan sebaya yang mempunyai pengalaman hidup dengan keadaan kesihatan mental." }
+          { english: "Establishing community mental health teams and intervention networks (e.g., CREST, COMIT) to provide accessible support and follow-up care within the community.", malay: "Membentuk tim kesehatan mental komunitas dan jaringan intervensi (misalnya, CREST, COMIT) untuk menyediakan dukungan yang dapat diakses dan perawatan tindak lanjut dalam komunitas." }, // Indonesian
+          { english: "Training and deploying peer support specialists who leverage their lived experiences to support others on their recovery journeys, fostering hope and reducing isolation.", malay: "Melatih dan menempatkan spesialis dukungan sebaya yang memanfaatkan pengalaman hidup mereka untuk mendukung orang lain dalam perjalanan pemulihan mereka, menumbuhkan harapan dan mengurangi isolasi." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Mental well-being", malay: "Kesejahteraan mental" },
-      { english: "emotional support", malay: "sokongan emosi" },
-      { english: "caring society", malay: "masyarakat penyayang" }
+      { english: "Mental health as an integral part of overall well-being", malay: "Kesehatan mental sebagai bagian integral dari kesejahteraan menyeluruh" }, // Indonesian
+      { english: "De-stigmatising mental illness and promoting help-seeking", malay: "Menghilangkan stigma penyakit mental dan mempromosikan pencarian bantuan" }, // Indonesian
+      { english: "Building a compassionate and inclusive society for mental wellness", malay: "Membangun masyarakat yang penuh kasih dan inklusif untuk kesejahteraan mental" }, // Indonesian
+      { english: "The whole-of-society approach to mental healthcare", malay: "Pendekatan seluruh masyarakat terhadap perawatan kesehatan mental" } // Indonesian
     ]
   },
   {
     id: 'topic-modern-technology-development',
     type: 'topic-card',
-    title: "Utilisation of modern technology for Singapore's development",
+    title: "Leveraging Modern Technology for Singapore's National Development and Transformation",
     main_points: [
       {
-        title_english: "Driving the Smart Nation Initiative for Public Service Delivery and Urban Living",
-        title_malay: "Memacu Inisiatif Negara Pintar untuk Penyampaian Perkhidmatan Awam dan Kehidupan Bandar",
+        title_english: "Driving the 'Smart Nation' Initiative to Enhance Public Services and Urban Liveability",
+        title_malay: "Mendorong Inisiatif 'Smart Nation' untuk Meningkatkan Layanan Publik dan Kelayakan Huni Perkotaan", // Indonesian
         examples: [
-          { english: "Digitalisation of government services (e.g., SingPass for secure online transactions, MyInfo for pre-filled forms).", malay: "Pendigitalan perkhidmatan kerajaan (cth: SingPass untuk transaksi dalam talian yang selamat, MyInfo untuk borang pra-isi)." },
-          { english: "Implementing smart urban solutions for transport (e.g., intelligent traffic management) and utilities.", malay: "Melaksanakan penyelesaian bandar pintar untuk pengangkutan (cth: pengurusan trafik pintar) dan utiliti." }
+          { english: "Digitalisation of government services through platforms like 'SingPass' (digital identity) and 'MyInfo' (data platform) streamlines citizen transactions and improves service delivery efficiency.", malay: "Digitalisasi layanan pemerintah melalui platform seperti 'SingPass' (identitas digital) dan 'MyInfo' (platform data) menyederhanakan transaksi warga dan meningkatkan efisiensi pemberian layanan." }, // Indonesian
+          { english: "Implementation of smart urban solutions in transport (e.g., intelligent transport systems, autonomous vehicle trials), housing (e.g., smart HDB homes), and utilities management to optimize resource use and enhance quality of life.", malay: "Implementasi solusi perkotaan cerdas dalam transportasi (misalnya, sistem transportasi cerdas, uji coba kendaraan otonom), perumahan (misalnya, rumah HDB pintar), dan manajemen utilitas untuk mengoptimalkan penggunaan sumber daya dan meningkatkan kualitas hidup." } // Indonesian
         ]
       },
       {
-        title_english: "Adopting Advanced Technologies in Industries for Productivity and Innovation",
-        title_malay: "Mengguna Pakai Teknologi Canggih dalam Industri untuk Produktiviti dan Inovasi",
+        title_english: "Fostering Innovation and Productivity through Technology Adoption in Key Industries",
+        title_malay: "Mendorong Inovasi dan Produktivitas melalui Adopsi Teknologi di Industri Utama", // Indonesian
         examples: [
-          { english: "Promoting automation and robotics in manufacturing and logistics.", malay: "Mempromosikan automasi dan robotik dalam pembuatan dan logistik." },
-          { english: "Leveraging big data analytics for business insights, urban planning, and public health.", malay: "Memanfaatkan analitik data raya untuk pandangan perniagaan, perancangan bandar, dan kesihatan awam." }
+          { english: "Promoting the adoption of automation, robotics, and Internet of Things (IoT) in sectors like manufacturing (e.g., Advanced Manufacturing), logistics, and healthcare to boost productivity and create higher-value jobs.", malay: "Mempromosikan adopsi otomatisasi, robotika, dan Internet of Things (IoT) di sektor-sektor seperti manufaktur (misalnya, Advanced Manufacturing), logistik, dan perawatan kesehatan untuk meningkatkan produktivitas dan menciptakan pekerjaan bernilai lebih tinggi." }, // Indonesian
+          { english: "Utilising big data analytics and artificial intelligence (AI) to derive insights for business strategy, improve operational efficiency, and develop new products and services across various industries.", malay: "Memanfaatkan analitik data besar dan kecerdasan buatan (AI) untuk mendapatkan wawasan bagi strategi bisnis, meningkatkan efisiensi operasional, dan mengembangkan produk serta layanan baru di berbagai industri." } // Indonesian
         ]
       },
       {
-        title_english: "Fostering a Tech-Savvy Population and Ecosystem",
-        title_malay: "Memupuk Populasi dan Ekosistem Celik Teknologi",
+        title_english: "Building a Digitally Inclusive Society and a Vibrant Tech Ecosystem",
+        title_malay: "Membangun Masyarakat Inklusif Digital dan Ekosistem Teknologi yang Dinamis", // Indonesian
         examples: [
-          { english: "Investing in digital literacy programmes for all ages.", malay: "Melabur dalam program literasi digital untuk semua peringkat umur." },
-          { english: "Supporting tech startups and innovation hubs (e.g., JTC LaunchPad).", malay: "Menyokong syarikat pemula teknologi dan hab inovasi (cth: JTC LaunchPad)." }
+          { english: "National digital literacy programmes like 'Seniors Go Digital' and 'Digital for Life' aim to equip citizens of all ages and backgrounds with essential digital skills, ensuring no one is left behind in the digital transformation.", malay: "Program literasi digital nasional seperti 'Seniors Go Digital' dan 'Digital for Life' bertujuan untuk membekali warga dari segala usia dan latar belakang dengan keterampilan digital penting, memastikan tidak ada yang tertinggal dalam transformasi digital." }, // Indonesian
+          { english: "Cultivating a supportive ecosystem for tech startups and innovation through grants, incubation programmes (e.g., JTC LaunchPad), and fostering collaboration between industry, academia, and research institutes.", malay: "Menumbuhkan ekosistem yang mendukung untuk perusahaan rintisan teknologi dan inovasi melalui hibah, program inkubasi (misalnya, JTC LaunchPad), dan mendorong kolaborasi antara industri, akademisi, dan lembaga penelitian." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Digital transformation", malay: "Transformasi digital" },
-      { english: "innovation", malay: "inovasi" },
-      { english: "productivity", malay: "produktiviti" },
-      { english: "enhanced quality of life", malay: "peningkatan kualiti hidup" }
+      { english: "Spearheading digital transformation for national progress", malay: "Memelopori transformasi digital untuk kemajuan nasional" }, // Indonesian
+      { english: "Technology as an enabler of economic growth and social good", malay: "Teknologi sebagai pendukung pertumbuhan ekonomi dan kebaikan sosial" }, // Indonesian
+      { english: "Building a future-ready 'Smart Nation'", malay: "Membangun 'Smart Nation' yang siap menghadapi masa depan" }, // Indonesian
+      { english: "Ensuring digital inclusivity and empowering citizens", malay: "Memastikan inklusivitas digital dan memberdayakan warga" } // Indonesian
     ]
   },
   {
     id: 'topic-ai-utilization',
     type: 'topic-card',
-    title: "The use of Artificial Intelligence (AI)",
+    title: "Harnessing Artificial Intelligence (AI) for Economic Growth and Societal Advancement",
     main_points: [
       {
-        title_english: "Implementing a National AI Strategy for Economic and Social Benefit",
-        title_malay: "Melaksanakan Strategi AI Kebangsaan untuk Manfaat Ekonomi dan Sosial",
+        title_english: "Driving National AI Strategy for Innovation and Competitive Advantage",
+        title_malay: "Mendorong Strategi AI Nasional untuk Inovasi dan Keunggulan Kompetitif", // Indonesian
         examples: [
-          { english: "AI Singapore (AISG) initiative to build AI capabilities, research, and adoption.", malay: "Inisiatif AI Singapura (AISG) untuk membina keupayaan AI, penyelidikan, dan penggunaan." },
-          { english: "Focusing AI application in key sectors like healthcare (e.g., medical imaging analysis), finance (e.g., fraud detection), and transport (e.g., autonomous vehicles).", malay: "Memfokuskan aplikasi AI dalam sektor utama seperti penjagaan kesihatan (cth: analisis pengimejan perubatan), kewangan (cth: pengesanan penipuan), dan pengangkutan (cth: kenderaan autonomi)." }
+          { english: "The 'National AI Strategy' focuses on developing and deploying AI solutions in key sectors such as healthcare (e.g., AI for diagnostics), finance (e.g., AI for fraud detection), and smart cities (e.g., AI for urban planning).", malay: "'National AI Strategy' berfokus pada pengembangan dan penerapan solusi AI di sektor-sektor utama seperti perawatan kesehatan (misalnya, AI untuk diagnostik), keuangan (misalnya, AI untuk deteksi penipuan), dan kota pintar (misalnya, AI untuk perencanaan kota)." }, // Indonesian
+          { english: "Initiatives like 'AI Singapore (AISG)' aim to build deep AI capabilities, foster a vibrant AI research community, and accelerate AI adoption across industries through flagship programmes and talent development.", malay: "Inisiatif seperti 'AI Singapore (AISG)' bertujuan untuk membangun kemampuan AI yang mendalam, menumbuhkan komunitas penelitian AI yang dinamis, dan mempercepat adopsi AI di berbagai industri melalui program unggulan dan pengembangan bakat." } // Indonesian
         ]
       },
       {
-        title_english: "Integrating AI into Public Services and Governance",
-        title_malay: "Mengintegrasikan AI ke dalam Perkhidmatan Awam dan Tadbir Urus",
+        title_english: "Integrating AI to Enhance Efficiency and Effectiveness in Public Services",
+        title_malay: "Mengintegrasikan AI untuk Meningkatkan Efisiensi dan Efektivitas dalam Layanan Publik", // Indonesian
         examples: [
-          { english: "Using AI-powered chatbots for citizen enquiries and service delivery.", malay: "Menggunakan chatbot berkuasa AI untuk pertanyaan rakyat dan penyampaian perkhidmatan." },
-          { english: "Employing AI for data analytics to inform policy-making and resource allocation.", malay: "Menggunakan AI untuk analitik data bagi memaklumkan pembuatan dasar dan peruntukan sumber." }
+          { english: "Deployment of AI-powered chatbots and virtual assistants to handle citizen enquiries, provide information, and streamline access to government services, improving user experience.", malay: "Penerapan chatbot dan asisten virtual bertenaga AI untuk menangani pertanyaan warga, memberikan informasi, dan menyederhanakan akses ke layanan pemerintah, meningkatkan pengalaman pengguna." }, // Indonesian
+          { english: "Utilisation of AI and machine learning for data analytics in public policy formulation, resource allocation, and predictive modelling for areas like traffic management and disease outbreak prevention.", malay: "Pemanfaatan AI dan pembelajaran mesin untuk analitik data dalam perumusan kebijakan publik, alokasi sumber daya, dan pemodelan prediktif untuk area seperti manajemen lalu lintas dan pencegahan wabah penyakit." } // Indonesian
         ]
       },
       {
-        title_english: "Addressing Ethical Considerations and Fostering Trust in AI",
-        title_malay: "Menangani Pertimbangan Etika dan Memupuk Kepercayaan terhadap AI",
+        title_english: "Championing Responsible AI Development and Ethical Governance",
+        title_malay: "Mengedepankan Pengembangan AI yang Bertanggung Jawab dan Tata Kelola Etis", // Indonesian
         examples: [
-          { english: "Developing AI governance frameworks and ethical guidelines (e.g., Model AI Governance Framework).", malay: "Membangunkan rangka kerja tadbir urus AI dan garis panduan etika (cth: Rangka Kerja Tadbir Urus AI Model)." },
-          { english: "Promoting research into explainable AI (XAI) to ensure transparency and accountability.", malay: "Mempromosikan penyelidikan ke dalam AI yang boleh dijelaskan (XAI) untuk memastikan ketelusan dan akauntabiliti." }
+          { english: "Development of frameworks like Singapore's 'Model AI Governance Framework' to provide guidance on ethical principles, accountability, and transparency in AI deployment, fostering public trust.", malay: "Pengembangan kerangka kerja seperti 'Model AI Governance Framework' Singapura untuk memberikan panduan tentang prinsip-prinsip etika, akuntabilitas, dan transparansi dalam penerapan AI, menumbuhkan kepercayaan publik." }, // Indonesian
+          { english: "Promoting research into areas like explainable AI (XAI) and AI safety to ensure that AI systems are fair, robust, and aligned with human values.", malay: "Mempromosikan penelitian di bidang-bidang seperti AI yang dapat dijelaskan (XAI) dan keamanan AI untuk memastikan bahwa sistem AI adil, kuat, dan selaras dengan nilai-nilai kemanusiaan." }, // Indonesian
+          { english: "Engaging in international dialogues on AI ethics and governance to contribute to global standards and best practices for responsible AI.", malay: "Terlibat dalam dialog internasional tentang etika dan tata kelola AI untuk berkontribusi pada standar global dan praktik terbaik untuk AI yang bertanggung jawab." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Industry 4.0", malay: "Revolusi Industri 4.0" },
-      { english: "disruptive innovation", malay: "inovasi disruptif" },
-      { english: "intelligent automation", malay: "automasi pintar" }
+      { english: "AI as a transformative general-purpose technology", malay: "AI sebagai teknologi serba guna yang transformatif" }, // Indonesian
+      { english: "Balancing AI innovation with ethical considerations", malay: "Menyeimbangkan inovasi AI dengan pertimbangan etis" }, // Indonesian
+      { english: "Building a trusted AI ecosystem", malay: "Membangun ekosistem AI yang tepercaya" }, // Indonesian
+      { english: "The future of work and society in an AI-driven era", malay: "Masa depan pekerjaan dan masyarakat di era yang didorong AI" } // Indonesian
     ]
   },
   {
     id: 'topic-world-peace-role',
     type: 'topic-card',
-    title: "Singapore's role and challenges in world peace",
+    title: "Singapore's Role and Challenges in Contributing to Global Peace and Security",
     main_points: [
       {
-        title_english: "Role as a Proponent of International Law and Multilateralism",
-        title_malay: "Peranan sebagai Penyokong Undang-undang Antarabangsa dan Multilateralisme",
+        title_english: "Championing International Law, Multilateralism, and a Rules-Based Global Order",
+        title_malay: "Mengedepankan Hukum Internasional, Multilateralisme, dan Tatanan Global Berbasis Aturan", // Indonesian
         examples: [
-          { english: "Actively participating in international organisations like the UN, WTO, and advocating for a rules-based global order.", malay: "Menyertai secara aktif dalam pertubuhan antarabangsa seperti PBB, WTO, dan menyokong perintah global berasaskan peraturan." },
-          { english: "Hosting international summits and dialogues (e.g., Shangri-La Dialogue) to facilitate discussions on security issues.", malay: "Menganjurkan sidang kemuncak dan dialog antarabangsa (cth: Dialog Shangri-La) untuk memudahkan perbincangan mengenai isu keselamatan." }
+          { english: "Active participation and advocacy in international organisations such as the United Nations (UN), World Trade Organization (WTO), and regional forums like ASEAN, promoting adherence to international norms and cooperative solutions.", malay: "Partisipasi aktif dan advokasi dalam organisasi internasional seperti Perserikatan Bangsa-Bangsa (PBB), Organisasi Perdagangan Dunia (WTO), dan forum regional seperti ASEAN, mempromosikan kepatuhan terhadap norma internasional dan solusi kooperatif." }, // Indonesian
+          { english: "Consistently upholding the principles of sovereignty, territorial integrity, and peaceful dispute resolution in international relations.", malay: "Secara konsisten menjunjung tinggi prinsip-prinsip kedaulatan, integritas teritorial, dan penyelesaian sengketa secara damai dalam hubungan internasional." } // Indonesian
         ]
       },
       {
-        title_english: "Role as a Mediator and Facilitator in Regional Affairs",
-        title_malay: "Peranan sebagai Pengantara dan Pemudah Cara dalam Hal Ehwal Serantau",
+        title_english: "Acting as an Honest Broker and Facilitator for Dialogue and Cooperation",
+        title_malay: "Bertindak sebagai Perantara yang Jujur dan Fasilitator untuk Dialog dan Kerja Sama", // Indonesian
         examples: [
-          { english: "Playing a constructive role within ASEAN to promote regional peace, stability, and economic integration.", malay: "Memainkan peranan konstruktif dalam ASEAN untuk mempromosikan keamanan, kestabilan, dan integrasi ekonomi serantau." },
-          { english: "Offering to host or facilitate talks between disputing parties (e.g., past U.S.-North Korea summit).", malay: "Menawarkan untuk menganjurkan atau memudahkan rundingan antara pihak yang bertelagah (cth: sidang kemuncak A.S.-Korea Utara yang lalu)." }
+          { english: "Leveraging its neutrality and good relations with various countries to host significant international meetings and dialogues, such as the Shangri-La Dialogue, which fosters security discussions in the Asia-Pacific.", malay: "Memanfaatkan netralitas dan hubungan baiknya dengan berbagai negara untuk menjadi tuan rumah pertemuan dan dialog internasional yang signifikan, seperti Shangri-La Dialogue, yang mendorong diskusi keamanan di Asia-Pasifik." }, // Indonesian
+          { english: "Offering its good offices to facilitate talks or mediate in regional disputes when requested, contributing to de-escalation and peaceful outcomes (e.g., hosting the 2018 U.S.-North Korea Summit).", malay: "Menawarkan jasa baiknya untuk memfasilitasi pembicaraan atau menengahi sengketa regional jika diminta, berkontribusi pada de-eskalasi dan hasil yang damai (misalnya, menjadi tuan rumah KTT AS-Korea Utara 2018)." } // Indonesian
         ]
       },
       {
-        title_english: "Challenges Faced in Contributing to World Peace",
-        title_malay: "Cabaran yang Dihadapi dalam Menyumbang kepada Keamanan Dunia",
+        title_english: "Navigating Geopolitical Complexities and Addressing Transnational Threats",
+        title_malay: "Menavigasi Kompleksitas Geopolitik dan Mengatasi Ancaman Transnasional", // Indonesian
         examples: [
-          { english: "Navigating geopolitical tensions between major powers while maintaining neutrality.", malay: "Mengemudi ketegangan geopolitik antara kuasa besar sambil mengekalkan sikap berkecuali." },
-          { english: "Addressing transnational threats like terrorism, piracy, and cyber warfare that impact global stability.", malay: "Menangani ancaman rentas sempadan seperti keganasan, pelanunan, dan peperangan siber yang memberi kesan kepada kestabilan global." },
-          { english: "Limited resources and influence as a small state in a complex international landscape.", malay: "Sumber dan pengaruh yang terhad sebagai negara kecil dalam landskap antarabangsa yang kompleks." }
+          { english: "Maintaining a principled and pragmatic foreign policy amidst rising geopolitical competition, balancing relationships with major powers while safeguarding national interests.", malay: "Mempertahankan kebijakan luar negeri yang berprinsip dan pragmatis di tengah meningkatnya persaingan geopolitik, menyeimbangkan hubungan dengan negara-negara besar sambil menjaga kepentingan nasional." }, // Indonesian
+          { english: "Contributing to international efforts against transnational threats such as terrorism, piracy, and cyber warfare through intelligence sharing, capacity building, and participation in multinational operations.", malay: "Berkontribusi pada upaya internasional melawan ancaman transnasional seperti terorisme, pembajakan, dan perang siber melalui berbagi intelijen, peningkatan kapasitas, dan partisipasi dalam operasi multinasional." }, // Indonesian
+          { english: "As a small state, Singapore faces inherent limitations in resources and influence, necessitating astute diplomacy and strategic partnerships to amplify its voice on the global stage.", malay: "Sebagai negara kecil, Singapura menghadapi keterbatasan sumber daya dan pengaruh yang melekat, yang memerlukan diplomasi yang cerdik dan kemitraan strategis untuk memperkuat suaranya di panggung global." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Diplomacy", malay: "Diplomasi" },
-      { english: "multilateralism", malay: "multilateralisme" },
-      { english: "regional security", malay: "keselamatan serantau" },
-      { english: "rules-based order", malay: "perintah berasaskan peraturan" }
+      { english: "Upholding a principled and pragmatic foreign policy", malay: "Menjunjung tinggi kebijakan luar negeri yang berprinsip dan pragmatis" }, // Indonesian
+      { english: "The role of small states in international affairs", malay: "Peran negara kecil dalam urusan internasional" }, // Indonesian
+      { english: "Navigating a complex and multipolar world order", malay: "Menavigasi tatanan dunia yang kompleks dan multipolar" }, // Indonesian
+      { english: "Contributing to regional stability and global governance", malay: "Berkontribusi pada stabilitas regional dan tata kelola global" } // Indonesian
     ]
   },
   {
     id: 'topic-climate-change-strategies',
     type: 'topic-card',
-    title: "Singapore's strategies to tackle climate change",
+    title: "Singapore's Multi-Pronged Strategies to Address Climate Change and Build Resilience",
     main_points: [
       {
-        title_english: "Mitigation Efforts to Reduce Carbon Emissions",
-        title_malay: "Usaha Mitigasi untuk Mengurangkan Pelepasan Karbon",
+        title_english: "Implementing Robust Mitigation Measures to Reduce National Carbon Emissions",
+        title_malay: "Menerapkan Tindakan Mitigasi yang Kuat untuk Mengurangi Emisi Karbon Nasional", // Indonesian
         examples: [
-          { english: "Implementing a carbon tax to incentivise industries to reduce emissions.", malay: "Melaksanakan cukai karbon untuk memberi insentif kepada industri bagi mengurangkan pelepasan." },
-          { english: "Transitioning to cleaner energy sources, primarily by increasing solar power capacity and exploring low-carbon hydrogen.", malay: "Beralih kepada sumber tenaga yang lebih bersih, terutamanya dengan meningkatkan kapasiti tenaga solar dan meneroka hidrogen rendah karbon." },
-          { english: "Promoting energy efficiency in buildings (Green Mark Scheme) and transport (encouraging EVs).", malay: "Mempromosikan kecekapan tenaga dalam bangunan (Skim Green Mark) dan pengangkutan (menggalakkan EV)." }
+          { english: "Introduction of a carbon tax, progressively increased, to incentivise industries to decarbonise their operations and invest in energy efficiency and lower-carbon technologies.", malay: "Pengenalan pajak karbon, yang ditingkatkan secara progresif, untuk memberi insentif kepada industri agar mendekarbontasi operasi mereka dan berinvestasi dalam efisiensi energi serta teknologi rendah karbon." }, // Indonesian
+          { english: "Accelerating the transition to cleaner energy sources by maximising solar energy deployment (e.g., 'SolarNova' programme, floating solar farms) and exploring low-carbon alternatives like hydrogen and regional power grids.", malay: "Mempercepat transisi ke sumber energi yang lebih bersih dengan memaksimalkan penerapan energi surya (misalnya, program 'SolarNova', ladang surya terapung) dan menjajaki alternatif rendah karbon seperti hidrogen dan jaringan listrik regional." }, // Indonesian
+          { english: "Promoting energy efficiency across sectors, including green building standards ('Green Mark Scheme'), industrial energy efficiency programmes, and encouraging adoption of electric vehicles (EVs).", malay: "Mempromosikan efisiensi energi di berbagai sektor, termasuk standar bangunan hijau ('Green Mark Scheme'), program efisiensi energi industri, dan mendorong adopsi kendaraan listrik (EV)." } // Indonesian
         ]
       },
       {
-        title_english: "Adaptation Measures to Build Climate Resilience",
-        title_malay: "Langkah Adaptasi untuk Membina Daya Tahan Iklim",
+        title_english: "Strengthening Adaptation Strategies to Enhance Climate Resilience and Protect Vulnerable Areas",
+        title_malay: "Memperkuat Strategi Adaptasi untuk Meningkatkan Ketahanan Iklim dan Melindungi Area Rentan", // Indonesian
         examples: [
-          { english: "Coastal protection measures like building sea walls and raising land levels to guard against rising sea levels.", malay: "Langkah perlindungan pantai seperti membina tembok laut dan menaikkan paras tanah untuk melindungi daripada kenaikan aras laut." },
-          { english: "Enhancing water security through the \"Four National Taps\" strategy (local catchment, imported water, NEWater, desalinated water).", malay: "Meningkatkan keselamatan air melalui strategi \"Empat Paip Nasional\" (tadahan tempatan, air import, NEWater, air nyahmasin)." },
-          { english: "Reducing urban heat island effect through increased greenery and cool paint technologies.", malay: "Mengurangkan kesan pulau haba bandar melalui peningkatan kehijauan dan teknologi cat sejuk." }
+          { english: "Investing significantly in coastal protection measures, such as building sea walls, raising land levels, and developing nature-based solutions (e.g., mangrove restoration), to guard against rising sea levels and storm surges.", malay: "Berinvestasi secara signifikan dalam tindakan perlindungan pantai, seperti membangun tembok laut, menaikkan permukaan tanah, dan mengembangkan solusi berbasis alam (misalnya, restorasi bakau), untuk melindungi dari kenaikan permukaan laut dan gelombang badai." }, // Indonesian
+          { english: "Enhancing water security and resilience through the 'Four National Taps' strategy (local catchment, imported water, NEWater, desalinated water), diversifying water sources to mitigate climate-induced water stress.", malay: "Meningkatkan keamanan dan ketahanan air melalui strategi 'Empat Kran Nasional' (tadahan lokal, air impor, NEWater, air desalinasi), mendiversifikasi sumber air untuk mengurangi tekanan air akibat iklim." }, // Indonesian
+          { english: "Implementing measures to mitigate the urban heat island effect, such as increasing green cover ('City in Nature' vision), promoting cool building materials, and designing for better air circulation in urban planning.", malay: "Menerapkan langkah-langkah untuk mengurangi efek pulau panas perkotaan, seperti meningkatkan tutupan hijau (visi 'Kota dalam Alam'), mempromosikan bahan bangunan sejuk, dan merancang untuk sirkulasi udara yang lebih baik dalam perencanaan kota." } // Indonesian
         ]
       },
       {
-        title_english: "National Framework and International Cooperation",
-        title_malay: "Rangka Kerja Kebangsaan dan Kerjasama Antarabangsa",
+        title_english: "Fostering a Whole-of-Nation Approach through Policy Frameworks and International Cooperation",
+        title_malay: "Mendorong Pendekatan Seluruh Bangsa melalui Kerangka Kebijakan dan Kerja Sama Internasional", // Indonesian
         examples: [
-          { english: "The Singapore Green Plan 2030 as a whole-of-nation movement outlining targets and initiatives.", malay: "Pelan Hijau Singapura 2030 sebagai gerakan seluruh negara yang menggariskan sasaran dan inisiatif." },
-          { english: "Participating in international climate agreements (e.g., Paris Agreement) and collaborating on green finance and technology.", malay: "Menyertai perjanjian iklim antarabangsa (cth: Perjanjian Paris) dan bekerjasama dalam kewangan dan teknologi hijau." }
+          { english: "The 'Singapore Green Plan 2030' serves as a national roadmap, outlining ambitious targets and concrete initiatives across various domains to drive sustainable development and climate action.", malay: "'Singapore Green Plan 2030' berfungsi sebagai peta jalan nasional, menguraikan target ambisius dan inisiatif konkret di berbagai domain untuk mendorong pembangunan berkelanjutan dan aksi iklim." }, // Indonesian
+          { english: "Active participation in international climate negotiations (e.g., under the UNFCCC and Paris Agreement), contributing to global climate goals and collaborating on green finance, technology transfer, and carbon markets.", malay: "Partisipasi aktif dalam negosiasi iklim internasional (misalnya, di bawah UNFCCC dan Perjanjian Paris), berkontribusi pada tujuan iklim global dan berkolaborasi dalam keuangan hijau, transfer teknologi, dan pasar karbon." } // Indonesian
         ]
       }
     ],
     key_phrases: [
-      { english: "Sustainable development", malay: "Pembangunan mampan" },
-      { english: "climate resilience", malay: "daya tahan iklim" },
-      { english: "decarbonisation", malay: "penyahkarbonan" },
-      { english: "collective action", malay: "tindakan kolektif" }
+      { english: "Balancing economic development with environmental sustainability", malay: "Menyeimbangkan pembangunan ekonomi dengan keberlanjutan lingkungan" }, // Indonesian
+      { english: "Building a climate-resilient and future-ready nation", malay: "Membangun negara yang tangguh terhadap iklim dan siap menghadapi masa depan" }, // Indonesian
+      { english: "The imperative of decarbonisation and green transition", malay: "Keharusan dekarbonisasi dan transisi hijau" }, // Indonesian
+      { english: "Collective action and global solidarity for climate change", malay: "Aksi kolektif dan solidaritas global untuk perubahan iklim" } // Indonesian
     ]
   }
 ];
