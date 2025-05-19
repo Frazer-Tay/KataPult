@@ -51,6 +51,15 @@ const HomePage = () => {
           </div>
         </Link>
 
+        {/* NEW LINK FOR SURAT RESMI */}
+        <Link to="/surat-resmi" className={`${styles.buttonCard} ${styles.suratButton}`} role="button"> {/* Use a new class like .suratButton */}
+          <span className={styles.buttonIcon}>✉️</span> {/* Example icon */}
+          <div className={styles.buttonTextContainer}>
+            <span className={styles.buttonText}>Surat Resmi (Formal Letters)</span>
+            <span className={styles.buttonSubtext}>Pelajari struktur & panduan menulis surat resmi.</span>
+          </div>
+        </Link>
+
         <div className={`${styles.sectionTitle} ${styles.testModeTitle}`}>Mode Tes</div>
         <Link to="/test-setup" className={`${styles.buttonCard} ${styles.testButton}`} role="button">
           <span className={styles.buttonIcon}>⏱️</span>

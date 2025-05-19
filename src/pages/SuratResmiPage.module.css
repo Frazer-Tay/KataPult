@@ -1,0 +1,239 @@
+/* src/pages/SuratResmiPage.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the left for better readability */
+  padding: 20px 15px 40px 15px;
+  max-width: 900px; /* Good width for reading long text */
+  margin: 20px auto;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+  line-height: 1.7; /* Improve readability */
+  text-align: left; /* Default text alignment for content */
+  color: var(--text-dark);
+}
+.container:focus {
+  outline: none;
+}
+
+.mainTitle {
+  font-size: 1.8rem; /* Mobile first */
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.intro {
+  font-size: 1rem; /* Mobile first */
+  color: var(--text-medium);
+  margin-bottom: 25px;
+  text-align: left; /* Or center if preferred */
+  width: 100%;
+}
+
+.toc {
+  background-color: var(--background-medium);
+  padding: 15px 20px;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
+}
+.toc h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+.toc ul {
+  list-style: decimal; /* Using decimal for TOC items */
+  padding-left: 25px;
+  margin: 0;
+}
+.toc li {
+  margin-bottom: 6px;
+}
+.toc a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.toc a:hover {
+  text-decoration: underline;
+  color: var(--primary-dark);
+}
+
+
+.section {
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 1.5rem; /* Mobile first */
+  color: var(--primary-dark);
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.subSectionTitle {
+  font-size: 1.2rem; /* Mobile first */
+  color: var(--secondary-color);
+  margin-top: 25px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.subSubSectionTitle { /* For h4 if used */
+  font-size: 1.1rem; /* Mobile first */
+  color: var(--primary-color);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.section p { /* General paragraph styling within sections */
+  margin-bottom: 15px;
+}
+.section p strong { /* Styling for <strong> tags */
+    font-weight: 700;
+    color: var(--primary-dark); /* Or choose another emphasis color */
+}
+.section p em { /* Styling for <em> tags */
+    font-style: italic;
+    color: var(--text-medium);
+}
+
+
+.section ul {
+  list-style: disc;
+  padding-left: 25px;
+  margin-bottom: 15px;
+}
+.section ul li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+/* Ensure strong/em within list items are also styled if not covered by .section p */
+.section ul li strong {
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+.section ul li em {
+    font-style: italic;
+    color: var(--text-medium);
+}
+
+.example {
+  font-style: italic;
+  color: #444; /* Darker grey for example text */
+  background-color: #f9f9f9; /* Very light grey background */
+  padding: 10px 15px;
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid var(--accent-color);
+  margin-bottom: 12px;
+  display: block; /* Ensure it takes its own line */
+  line-height: 1.5;
+}
+
+.important {
+  color: var(--error-dark);
+  font-weight: bold;
+  background-color: var(--error-light);
+  padding: 12px 15px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--error-color);
+  margin: 15px 0;
+}
+
+.codeBlock {
+  background-color: #2d2d2d; /* Darker background for code blocks */
+  color: #f0f0f0; /* Light text for contrast */
+  padding: 15px 20px;
+  border-radius: var(--border-radius-md);
+  overflow-x: auto; /* Allow horizontal scrolling for long lines */
+  font-family: 'Consolas', 'Menlo', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap; /* Wrap long lines but preserve formatting */
+  border: 1px solid #444;
+  margin: 15px 0;
+}
+
+.quote {
+  background-color: var(--background-medium);
+  border-left: 5px solid var(--secondary-color);
+  padding: 12px 20px;
+  margin: 15px 0;
+  font-style: italic;
+  color: var(--text-medium);
+}
+
+.exampleLetter {
+  margin-top: 25px;
+  margin-bottom: 35px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px 25px;
+  background-color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+.exampleLetter h4 {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color-light);
+  padding-bottom: 8px;
+  font-weight: 600;
+}
+.letterContent { /* Specifically for the <pre> tag containing the letter */
+  font-family: 'Georgia', 'Times New Roman', Times, serif; /* More formal for letter content */
+  font-size: 1rem;
+  line-height: 1.65;
+  white-space: pre-wrap; /* Crucial for preserving letter format */
+  color: var(--text-dark);
+  background-color: transparent; /* Ensure no default <pre> background interferes */
+  border: none; /* Remove default <pre> border */
+  padding: 0; /* Remove default <pre> padding */
+  overflow-x: auto; /* In case lines are very long, though pre-wrap should handle most */
+}
+
+/* Desktop Adjustments */
+@media (min-width: 768px) {
+  .container {
+    padding: 30px 40px 50px 40px;
+  }
+  .mainTitle {
+    font-size: 2.2rem; /* Larger on desktop */
+  }
+  .intro {
+    font-size: 1.1rem; /* Larger on desktop */
+  }
+  .sectionTitle {
+    font-size: 1.7rem; /* Larger on desktop */
+  }
+  .subSectionTitle {
+    font-size: 1.3rem; /* Larger on desktop */
+  }
+  .subSubSectionTitle {
+    font-size: 1.2rem; /* Larger on desktop */
+  }
+  .exampleLetter {
+    padding: 25px 30px;
+  }
+  .exampleLetter h4 {
+    font-size: 1.3rem;
+  }
+  .letterContent {
+    font-size: 1.05rem;
+  }
+}

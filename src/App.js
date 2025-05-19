@@ -7,6 +7,7 @@ import ImbuhanPage from './pages/ImbuhanPage';
 import PersamaanPage from './pages/PersamaanPage';
 import KaranganPage from './pages/KaranganPage';
 import FlashcardsPage from './pages/FlashcardsPage';
+import SuratResmiPage from './pages/SuratResmiPage'; // <-- IMPORTED SuratResmiPage
 import TestSetupPage from './pages/TestSetupPage';
 import ImbuhanTestPage from './pages/ImbuhanTestPage';
 import PersamaanTestPage from './pages/PersamaanTestPage';
@@ -25,7 +26,7 @@ function App() {
   }
 
   return (
-    <Router> {/* Removed basename as discussed */}
+    <Router> {/* Using HashRouter as per your file */}
       <AnalyticsTracker />
       <header className="app-header">
         <Link to="/" className="logo-link" onClick={closeNav}> {/* Close nav on logo click */}
@@ -34,7 +35,7 @@ function App() {
         
         {/* Hamburger Button - visible only on mobile via CSS */}
         <button className="hamburger-button" onClick={toggleNav} aria-label="Toggle navigation" aria-expanded={isNavOpen}>
-          ☰ {/* Hamburger icon */}
+          ☰ {/* Hamburger icon (as per your earlier version) */}
         </button>
 
         {/* Navigation Links */}
@@ -46,6 +47,7 @@ function App() {
           <NavLink to="/persamaan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan</NavLink>
           <NavLink to="/karangan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Karangan</NavLink>
           <NavLink to="/flashcards" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Flashcards</NavLink>
+          <NavLink to="/surat-resmi" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Surat Resmi</NavLink> {/* <-- ADDED LINK FOR SURAT RESMI */}
           <NavLink to="/test-setup" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Tes</NavLink>
         </nav>
       </header>
@@ -57,6 +59,7 @@ function App() {
           <Route path="/persamaan" element={<PersamaanPage />} />
           <Route path="/karangan" element={<KaranganPage />} />
           <Route path="/flashcards" element={<FlashcardsPage />} />
+          <Route path="/surat-resmi" element={<SuratResmiPage />} /> {/* <-- ADDED ROUTE FOR SURAT RESMI */}
           <Route path="/test-setup" element={<TestSetupPage />} />
           <Route path="/test/imbuhan" element={<ImbuhanTestPage />} />
           <Route path="/test/persamaan" element={<PersamaanTestPage />} />
