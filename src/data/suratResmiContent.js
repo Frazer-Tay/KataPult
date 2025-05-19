@@ -60,10 +60,6 @@ export const suratResmiGuide = {
         { type: "paragraph", content: "Jika menulis atas nama kelompok: Hormat kami, (Our respects/Yours faithfully,)" },
         { type: "paragraph", content: "Selalu diikuti koma. (Always followed by a comma)." },
 
-        { type: "subheading", level: 3, content: "Tanda Tangan (Signature):" },
-        { type: "paragraph", content: "Tulis: (Tanda Tangan) jika diketik. (Write: (Signature) if typed)." },
-        { type: "paragraph", content: "Berikan ruang untuk tanda tangan asli jika ditulis tangan. (Leave space for an actual signature if handwritten)." },
-
         { type: "subheading", level: 3, content: "Nama Jelas Pengirim (Sender's Full Name):" },
         { type: "paragraph", content: "Tulis nama lengkap Anda di bawah tanda tangan. (Write your full name below the signature)." },
         { type: "paragraph", content: "Jika relevan, tambahkan jabatan/afiliasi (e.g., Ketua Klub Bahasa Indonesia, Penghuni Blok 123). (If relevant, add your position/affiliation)." },
