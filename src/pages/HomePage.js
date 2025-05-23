@@ -30,10 +30,18 @@ const HomePage = () => {
         <Link to="/persamaan" className={`${styles.buttonCard} ${styles.persamaanButton}`} role="button">
           <span className={styles.buttonIcon}>🔄</span>
           <div className={styles.buttonTextContainer}>
-            <span className={styles.buttonText}>Persamaan (Synonyms - MCQ)</span>
+           <span className={styles.buttonText}>Persamaan (Sinonim - MCQ)</span>
             <span className={styles.buttonSubtext}>Uji & tingkatkan pemahaman sinonim Anda.</span>
           </div>
         </Link>
+
+        <Link to="/persamaan-latihan" className={`${styles.buttonCard} ${styles.persamaanLatihanButton}`} role="button">
+         <span className={styles.buttonIcon}>✍️</span>
+         <div className={styles.buttonTextContainer}>
+           <span className={styles.buttonText}>Persamaan (Latihan Tulis Sinonim)</span>
+           <span className={styles.buttonSubtext}>Latih kemampuan mengingat & menulis sinonim.</span>
+         </div>
+       </Link>
 
         <Link to="/karangan" className={`${styles.buttonCard} ${styles.karanganButton}`} role="button">
           <span className={styles.buttonIcon}>📝</span>
@@ -51,9 +59,8 @@ const HomePage = () => {
           </div>
         </Link>
 
-        {/* NEW LINK FOR SURAT RESMI */}
-        <Link to="/surat-resmi" className={`${styles.buttonCard} ${styles.suratButton}`} role="button"> {/* Use a new class like .suratButton */}
-          <span className={styles.buttonIcon}>✉️</span> {/* Example icon */}
+        <Link to="/surat-resmi" className={`${styles.buttonCard} ${styles.suratButton}`} role="button">
+          <span className={styles.buttonIcon}>✉️</span>
           <div className={styles.buttonTextContainer}>
             <span className={styles.buttonText}>Surat Resmi (Formal Letters)</span>
             <span className={styles.buttonSubtext}>Pelajari struktur & panduan menulis surat resmi.</span>

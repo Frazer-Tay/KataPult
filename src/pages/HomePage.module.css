@@ -127,11 +127,17 @@
   .persamaanButton { border-left: 5px solid var(--success-color); } /* Teal Green */
   .persamaanButton:hover .buttonIcon { color: var(--success-color); }
   
+  .persamaanLatihanButton { border-left: 5px solid #27ae60; } /* Another Green */
+  .persamaanLatihanButton:hover .buttonIcon { color: #27ae60; }
+
   .karanganButton { border-left: 5px solid var(--accent-color); } /* Amber/Gold */
   .karanganButton:hover .buttonIcon { color: var(--accent-color); }
   
   .flashcardsButton { border-left: 5px solid #3498db; } /* A different blue for Flashcards */
   .flashcardsButton:hover .buttonIcon { color: #3498db; }
+
+  .suratButton { border-left: 5px solid #f39c12; } /* Orange for Surat Resmi */
+  .suratButton:hover .buttonIcon { color: #f39c12; }
 
   .testButton {
     border-left: 5px solid #e74c3c; /* Distinct Red for test mode */
