@@ -96,21 +96,21 @@ const PersamaanTestPage = () => {
       : null;
   }, [testItems, currentIndex]);
 
+  // ESLint Fix 1: Removed 'getDistractors' from dependency array as it's defined outside the component scope.
   const generateOptions = useCallback(() => {
     if (!currentItem || !Array.isArray(currentItem.synonyms) || currentItem.synonyms.length === 0) {
       setOptions([]);
       setCorrectSynonymForCurrent(null);
       return;
     }
-    // Pick one correct synonym object, then extract its string
     const chosenCorrectSynonymObj = currentItem.synonyms[Math.floor(Math.random() * currentItem.synonyms.length)];
-    setCorrectSynonymForCurrent(chosenCorrectSynonymObj.synonym); // Store the string
+    setCorrectSynonymForCurrent(chosenCorrectSynonymObj.synonym);
 
-    const distractors = getDistractors(persamaanData, currentItem, 3); // 3 distractors for 4 total options
+    const distractors = getDistractors(persamaanData, currentItem, 3);
     const allOptionStrings = shuffleArray([chosenCorrectSynonymObj.synonym, ...distractors]);
     setOptions(allOptionStrings);
     optionButtonRefs.current = allOptionStrings.map((_, i) => optionButtonRefs.current[i] || React.createRef());
-  }, [currentItem, getDistractors]);
+  }, [currentItem]); // getDistractors removed
 
   const handleTimeOut = useCallback(() => {
     if (isAnsweredRef.current) return;
@@ -119,7 +119,7 @@ const PersamaanTestPage = () => {
     setLives(prevLives => prevLives - 1);
     setStreak(0);
     setTimeout(() => nextButtonRef.current?.focus(), 50);
-  }, []);
+  }, []); // No dependencies needed as per original logic, isAnsweredRef handles staleness
 
   const startTimer = useCallback(() => {
     setTimeLeft(QUESTION_TIME_LIMIT);
@@ -169,35 +169,62 @@ const PersamaanTestPage = () => {
   const loadNextQuestion = useCallback(() => {
     if (currentIndex < testItems.length - 1 && lives > 0) {
       setCurrentIndex(prev => prev + 1);
-      setSelectedAnswer(null); setIsAnswered(false); setIsCorrect(null);
+      setSelectedAnswer(null); 
+      setIsAnswered(false); 
+      setIsCorrect(null);
+      // Timer will be re-started by the useEffect dependent on currentItem
     } else {
-      setIsTestOver(true); clearInterval(timerRef.current);
+      setIsTestOver(true); 
+      clearInterval(timerRef.current);
     }
-  }, [currentIndex, testItems.length, lives]);
+  }, [currentIndex, testItems.length, lives, setIsAnswered, setIsCorrect, setSelectedAnswer]); // Added setters
 
+  // ESLint Fix 2: Added timeBonus calculation using timeLeft, and added setters to dependency array.
   const handleOptionClick = useCallback((selectedOptionString) => {
     if (isAnsweredRef.current || !currentItem || !correctSynonymForCurrent) return;
     clearInterval(timerRef.current);
-    setIsAnswered(true); setSelectedAnswer(selectedOptionString);
+    setIsAnswered(true); 
+    setSelectedAnswer(selectedOptionString);
     const correct = selectedOptionString.toLowerCase() === correctSynonymForCurrent.toLowerCase();
     setIsCorrect(correct);
+
     if (correct) {
       setCorrectAnswersCount(prev => prev + 1);
-      const currentStreak = streak + 1; setStreak(currentStreak);
+      const currentStreak = streak + 1; 
+      setStreak(currentStreak);
       let pointsEarned = BASE_POINTS_PER_CORRECT;
-      if (currentStreak >= 2) { pointsEarned += STREAK_BONUS_POINTS * Math.min(currentStreak -1, MAX_STREAK_BONUS_MULTIPLIER); }
-      setScore(prevScore => prevScore + pointsEarned);
+      // Added time bonus calculation
+      const timeBonus = Math.max(0, Math.floor((timeLeft / QUESTION_TIME_LIMIT) * BASE_POINTS_PER_CORRECT)); 
+      if (currentStreak >= 2) { 
+        pointsEarned += STREAK_BONUS_POINTS * Math.min(currentStreak -1, MAX_STREAK_BONUS_MULTIPLIER); 
+      }
+      setScore(prevScore => prevScore + pointsEarned + timeBonus); // Added timeBonus to score
     } else {
-      setLives(prevLives => prevLives - 1); setStreak(0);
+      setLives(prevLives => prevLives - 1); 
+      setStreak(0);
     }
     setTimeout(() => nextButtonRef.current?.focus(), 100);
-  }, [currentItem, streak, timeLeft, correctSynonymForCurrent]);
+  }, [currentItem, streak, timeLeft, correctSynonymForCurrent, 
+      setIsAnswered, setSelectedAnswer, setIsCorrect, setCorrectAnswersCount, setStreak, setScore, setLives // Added setters
+  ]);
 
-  useEffect(() => { if (lives <= 0 && !isTestOver) { setIsTestOver(true); clearInterval(timerRef.current); } }, [lives, isTestOver]);
+  useEffect(() => { 
+    if (lives <= 0 && !isTestOver) { 
+      setIsTestOver(true); 
+      clearInterval(timerRef.current); 
+    } 
+  }, [lives, isTestOver]);
 
-  const getRank = (finalScore, totalQuestions) => { const percentage = totalQuestions > 0 ? (correctAnswersCount / totalQuestions) * 100 : 0; if (percentage >= 90) return "Pakar Persamaan Kata 🥇"; if (percentage >= 75) return "Jagoan Sinonim 👍"; if (percentage >= 50) return "Pencari Kata ✨"; return "Pemula Bersemangat 🌱"; };
+  const getRank = (finalScore, totalQuestions) => { 
+    const percentage = totalQuestions > 0 ? (correctAnswersCount / totalQuestions) * 100 : 0; 
+    if (percentage >= 90) return "Pakar Persamaan Kata 🥇"; 
+    if (percentage >= 75) return "Jagoan Sinonim 👍"; 
+    if (percentage >= 50) return "Pencari Kata ✨"; 
+    return "Pemula Bersemangat 🌱"; 
+  };
 
   if (isLoading) { return <div className="loading-page">Menyiapkan Tes Persamaan...</div>; }
+  
   if (isTestOver) {
     const accuracy = testItems.length > 0 ? ((correctAnswersCount / testItems.length) * 100).toFixed(1) : 0;
     const rank = getRank(score, testItems.length);
@@ -215,6 +242,7 @@ const PersamaanTestPage = () => {
       </div>
     );
   }
+
   if (!currentItem || !correctSynonymForCurrent) { return <div className="loading">Memuat pertanyaan berikutnya...</div>; }
 
   return (
