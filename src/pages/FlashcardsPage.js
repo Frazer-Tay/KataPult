@@ -50,7 +50,9 @@ const FlashcardsPage = () => {
   }, []);
 
   const currentSet = useMemo(() => {
+    // console.log("Current allSets in useMemo:", allSets); // For debugging
     if (!isLoading && allSets && allSets.length > 0 && currentSetIndex >= 0 && currentSetIndex < allSets.length) {
+        // console.log("Current Set Data:", JSON.stringify(allSets[currentSetIndex], null, 2)); // For debugging
         return allSets[currentSetIndex];
     }
     return null;
@@ -115,12 +117,14 @@ const FlashcardsPage = () => {
 
   const renderPhraseList = (set) => (
     <div className={styles.phraseSet}>
-      <h2 className={styles.setTitle}>{set.title}</h2>
+      <h2 className={styles.setTitle}>{set.title}</h2> {/* Assuming title is a single string as per your data */}
       <ul className={styles.phraseList}>
         {set.phrases.map((phrase, index) => (
           <li key={`${set.id}-phrase-${index}`} className={styles.phraseItem}>
-            <p className={styles.phraseEnglish}>{phrase.english}</p>
-            <p className={styles.phraseMalay}><em>({phrase.malay})</em></p>
+            {/* Indonesian first */}
+            <p className={styles.phraseMalay}>{phrase.malay}</p>
+            {/* English translation in italics and parentheses */}
+            {phrase.english && <p className={styles.phraseEnglish}><em>({phrase.english})</em></p>}
           </li>
         ))}
       </ul>
@@ -130,15 +134,18 @@ const FlashcardsPage = () => {
   const renderTopicEssayPoints = (set) => (
     <div className={styles.topicEssayCardContainer}>
         <div className={styles.topicHeader}>
-            <h2 className={styles.cardTitle}>{set.title_english}</h2>
-            {set.title_malay && <p className={styles.cardTitleMalay}><em>({set.title_malay})</em></p>}
+            {/* Indonesian title first */}
+            <h2 className={styles.cardTitle}>{set.title_malay}</h2>
+            {/* English translation in italics and parentheses */}
+            {set.title_english && <p className={styles.cardTitleEnglish}><em>({set.title_english})</em></p>}
         </div>
 
-        {set.introduction_prompt_english && (
+        {/* Assuming prompts also have _malay and _english versions if you want that order */}
+        {set.introduction_prompt_malay && ( // Check for malay prompt first
             <div className={styles.essayPromptSection}>
                 <h3 className={styles.promptTitle}>Arahan Pendahuluan:</h3>
-                <p className={styles.promptTextEng}>{set.introduction_prompt_english}</p>
-                <p className={styles.promptTextMalay}><em>({set.introduction_prompt_malay})</em></p>
+                <p className={styles.promptTextMalay}>{set.introduction_prompt_malay}</p>
+                {set.introduction_prompt_english && <p className={styles.promptTextEnglish}><em>({set.introduction_prompt_english})</em></p>}
             </div>
         )}
 
@@ -146,58 +153,80 @@ const FlashcardsPage = () => {
             <div className={styles.topicDetails}>
                 {set.main_points.map((point, pIdx) => (
                     <div key={`${set.id}-point-${pIdx}`} className={styles.mainPoint}>
-                    <h4 className={styles.pointTitle}>{pIdx + 1}. {point.title_english} <em className={styles.pointTitleMalay}>({point.title_malay})</em></h4>
+                        {/* Indonesian point title first */}
+                        <h4 className={styles.pointTitle}>
+                            {pIdx + 1}. {point.title_malay} 
+                            {point.title_english && <em className={styles.pointTitleEnglish}>({point.title_english})</em>}
+                        </h4>
                     
-                    {/* Examples are an array within each point */}
-                    {point.examples && point.examples.length > 0 && (
-                        <div className={styles.examplesList}>
-                            {/* Optional: <p style={{fontWeight: '600', marginBottom: '5px'}}>Contoh:</p> */}
-                            <ul>
-                                {point.examples.map((ex, exIdx) => (
-                                    <li key={exIdx}>
-                                        {ex.english} <em className={styles.exampleMalay}>({ex.malay})</em>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+                        {/* Examples: Indonesian first */}
+                        {point.examples && point.examples.length > 0 && (
+                            <div className={styles.examplesList}>
+                                <ul>
+                                    {point.examples.map((ex, exIdx) => (
+                                        <li key={exIdx}>
+                                            {ex.malay} 
+                                            {ex.english && <em className={styles.exampleEnglish}>({ex.english})</em>}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {/* Rendering challenge_rebuttal: Indonesian first */}
+                        {point.challenge_rebuttal && (
+                            <div className={styles.challengeRebuttalSection}>
+                                <h5 className={styles.challengeTitle}>Tantangan/Kritik:</h5>
+                                <p className={styles.challengeTextMalay}>{point.challenge_rebuttal.challenge_malay}</p>
+                                {point.challenge_rebuttal.challenge_english && <p className={styles.challengeTextEnglish}><em>({point.challenge_rebuttal.challenge_english})</em></p>}
+                                
+                                <h5 className={styles.rebuttalTitle}>Jawaban/Solusi:</h5>
+                                <p className={styles.rebuttalTextMalay}>{point.challenge_rebuttal.rebuttal_malay}</p>
+                                {point.challenge_rebuttal.rebuttal_english && <p className={styles.rebuttalTextEnglish}><em>({point.challenge_rebuttal.rebuttal_english})</em></p>}
+                            </div>
+                        )}
                     </div>
                 ))}
 
+                {/* Key Phrases: Indonesian first (assuming 'malay' is the Indonesian text) */}
                 {set.key_phrases && set.key_phrases.length > 0 && (
-                    <div className={styles.keyVocabularySection}> {/* Changed from key_vocabulary to key_phrases based on data */}
-                    <h3 className={styles.sectionSubTitle}>Frasa Kunci:</h3> {/* Changed from Kosakata Kunci */}
-                    <ul className={styles.vocabularyList}> {/* Reused class, can be renamed */}
-                        {set.key_phrases.map((phrase, kIdx) => ( // Changed vocab to phrase
-                        <li key={`${set.id}-keyphrase-${kIdx}`}>
-                            <strong>{phrase.english}:</strong> {phrase.malay}
-                        </li>
-                        ))}
-                    </ul>
+                    <div className={styles.keyVocabularySection}>
+                        <h3 className={styles.sectionSubTitle}>Frasa Kunci:</h3>
+                        <ul className={styles.vocabularyList}>
+                            {set.key_phrases.map((phrase, kIdx) => (
+                            <li key={`${set.id}-keyphrase-${kIdx}`}>
+                                <strong>{phrase.malay}:</strong> {phrase.english && <em>({phrase.english})</em>}
+                            </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
 
-                {set.linking_phrases_english && set.linking_phrases_english.length > 0 && (
+                {/* Linking Phrases: Indonesian first */}
+                {set.linking_phrases_malay && set.linking_phrases_malay.length > 0 && ( // Check for malay version
                     <div className={styles.linkingPhrasesSection}>
-                    <h3 className={styles.sectionSubTitle}>Frasa Penghubung Berguna:</h3>
-                    <div className={styles.linkingPair}>
-                        <div>
-                        <strong>English:</strong>
-                        <ul>{set.linking_phrases_english.map((lp, lIdx) => <li key={`lp-en-${lIdx}`}>{lp}</li>)}</ul>
+                        <h3 className={styles.sectionSubTitle}>Frasa Penghubung Berguna:</h3>
+                        <div className={styles.linkingPair}>
+                            <div>
+                                <strong>Bahasa Indonesia:</strong>
+                                <ul>{set.linking_phrases_malay.map((lp, lIdx) => <li key={`lp-ms-${lIdx}`}>{lp}</li>)}</ul>
+                            </div>
+                            {set.linking_phrases_english && set.linking_phrases_english.length > 0 && (
+                                <div>
+                                    <strong>English:</strong>
+                                    <ul>{set.linking_phrases_english.map((lp, lIdx) => <li key={`lp-en-${lIdx}`}>{lp}</li>)}</ul>
+                                </div>
+                            )}
                         </div>
-                        <div>
-                        <strong>Malay:</strong>
-                        <ul>{set.linking_phrases_malay.map((lp, lIdx) => <li key={`lp-ms-${lIdx}`}>{lp}</li>)}</ul>
-                        </div>
-                    </div>
                     </div>
                 )}
                 
-                {set.conclusion_prompt_english && (
+                {/* Conclusion Prompt: Indonesian first */}
+                {set.conclusion_prompt_malay && ( // Check for malay prompt first
                     <div className={styles.essayPromptSection} style={{marginTop: '20px'}}>
                         <h3 className={styles.promptTitle}>Arahan Kesimpulan:</h3>
-                        <p className={styles.promptTextEng}>{set.conclusion_prompt_english}</p>
-                        <p className={styles.promptTextMalay}><em>({set.conclusion_prompt_malay})</em></p>
+                        <p className={styles.promptTextMalay}>{set.conclusion_prompt_malay}</p>
+                        {set.conclusion_prompt_english && <p className={styles.promptTextEnglish}><em>({set.conclusion_prompt_english})</em></p>}
                     </div>
                 )}
             </div>
