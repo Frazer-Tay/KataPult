@@ -8,6 +8,30 @@
     padding: 30px 15px;
     text-align: center;
   }
+
+/* NEW STYLE FOR THE APP LOGO */
+.appLogo {
+  width: 100px; /* Adjust as needed */
+  height: 100px; /* Adjust as needed, or use 'auto' if you set only width */
+  margin-bottom: 20px; /* Space below the logo */
+  /* You can add more styles like box-shadow, border-radius if you want */
+  /* animation: float 3s ease-in-out infinite alternate; */ /* Optional: subtle animation */
+}
+
+/* Optional floating animation for the logo */
+/* 
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+} 
+*/
   
   .title {
     font-size: 2.2rem;

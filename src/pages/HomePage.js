@@ -2,12 +2,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePage.module.css';
+import appLogo from '../assets/images/app-logo.png'; // Step 1: Import the logo
 
 const HomePage = () => {
   return (
     <div className={styles.container}>
+      {/* Step 2: Add the image element */}
+      <img src={appLogo} alt="KataPult App Logo" className={styles.appLogo} />
+
       <h1 className={styles.title}>Selamat Datang di KataPult!</h1>
       <p className={styles.subtitle}>Pilih mode latihan atau uji kemampuan Anda.</p>
+      
       <nav className={styles.buttonGrid} aria-label="Mode Aplikasi">
         <div className={styles.sectionTitle}>Mode Latihan & Referensi</div>
 
@@ -30,18 +35,18 @@ const HomePage = () => {
         <Link to="/persamaan" className={`${styles.buttonCard} ${styles.persamaanButton}`} role="button">
           <span className={styles.buttonIcon}>🔄</span>
           <div className={styles.buttonTextContainer}>
-           <span className={styles.buttonText}>Persamaan (Sinonim - MCQ)</span>
-            <span className={styles.buttonSubtext}>Uji & tingkatkan pemahaman sinonim Anda.</span>
+            <span className={styles.buttonText}>Persamaan MCQ</span> {/* Changed for consistency with nav */}
+            <span className={styles.buttonSubtext}>Uji & tingkatkan pemahaman sinonim Anda (MCQ).</span>
           </div>
         </Link>
 
         <Link to="/persamaan-latihan" className={`${styles.buttonCard} ${styles.persamaanLatihanButton}`} role="button">
-         <span className={styles.buttonIcon}>✍️</span>
-         <div className={styles.buttonTextContainer}>
-           <span className={styles.buttonText}>Persamaan (Latihan Tulis Sinonim)</span>
-           <span className={styles.buttonSubtext}>Latih kemampuan mengingat & menulis sinonim.</span>
-         </div>
-       </Link>
+          <span className={styles.buttonIcon}>✍️</span> {/* Example Icon */}
+          <div className={styles.buttonTextContainer}>
+            <span className={styles.buttonText}>Persamaan Latihan (Isian)</span>
+            <span className={styles.buttonSubtext}>Latih sinonim dengan mengisi jawaban.</span>
+          </div>
+        </Link>
 
         <Link to="/karangan" className={`${styles.buttonCard} ${styles.karanganButton}`} role="button">
           <span className={styles.buttonIcon}>📝</span>
