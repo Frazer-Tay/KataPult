@@ -80,6 +80,67 @@ export const flashcardsData = [
     ]
   },
   {
+    id: 'essay-openings-closings',
+    type: 'essay-model-paragraphs', // New type for distinct rendering if needed
+    title: "Model Pendahuluan dan Kesimpulan Esai (Model Essay Introductions and Conclusions)",
+    sections: [
+      {
+        title_malay: "Model Pendahuluan Esai (Model Essay Introductions)",
+        title_english: "Model Essay Introductions",
+        models: [
+          {
+            id: "intro_model_1",
+            malay_title: "Pendahuluan Model 1 (Umum ke Khusus - Isu Sosial/Teknologi)",
+            malay: "Dewasa ini, isu [Topik Utama, contoh: penyalahgunaan media sosial / pentingnya kesehatan mental] telah menjadi topik perbincangan hangat di berbagai lapisan masyarakat, baik di tingkat global maupun lokal. Fenomena ini tidak muncul secara tiba-tiba, melainkan didorong oleh [faktor utama, contoh: pesatnya kemajuan teknologi informasi / meningkatnya tekanan hidup modern]. Oleh karena itu, tulisan ini bertujuan untuk mengkaji lebih dalam mengenai dampak yang ditimbulkan oleh [Topik Utama] serta membahas beberapa langkah strategis yang dapat ditempuh untuk [tujuan esai, contoh: memitigasi dampak negatifnya / meningkatkan kesadaran masyarakat].",
+            english_title: "Model Introduction 1 (General to Specific - Social/Technological Issue)",
+            english: "In this current era, the issue of [Main Topic, e.g., social media misuse / the importance of mental health] has become a hotly debated topic across various societal layers, both globally and locally. This phenomenon did not emerge suddenly but was driven by [main factor, e.g., the rapid advancement of information technology / increasing pressures of modern life]. Therefore, this essay aims to examine more deeply the impacts caused by [Main Topic] and discuss several strategic steps that can be taken to [essay's objective, e.g., mitigate its negative impacts / increase public awareness]."
+          },
+          {
+            id: "intro_model_2",
+            malay_title: "Pendahuluan Model 2 (Pentingnya Topik - Isu Lingkungan/Pendidikan)",
+            malay: "Tidak dapat dimungkiri bahwa [Topik Utama, contoh: pelestarian lingkungan hidup / kualitas pendidikan] memegang peranan fundamental dalam menentukan arah dan kualitas masa depan suatu bangsa. Mengingat [alasan pentingnya topik, contoh: semakin meningkatnya ancaman perubahan iklim / tuntutan kompetensi di era global], upaya untuk [tujuan utama terkait topik, contoh: meningkatkan kesadaran akan pentingnya menjaga lingkungan / mereformasi sistem pendidikan] menjadi sebuah keharusan. Sehubungan dengan hal tersebut, esai ini akan memaparkan beberapa aspek krusial terkait [Topik Utama], yang meliputi [Poin 1 yang akan dibahas], [Poin 2 yang akan dibahas], dan [Poin 3 yang akan dibahas].",
+            english_title: "Model Introduction 2 (Importance of Topic - Environmental/Educational Issue)",
+            english: "It is undeniable that [Main Topic, e.g., environmental conservation / the quality of education] plays a fundamental role in determining the direction and quality of a nation's future. Considering [reason for topic's importance, e.g., the increasing threat of climate change / the demand for competence in the global era], efforts to [main objective related to the topic, e.g., increase awareness of the importance of protecting the environment / reform the education system] become a necessity. In this regard, this essay will present several crucial aspects related to [Main Topic], covering [Point 1 to be discussed], [Point 2 to be discussed], and [Point 3 to be discussed]."
+          },
+          {
+            id: "intro_model_3",
+            malay_title: "Pendahuluan Model 3 (Solusi terhadap Masalah - Isu Komunitas/Kebijakan)",
+            malay: "Permasalahan [Masalah Spesifik, contoh: meningkatnya kasus kenakalan remaja / kurangnya fasilitas publik yang memadai] di [konteks lokasi, contoh: lingkungan perkotaan / wilayah kita] telah menjadi perhatian serius yang menuntut solusi komprehensif. Kondisi ini, jika dibiarkan berlarut-larut, dikhawatirkan akan berdampak negatif pada [aspek yang terpengaruh, contoh: tatanan sosial / kualitas hidup masyarakat]. Oleh karena itu, melalui tulisan ini, akan diuraikan beberapa usulan solusi yang diharapkan dapat berkontribusi dalam mengatasi [Masalah Spesifik], dengan fokus pada [Strategi 1], [Strategi 2], dan penjabaran mengenai [Strategi 3].",
+            english_title: "Model Introduction 3 (Solution to a Problem - Community/Policy Issue)",
+            english: "The problem of [Specific Problem, e.g., rising cases of juvenile delinquency / lack of adequate public facilities] in [locational context, e.g., urban environments / our region] has become a serious concern demanding comprehensive solutions. This condition, if left unresolved, is feared to negatively impact [affected aspect, e.g., social order / public quality of life]. Therefore, through this writing, several proposed solutions will be outlined that are expected to contribute to overcoming [Specific Problem], focusing on [Strategy 1], [Strategy 2], and an elaboration of [Strategy 3]."
+          }
+        ]
+      },
+      {
+        title_malay: "Model Kesimpulan Esai (Model Essay Conclusions)",
+        title_english: "Model Essay Conclusions",
+        models: [
+          {
+            id: "conclusion_model_1",
+            malay_title: "Kesimpulan Model 1 (Ringkasan dan Harapan/Saran Umum)",
+            malay: "Berdasarkan seluruh uraian yang telah dipaparkan, dapat disimpulkan bahwa [Topik Utama] merupakan isu kompleks yang memerlukan perhatian dari berbagai pihak. Telah dibahas bagaimana [Ringkasan singkat Poin 1] dan [Ringkasan singkat Poin 2] saling berkaitan dalam [konteks topik]. Untuk ke depannya, diharapkan agar upaya-upaya seperti [Saran Umum 1] dan [Saran Umum 2] dapat terus ditingkatkan demi tercapainya [Hasil Ideal yang Diinginkan].",
+            english_title: "Model Conclusion 1 (Summary and General Hope/Recommendation)",
+            english: "Based on all the explanations presented, it can be concluded that [Main Topic] is a complex issue requiring attention from various parties. It has been discussed how [Brief summary of Point 1] and [Brief summary of Point 2] are interconnected within [topic's context]. Looking ahead, it is hoped that efforts such as [General Recommendation 1] and [General Recommendation 2] can continue to be enhanced to achieve [Desired Ideal Outcome]."
+          },
+          {
+            id: "conclusion_model_2",
+            malay_title: "Kesimpulan Model 2 (Penegasan Tesis dan Implikasi Luas)",
+            malay: "Secara keseluruhan, pembahasan ini menegaskan kembali bahwa [Penegasan Tesis Utama]. Strategi-strategi yang meliputi [Sebutkan Poin Kunci 1 secara singkat] dan [Sebutkan Poin Kunci 2 secara singkat] menunjukkan potensi besar untuk [Hasil Positif]. Implikasi lebih lanjut dari keberhasilan penanganan [Topik Utama] ini tidak hanya akan berdampak pada [aspek langsung], tetapi juga pada [aspek lebih luas, contoh: peningkatan kualitas hidup masyarakat secara keseluruhan / penguatan daya saing bangsa di kancah global].",
+            english_title: "Model Conclusion 2 (Thesis Restatement and Broader Implication)",
+            english: "Overall, this discussion reaffirms that [Restatement of Main Thesis]. The strategies covering [Briefly mention Key Point 1] and [Briefly mention Key Point 2] show great potential for [Positive Outcome]. Further implications of successfully addressing [Main Topic] will not only impact [direct aspect] but also [broader aspect, e.g., the overall improvement of public quality of life / strengthening the nation's competitiveness on the global stage]."
+          },
+          {
+            id: "conclusion_model_3",
+            malay_title: "Kesimpulan Model 3 (Refleksi dan Panggilan untuk Aksi)",
+            malay: "Dari paparan di atas, menjadi jelas bahwa [Topik Utama] bukanlah sekadar wacana, melainkan sebuah realitas yang menuntut tindakan nyata. Mengingat [Ringkasan Poin Penting 1] dan [Ringkasan Poin Penting 2], sudah saatnya bagi kita semua, baik individu, masyarakat, maupun pemerintah, untuk mengambil langkah kolaboratif. Dengan komitmen dan kerja sama yang solid, niscaya [Hasil Positif yang diharapkan] dapat kita wujudkan bersama demi masa depan yang lebih baik.",
+            english_title: "Model Conclusion 3 (Reflection and Call to Action)",
+            english: "From the presentation above, it becomes clear that [Main Topic] is not merely a discourse but a reality that demands concrete action. Considering [Summary of Important Point 1] and [Summary of Important Point 2], it is time for all of us, whether individuals, communities, or the government, to take collaborative steps. With solid commitment and cooperation, undoubtedly [Expected Positive Outcome] can be achieved together for a better future."
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: 'topic-population-growth',
     type: 'topic-essay-points',
     title_malay: "Strategi-Strategi untuk Mendukung Pertumbuhan dan Keberlanjutan Populasi Singapura",
@@ -1070,5 +1131,5 @@ export const flashcardsData = [
       { malay: "Urgensi dekarbonisasi dan transisi hijau", english: "The imperative of decarbonisation and green transition" },
       { malay: "Tindakan kolektif dan solidaritas global untuk perubahan iklim", english: "Collective action and global solidarity for climate change" }
     ]
-  }
+  } // Make sure this is the ABSOLUTE LAST CHARACTER if this is the last item, no comma after this closing brace.
 ];
