@@ -7,7 +7,7 @@ export const suratResmiGuide = {
   tableOfContents: [
     { id: "struktur-penting", title: "I. Struktur dan Format Penting" },
     { id: "kerangka-induk", title: 'II. "Kerangka Induk" Surat Resmi (Format Mudah Diproses)' },
-    { id: "bank-frasa", title: "III. Bank Frasa (Diurutkan berdasarkan Kegunaan Umum)" }, // Updated title
+    { id: "bank-frasa", title: "III. Bank Frasa (Diurutkan berdasarkan Kegunaan Umum)" },
     { id: "mengubah-poin", title: "IV. Mengubah Poin Menjadi Paragraf" },
     { id: "contoh-surat-dengan-prompt", title: "V. Contoh Surat Kontekstual dengan Skenario Ujian" },
     { id: "meretas-ujian", title: 'VI. "Meretas" Ujian – Strategi Utama' },
@@ -73,70 +73,87 @@ export const suratResmiGuide = {
       title: 'II. "Kerangka Induk" Surat Resmi (Format Mudah Diproses)',
       elements: [
         { type: "paragraph", content: "Gunakan kerangka ini sebagai panduan dasar. Ganti bagian dalam kurung siku [...] dengan informasi yang sesuai dengan soal ujian atau situasi Anda." },
-        { type: "paragraph", content: "--- AWAL SURAT ---" },
+        { type: "paragraph", content: "--- AWAL SURAT (Sender's Address & Date) ---" },
         { type: "preformatted", content: 
-`[Tempat Anda Menulis, e.g., Singapura], [Tanggal Bulan Tahun, e.g., 28 Oktober 2024]
+`[Alamat Pengirim Lengkap Anda, jika individu atau tidak menggunakan kop surat resmi institusi]
+[Singapura Kode Pos Anda]
+(Lewati baris ini jika menggunakan kop surat institusi)
 
-Perihal: [Pokok Utama Surat Anda Secara Ringkas dan Jelas, contoh: Keluhan Fasilitas Rusak, Permohonan Izin Acara, Usulan Peningkatan Layanan]
-
-Kepada Yth.
-Bapak/Ibu [Jabatan Penerima yang Tepat, e.g., Manajer, Kepala Sekolah, Direktur]
-[Nama Institusi/Organisasi Penerima, e.g., Dewan Kota Wilayah Sentosa, SMA Tunas Bangsa, Perusahaan Teknologi Cemerlang]
+[Tempat Anda Menulis, e.g., Singapura], [Tanggal Bulan Tahun, e.g., 28 Oktober 2024]`
+        },
+        { type: "paragraph", content: "--- PERIHAL (Subject) ---" },
+        { type: "preformatted", content:
+`Perihal: [Pokok Utama Surat Anda Secara Ringkas dan Jelas, contoh: Keluhan Fasilitas Rusak di Blok 123, Permohonan Izin Penggunaan Aula untuk Acara Klub Sains, Usulan Peningkatan Layanan Kebersihan Lingkungan, Lamaran Pekerjaan Posisi Staf Administrasi]`
+        },
+        { type: "paragraph", content: "--- ALAMAT TUJUAN (Recipient's Address) ---" },
+        { type: "preformatted", content:
+`Kepada Yth.
+Bapak/Ibu [Jabatan Penerima yang Tepat, e.g., Manajer, Kepala Sekolah, Direktur Personalia, Pimpinan Redaksi]
+[Nama Institusi/Organisasi Penerima, e.g., Dewan Kota Wilayah Sentosa, SMA Tunas Bangsa, Perusahaan Teknologi Cemerlang, Harian Nasional]
 [Alamat Lengkap Institusi Penerima, e.g., #05-01 Gedung Merah Putih, 123 Jalan Kemerdekaan]
-[Singapura Kode Pos, e.g., Singapura 123456]
-
-Dengan hormat,`
+[Singapura Kode Pos, e.g., Singapura 123456]`
+        },
+        { type: "paragraph", content: "--- SALAM PEMBUKA (Opening Salutation) ---" },
+        { type: "preformatted", content:
+`Dengan hormat,`
         },
         
-        { type: "subheading", level: 4, content: "Paragraf 1: Pengenalan Diri dan Tujuan Utama" },
-        { type: "paragraph", content: "<em>(Introduction of Self and Main Purpose)</em>"},
+        { type: "subheading", level: 4, content: "Paragraf 1: Pengenalan Diri dan Tujuan Utama Surat" },
+        { type: "paragraph", content: "<em>(Introduction of Self and Main Purpose of the Letter)</em>"},
         { type: "list", items: [
-            "Siapa Anda? (e.g., siswa, penghuni, ketua klub).",
-            "Apa tujuan utama Anda menulis surat ini? Sampaikan dengan jelas (e.g., mengeluh, memohon izin, mengusulkan sesuatu)." ,
-            "<em>(Optional)</em> Berikan apresiasi singkat jika relevan."
+            " Perkenalkan diri Anda (nama, status/peran yang relevan dengan isi surat – e.g., siswa, penghuni, ketua klub, orang tua murid).",
+            "Sebutkan dengan jelas dan lugas apa tujuan utama Anda menulis surat ini (e.g., menyampaikan keluhan, memohon izin, mengusulkan sesuatu, melamar pekerjaan, memberikan masukan).",
+            "<em>(Opsional, jika relevan)</em> Berikan apresiasi singkat atau referensi terhadap komunikasi/kejadian sebelumnya jika ada."
         ]},
-        { type: "paragraph", isQuote: true, content: `Saya/Kami, [Nama Lengkap Anda/Nama Kelompok], adalah seorang/selaku [Identitas Anda, e.g., siswa SMA [Nama Sekolah] kelas [Kelas Anda], penghuni Blok [Nomor Blok] [Nama Kawasan], sekretaris Klub Lingkungan Sekolah [Nama Sekolah]]. Melalui surat ini, saya/kami bermaksud untuk [Tujuan Utama Surat Secara Jelas, e.g., menyampaikan keluhan mengenai fasilitas [Nama Fasilitas] yang rusak di [Lokasi Spesifik], yaitu [Detail Kerusakan]; atau memohon izin dari Bapak/Ibu untuk dapat mengadakan kegiatan [Nama Kegiatan] atas nama [Nama Klub/Organisasi] pada [Tanggal dan Waktu Usulan]; atau menawarkan beberapa usulan konstruktif untuk mengatasi masalah [Masalah Spesifik] di lingkungan [Lokasi Spesifik]]. <em>(Opsional)</em> Saya/Kami sangat menghargai berbagai upaya yang telah dilakukan oleh pihak [Nama Institusi Penerima] dalam [Bidang Terkait, e.g., menjaga kebersihan lingkungan, mendukung kegiatan kesiswaan].` },
+        { type: "paragraph", isQuote: true, content: `Saya/Kami, [Nama Lengkap Anda/Nama Kelompok], adalah seorang/selaku [Identitas Anda, e.g., siswa SMA [Nama Sekolah] kelas [Kelas Anda], penghuni Blok [Nomor Blok] [Nama Kawasan] sejak tahun [Tahun], sekretaris Klub Lingkungan Hidup Sekolah [Nama Sekolah], orang tua dari Ananda [Nama Anak] kelas [Kelas Anak]]. Melalui surat ini, saya/kami bermaksud untuk [Tujuan Utama Surat Secara Jelas, e.g., menyampaikan keluhan mengenai fasilitas [Nama Fasilitas] yang rusak di [Lokasi Spesifik], yaitu [Detail Kerusakan Singkat]; atau memohon izin dari Bapak/Ibu untuk dapat menyelenggarakan kegiatan [Nama Kegiatan] atas nama [Nama Klub/Organisasi] yang direncanakan pada [Tanggal dan Waktu Usulan]; atau menawarkan beberapa usulan konstruktif guna mengatasi permasalahan [Masalah Spesifik] di lingkungan [Lokasi Spesifik]; atau menanggapi pengumuman lowongan pekerjaan untuk posisi [Nama Posisi] yang dimuat di [Sumber Informasi Lowongan] pada tanggal [Tanggal Lowongan]]. <em>(Opsional)</em> Saya/Kami sangat menghargai berbagai upaya yang telah dilakukan oleh pihak [Nama Institusi Penerima] dalam [Bidang Terkait, e.g., menjaga kebersihan lingkungan, mendukung kegiatan kesiswaan, memajukan kualitas pendidikan di sekolah ini].` },
 
-        { type: "subheading", level: 4, content: "Paragraf 2: Penjelasan Detail Masalah / Latar Belakang Usulan / Rincian Permohonan" },
-        { type: "paragraph", content: "<em>(Detailed Problem Statement / Background of Proposal / Details of Request)</em>"},
+        { type: "subheading", level: 4, content: "Paragraf 2: Penjelasan Detail Mengenai Pokok Surat (Masalah / Latar Belakang Usulan / Kualifikasi Lamaran / Rincian Permohonan)" },
+        { type: "paragraph", content: "<em>(Detailed Explanation of the Letter's Subject Matter - Problem / Background of Proposal / Application Qualifications / Details of Request)</em>"},
         { type: "list", items: [
-            "Jelaskan situasi, masalah, atau latar belakang secara rinci.",
-            "Berikan konteks: Kapan? Di mana? Siapa yang terdampak? Mengapa ini penting?",
-            "Gunakan bahasa formal dan hindari poin bernomor."
+            "Jelaskan situasi, masalah, atau latar belakang secara rinci, faktual, dan objektif.",
+            "Berikan konteks yang relevan: Kapan masalah mulai terjadi? Di mana lokasinya? Siapa saja yang terdampak? Mengapa hal ini penting untuk segera ditangani atau dipertimbangkan?",
+            "Jika mengajukan usulan atau permohonan, berikan latar belakang yang kuat mengapa hal tersebut diperlukan atau bermanfaat.",
+            "Jika melamar pekerjaan, uraikan kualifikasi, pengalaman, dan keterampilan yang relevan dengan posisi yang dilamar.",
+            "Gunakan bahasa formal dan susun menjadi kalimat-kalimat yang padu. Hindari poin bernomor atau bertanda dalam paragraf."
         ]},
         { type: "paragraph", content: "<em>Contoh untuk Keluhan:</em>" },
-        { type: "paragraph", isQuote: true, content: `"Belakangan ini, kami sebagai penghuni [Nama Kawasan/Blok] sering kali menghadapi masalah [Masalah Spesifik dengan Detail, e.g., lift di Blok kami, khususnya Lift A, yang sering tidak berfungsi dengan baik, terutama pada jam-jam sibuk pagi antara pukul 07.00-09.00 dan sore hari antara pukul 17.00-19.00 / penumpukan sampah di sekitar tempat pembuangan sementara yang terletak di dekat Blok [Nomor Blok], yang menimbulkan bau tidak sedap dan berpotensi menarik hama seperti tikus dan kecoa]. Keadaan ini tentu saja menimbulkan [Dampak Negatif Spesifik, e.g., kesulitan mobilitas bagi warga lanjut usia dan penyandang disabilitas, ketidaknyamanan signifikan bagi seluruh penghuni, serta potensi risiko penyebaran penyakit] bagi para penghuni."` },
-        { type: "paragraph", content: "<em>Contoh untuk Usulan/Permohonan:</em>" },
-        { type: "paragraph", isQuote: true, content: `"Melihat tingginya antusiasme siswa terhadap [Bidang Minat, e.g., pelestarian lingkungan hidup dan pentingnya daur ulang], serta adanya kebutuhan nyata untuk [Tujuan Spesifik, e.g., meningkatkan kesadaran akan praktik 3R (Reduce, Reuse, Recycle) di lingkungan sekolah], Klub [Nama Klub Anda] merasa terpanggil dan bertanggung jawab untuk mengadakan sebuah [Jenis Kegiatan, e.g., lokakarya interaktif dan kampanye kesadaran] yang kami beri nama '[Nama Kegiatan yang Menarik]'."` },
-
-        { type: "subheading", level: 4, content: "Paragraf 3 (dan seterusnya jika perlu): Usulan Solusi / Permintaan Spesifik / Argumen Pendukung" },
-        { type: "paragraph", content: "<em>(Detailed Proposals / Specific Requests / Supporting Arguments)</em>"},
-        { type: "list", items: [
-            "Sampaikan usulan solusi, permintaan, atau argumen secara logis dan terstruktur.",
-            "Jika ada beberapa poin, hubungkan menjadi kalimat yang mengalir (gunakan kata penghubung dari Bank Frasa).",
-            "Jelaskan mengapa usulan/permintaan Anda penting atau bermanfaat.",
-            "Jika ada, sebutkan lampiran (e.g., proposal, anggaran)."
-        ]},
-        { type: "paragraph", content: "<em>Contoh untuk Usulan Solusi:</em>" },
-        { type: "paragraph", isQuote: true, content: `"Sebagai langkah konkret untuk menangani isu tersebut, kami ingin mengusulkan agar pihak [Nama Institusi Penerima] dapat [Usulan Pertama yang Jelas, e.g., melakukan pemeriksaan menyeluruh dan jadwal pemeliharaan preventif yang lebih rutin untuk Lift A di Blok kami, misalnya setiap dua minggu sekali]. Selain itu, kami juga berpendapat bahwa penambahan [Usulan Kedua yang Jelas, e.g., dua unit tempat sampah daur ulang yang terpilah (kertas, plastik, kaca) di setiap lobi lantai dasar blok hunian] akan sangat membantu dalam mendorong partisipasi aktif penghuni dalam praktik daur ulang. Upaya-upaya ini kami yakini tidak hanya akan meningkatkan kenyamanan dan kualitas hidup penghuni, tetapi juga menumbuhkan rasa tanggung jawab kolektif terhadap kebersihan dan kelestarian lingkungan kita bersama."` },
-        { type: "paragraph", content: "<em>Contoh untuk Permintaan:</em>" },
-        { type: "paragraph", isQuote: true, content: `"Sehubungan dengan rencana kegiatan lokakarya tersebut, kami dengan ini secara resmi memohon izin dari Bapak/Ibu Kepala Sekolah untuk [Permintaan Spesifik dan Detail, e.g., menggunakan fasilitas Aula Serbaguna sekolah beserta sistem tata suaranya pada hari Sabtu, tanggal [Tanggal Pelaksanaan], dari pukul [Waktu Mulai] hingga [Waktu Selesai]]. Kami juga berharap mendapatkan dukungan berupa [Dukungan Lain Jika Ada, e.g., peminjaman satu unit proyektor LCD dan layar, serta dispensasi bagi anggota panitia untuk melakukan persiapan satu jam sebelum acara dimulai]. Untuk rincian lebih lanjut mengenai anggaran dan susunan acara, telah kami lampirkan proposal kegiatan bersama surat ini."` },
+        { type: "paragraph", isQuote: true, content: `"Belakangan ini, kami sebagai penghuni [Nama Kawasan/Blok] sering kali menghadapi masalah terkait [Masalah Spesifik dengan Detail, e.g., lift di Blok kami, khususnya Lift A yang melayani lantai ganjil, yang sering mengalami kerusakan dan tidak berfungsi dengan baik. Kejadian ini telah berulang setidaknya tiga kali dalam sebulan terakhir, terutama pada jam-jam sibuk pagi antara pukul 07.00-09.00 dan sore hari antara pukul 17.00-19.00]. Selain itu, kondisi kebersihan di area [Lokasi Spesifik, e.g., lobi utama dan koridor menuju tempat sampah] juga sangat memprihatinkan akibat [Penyebab Spesifik, e.g., penumpukan sampah di luar tempat yang disediakan dan kurangnya frekuensi pengangkutan]. Keadaan ini tentu saja menimbulkan [Dampak Negatif Spesifik, e.g., kesulitan mobilitas bagi warga lanjut usia dan penyandang disabilitas, ketidaknyamanan signifikan bagi seluruh penghuni, serta potensi risiko penyebaran penyakit akibat bau tidak sedap dan kemungkinan munculnya hama]."` },
         
-        { type: "subheading", level: 4, content: "Paragraf Penutup: Penegasan Harapan, Kesediaan untuk Diskusi, dan Ucapan Terima Kasih" },
-        { type: "paragraph", content: "<em>(Closing Statement, Willingness to Discuss, and Expression of Thanks)</em>"},
+        { type: "subheading", level: 4, content: "Paragraf 3 (dan seterusnya jika perlu): Usulan Solusi / Permintaan Spesifik / Argumen Pendukung / Detail Tambahan" },
+        { type: "paragraph", content: "<em>(Detailed Proposals / Specific Requests / Supporting Arguments / Additional Details)</em>"},
         { type: "list", items: [
-            "Sampaikan kembali harapan Anda secara ringkas.",
-            "Nyatakan kesediaan untuk berdiskusi lebih lanjut.",
-            "Ucapkan terima kasih atas perhatian dan kerja sama."
+            "Sampaikan usulan solusi yang konkret dan realistis, permintaan yang spesifik, atau argumen pendukung secara logis dan terstruktur.",
+            "Jika ada beberapa poin, hubungkan menjadi kalimat-kalimat yang mengalir menggunakan kata penghubung yang tepat (lihat Bank Frasa).",
+            "Jelaskan mengapa usulan/permintaan Anda penting, apa manfaat yang diharapkan, atau bagaimana argumen Anda mendukung tujuan surat.",
+            "Untuk lamaran kerja, tonjolkan bagaimana Anda bisa berkontribusi pada perusahaan.",
+            "Sebutkan lampiran jika ada (e.g., proposal detail, daftar riwayat hidup, portofolio, rincian anggaran)."
         ]},
-        { type: "paragraph", isQuote: true, content: `Demikianlah [Jenis Surat: keluhan/usulan/permohonan/undangan] ini saya/kami sampaikan dengan harapan dapat menjadi bahan pertimbangan yang positif bagi Bapak/Ibu. Besar harapan saya/kami agar Bapak/Ibu sudi [Tindakan yang Diharapkan Secara Spesifik dan Sopan – e.g., mengambil tindakan perbaikan yang diperlukan secepatnya, menyetujui permohonan izin kegiatan kami, mempertimbangkan dengan saksama usulan yang telah kami kemukakan, atau berkenan menerima undangan kami]. Kami sangat terbuka dan bersedia untuk bertemu guna mendiskusikan hal ini lebih lanjut pada waktu yang Bapak/Ibu tentukan. Atas segala perhatian, kerja sama, dan kebijaksanaan Bapak/Ibu, saya/kami haturkan terima kasih yang sebesar-besarnya.`},
+        { type: "paragraph", content: "<em>Contoh untuk Usulan Solusi dari Keluhan:</em>" },
+        { type: "paragraph", isQuote: true, content: `"Sehubungan dengan permasalahan tersebut, kami ingin mengajukan beberapa usulan konstruktif. Pertama, kami memohon agar pihak [Nama Institusi Penerima] dapat [Usulan Pertama yang Jelas dan Dapat Diukur, e.g., melakukan inspeksi menyeluruh terhadap kondisi Lift A di Blok kami dan mengganti komponen yang aus, serta menetapkan jadwal pemeliharaan preventif yang lebih frekuen, misalnya setiap dua minggu sekali]. Kedua, kami mengusulkan penambahan [Usulan Kedua yang Jelas, e.g., minimal dua unit tempat sampah tertutup berukuran besar di area lobi utama dan peningkatan frekuensi pengangkutan sampah menjadi dua kali sehari, terutama pada akhir pekan]. Kami percaya, dengan tindakan nyata ini, kenyamanan dan kesehatan lingkungan di blok kami dapat ditingkatkan secara signifikan."` },
+        
+        { type: "subheading", level: 4, content: "Paragraf Penutup: Penegasan Kembali Harapan, Kesediaan untuk Diskusi Lebih Lanjut, dan Ucapan Terima Kasih" },
+        { type: "paragraph", content: "<em>(Closing Statement, Reiteration of Hope, Willingness to Discuss Further, and Expression of Thanks)</em>"},
+        { type: "list", items: [
+            "Ringkas kembali harapan utama Anda atau hasil yang diinginkan.",
+            "Nyatakan kesediaan Anda untuk berdiskusi lebih lanjut atau memberikan informasi tambahan jika diperlukan.",
+            "Tutup surat dengan ucapan terima kasih yang tulus atas perhatian dan kerja sama penerima surat."
+        ]},
+        { type: "paragraph", isQuote: true, content: `Demikianlah [Jenis Surat: keluhan/usulan/permohonan/lamaran/masukan] ini saya/kami sampaikan dengan harapan dapat menjadi bahan pertimbangan yang positif bagi Bapak/Ibu. Besar harapan saya/kami agar Bapak/Ibu sudi [Tindakan yang Diharapkan Secara Spesifik dan Sopan – e.g., mengambil tindakan perbaikan yang diperlukan secepatnya atas keluhan yang kami ajukan, menyetujui permohonan izin kegiatan kami, mempertimbangkan dengan saksama usulan/masukan yang telah kami kemukakan, memberikan kesempatan wawancara kepada saya]. Kami sangat terbuka dan bersedia untuk bertemu guna mendiskusikan hal ini lebih lanjut pada waktu yang paling sesuai bagi Bapak/Ibu. Atas segala perhatian, kerja sama, dan kebijaksanaan Bapak/Ibu, saya/kami haturkan terima kasih yang sebesar-besarnya.`},
 
-        { type: "paragraph", content: "--- AKHIR SURAT ---" },
-        { type: "preformatted", content: `Hormat saya,\n(atau Hormat kami, jika mewakili kelompok)\n\n(Area untuk Tanda Tangan Anda)\n\n[Nama Lengkap Anda]\n[Jabatan/Afiliasi Anda, jika relevan, e.g., Siswa Kelas X Unggulan, Ketua Klub Daur Ulang, Penghuni Unit #XX-XXX]` }
+        { type: "paragraph", content: "--- BAGIAN PENUTUP (Closing Part) ---" },
+        { type: "preformatted", content: 
+`Hormat saya, 
+(atau Hormat kami, jika menulis atas nama kelompok)
+
+(Area kosong sekitar 3-4 baris untuk Tanda Tangan Anda)
+
+[Nama Lengkap Anda Ditik atau Ditulis Jelas]
+[Jabatan/Afiliasi Anda, jika relevan, e.g., Siswa Kelas X Unggulan, Ketua Klub Daur Ulang, Penghuni Unit #XX-XXX, Orang Tua Murid Ananda [Nama Anak] Kelas [Kelas]]` 
+        }
       ]
     },
 
-    // SECTION III (Bank Frasa - REORGANIZED for exam-smart learning)
+    // SECTION III (Bank Frasa - Remains as previously enhanced)
     {
       id: "bank-frasa",
       title: "III. Bank Frasa (Diurutkan berdasarkan Kegunaan Umum)",
@@ -164,7 +181,8 @@ Dengan hormat,`
             "...menawarkan kerja sama strategis dalam hal... (...offer strategic cooperation regarding...)",
             "Saya/Kami ingin menyatakan apresiasi yang setinggi-tingginya atas... (I/We would like to express the highest appreciation for...)",
             "Surat ini kami tujukan sehubungan dengan... (We address this letter in relation to...)",
-            "Menindaklanjuti pembicaraan/surat kami sebelumnya tanggal [tanggal], ... (Following up on our previous conversation/letter dated [date], ...)"
+            "Menindaklanjuti pembicaraan/surat kami sebelumnya tanggal [tanggal], ... (Following up on our previous conversation/letter dated [date], ...)",
+            "Sehubungan dengan surat edaran/pengumuman Bapak/Ibu tertanggal [Tanggal], perihal [Topik Edaran], kami ingin... (Responding to your circular/announcement dated [Date], regarding [Topic of Circular], we would like to...)"
           ]
         },
 
@@ -189,23 +207,26 @@ Dengan hormat,`
             "Kekurangan [sesuatu, e.g., fasilitas, koordinasi, informasi] telah mengakibatkan [akibat spesifik]. (The lack of [something, e.g., facilities, coordination, information] has resulted in [specific consequence].)",
             "Situasi ini diperparah oleh... (This situation is exacerbated by...)",
             "Hal ini berpotensi menimbulkan dampak negatif terhadap... (This has the potential to cause a negative impact on...)",
-            "Kami memahami bahwa [pihak penerima] mungkin memiliki banyak prioritas, namun isu ini mendesak untuk ditangani karena... (We understand that [recipient] may have many priorities, but this issue is urgent to address because...)"
+            "Kami memahami bahwa [pihak penerima] mungkin memiliki banyak prioritas, namun isu ini mendesak untuk ditangani karena... (We understand that [recipient] may have many priorities, but this issue is urgent to address because...)",
+            "Kami menyambut baik inisiatif [pihak] untuk [rencana/tindakan]. (We welcome [party]'s initiative to [plan/action].)"
           ]
         },
 
-        { type: "subheading", level: 3, content: "C. Mengemukakan Usulan/Permintaan (Making Suggestions/Requests):" },
+        { type: "subheading", level: 3, content: "C. Mengemukakan Usulan/Permintaan/Masukan (Making Suggestions/Requests/Providing Feedback):" },
         { type: "paragraph", content: "<em>Gunakan kata penghubung untuk alur yang baik. Mulai dengan usulan paling penting:</em>"},
         {
           type: "list",
           items: [
             "Oleh karena itu, kami dengan hormat memohon agar Bapak/Ibu sudi [permintaan spesifik]. (Therefore, we respectfully request that you be willing to [specific request].)",
             "Sebagai langkah awal yang konstruktif, kami mengusulkan agar... (As a constructive initial step, we propose that...)",
+            "Menurut hemat kami, beberapa program/langkah yang mungkin sesuai dan bermanfaat antara lain... (In our humble opinion, some suitable and beneficial programs/steps include...)",
+            "Kami menyarankan agar pengenalan [topik] dilakukan secara bertahap, dimulai dengan... (We suggest that the introduction of [topic] be done gradually, starting with...)",
             "Selain itu, kami juga berpendapat bahwa implementasi [usulan lain] akan sangat bermanfaat. (Furthermore, we are also of the opinion that the implementation of [another proposal] would be very beneficial.)",
             "Selanjutnya, kami melihat adanya kebutuhan mendesak untuk... (Subsequently, we see an urgent need to...)",
             "Di samping itu, kami meyakini bahwa tindakan untuk [ide lain] juga patut dipertimbangkan sebagai solusi alternatif yang efektif. (Additionally, we believe that action for [another idea] should also be considered as an effective alternative solution.)",
             "Kami berharap pihak Bapak/Ibu dapat mempertimbangkan untuk [tindakan yang diminta]. (We hope your party can consider to [requested action].)",
             "Akan sangat kami hargai apabila [permintaan/harapan]. (We would greatly appreciate it if [request/hope].)",
-            "Untuk mendukung usulan ini, kami melampirkan [dokumen pendukung, misal: proposal, rincian anggaran]. (To support this proposal, we attach [supporting documents, e.g., proposal, budget details].)"
+            "Untuk mendukung usulan ini, kami melampirkan [dokumen pendukung, misal: proposal detail, rincian anggaran, daftar nama]. (To support this proposal, we attach [supporting documents, e.g., detailed proposal, budget details, list of names].)"
           ]
         },
 
@@ -239,7 +260,7 @@ Dengan hormat,`
           type: "list",
           items: [
             "Kami siap berkontribusi aktif dalam mencari jalan keluar terbaik untuk [masalah spesifik]. (We are ready to contribute actively in finding the best way out for [specific problem].)",
-            "Sekiranya diperlukan, kami bersedia untuk [tawaran bantuan spesifik, misal: menyediakan data tambahan, membantu sosialisasi]. (If needed, we are willing to [specific offer of help, e.g., provide additional data, assist in socialization].)",
+            "Sekiranya diperlukan, kami bersedia untuk [tawaran bantuan spesifik, misal: menyediakan data tambahan, membantu sosialisasi, berpartisipasi dalam diskusi lanjutan]. (If needed, we are willing to [specific offer of help, e.g., provide additional data, assist in socialization, participate in further discussions].)",
             "Kami percaya bahwa dengan kerja sama dan dialog yang konstruktif, masalah ini dapat diatasi secara efektif. (We believe that with cooperation and constructive dialogue, this problem can be effectively overcome.)"
           ]
         },
@@ -251,7 +272,7 @@ Dengan hormat,`
           items: [
             "Kami sangat mengharapkan tindak lanjut yang konkret dan sesegera mungkin dari pihak Bapak/Ibu. (We greatly expect concrete and prompt follow-up action from your side.)",
             "Kami siap untuk bertemu dan berdiskusi lebih lanjut mengenai hal ini pada waktu yang paling sesuai bagi Bapak/Ibu. (We are ready to meet and discuss this matter further at a time most convenient for you.)",
-            "Mohon kiranya Bapak/Ibu dapat memberikan respons atas surat ini sebelum tanggal [tanggal spesifik, jika ada]. (We kindly request that you provide a response to this letter before [specific date, if any].)"
+            "Mohon kiranya Bapak/Ibu dapat memberikan respons atas surat ini sebelum tanggal [tanggal spesifik, jika ada], agar kami dapat [alasan urgensi, jika ada]. (We kindly request that you provide a response to this letter before [specific date, if any], so that we may [reason for urgency, if any].)"
             
           ]
         },
@@ -262,10 +283,10 @@ Dengan hormat,`
           type: "list",
           items: [
             "Demikianlah surat ini saya/kami sampaikan dengan harapan dapat menjadi bahan pertimbangan yang berharga. (Thus, I/we submit this letter with the hope that it can be valuable consideration.)",
-            "Besar harapan saya/kami agar Bapak/Ibu dapat mempertimbangkan usulan/permohonan ini dengan arif dan bijaksana. (It is my/our great hope that you will consider this proposal/request wisely and judiciously.)",
+            "Besar harapan saya/kami agar Bapak/Ibu dapat mempertimbangkan usulan/permohonan/masukan ini dengan arif dan bijaksana. (It is my/our great hope that you will consider this proposal/request/feedback wisely and judiciously.)",
             "Atas segala perhatian, kerja sama, dan waktu yang Bapak/Ibu luangkan, saya/kami haturkan terima kasih yang sebesar-besarnya. (For all the attention, cooperation, and time you have devoted, I/we express our deepest gratitude.)",
             "Kami sangat menantikan kabar baik dan tanggapan positif dari pihak Bapak/Ibu. (We eagerly await good news and a positive response from you.)",
-            "Semoga Bapak/Ibu dapat memberikan perhatian yang semestinya dan solusi yang terbaik terhadap permasalahan ini. (Hopefully, you can give due attention and the best solution to this problem.)"
+            "Semoga Bapak/Ibu dapat memberikan perhatian yang semestinya dan solusi yang terbaik terhadap permasalahan/rencana ini. (Hopefully, you can give due attention and the best solution to this problem/plan.)"
           ]
         },
 
@@ -274,13 +295,13 @@ Dengan hormat,`
         {
           type: "list",
           items: [
-            "Berdasarkan informasi lowongan pekerjaan yang saya peroleh dari [sumber informasi, e.g., situs web perusahaan, surat kabar Harian Kompas tanggal ...], saya bermaksud mengajukan lamaran untuk posisi [Nama Posisi].",
-            "Saya adalah seorang lulusan [Gelar, e.g., Sarjana Ekonomi] dari [Nama Universitas/Institusi] dengan spesialisasi di bidang [Bidang Studi].",
-            "Saya memiliki kualifikasi dan pengalaman yang relevan dengan posisi yang ditawarkan, khususnya dalam [sebutkan 1-2 kualifikasi/pengalaman kunci].",
-            "Selama [masa studi/pengalaman kerja sebelumnya di PT ABC], saya berhasil [sebutkan pencapaian konkret atau keterampilan yang dikembangkan].",
-            "Saya sangat antusias untuk dapat berkontribusi pada [Nama Perusahaan] dan percaya bahwa keahlian saya di bidang [bidang keahlian] akan menjadi aset berharga bagi tim Bapak/Ibu.",
-            "Terlampir bersama surat ini adalah daftar riwayat hidup (CV) saya dan dokumen pendukung lainnya untuk menjadi bahan pertimbangan Bapak/Ibu.",
-            "Besar harapan saya untuk dapat diberikan kesempatan mengikuti tahap seleksi selanjutnya, termasuk wawancara, untuk menjelaskan lebih lanjut mengenai kompetensi saya."
+            "Berdasarkan informasi lowongan pekerjaan yang saya peroleh dari [sumber informasi, e.g., situs web perusahaan, surat kabar Harian Kompas tanggal ...], dengan ini saya bermaksud mengajukan lamaran untuk posisi [Nama Posisi].",
+            "Saya adalah seorang lulusan [Gelar, e.g., Sarjana Ekonomi] dari [Nama Universitas/Institusi] dengan Indeks Prestasi Kumulatif (IPK) [nilai IPK Anda] dan spesialisasi di bidang [Bidang Studi].",
+            "Saya memiliki kualifikasi dan pengalaman yang relevan dengan posisi yang ditawarkan, khususnya dalam [sebutkan 1-2 kualifikasi/pengalaman kunci, e.g., manajemen proyek dan analisis data].",
+            "Selama [masa studi/pengalaman kerja sebelumnya di PT ABC], saya berhasil [sebutkan pencapaian konkret atau keterampilan yang dikembangkan, e.g., memimpin tim dalam proyek X dan meningkatkan efisiensi sebesar Y%].",
+            "Saya sangat antusias untuk dapat berkontribusi pada [Nama Perusahaan] dan percaya bahwa keahlian saya di bidang [bidang keahlian] serta semangat belajar yang tinggi akan menjadi aset berharga bagi tim Bapak/Ibu.",
+            "Terlampir bersama surat ini adalah daftar riwayat hidup (CV) saya, ijazah, transkrip nilai, serta dokumen pendukung lainnya untuk menjadi bahan pertimbangan Bapak/Ibu.",
+            "Besar harapan saya untuk dapat diberikan kesempatan mengikuti tahap seleksi selanjutnya, termasuk wawancara, untuk menjelaskan lebih lanjut mengenai kompetensi dan motivasi saya."
           ]
         },
 
@@ -289,12 +310,12 @@ Dengan hormat,`
         {
           type: "list",
           items: [
-            "Dengan penuh penyesalan, kami menulis surat ini untuk menyampaikan permohonan maaf yang sebesar-besarnya atas [kejadian/kesalahan spesifik].",
-            "Kami menyadari sepenuhnya kekeliruan/kelalaian yang telah terjadi pada [tanggal/saat kejadian] yang mengakibatkan [dampak negatif].",
-            "Kami bertanggung jawab penuh atas insiden tersebut dan memahami sepenuhnya ketidaknyamanan/kerugian yang mungkin ditimbulkan.",
-            "Sebagai bentuk itikad baik dan tanggung jawab kami, kami bersedia untuk [tindakan perbaikan/kompensasi yang ditawarkan, e.g., memperbaiki kerusakan, memberikan kompensasi yang layak].",
-            "Kami telah mengambil langkah-langkah korektif internal untuk memastikan kejadian serupa tidak terulang kembali di masa mendatang, termasuk [sebutkan langkah spesifik jika relevan].",
-            "Kami berharap Bapak/Ibu berkenan menerima permohonan maaf kami yang tulus ini dan memberikan kami kesempatan untuk memperbaiki keadaan serta memulihkan kepercayaan."
+            "Dengan penuh penyesalan, kami menulis surat ini untuk menyampaikan permohonan maaf yang sebesar-besarnya atas [kejadian/kesalahan spesifik dan dampaknya].",
+            "Kami menyadari sepenuhnya kekeliruan/kelalaian yang telah terjadi pada [tanggal/saat kejadian] yang mengakibatkan [dampak negatif secara jelas].",
+            "Kami bertanggung jawab penuh atas insiden tersebut dan memahami sepenuhnya ketidaknyamanan/kerugian yang mungkin ditimbulkan kepada pihak Bapak/Ibu.",
+            "Sebagai bentuk itikad baik dan tanggung jawab kami, kami bersedia untuk [tindakan perbaikan/kompensasi yang ditawarkan secara konkret, e.g., segera memperbaiki kerusakan yang terjadi, memberikan kompensasi yang layak sesuai kesepakatan].",
+            "Kami telah mengambil langkah-langkah korektif internal untuk memastikan kejadian serupa tidak terulang kembali di masa mendatang, termasuk [sebutkan langkah spesifik jika relevan, e.g., meninjau ulang prosedur operasional kami, memberikan pelatihan tambahan kepada staf terkait].",
+            "Kami berharap Bapak/Ibu berkenan menerima permohonan maaf kami yang tulus ini dan memberikan kami kesempatan untuk memperbaiki keadaan serta memulihkan kepercayaan yang mungkin telah terganggu."
           ]
         },
         
@@ -304,10 +325,10 @@ Dengan hormat,`
           type: "list",
           items: [
             "Dengan hormat, yang bertanda tangan di bawah ini, saya [Nama Anda], orang tua/wali dari siswa bernama [Nama Siswa], kelas [Kelas], dengan ini memberitahukan bahwa anak kami tidak dapat mengikuti kegiatan belajar di sekolah pada...",
-            "...hari [Nama Hari], tanggal [Tanggal Lengkap], dikarenakan [alasan singkat dan jelas, e.g., sakit (demam dan batuk), ada urusan keluarga yang sangat mendesak dan tidak dapat ditunda].",
-            "Sehubungan dengan hal tersebut, kami dengan hormat memohon izin kepada Bapak/Ibu Kepala Sekolah (atau Bapak/Ibu Guru Wali Kelas) agar anak kami dapat diberikan dispensasi untuk tidak hadir.",
-            "Sebagai bukti/informasi pendukung, terlampir [jika ada, e.g., surat keterangan dokter dari Klinik Sehat Selalu].",
-            "Kami akan memastikan anak kami dapat mengejar ketertinggalan materi pelajaran sesegera mungkin setelah ia kembali bersekolah/kondisinya membaik."
+            "...hari [Nama Hari], tanggal [Tanggal Lengkap], dikarenakan [alasan singkat dan jelas, e.g., sakit (demam dan batuk sehingga memerlukan istirahat di rumah), ada urusan keluarga yang sangat mendesak dan tidak dapat ditunda, yaitu [sebutkan secara singkat jika memungkinkan]].",
+            "Sehubungan dengan hal tersebut, kami dengan hormat memohon izin kepada Bapak/Ibu Kepala Sekolah (atau Bapak/Ibu Guru Wali Kelas) agar anak kami dapat diberikan dispensasi untuk tidak hadir pada tanggal tersebut.",
+            "Sebagai bukti/informasi pendukung, terlampir [jika ada, e.g., surat keterangan dokter dari Klinik Sehat Selalu nomor [Nomor Surat Dokter]].",
+            "Kami akan memastikan anak kami dapat mengejar ketertinggalan materi pelajaran sesegera mungkin setelah ia kembali bersekolah/kondisinya membaik. Kami juga siap berkoordinasi dengan pihak sekolah terkait hal ini."
           ]
         }
       ]
@@ -326,7 +347,7 @@ Dengan hormat,`
       ]
     },
 
-    // SECTION V (Remains as is with the exam prompts and varied examples)
+    // SECTION V (Contoh Surat Kontekstual - Added Example 10)
     {
       id: "contoh-surat-dengan-prompt",
       title: "V. Contoh Surat Kontekstual dengan Skenario Ujian",
@@ -398,7 +419,20 @@ Dengan hormat,`
         },
         { 
           type: "subheading", level: 3, 
-          content: "Contoh 6: Surat Lamaran Pekerjaan (Job Application)" 
+          content: "Contoh 6: Surat Masukan kepada Sekolah mengenai Kurikulum AI" 
+        },
+        { 
+          type: "paragraph", 
+          content: "<strong>Skenario Ujian:</strong> Saat ini, banyak siswa aktif memanfaatkan internet untuk bermain, mencari informasi, menggunakan media sosial dan banyak hal lain. Sekolah anak Anda (sebuah SMP) ingin memperkenalkan teknologi kecerdasan buatan kepada para siswa sebagai bagian dari kurikulum di sekolah dan meminta masukan dari para orang tua. Tulislah sepucuk surat kepada Kepala Sekolah anak Anda, sarankan suatu program yang bisa diperkenalkan di sekolah untuk melindungi dan meningkatkan kesadaran para siswa tentang bahaya yang perlu diperhatikan saat menggunakan internet, serta bagaimana AI bisa diintegrasikan secara positif." 
+        },
+        {
+          type: "exampleLetter",
+          title: "",
+          content: `[Alamat Rumah Anda]\n[Singapura Kode Pos Anda]\n[Nomor Telepon Anda]\n[Alamat Email Anda]\n\nSingapura, 20 November 2024\n\nPerihal: Masukan dan Saran Program Kesadaran Bahaya Internet serta Integrasi Positif AI dalam Kurikulum SMP [Nama Sekolah Anak Anda]\n\nKepada Yth.\nBapak/Ibu Kepala Sekolah\nSMP [Nama Fiktif Sekolah Anak Anda, e.g., Cendekia Bangsa]\n[Alamat Fiktif Sekolah]\n[Singapura Kode Pos Fiktif]\n\nDengan hormat,\n\nSaya, [Nama Lengkap Anda], orang tua dari ananda [Nama Lengkap Anak Anda], siswa kelas [Kelas Anak Anda, e.g., VIII B] di SMP [Nama Fiktif Sekolah Anak Anda]. Sehubungan dengan maraknya penggunaan internet oleh para siswa untuk berbagai keperluan, mulai dari bermain, mencari informasi, hingga berinteraksi di media sosial, serta menanggapi inisiatif sekolah untuk memperkenalkan teknologi kecerdasan buatan (AI) dalam kurikulum, saya ingin menyampaikan apresiasi dan sekaligus memberikan beberapa masukan konstruktif.\n\nSaya sangat setuju bahwa pemahaman akan teknologi AI sangat penting bagi masa depan anak-anak kita. Namun, seiring dengan manfaatnya, kita juga perlu membekali mereka dengan kesadaran akan potensi bahaya di dunia maya. Oleh karena itu, saya mengusulkan agar sekolah dapat mengembangkan program komprehensif bertajuk, misalnya, "Jelajah Digital Cerdas dan Aman". Program ini dapat mencakup beberapa aspek. Pertama, lokakarya interaktif mengenai keamanan siber dasar, seperti pentingnya kata sandi yang kuat, mengenali upaya phishing, menjaga privasi data pribadi, serta risiko perundungan siber (cyberbullying) dan cara mengatasinya. Kedua, sesi diskusi terpandu mengenai dampak penggunaan media sosial yang berlebihan dan cara membangun jejak digital yang positif.\n\nSelanjutnya, terkait integrasi AI dalam kurikulum, saya menyarankan pendekatan yang tidak hanya teoritis tetapi juga praktis dan relevan. Misalnya, pengenalan konsep dasar AI dapat dimulai dengan contoh-contoh sederhana yang sudah akrab dengan siswa, seperti cara kerja mesin pencari atau sistem rekomendasi. Kemudian, siswa dapat diajak untuk terlibat dalam proyek-proyek kecil yang memanfaatkan alat AI sederhana yang aman dan edukatif, misalnya, membuat presentasi interaktif dengan bantuan AI, atau bahkan mencoba dasar-dasar pemrograman visual untuk memahami logika di balik AI. Penting juga untuk menekankan aspek etika dalam pengembangan dan penggunaan AI, agar siswa memahami tanggung jawab yang menyertainya. Untuk mendukung program ini, sekolah bisa mempertimbangkan untuk mengundang pakar keamanan siber atau praktisi AI sebagai narasumber tamu, serta melibatkan peran aktif orang tua melalui seminar atau materi informasi.\n\nSaya percaya bahwa kombinasi antara peningkatan kesadaran akan bahaya internet dan pengenalan AI yang positif dan bertanggung jawab akan sangat bermanfaat bagi perkembangan siswa di era digital ini. Besar harapan saya agar masukan ini dapat menjadi bahan pertimbangan yang berguna bagi pihak sekolah. Saya siap untuk berdiskusi lebih lanjut apabila diperlukan.\n\nAtas perhatian dan kebijaksanaan Bapak/Ibu, saya mengucapkan terima kasih.\n\nHormat saya,\n\n(Tanda Tangan)\n\n[Nama Lengkap Anda]\nOrang Tua dari Ananda [Nama Lengkap Anak Anda], Kelas [Kelas Anak Anda]`
+        },
+        { 
+          type: "subheading", level: 3, 
+          content: "Contoh 7: Surat Lamaran Pekerjaan (Job Application)" 
         },
         { 
           type: "paragraph", 
@@ -411,7 +445,7 @@ Dengan hormat,`
         },
         { 
           type: "subheading", level: 3, 
-          content: "Contoh 7: Surat Permohonan Maaf Resmi (Formal Apology)" 
+          content: "Contoh 8: Surat Permohonan Maaf Resmi (Formal Apology)" 
         },
         { 
           type: "paragraph", 
@@ -424,7 +458,7 @@ Dengan hormat,`
         },
         { 
           type: "subheading", level: 3, 
-          content: "Contoh 8: Surat Izin Tidak Masuk Sekolah dari Orang Tua/Wali" 
+          content: "Contoh 9: Surat Izin Tidak Masuk Sekolah dari Orang Tua/Wali" 
         },
         { 
           type: "paragraph", 
@@ -434,11 +468,24 @@ Dengan hormat,`
           type: "exampleLetter",
           title: "",
           content: `[Alamat Rumah Anda]\n[Singapura Kode Pos Anda]\n[Nomor Telepon Anda]\n\nSingapura, 19 November 2024\n\nPerihal: Permohonan Izin Tidak Masuk Sekolah atas Nama [Nama Lengkap Anak]\n\nKepada Yth.\nIbu [Nama Guru Wali Kelas]\nGuru Wali Kelas [Nama Kelas, e.g., Primary 3A]\nSekolah Dasar [Nama Sekolah Dasar, e.g., Clementi Primary School]\n[Alamat Lengkap Sekolah]\nSingapura [Kode Pos Sekolah]\n\nDengan hormat,\n\nYang bertanda tangan di bawah ini:\nNama Orang Tua/Wali : [Nama Lengkap Orang Tua/Wali Anda]\n\nAdalah orang tua/wali dari siswa:\nNama Siswa : [Nama Lengkap Anak Anda]\nKelas : [Kelas Anak Anda, e.g., Primary 3A]\nNomor Induk Siswa : [Nomor Induk Siswa Anak, jika ada/relevan]\n\nDengan ini memberitahukan bahwa anak kami tersebut di atas, [Nama Lengkap Anak Anda], tidak dapat mengikuti kegiatan belajar mengajar di sekolah pada hari ini, Selasa, 19 November 2024, dikarenakan sedang sakit (mengalami demam dan batuk sejak semalam).\n\nSehubungan dengan kondisi kesehatannya tersebut, kami dengan hormat memohon kepada Ibu Guru Wali Kelas untuk dapat memberikan izin tidak masuk sekolah bagi anak kami pada hari ini. Kami akan memastikan anak kami mendapatkan istirahat yang cukup di rumah dan akan berusaha agar ia dapat mengejar materi pelajaran yang tertinggal sesegera mungkin setelah kondisinya pulih. Sebagai informasi tambahan, kami juga telah membawa anak kami berkonsultasi dengan dokter pagi ini, dan surat keterangan dokter akan kami lampirkan atau susulkan apabila diperlukan oleh pihak sekolah.\n\nAtas segala perhatian dan izin yang Ibu berikan, kami mengucapkan terima kasih yang sebesar-besarnya.\n\nHormat saya,\n\n(Tanda Tangan Orang Tua/Wali)\n\n[Nama Lengkap Orang Tua/Wali Anda]`
+        },
+        { // NEW EXAMPLE 10 - River Pollution & Flood
+          type: "subheading", level: 3, 
+          content: "Contoh 10: Surat Keluhan dan Usulan mengenai Kondisi Sungai kepada Dinas Terkait" 
+        },
+        { 
+          type: "paragraph", 
+          content: "<strong>Skenario Ujian:</strong> Sungai di daerah tempat tinggal Anda kotor dan menyebabkan banjir saat hujan turun. Tulislah surat kepada dinas terkait (misalnya Dinas Lingkungan Hidup atau Dinas Pekerjaan Umum), jelaskan kondisi sungai dan masalah yang sering terjadi, serta berikan saran-saran yang sesuai." 
+        },
+        {
+          type: "exampleLetter",
+          title: "",
+          content: `[Alamat Lengkap Anda]\n[Singapura Kode Pos Anda]\n\nSingapura, 22 November 2024\n\nPerihal: Keluhan mengenai Kondisi Sungai [Nama Sungai Fiktif, e.g., Ciliwung Kecil] dan Usulan Penanganan Banjir di Wilayah [Nama Wilayah Anda]\n\nKepada Yth.\nBapak/Ibu Kepala Dinas\n[Nama Dinas Terkait, e.g., Dinas Lingkungan Hidup dan Kebersihan / Dinas Pekerjaan Umum dan Penataan Ruang]\nKota Administratif [Nama Kota/Wilayah Administrasi Anda, e.g., Singapura Pusat]\n[Alamat Lengkap Dinas Terkait]\nSingapura [Kode Pos Dinas Terkait]\n\nDengan hormat,\n\nSaya/Kami, [Nama Lengkap Anda atau 'Perwakilan Warga Perumahan XYZ'], yang bertempat tinggal di [Alamat Lengkap Anda/Nama Perumahan], Kelurahan [Nama Kelurahan], Kecamatan [Nama Kecamatan], melalui surat ini ingin menyampaikan keluhan dan keprihatinan yang mendalam mengenai kondisi Sungai [Nama Sungai Fiktif] yang melintasi wilayah kami. Kondisi sungai yang semakin memburuk ini telah berulang kali menyebabkan masalah banjir, khususnya saat musim penghujan tiba.\n\nSelama beberapa tahun terakhir, kami selaku warga telah mengamati dengan prihatin penurunan kualitas Sungai [Nama Sungai Fiktif]. Sungai tersebut kini terlihat semakin dangkal akibat adanya penumpukan sedimen dan dipenuhi oleh berbagai jenis sampah, baik sampah rumah tangga maupun material lain yang diduga berasal dari aktivitas di area hulu. Akibatnya, setiap kali hujan dengan intensitas sedang hingga tinggi turun selama lebih dari dua jam, air sungai tidak mampu lagi menampung debit air sehingga meluap dan menyebabkan banjir di permukiman kami, terutama di area [Sebutkan Area Spesifik yang Terdampak Banjir, e.g., RT 01 dan RT 02 RW 05]. Banjir ini tidak hanya merusak properti dan infrastruktur jalan lingkungan, tetapi juga secara signifikan mengganggu aktivitas sehari-hari warga, menghambat akses transportasi, serta menimbulkan potensi risiko penyebaran penyakit.\n\nOleh karena itu, kami dengan sangat memohon agar pihak Dinas [Nama Dinas Terkait] dapat segera mengambil tindakan nyata dan komprehensif untuk mengatasi permasalahan ini. Sebagai langkah awal, kami mengusulkan agar dilakukan program pengerukan sedimen dan normalisasi alur Sungai [Nama Sungai Fiktif] secara berkala dan terjadwal. Kedua, kami berharap adanya pemasangan jaring atau perangkap sampah di beberapa titik strategis sepanjang aliran sungai, khususnya sebelum memasuki area permukiman kami, serta peningkatan frekuensi pengangkutan sampah dari tempat-tempat pembuangan sementara di sekitar sungai. Ketiga, kami juga menyarankan agar dilakukan sosialisasi yang lebih intensif kepada masyarakat mengenai pentingnya menjaga kebersihan sungai dan penegakan aturan yang lebih tegas terhadap pelaku pembuangan sampah atau limbah sembarangan ke sungai. Kami, sebagai warga, juga siap untuk berpartisipasi aktif dalam kegiatan gotong royong pembersihan sungai apabila difasilitasi dan dikoordinasikan oleh pihak Dinas.\n\nBesar harapan kami agar keluhan dan usulan ini mendapatkan perhatian serius dan tindak lanjut yang konkret dari Bapak/Ibu. Kami percaya bahwa dengan kerja sama yang baik antara pemerintah dan masyarakat, masalah ini dapat diatasi demi terciptanya lingkungan yang lebih bersih, sehat, aman, dan bebas dari ancaman banjir. Kami juga bersedia untuk bertemu dan berdiskusi lebih lanjut untuk memberikan informasi tambahan yang mungkin diperlukan.\n\nAtas perhatian, kerja sama, dan kebijaksanaan Bapak/Ibu, kami mengucapkan terima kasih yang sebesar-besarnya.\n\nHormat kami,\n\n(Tanda Tangan)\n\n[Nama Lengkap Anda]\n(Mewakili Warga [Nama Perumahan/Wilayah Anda])`
         }
       ]
     },
     
-    // SECTION VI ("Meretas Ujian" - Remains as previously enhanced)
+    // SECTION VI ("Meretas Ujian" - Enhanced)
     {
       id: "meretas-ujian",
       title: 'VI. "Meretas" Ujian – Strategi Utama',
@@ -449,7 +496,7 @@ Dengan hormat,`
           items: [
             "<strong>P</strong>urpose (Tujuan): Identifikasi dengan jelas APA tujuan utama surat Anda. Apakah untuk mengeluh, mengusulkan, memohon izin, melamar pekerjaan, mengundang, berterima kasih, meminta maaf, atau tujuan lainnya? Tujuan akan sangat memengaruhi pilihan kata dan struktur utama surat.",
             "<strong>A</strong>udience (Penerima): Kepada SIAPA Anda menulis? Kenali jabatan (e.g., Kepala Sekolah, Manajer Dewan Kota, Direktur Perusahaan, Tokoh Masyarakat) dan institusinya. Ini krusial untuk menentukan tingkat formalitas, sapaan yang tepat, dan argumen yang relevan bagi mereka.",
-            "<strong>T</strong>one (Nada): Bagaimana nada surat Anda seharusnya? (e.g., formal dan tegas namun sopan untuk keluhan; hormat, jelas, dan persuasif untuk permohonan atau usulan; antusias dan profesional untuk lamaran kerja; hangat dan tulus untuk ucapan terima kasih; penuh penyesalan dan bertanggung jawab untuk permohonan maaf).",
+            "<strong>T</strong>one (Nada): Bagaimana nada surat Anda seharusnya? (e.g., formal dan tegas namun sopan untuk keluhan; hormat, suportif, dan konstruktif untuk masukan; hormat dan persuasif untuk permohonan atau undangan; tulus untuk ucapan terima kasih; penuh penyesalan dan bertanggung jawab untuk permohonan maaf).",
             "<strong>Konteks & Poin Kunci:</strong> Informasi apa saja yang diberikan dalam soal ujian yang WAJIB Anda masukkan? (e.g., masalah spesifik yang harus dikeluhkan, detail acara yang diusulkan, kualifikasi yang harus ditonjolkan, insiden yang perlu dimaafkan). Garis bawahi poin-poin ini.",
             "<strong>Adaptasi, Bukan Menghafal:</strong> Gunakan \"Kerangka Induk\" (Bagian II) dan \"Bank Frasa\" (Bagian III) sebagai dasar. Jangan menghafal contoh surat secara keseluruhan, tetapi pahami polanya dan adaptasikan dengan kreatif sesuai kebutuhan soal."
           ]
@@ -462,7 +509,7 @@ Dengan hormat,`
       ]
     },
 
-    // SECTION VII (Tip Tambahan - Remains as previously enhanced)
+    // SECTION VII (Tip Tambahan - Enhanced)
     {
       id: "tip-tambahan",
       title: "VII. Tip Tambahan dan Adaptasi Ujian",
@@ -471,7 +518,7 @@ Dengan hormat,`
         {
           type: "list",
           items: [
-            "Manajer Dewan Kota (Town Councils) - untuk isu perumahan umum, fasilitas publik.",
+            "Manajer Dewan Kota (Town Council Manager) - untuk isu perumahan umum, fasilitas publik.",
             "Badan Perumahan dan Pembangunan (HDB) - untuk isu terkait unit perumahan/apartemen.",
             "Otoritas Transportasi Darat (LTA) - untuk isu transportasi umum, jalan raya.",
             "Badan Lingkungan Hidup Nasional (NEA) - untuk isu kebersihan, demam berdarah, pedagang kaki lima.",
@@ -485,9 +532,10 @@ Dengan hormat,`
           type: "list",
           items: [
             "Fasilitas umum (lift rusak, kebersihan koridor, kurangnya tempat parkir sepeda).",
-            "Masalah lingkungan (daur ulang, sampah berserakan, polusi suara).",
+            "Masalah lingkungan (daur ulang, sampah berserakan, polusi suara, kondisi sungai).",
             "Kegiatan sekolah/komunitas (permohonan izin, pengajuan dana, undangan).",
             "Usulan untuk meningkatkan layanan publik atau program komunitas.",
+            "Masukan/saran terhadap rencana atau kebijakan baru suatu institusi (e.g., kurikulum sekolah).",
             "Keluhan mengenai layanan atau kondisi tertentu.",
             "Ucapan terima kasih atas bantuan atau dukungan.",
             "Lamaran pekerjaan (jika skenario memungkinkan).",
@@ -506,10 +554,10 @@ Dengan hormat,`
         {
           type: "list",
           items: [
-            "<strong>Untuk nama perusahaan/organisasi:</strong> Jika tidak diberikan, gunakan istilah umum seperti: \"Pimpinan Perusahaan Maju Jaya\", \"Manajer Departemen Pelayanan Pelanggan\", \"Direktur Yayasan Kasih Bunda\", \"Kepala Bagian Personalia Perusahaan Sejahtera\". Hindari menciptakan nama seperti \"GigaTech Solutions Pte Ltd\" kecuali diminta.",
-            "<strong>Untuk nama orang (penerima):</strong> Jika tidak ada nama, gunakan jabatan: \"Yth. Bapak Manajer\", \"Yth. Ibu Kepala Sekolah\", \"Yth. Bapak/Ibu Pimpinan [Nama Institusi Umum dari Soal, misal: Dewan Kota Wilayah Timur]\".",
+            "<strong>Untuk nama perusahaan/organisasi:</strong> Jika tidak diberikan, gunakan istilah umum seperti: \"Pimpinan Perusahaan Maju Jaya\", \"Manajer Departemen Pelayanan Pelanggan\", \"Direktur Yayasan Kasih Bunda\", \"Kepala Bagian Personalia Perusahaan Sejahtera\", \"Kepala Dinas Lingkungan Hidup Kota Sejahtera\". Jika merujuk pada sekolah anak Anda seperti pada Contoh 6 atau 9, gunakan \"Kepala Sekolah [Nama Sekolah Anak Anda jika diketahui dari soal, jika tidak cukup 'Sekolah Menengah Pertama tempat anak saya belajar']\" atau \"Guru Wali Kelas [Kelas anak Anda] SMP [Nama Sekolah jika ada]\".",
+            "<strong>Untuk nama orang (penerima):</strong> Jika tidak ada nama, gunakan jabatan generik seperti \"Yth. Bapak Manajer Pemasaran\", \"Yth. Ibu Kepala Sekolah\", atau \"Yth. Bapak/Ibu Pimpinan [Nama Institusi Umum dari Soal, misal: Dewan Kota Wilayah Timur, Dinas Kebersihan Kota]\".",
             "<strong>Untuk nama Anda (pengirim):</strong> Jika soal meminta Anda berperan sebagai seseorang dengan nama fiktif, gunakan nama itu. Jika tidak, Anda bisa menggunakan nama samaran yang umum (misal: Budi Pekerti, Siti Aminah) atau mengikuti instruksi spesifik pengawas ujian mengenai identitas pada lembar jawaban.",
-            "<strong>Kunci Utama:</strong> Fokus pada pemahaman **struktur baku, format surat resmi, dan penggunaan frasa-frasa formal** yang ada di \"Bank Frasa\". Contoh surat adalah ilustrasi penerapan, bukan untuk dihafal kata per kata. Adaptasikan detail (masalah, usulan, tanggal acara) sesuai skenario soal ujian."
+            "<strong>Kunci Utama:</strong> Fokus pada pemahaman **struktur baku, format surat resmi, dan penggunaan frasa-frasa formal** yang ada di \"Bank Frasa\". Contoh surat adalah ilustrasi penerapan, bukan untuk dihafal kata per kata. Adaptasikan detail (masalah, usulan, tanggal acara, poin masukan) sesuai skenario soal ujian."
           ]
         },
         { type: "paragraph", content: "<strong>Hindari Bahasa Gaul atau Non-Formal:</strong> Pertahankan tingkat formalitas yang tinggi." },

@@ -1131,5 +1131,178 @@ export const flashcardsData = [
       { malay: "Urgensi dekarbonisasi dan transisi hijau", english: "The imperative of decarbonisation and green transition" },
       { malay: "Tindakan kolektif dan solidaritas global untuk perubahan iklim", english: "Collective action and global solidarity for climate change" }
     ]
-  } // Make sure this is the ABSOLUTE LAST CHARACTER if this is the last item, no comma after this closing brace.
+  },
+  {
+    id: 'topic-reducing-unemployment',
+    type: 'topic-essay-points',
+    title_malay: "Strategi Komprehensif untuk Mengurangi Angka Pengangguran di Singapura",
+    title_english: "Comprehensive Strategies to Reduce Unemployment Rates in Singapore",
+    main_points: [
+      {
+        title_malay: "Mendorong Peningkatan Keterampilan dan Pelatihan Ulang Tenaga Kerja (Upskilling & Reskilling)",
+        title_english: "Promoting Workforce Upskilling and Reskilling",
+        examples: [
+          { malay: "Program 'SkillsFuture Singapore (SSG)' menyediakan subsidi dan berbagai kursus untuk membantu warga Singapura memperoleh keterampilan baru atau meningkatkan keahlian yang sudah ada agar tetap relevan dengan kebutuhan industri.", english: "The 'SkillsFuture Singapore (SSG)' program provides subsidies and various courses to help Singaporeans acquire new skills or enhance existing ones to remain relevant to industry needs." },
+          { malay: "Inisiatif 'Career Conversion Programmes (CCP)' membantu para profesional, manajer, eksekutif, dan teknisi (PMET) yang ingin beralih ke sektor atau peran pekerjaan baru yang memiliki prospek lebih baik.", english: "The 'Career Conversion Programmes (CCP)' initiative assists professionals, managers, executives, and technicians (PMETs) looking to switch to new sectors or job roles with better prospects." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Namun, tantangan utama adalah memotivasi individu untuk secara proaktif mengikuti pelatihan di tengah kesibukan atau ketidakpastian, serta memastikan program pelatihan benar-benar sesuai dengan permintaan industri yang dinamis.",
+          challenge_english: "However, the main challenge is motivating individuals to proactively undertake training amidst busy schedules or uncertainty, and ensuring training programs are truly aligned with dynamic industry demands.",
+          rebuttal_malay: "Oleh karena itu, pemerintah terus meningkatkan fleksibilitas program pelatihan (misalnya, modul daring dan paruh waktu), memberikan insentif finansial bagi peserta dan perusahaan, serta memperkuat kolaborasi dengan industri untuk merancang kurikulum yang relevan dan berorientasi masa depan.",
+          rebuttal_english: "Therefore, the government continuously enhances the flexibility of training programs (e.g., online and part-time modules), provides financial incentives for participants and companies, and strengthens collaboration with industries to design relevant and future-oriented curricula."
+        }
+      },
+      {
+        title_malay: "Memfasilitasi Penyesuaian antara Pencari Kerja dan Lowongan Pekerjaan (Job Matching)",
+        title_english: "Facilitating Job Matching between Job Seekers and Vacancies",
+        examples: [
+          { malay: "Platform 'MyCareersFuture.gov.sg' berfungsi sebagai portal pekerjaan nasional yang membantu menghubungkan pencari kerja dengan perusahaan yang membutuhkan tenaga kerja, dilengkapi dengan fitur pencocokan keterampilan.", english: "The 'MyCareersFuture.gov.sg' platform serves as a national job portal that helps connect job seekers with companies needing manpower, equipped with skills-matching features." },
+          { malay: "Workforce Singapore (WSG) dan pusat-pusat karier seperti 'Careers Connect' menyediakan layanan pendampingan karier, lokakarya pencarian kerja, dan acara perjodohan pekerjaan (job fairs) untuk mempertemukan pemberi kerja dan pencari kerja.", english: "Workforce Singapore (WSG) and career centers like 'Careers Connect' provide career coaching services, job search workshops, and job fairs to bring employers and job seekers together." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Kendati platform dan layanan tersedia, kesenjangan informasi dan ekspektasi antara pencari kerja dan pemberi kerja terkadang masih menjadi kendala dalam proses pencocokan yang efektif.",
+          challenge_english: "Although platforms and services are available, information and expectation gaps between job seekers and employers can sometimes still be obstacles in the effective matching process.",
+          rebuttal_malay: "Untuk itu, peningkatan kualitas informasi lowongan, penyediaan data pasar tenaga kerja yang transparan, serta program bimbingan karier yang lebih personal untuk membantu pencari kerja memahami kebutuhan industri dan menyesuaikan ekspektasi sangatlah penting.",
+          rebuttal_english: "Therefore, improving the quality of vacancy information, providing transparent labor market data, and more personalized career guidance programs to help job seekers understand industry needs and adjust expectations are crucial."
+        }
+      },
+      {
+        title_malay: "Mendukung Kewirausahaan dan Penciptaan Lapangan Kerja Baru",
+        title_english: "Supporting Entrepreneurship and New Job Creation",
+        examples: [
+          { malay: "Berbagai skema dukungan seperti 'Startup SG' menyediakan pendanaan, program inkubasi, dan bimbingan bagi para wirausahawan yang ingin memulai dan mengembangkan bisnis mereka.", english: "Various support schemes like 'Startup SG' provide funding, incubation programs, and mentorship for entrepreneurs looking to start and scale their businesses." },
+          { malay: "Pemerintah juga menciptakan lingkungan regulasi yang kondusif dan pro-inovasi untuk mendorong pertumbuhan sektor-sektor baru yang berpotensi menciptakan lapangan kerja berkualitas tinggi.", english: "The government also creates a conducive and pro-innovation regulatory environment to encourage the growth of new sectors with the potential to create high-quality jobs." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Namun, tingkat risiko yang tinggi dan akses terhadap modal awal sering menjadi penghalang utama bagi calon wirausahawan, terutama bagi mereka yang berasal dari latar belakang kurang beruntung.",
+          challenge_english: "However, the high-risk nature and access to initial capital often become major barriers for aspiring entrepreneurs, especially those from disadvantaged backgrounds.",
+          rebuttal_malay: "Oleh karena itu, diversifikasi sumber pendanaan untuk startup, penyediaan program bimbingan intensif dari praktisi berpengalaman, serta pengurangan hambatan birokrasi untuk memulai usaha perlu terus dioptimalkan untuk menumbuhkan ekosistem kewirausahaan yang lebih inklusif.",
+          rebuttal_english: "Therefore, diversifying funding sources for startups, providing intensive mentorship programs from experienced practitioners, and reducing bureaucratic hurdles for starting businesses need to be continuously optimized to foster a more inclusive entrepreneurial ecosystem."
+        }
+      }
+    ],
+    key_phrases: [
+      { malay: "Peningkatan keterampilan (upskilling) dan pelatihan ulang (reskilling)", english: "Upskilling and reskilling" },
+      { malay: "Pencocokan pekerjaan (job matching) yang efektif", english: "Effective job matching" },
+      { malay: "Mendorong inovasi dan kewirausahaan", english: "Encouraging innovation and entrepreneurship" },
+      { malay: "Ketahanan pasar tenaga kerja", english: "Labor market resilience" }
+    ]
+  },
+  {
+    id: 'topic-aging-population-preparedness', // Different ID from existing aging topic to focus on preparedness
+    type: 'topic-essay-points',
+    title_malay: "Menyiapkan Singapura untuk Menghadapi Populasi yang Semakin Menua",
+    title_english: "Preparing Singapore for an Aging Population",
+    main_points: [
+      {
+        title_malay: "Penguatan Sistem Layanan Kesehatan dan Perawatan Jangka Panjang",
+        title_english: "Strengthening Healthcare and Long-Term Care Systems",
+        examples: [
+          { malay: "Pengembangan model perawatan terintegrasi yang berfokus pada layanan berbasis komunitas dan perawatan di rumah untuk mendukung lansia agar dapat menua dengan nyaman di tempat tinggal sendiri ('aging in place').", english: "Development of integrated care models focusing on community-based services and home care to support seniors in aging comfortably in their own homes ('aging in place')." },
+          { malay: "Peningkatan investasi dalam infrastruktur layanan kesehatan lansia, termasuk poliklinik ramah lansia, pusat rehabilitasi, dan fasilitas perawatan jangka panjang, serta peningkatan jumlah tenaga medis dan perawat terlatih di bidang geriatri.", english: "Increased investment in elderly healthcare infrastructure, including senior-friendly polyclinics, rehabilitation centers, and long-term care facilities, as well as increasing the number of trained medical personnel and nurses in geriatrics." },
+          { malay: "Peluncuran skema asuransi perawatan jangka panjang nasional seperti 'CareShield Life' untuk membantu warga Singapura mempersiapkan diri menghadapi biaya perawatan jangka panjang.", english: "Launch of national long-term care insurance schemes like 'CareShield Life' to help Singaporeans prepare for long-term care costs." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Namun, memastikan keterjangkauan dan kualitas layanan perawatan jangka panjang yang merata bagi semua lapisan masyarakat, serta mengatasi kekurangan tenaga kerja di sektor perawatan lansia, tetap menjadi tantangan besar.",
+          challenge_english: "However, ensuring equitable affordability and quality of long-term care services for all segments of society, as well as addressing labor shortages in the eldercare sector, remain significant challenges.",
+          rebuttal_malay: "Untuk itu, pemerintah terus meningkatkan subsidi bagi layanan perawatan lansia, mendorong inovasi teknologi dalam perawatan (misalnya, telemedisin dan robotika bantu), serta meluncurkan inisiatif untuk menarik dan mempertahankan tenaga kerja di sektor ini melalui peningkatan citra profesi dan jalur karier yang lebih baik.",
+          rebuttal_english: "Therefore, the government continues to increase subsidies for eldercare services, promote technological innovations in care (e.g., telemedicine and assistive robotics), and launch initiatives to attract and retain manpower in this sector by improving the profession's image and career pathways."
+        }
+      },
+      {
+        title_malay: "Menciptakan Lingkungan Fisik dan Sosial yang Ramah Lansia serta Inklusif",
+        title_english: "Creating Age-Friendly and Inclusive Physical and Social Environments",
+        examples: [
+          { malay: "Program 'Kampung Admiralty' sebagai contoh hunian terpadu yang menggabungkan fasilitas perumahan, layanan kesehatan, pusat kegiatan lansia, dan fasilitas penitipan anak dalam satu lokasi.", english: "The 'Kampung Admiralty' program as an example of integrated housing that combines residential facilities, healthcare services, senior activity centers, and childcare facilities in one location." },
+          { malay: "Peningkatan aksesibilitas pada transportasi publik, bangunan umum, dan area pejalan kaki melalui desain universal dan program seperti 'Enhancement for Active Seniors (EASE)' untuk modifikasi rumah HDB.", english: "Improving accessibility in public transport, public buildings, and pedestrian areas through universal design and programs like 'Enhancement for Active Seniors (EASE)' for HDB flat modifications." },
+          { malay: "Mendorong program antargenerasi dan kegiatan komunitas yang melibatkan lansia untuk menjaga mereka tetap aktif secara sosial, mental, dan fisik, serta memerangi isolasi sosial.", english: "Promoting intergenerational programs and community activities involving seniors to keep them socially, mentally, and physically active, and to combat social isolation." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Meskipun lingkungan fisik dapat dimodifikasi, mengubah persepsi sosial tentang penuaan dan memerangi ageisme (diskriminasi usia) membutuhkan upaya edukasi dan advokasi yang berkelanjutan.",
+          challenge_english: "Although the physical environment can be modified, changing social perceptions about aging and combating ageism requires sustained educational and advocacy efforts.",
+          rebuttal_malay: "Oleh karena itu, kampanye kesadaran publik yang menampilkan citra positif lansia yang aktif dan berkontribusi, serta promosi pembelajaran seumur hidup dan peluang kerja bagi lansia, sangat penting untuk membangun masyarakat yang benar-benar inklusif bagi semua usia.",
+          rebuttal_english: "Therefore, public awareness campaigns featuring positive images of active and contributing seniors, as well as promoting lifelong learning and employment opportunities for the elderly, are crucial for building a truly inclusive society for all ages."
+        }
+      },
+      {
+        title_malay: "Mendorong Produktivitas dan Keterlibatan Lansia dalam Angkatan Kerja",
+        title_english: "Promoting Senior Productivity and Engagement in the Workforce",
+        examples: [
+          { malay: "Pemberian insentif bagi perusahaan untuk mempekerjakan kembali atau mempertahankan pekerja lansia, seperti 'Senior Employment Credit (SEC)'.", english: "Providing incentives for companies to re-employ or retain senior workers, such as the 'Senior Employment Credit (SEC)'." },
+          { malay: "Program penyesuaian dan desain ulang pekerjaan (job redesign) agar lebih sesuai dengan kemampuan dan kebutuhan pekerja lansia, serta promosi budaya kerja yang fleksibel.", english: "Job redesign and adjustment programs to better suit the abilities and needs of senior workers, as well as promoting flexible work cultures." },
+          { malay: "Dukungan untuk peningkatan keterampilan ('reskilling' dan 'upskilling') bagi pekerja lansia melalui program 'SkillsFuture' agar mereka tetap kompetitif di pasar kerja.", english: "Support for skills upgrading ('reskilling' and 'upskilling') for senior workers through the 'SkillsFuture' program to keep them competitive in the job market." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Namun, diskriminasi usia di tempat kerja dan stereotip negatif terhadap kemampuan pekerja lansia masih menjadi hambatan bagi partisipasi mereka yang lebih luas dalam angkatan kerja.",
+          challenge_english: "However, age discrimination in the workplace and negative stereotypes about the capabilities of senior workers still pose barriers to their wider participation in the workforce.",
+          rebuttal_malay: "Oleh karena itu, upaya legislatif untuk melindungi pekerja lansia dari diskriminasi, disertai dengan kampanye untuk mengubah mindset pemberi kerja dan masyarakat mengenai nilai kontribusi pekerja senior, perlu terus diperkuat.",
+          rebuttal_english: "Therefore, legislative efforts to protect senior workers from discrimination, accompanied by campaigns to change the mindset of employers and society regarding the value of senior workers' contributions, need to be continuously strengthened."
+        }
+      }
+    ],
+    key_phrases: [
+      { malay: "Penuaan aktif dan sehat ('Active and Healthy Aging')", english: "Active and Healthy Aging" },
+      { malay: "Lingkungan ramah lansia ('Age-Friendly Environment')", english: "Age-Friendly Environment" },
+      { malay: "Perawatan jangka panjang ('Long-Term Care')", english: "Long-Term Care" },
+      { malay: "Solidaritas antargenerasi", english: "Intergenerational Solidarity" }
+    ]
+  },
+  {
+    id: 'topic-managing-high-inflation',
+    type: 'topic-essay-points',
+    title_malay: "Cara-Cara Pemerintah Membantu Masyarakat Singapura Menghadapi Inflasi Tinggi",
+    title_english: "Government Measures to Help Singaporeans Cope with High Inflation",
+    main_points: [
+      {
+        title_malay: "Pemberian Bantuan Finansial Langsung dan Subsidi yang Ditargetkan",
+        title_english: "Providing Direct Financial Assistance and Targeted Subsidies",
+        examples: [
+          { malay: "Paket-paket dukungan seperti 'Cost-of-Living Support Package' yang mencakup pembayaran tunai khusus, 'GST Voucher' tambahan, dan rabat 'U-Save' untuk tagihan utilitas bagi rumah tangga yang memenuhi syarat.", english: "Support packages like the 'Cost-of-Living Support Package' which include special cash payouts, additional 'GST Vouchers', and 'U-Save' rebates for utility bills for eligible households." },
+          { malay: "Subsidi untuk kebutuhan pokok seperti transportasi publik dan layanan kesehatan untuk menjaga keterjangkauan bagi masyarakat luas, terutama kelompok berpenghasilan rendah.", english: "Subsidies for essential needs such as public transport and healthcare services to maintain affordability for the general public, especially low-income groups." },
+          { malay: "Program bantuan seperti 'ComCare' yang memberikan dukungan keuangan sementara bagi individu dan keluarga yang menghadapi kesulitan finansial akibat inflasi.", english: "Assistance programs like 'ComCare' that provide temporary financial support for individuals and families facing financial hardship due to inflation." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Namun, bantuan finansial langsung bersifat sementara dan mungkin tidak sepenuhnya mengatasi dampak kenaikan biaya hidup jangka panjang, serta berpotensi membebani anggaran negara jika dilakukan terus-menerus.",
+          challenge_english: "However, direct financial assistance is temporary and may not fully address the long-term impact of rising living costs, and could potentially strain the national budget if continued indefinitely.",
+          rebuttal_malay: "Oleh karena itu, bantuan langsung ini perlu diseimbangkan dengan kebijakan jangka menengah dan panjang yang fokus pada peningkatan produktivitas, upskilling tenaga kerja untuk pekerjaan berpenghasilan lebih tinggi, dan menjaga daya saing ekonomi secara keseluruhan untuk mengendalikan inflasi dari sisi penawaran.",
+          rebuttal_english: "Therefore, this direct assistance needs to be balanced with medium and long-term policies focused on increasing productivity, upskilling the workforce for higher-income jobs, and maintaining overall economic competitiveness to control supply-side inflation."
+        }
+      },
+      {
+        title_malay: "Kebijakan Moneter untuk Menstabilkan Harga dan Mengendalikan Inflasi",
+        title_english: "Monetary Policy to Stabilize Prices and Control Inflation",
+        examples: [
+          { malay: "Monetary Authority of Singapore (MAS) menggunakan kebijakan nilai tukar (exchange rate policy) sebagai alat utama untuk mengelola inflasi impor dan menjaga stabilitas harga secara keseluruhan dalam jangka menengah.", english: "The Monetary Authority of Singapore (MAS) uses exchange rate policy as its primary tool to manage imported inflation and maintain overall price stability in the medium term." },
+          { malay: "Pengetatan kebijakan moneter secara bertahap, seperti membiarkan nilai tukar dolar Singapura menguat, dapat membantu meredam tekanan inflasi yang berasal dari luar negeri.", english: "Gradual tightening of monetary policy, such as allowing the Singapore dollar exchange rate to appreciate, can help dampen inflationary pressures originating from abroad." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Akan tetapi, kebijakan moneter memiliki efek tunda (time lag) dan mungkin kurang efektif dalam mengatasi inflasi yang disebabkan oleh guncangan pasokan global atau faktor domestik non-moneter.",
+          challenge_english: "However, monetary policy has time lags and may be less effective in addressing inflation caused by global supply shocks or domestic non-monetary factors.",
+          rebuttal_malay: "Oleh sebab itu, kebijakan moneter perlu didukung oleh kebijakan fiskal yang bijaksana dan langkah-langkah struktural untuk meningkatkan ketahanan rantai pasokan, diversifikasi sumber impor, serta mendorong efisiensi di berbagai sektor ekonomi.",
+          rebuttal_english: "Therefore, monetary policy needs to be supported by prudent fiscal policy and structural measures to enhance supply chain resilience, diversify import sources, and promote efficiency across various economic sectors."
+        }
+      },
+      {
+        title_malay: "Mendorong Persaingan Pasar yang Sehat dan Edukasi Konsumen",
+        title_english: "Promoting Healthy Market Competition and Consumer Education",
+        examples: [
+          { malay: "Competition and Consumer Commission of Singapore (CCCS) berperan dalam memastikan praktik persaingan yang adil di pasar untuk mencegah praktik monopoli atau kartel yang dapat menaikkan harga secara tidak wajar.", english: "The Competition and Consumer Commission of Singapore (CCCS) plays a role in ensuring fair competition practices in the market to prevent monopolistic or cartel practices that can unreasonably raise prices." },
+          { malay: "Program edukasi konsumen seperti yang dijalankan oleh CASE (Consumers Association of Singapore) untuk meningkatkan literasi keuangan dan membantu konsumen membuat pilihan pembelian yang lebih cerdas di tengah kenaikan harga.", english: "Consumer education programs such as those run by CASE (Consumers Association of Singapore) to improve financial literacy and help consumers make smarter purchasing choices amidst rising prices." },
+          { malay: "Inisiatif pemerintah untuk meningkatkan transparansi harga, misalnya melalui portal perbandingan harga, agar konsumen dapat membandingkan dan memilih opsi yang lebih terjangkau.", english: "Government initiatives to increase price transparency, for example, through price comparison portals, so that consumers can compare and choose more affordable options." }
+        ],
+        challenge_rebuttal: {
+          challenge_malay: "Meskipun demikian, dalam pasar global yang terintegrasi, banyak faktor harga, terutama untuk barang impor, berada di luar kendali regulator domestik, dan literasi konsumen memerlukan upaya sosialisasi yang berkelanjutan.",
+          challenge_english: "Nevertheless, in an integrated global market, many price factors, especially for imported goods, are beyond the control of domestic regulators, and consumer literacy requires sustained socialization efforts.",
+          rebuttal_malay: "Oleh karena itu, selain pengawasan pasar domestik, pemerintah juga aktif dalam diplomasi ekonomi untuk menjaga kelancaran pasokan global, serta terus berinvestasi dalam program literasi konsumen yang inovatif dan mudah diakses oleh semua segmen masyarakat.",
+          rebuttal_english: "Therefore, in addition to domestic market surveillance, the government is also active in economic diplomacy to maintain the smooth flow of global supply, and continues to invest in innovative and easily accessible consumer literacy programs for all segments of society."
+        }
+      }
+    ],
+    key_phrases: [
+      { malay: "Mengelola biaya hidup", english: "Managing cost of living" },
+      { malay: "Stabilitas harga dan inflasi terkendali", english: "Price stability and controlled inflation" },
+      { malay: "Ketahanan ekonomi dan sosial", english: "Economic and social resilience" },
+      { malay: "Pemberdayaan konsumen", english: "Consumer empowerment" }
+    ]
+  }// Make sure this is the ABSOLUTE LAST CHARACTER if this is the last item, no comma after this closing brace.
 ];
