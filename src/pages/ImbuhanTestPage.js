@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { imbuhanData } from '../data/imbuhan';
+import { useProgress } from '../contexts/ProgressContext';
 import styles from './ImbuhanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -20,11 +21,14 @@ const QUESTION_TIME_LIMIT = 30; // seconds per question
 const LIVES_START_COUNT = 3;
 const BASE_POINTS_PER_CORRECT_ANSWER = 10;
 const HINT_PENALTY = 5;
+const STREAK_BONUS_POINTS = 5;
+const MAX_STREAK_BONUS_MULTIPLIER = 3;
 
 
 const ImbuhanTestPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { addXP } = useProgress();
   const { numQuestions = 10 } = location.state || {};
 
   const [testItems, setTestItems] = useState([]);
@@ -36,10 +40,11 @@ const ImbuhanTestPage = () => {
   const [lives, setLives] = useState(LIVES_START_COUNT);
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_LIMIT);
   const [showHint, setShowHint] = useState(false);
-  const [hintUsedThisQuestion, setHintUsedThisQuestion] = useState(false); // Track if hint was used for current q
+  const [hintUsedThisQuestion, setHintUsedThisQuestion] = useState(false); 
   const [isTestOver, setIsTestOver] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [correctAnswersCount, setCorrectAnswersCount] = useState(0); // New state for counting correct answers
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   const inputRef = useRef(null);
   const timerRef = useRef(null);
@@ -58,12 +63,13 @@ const ImbuhanTestPage = () => {
 
 
   const handleTimeOut = useCallback(() => {
-    if (isAnsweredRef.current) return; // Check ref, as state might be stale in interval
+    if (isAnsweredRef.current) return;
     setIsAnswered(true);
     setIsCorrect(false);
     setLives(prevLives => prevLives - 1);
+    setStreak(0);
     setTimeout(() => nextButtonRef.current?.focus(), 50);
-  }, []); // No dependencies needed if using ref for isAnswered
+  }, []);
 
   const startTimer = useCallback(() => {
     setTimeLeft(QUESTION_TIME_LIMIT);
@@ -72,16 +78,16 @@ const ImbuhanTestPage = () => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerRef.current);
-          handleTimeOut(); // Call the stable handleTimeOut
+          handleTimeOut(); 
           return 0;
         }
         return prevTime - 1;
       });
     }, 1000);
-  }, [handleTimeOut]); // Add handleTimeOut to dependency array
+  }, [handleTimeOut]);
 
   useEffect(() => {
-    if (currentItem && !isTestOver) { // Only start timer if there's a current item and test is not over
+    if (currentItem && !isTestOver) {
         startTimer();
     }
     return () => clearInterval(timerRef.current);
@@ -89,7 +95,7 @@ const ImbuhanTestPage = () => {
 
 
   useEffect(() => {
-    setIsLoading(true); // Set loading true at the start of this effect
+    setIsLoading(true);
     const allValidImbuhan = imbuhanData.filter(
       item => item.root && item.targetWord && item.sentence && item.hint && item.explanation
     );
@@ -116,6 +122,7 @@ const ImbuhanTestPage = () => {
     setIsCorrect(null);
     setShowHint(false);
     setHintUsedThisQuestion(false);
+    setStreak(0);
     setIsLoading(false);
   }, [numQuestions, navigate]);
 
@@ -127,7 +134,6 @@ const ImbuhanTestPage = () => {
       setIsCorrect(null);
       setShowHint(false);
       setHintUsedThisQuestion(false);
-      // Timer will be restarted by the useEffect for currentItem
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
       setIsTestOver(true);
@@ -147,15 +153,24 @@ const ImbuhanTestPage = () => {
     setIsCorrect(correct);
     if (correct) {
       setCorrectAnswersCount(prev => prev + 1);
-      // Bonus points: more points for faster correct answers
-      // Example: Max bonus is 10 (QUESTION_TIME_LIMIT / 3 roughly), min is 0
+      
+      const currentStreak = streak + 1;
+      setStreak(currentStreak);
+      
+      let pointsEarned = BASE_POINTS_PER_CORRECT_ANSWER;
       const timeBonus = Math.max(0, Math.floor((timeLeft / QUESTION_TIME_LIMIT) * BASE_POINTS_PER_CORRECT_ANSWER));
-      setScore(prevScore => prevScore + BASE_POINTS_PER_CORRECT_ANSWER + timeBonus);
+      
+      if (currentStreak >= 2) {
+        pointsEarned += STREAK_BONUS_POINTS * Math.min(currentStreak - 1, MAX_STREAK_BONUS_MULTIPLIER);
+      }
+      
+      setScore(prevScore => prevScore + pointsEarned + timeBonus);
     } else {
       setLives(prevLives => prevLives - 1);
+      setStreak(0);
     }
     setTimeout(() => nextButtonRef.current?.focus(), 100);
-  }, [userInput, currentItem, timeLeft]);
+  }, [userInput, currentItem, timeLeft, streak]);
 
   useEffect(() => {
     if (lives <= 0 && !isTestOver) {
@@ -163,6 +178,12 @@ const ImbuhanTestPage = () => {
       clearInterval(timerRef.current);
     }
   }, [lives, isTestOver]);
+
+  useEffect(() => {
+    if (isTestOver && score > 0) {
+      addXP(score);
+    }
+  }, [isTestOver, score, addXP]);
 
   const handleInputKeyDown = (event) => { // Changed from onKeyPress
     if (event.key === 'Enter' && !isAnswered && userInput.trim()) {
@@ -223,6 +244,7 @@ const ImbuhanTestPage = () => {
         <span className={styles.statItem}>Skor: {score}</span>
         <span className={styles.statItem}>Sisa Waktu: {timeLeft}s</span>
         <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + (lives < LIVES_START_COUNT ? '💔'.repeat(LIVES_START_COUNT - lives) : '')}</span>
+        {streak >= 2 && <span className={styles.statItem} style={{color: '#ff9800', fontWeight: 'bold'}}>🔥 Streak x{streak}!</span>}
       </div>
 
       <div className={styles.questionCard}>
@@ -248,7 +270,13 @@ const ImbuhanTestPage = () => {
         </div>
       </div>
 
-      <div className={styles.inputSection}>
+      {isAnswered && isCorrect && streak >= 3 && (
+        <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', marginTop: '-10px', marginBottom: '10px' }}>
+          <span className="floating-combo">🔥 Combo x{streak}!</span>
+        </div>
+      )}
+
+      <div className={`${styles.inputSection} ${isAnswered && !isCorrect ? 'shake-animation' : ''} ${isAnswered && isCorrect ? 'pulse-animation' : ''}`} style={isAnswered && isCorrect ? {borderRadius: '12px', padding: '10px'} : {}}>
         <label htmlFor="testInput" className={styles.instruction}>Ketik bentuk kata yang tepat:</label>
         <input
           id="testInput"
@@ -258,7 +286,7 @@ const ImbuhanTestPage = () => {
           placeholder="Jawaban Anda..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          onKeyDown={handleInputKeyDown} // Changed to onKeyDown
+          onKeyDown={handleInputKeyDown}
           disabled={isAnswered}
           autoFocus
           autoCapitalize="none"

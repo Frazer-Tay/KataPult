@@ -1,0 +1,241 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-color);
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.gameStats {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.questionCard {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.questionType {
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.questionText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.exampleText {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--secondary-text-color);
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent-color);
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.optionButton {
+  padding: 1rem;
+  background-color: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 60px;
+}
+
+.optionButton:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+}
+
+.optionButton.correctSelected {
+  background-color: #4cd137;
+  border-color: #4cd137;
+  color: white;
+}
+
+.optionButton.incorrectSelected {
+  background-color: #e84118;
+  border-color: #e84118;
+  color: white;
+}
+
+.optionButton.correctUnselected {
+  background-color: rgba(76, 209, 55, 0.1);
+  border-color: #4cd137;
+  color: #4cd137;
+}
+
+.optionButton.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.inputSection {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input {
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.inputCorrect {
+  border-color: #4cd137;
+  background-color: rgba(76, 209, 55, 0.05);
+}
+
+.inputIncorrect {
+  border-color: #e84118;
+  background-color: rgba(232, 65, 24, 0.05);
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.feedback {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.1rem;
+  animation: floatUp 0.3s ease-out;
+}
+
+.correctFeedback {
+  background-color: rgba(76, 209, 55, 0.1);
+  color: #4cd137;
+}
+
+.incorrectFeedback {
+  background-color: rgba(232, 65, 24, 0.1);
+  color: #e84118;
+}
+
+.explanationBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(108, 92, 231, 0.05);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 0 12px 12px 0;
+  font-size: 0.95rem;
+}
+
+.explanationTitle {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.resultsCard {
+  background-color: var(--card-bg);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.successMessage {
+  font-size: 1.5rem;
+  color: #4cd137;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.failMessage {
+  font-size: 1.5rem;
+  color: #e84118;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.completedState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+}
+
+.completedIcon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { persamaanData } from '../data/persamaan';
+import { useProgress } from '../contexts/ProgressContext';
 import styles from './PersamaanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -63,6 +64,7 @@ const MAX_STREAK_BONUS_MULTIPLIER = 3;
 const PersamaanTestPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { addXP } = useProgress();
   const { numQuestions = 10 } = location.state || {};
 
   const [testItems, setTestItems] = useState([]);
@@ -215,6 +217,12 @@ const PersamaanTestPage = () => {
     } 
   }, [lives, isTestOver]);
 
+  useEffect(() => {
+    if (isTestOver && score > 0) {
+      addXP(score);
+    }
+  }, [isTestOver, score, addXP]);
+
   const getRank = (finalScore, totalQuestions) => { 
     const percentage = totalQuestions > 0 ? (correctAnswersCount / totalQuestions) * 100 : 0; 
     if (percentage >= 90) return "Pakar Persamaan Kata 🥇"; 
@@ -263,13 +271,19 @@ const PersamaanTestPage = () => {
         )}
       </div>
 
-      <div className={styles.optionsGrid}>
+      {isAnswered && isCorrect && streak >= 3 && (
+        <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', marginTop: '-10px', marginBottom: '10px' }}>
+          <span className="floating-combo">🔥 Combo x{streak}!</span>
+        </div>
+      )}
+
+      <div className={`${styles.optionsGrid} ${isAnswered && !isCorrect ? 'shake-animation' : ''}`}>
         {options.map((optionString, index) => {
           const isTheCorrectAnswer = optionString.toLowerCase() === correctSynonymForCurrent.toLowerCase();
           let buttonClassName = styles.optionButton;
           if (isAnswered) {
             if (selectedAnswer === optionString) {
-              buttonClassName += isCorrect ? ` ${styles.correctSelected}` : ` ${styles.incorrectSelected}`;
+              buttonClassName += isCorrect ? ` ${styles.correctSelected} pulse-animation` : ` ${styles.incorrectSelected}`;
             } else if (isTheCorrectAnswer) {
               buttonClassName += ` ${styles.correctUnselected}`;
             } else {

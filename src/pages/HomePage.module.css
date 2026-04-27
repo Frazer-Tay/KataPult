@@ -1,224 +1,401 @@
 /* src/pages/HomePage.module.css */
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    padding: 30px 15px;
-    text-align: center;
-  }
-
-/* NEW STYLE FOR THE APP LOGO */
-.appLogo {
-  width: 100px; /* Adjust as needed */
-  height: 100px; /* Adjust as needed, or use 'auto' if you set only width */
-  margin-bottom: 20px; /* Space below the logo */
-  /* You can add more styles like box-shadow, border-radius if you want */
-  /* animation: float 3s ease-in-out infinite alternate; */ /* Optional: subtle animation */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  animation: fadeIn 0.4s ease-out;
 }
 
-/* Optional floating animation for the logo */
-/* 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-} 
-*/
-  
-  .title {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-    color: var(--primary-dark);
-    font-weight: 700;
-    line-height: 1.2;
-  }
-  
-  .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-medium);
-      margin-bottom: 30px;
-      max-width: 90%;
-  }
-  
-  .buttonGrid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px; /* Slightly adjusted gap */
-      width: 100%;
-      max-width: 450px; /* Max width for single column buttons on mobile */
-  }
-  
-  .sectionTitle {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-top: 25px;
-    margin-bottom: 15px;
-    grid-column: 1 / -1;
-    text-align: center;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--primary-light);
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .testModeTitle {
-    margin-top: 40px;
-  }
-  
-  .buttonCard {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 15px 18px; /* Adjusted padding for two lines of text */
-    font-size: 1rem;
-    border-radius: var(--border-radius-lg);
-    text-decoration: none;
-    box-shadow: var(--shadow-md);
-    font-weight: 600;
-    text-align: left;
-    border: 2px solid transparent; /* For focus state */
-    background-color: var(--background-light);
-    transition: all 0.25s ease-in-out !important;
-    color: var(--text-dark);
-    min-height: 70px; /* Ensure enough height for two lines */
-  }
-  
-  .buttonCard:focus-visible {
-      border-color: var(--primary-color) !important;
-      box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light) !important;
-      outline: none;
-  }
-  .buttonCard:hover {
-    transform: translateY(-3px) scale(1.01); /* Subtler scale */
-    box-shadow: var(--shadow-lg);
-  }
-  .buttonCard:active {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-  }
-  
-  .buttonIcon {
-      font-size: 1.6rem; /* Slightly smaller icon for mobile card */
-      margin-right: 15px;
-      line-height: 1;
-      width: 30px; /* Fixed width for icon area */
-      text-align: center;
-      transition: transform 0.2s ease-out;
-      flex-shrink: 0; /* Prevent icon from shrinking */
-  }
-  .buttonCard:hover .buttonIcon {
-    transform: scale(1.1);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  .buttonTextContainer {
-    display: flex;
+/* --- Hero Section --- */
+.heroSection {
+  text-align: center;
+  max-width: 800px;
+  margin: 20px auto 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroProgressBadge {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+  color: #d84315;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.15);
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -0.03em;
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  color: var(--text-medium);
+  margin-bottom: 40px;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.heroActions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.heroPrimaryCTA {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-light) 100%);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.05rem;
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+.heroPrimaryCTA:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.heroSecondaryCTA {
+  background: white;
+  color: var(--primary-color);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.heroSecondaryCTA:hover {
+  background: var(--background-medium);
+  border-color: var(--text-light);
+}
+
+/* --- Value Cards --- */
+.valueSection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 60px;
+}
+
+.valueCard {
+  background: white;
+  border: 1px solid var(--border-color-light);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-xs);
+}
+
+.valueIcon {
+  font-size: 1.4rem;
+  background: var(--background-dark);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.valueText {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+/* --- Recommended Path --- */
+.pathSection {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 70px;
+}
+
+.sectionHeading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 30px;
+  letter-spacing: -0.02em;
+}
+
+.pathSteps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color-light);
+}
+
+.pathStep {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 196, 204, 0.1);
+  color: var(--accent-dark);
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.stepTitle {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.stepDesc {
+  font-size: 0.8rem;
+  color: var(--text-medium);
+  line-height: 1.3;
+}
+
+.pathDivider {
+  height: 2px;
+  width: 40px;
+  background: var(--border-color);
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+/* --- Modules Section --- */
+.modulesSection {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-bottom: 40px;
+}
+
+.moduleGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupHeading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.moduleCard {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.moduleCardTest {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.moduleCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--secondary-color);
+  background: white;
+}
+
+.moduleCardTest:hover {
+  border-color: var(--error-color);
+  box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.1);
+}
+
+.iconBlock {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.iconVocab { background: rgba(123, 97, 255, 0.1); }
+.iconImbuhan { background: rgba(16, 185, 129, 0.1); }
+.iconPersamaan { background: rgba(0, 196, 204, 0.1); }
+.iconPersamaanLat { background: rgba(59, 130, 246, 0.1); }
+.iconKarangan { background: rgba(245, 158, 11, 0.1); }
+.iconFlashcards { background: rgba(236, 72, 153, 0.1); }
+.iconSurat { background: rgba(139, 92, 246, 0.1); }
+.iconTest { background: rgba(239, 68, 68, 0.1); }
+
+.moduleInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-right: 20px;
+}
+
+.moduleTitle {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.srsBadge {
+  background: var(--danger-color, #d84315);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.moduleDesc {
+  font-size: 0.85rem;
+  color: var(--text-medium);
+  line-height: 1.4;
+}
+
+.moduleArrow {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  transition: transform 0.2s ease, color 0.2s ease;
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.moduleCard:hover .moduleArrow {
+  transform: translate(4px, -50%);
+  color: var(--secondary-color);
+}
+.moduleCardTest:hover .moduleArrow {
+  color: var(--error-color);
+}
+
+/* --- Motivational Footer --- */
+.motivationalFooter {
+  margin-top: 60px;
+  text-align: center;
+  color: var(--text-medium);
+  font-size: 0.95rem;
+  background: var(--background-medium);
+  padding: 16px 32px;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 900px) {
+  .pathSteps {
     flex-direction: column;
     align-items: flex-start;
-    flex-grow: 1;
+    gap: 20px;
   }
-  
-  .buttonText {
-    line-height: 1.3;
-    margin-bottom: 3px; /* Space between title and subtext */
-    font-size: 1rem; /* Main text size */
+  .pathDivider {
+    width: 2px;
+    height: 20px;
+    margin: 0 0 0 19px; /* Align with center of stepNumber (40px/2 - 1px) */
   }
-  
-  .buttonSubtext {
-    font-size: 0.75rem; /* Smaller subtext */
-    color: var(--text-medium);
-    font-weight: 400;
-    line-height: 1.3;
-  }
-  
-  /* Specific Button Colors (reusing existing ones, add new if needed) */
-  .vocabButton { border-left: 5px solid var(--secondary-color); }
-  .vocabButton:hover .buttonIcon { color: var(--secondary-color); }
-  
-  .imbuhanButton { border-left: 5px solid #9b59b6; } /* Purple */
-  .imbuhanButton:hover .buttonIcon { color: #9b59b6; }
-  
-  .persamaanButton { border-left: 5px solid var(--success-color); } /* Teal Green */
-  .persamaanButton:hover .buttonIcon { color: var(--success-color); }
-  
-  .persamaanLatihanButton { border-left: 5px solid #27ae60; } /* Another Green */
-  .persamaanLatihanButton:hover .buttonIcon { color: #27ae60; }
+}
 
-  .karanganButton { border-left: 5px solid var(--accent-color); } /* Amber/Gold */
-  .karanganButton:hover .buttonIcon { color: var(--accent-color); }
-  
-  .flashcardsButton { border-left: 5px solid #3498db; } /* A different blue for Flashcards */
-  .flashcardsButton:hover .buttonIcon { color: #3498db; }
-
-  .suratButton { border-left: 5px solid #f39c12; } /* Orange for Surat Resmi */
-  .suratButton:hover .buttonIcon { color: #f39c12; }
-
-  .testButton {
-    border-left: 5px solid #e74c3c; /* Distinct Red for test mode */
-    background-color: #fef3f2;
+@media (max-width: 767px) {
+  .heroTitle {
+    font-size: 2rem;
   }
-  .testButton:hover {
-    border-color: #c0392b;
-    background-color: #fdecea;
+  .heroSubtitle {
+    font-size: 1rem;
   }
-  .testButton:hover .buttonIcon {
-    color: #e74c3c;
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 20px;
+  }
+  .heroActions > * {
+    width: 100%;
   }
   
-  /* Desktop adjustments */
-  @media (min-width: 768px) {
-      .container {
-          padding: 40px 20px;
-      }
-      .title {
-          font-size: 2.8rem;
-      }
-      .subtitle {
-          font-size: 1.2rem;
-          max-width: 600px;
-          margin-bottom: 40px;
-      }
-      .buttonGrid {
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Adjusted minmax */
-          gap: 25px;
-          max-width: 1000px;
-      }
-      .sectionTitle {
-          font-size: 1.6rem;
-          margin-top: 40px;
-      }
-      .buttonCard {
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          min-height: 180px; /* Slightly increased min-height for desktop */
-          padding: 25px;
-      }
-      .buttonIcon {
-          font-size: 2.5rem; /* Larger icon on desktop */
-          margin-right: 0;
-          margin-bottom: 15px; /* Space below icon */
-          width: auto;
-      }
-      .buttonTextContainer {
-        align-items: center; /* Center text when icon is above */
-      }
-      .buttonText {
-        font-size: 1.1rem; /* Slightly larger main text on desktop */
-      }
-      .buttonSubtext {
-        font-size: 0.85rem; /* Slightly larger subtext on desktop */
-        text-align: center;
-      }
+  .valueSection {
+    grid-template-columns: 1fr;
   }
+  
+  .moduleGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .moduleCard {
+    padding: 20px;
+  }
+  
+  .motivationalFooter {
+    border-radius: 16px;
+    padding: 20px;
+  }
+}
+

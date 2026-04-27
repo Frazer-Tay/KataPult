@@ -12,8 +12,11 @@ import SuratResmiPage from './pages/SuratResmiPage';
 import TestSetupPage from './pages/TestSetupPage';
 import ImbuhanTestPage from './pages/ImbuhanTestPage';
 import PersamaanTestPage from './pages/PersamaanTestPage';
+import DailyChallengePage from './pages/DailyChallengePage';
 import AnalyticsTracker from './components/AnalyticsTracker';
+import { ProgressProvider } from './contexts/ProgressContext';
 import './App.css';
+import appLogo from './assets/images/app-logo.png';
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -27,11 +30,16 @@ function App() {
   };
 
   return (
-    <Router>
-      <AnalyticsTracker />
+    <ProgressProvider>
+      <Router>
+        <AnalyticsTracker />
       <header className="app-header">
-        <Link to="/" className="logo-link" onClick={closeNav}>
-          KataPult Bahasa Prep
+        <Link to="/" className="header-brand" onClick={closeNav}>
+          <img src={appLogo} alt="KataPult Logo" className="logo-image" />
+          <div className="logo-text-container">
+            <span className="logo-title">KataPult</span>
+            <span className="logo-tagline">Bahasa Prep Companion</span>
+          </div>
         </Link>
         
         <button className="hamburger-button" onClick={toggleNav} aria-label="Toggle navigation" aria-expanded={isNavOpen}>
@@ -63,12 +71,14 @@ function App() {
           <Route path="/test-setup" element={<TestSetupPage />} />
           <Route path="/test/imbuhan" element={<ImbuhanTestPage />} />
           <Route path="/test/persamaan" element={<PersamaanTestPage />} />
+          <Route path="/daily-challenge" element={<DailyChallengePage />} />
         </Routes>
       </main>
       <footer className="app-footer">
         <p>© {new Date().getFullYear()} KataPult. Latih Bahasa Anda!</p>
       </footer>
-    </Router>
+      </Router>
+    </ProgressProvider>
   );
 }
 

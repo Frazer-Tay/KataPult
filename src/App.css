@@ -1,40 +1,53 @@
 /* src/App.css */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  --primary-color: #663399; /* Rebeccapurple */
-  --primary-light: #9370DB; /* MediumPurple */
-  --primary-dark: #483D8B;  /* DarkSlateBlue */
-  --secondary-color: #007BFF; /* Bright Blue */
-  --secondary-light: #5CACEE; /* Lighter Blue */
-  --accent-color: #FFC107; /* Amber/Gold */
-  --accent-dark: #FFA000; /* Darker Amber */
-  --success-color: #20C997; /* Teal Green */
-  --success-light: #E0F8F0; /* Light Teal */
-  --success-dark: #198754;  /* Dark Green */
-  --error-color: #F85149; /* Bright Red */
-  --error-light: #FDECEA; /* Light Red */
-  --error-dark: #DC3545; /* Darker Red */
-  --text-dark: #343a40; /* Near Black */
-  --text-medium: #5a6268; /* Medium Grey */
-  --text-light: #868e96; /* Light Grey */
-  --background-light: #ffffff; /* White */
-  --background-medium: #f4f7fc; /* Very Light Blue/Grey */
-  --background-dark: #eef2f7; /* Light Blue-Grey */
-  --border-color: #dee2e6;
-  --border-color-light: #f1f3f5;
+  
+  /* Modern SaaS Color Palette */
+  --primary-color: #2A1B54; /* Deep Indigo */
+  --primary-light: #4D3C82; 
+  --primary-dark: #1A103C;  
+  
+  --secondary-color: #7B61FF; /* Soft Lavender/Violet accent */
+  --secondary-light: #9B88FF; 
+  
+  --accent-color: #00C4CC; /* Cyan accent for Call to Action */
+  --accent-dark: #00A3A8; 
+  
+  --success-color: #10B981; 
+  --success-light: #D1FAE5; 
+  --success-dark: #059669;  
+  
+  --error-color: #EF4444; 
+  --error-light: #FEE2E2; 
+  --error-dark: #DC2626; 
+  
+  --text-dark: #111827; /* Very Dark Gray */
+  --text-medium: #4B5563; /* Medium Gray */
+  --text-light: #9CA3AF; /* Light Gray */
+  
+  --background-light: #ffffff; 
+  --background-medium: #F3F4F6; 
+  --background-dark: #FAFAFA; /* Cleaner almost-white background */
+  
+  --border-color: #E5E7EB;
+  --border-color-light: #F3F4F6;
+  
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 3px 6px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
-  --border-radius-xl: 16px;
-  --progress-bar-background: #e9ecef;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(123, 97, 255, 0.15); /* For modern glow effect */
+  
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  
+  --progress-bar-background: #E5E7EB;
 }
 
 *, *::before, *::after {
@@ -42,7 +55,7 @@
 }
 
 html {
-  font-size: 100%; /* Base for rem units */
+  font-size: 100%;
 }
 
 body {
@@ -51,6 +64,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-dark);
+  
+  /* Subtle ambient background glow */
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(123, 97, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(0, 196, 204, 0.06) 0%, transparent 40%);
+  background-attachment: fixed;
+  
   color: var(--text-dark);
   line-height: 1.6;
   font-size: 15px;
@@ -58,81 +78,113 @@ body {
 }
 
 #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative; /* For mobile nav overlay context */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
 }
 
+/* Glassy Sticky Header */
 .app-header {
-  background: var(--primary-dark);
-  padding: 12px 15px; /* Adjusted for mobile */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  flex-shrink: 0;
-  border-bottom: 2px solid var(--accent-color); /* Slightly thinner accent */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  color: white;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
 }
 
-.logo-link {
-  color: white;
-  font-size: 1.3rem; /* Adjusted for mobile */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  z-index: 1001;
+}
+
+.logo-image {
+  height: 32px;
+  width: auto;
+  border-radius: 6px;
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  color: var(--primary-color);
+  font-size: 1.25rem;
   font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-  z-index: 1001; /* Above nav when open */
-  padding: 5px 0; /* Add some padding for easier tap */
-}
-.logo-link:hover {
-  opacity: 0.85;
-  text-decoration: none;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-/* Hamburger Button Styles */
+.logo-tagline {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Hamburger Button */
 .hamburger-button {
-  display: none; /* Hidden by default, shown on mobile */
+  display: none;
   background: none;
   border: none;
-  color: white;
-  font-size: 1.9rem; /* Slightly larger hamburger */
+  color: var(--text-dark);
+  font-size: 1.8rem;
   cursor: pointer;
-  padding: 5px; /* Make it easier to tap */
-  margin-left: 10px; /* Space from other elements if any */
-  z-index: 1001; /* Above nav */
-  line-height: 1; /* Ensure icon is vertically centered */
+  padding: 5px;
+  margin-left: 10px;
+  z-index: 1001;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
 
-/* Default Nav for Desktop (will be overridden for mobile) */
+.hamburger-button:hover {
+  color: var(--secondary-color);
+}
+
+/* Navigation */
 .app-nav {
   display: flex;
-  gap: 10px; /* Initial gap, will be overridden for mobile */
+  gap: 8px;
 }
 
 .app-nav a {
-  color: #e0e0e0;
+  color: var(--text-medium);
   text-decoration: none;
-  padding: 8px 10px;
-  border-radius: var(--border-radius-sm);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
   font-weight: 500;
+  font-size: 0.9rem;
   white-space: nowrap;
 }
 
-.app-nav a:hover,
-.app-nav a.active-link { /* Class from NavLink */
-  color: white;
-  background-color: rgba(255, 255, 255, 0.15);
+.app-nav a:hover {
+  color: var(--primary-color);
+  background-color: var(--background-medium);
+}
+
+.app-nav a.active-link {
+  color: var(--primary-color);
+  background-color: rgba(123, 97, 255, 0.1);
+  font-weight: 600;
 }
 
 main {
-  padding: 20px 10px;
+  padding: 24px 16px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -140,39 +192,38 @@ main {
   max-width: 1100px;
   margin: 0 auto;
   box-sizing: border-box;
-  /* Mobile header height approx: 12px*2 (padding) + ~21px (1.3rem logo) + 2px (border) = ~47px. Add buffer. */
-  padding-top: 65px; /* ADJUST THIS based on your ACTUAL mobile header height */
 }
 
 .app-footer {
   text-align: center;
-  margin-top: 40px;
-  padding: 20px 15px;
+  margin-top: 60px;
+  padding: 30px 20px;
   color: var(--text-light);
   font-size: 0.85rem;
-  border-top: 1px solid var(--border-color-light);
-  background-color: var(--background-light);
+  border-top: 1px solid var(--border-color);
+  background-color: transparent;
   flex-shrink: 0;
 }
 
 .loading-page, .loading, .error, .completionMessage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 40vh;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: var(--text-light);
-    padding: 30px 15px;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 40vh;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  padding: 30px 15px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .error { color: var(--error-color); font-weight: 600; font-size: 1.1rem; }
-.completionMessage { color: var(--primary-dark); font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
-.completionSubMessage { font-size: 1rem; color: var(--text-medium); margin-bottom: 20px; }
-.completionActions { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+.completionMessage { color: var(--primary-color); font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; line-height: 1.3; letter-spacing: -0.01em; }
+.completionSubMessage { font-size: 1.05rem; color: var(--text-medium); margin-bottom: 24px; }
+.completionActions { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
 
 /* Global Button Styles */
 button, .button, a.buttonCard {
@@ -182,7 +233,7 @@ button, .button, a.buttonCard {
   padding: 10px 20px;
   font-size: 0.95rem;
   font-weight: 600;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: var(--shadow-sm);
   display: inline-flex;
   align-items: center;
@@ -194,136 +245,213 @@ button, .button, a.buttonCard {
   color: inherit;
 }
 
-button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-button:active:not(:disabled), .button:active:not(:disabled), a.buttonCard:active { transform: translateY(0px); box-shadow: var(--shadow-xs); }
-button:disabled { cursor: not-allowed; background-color: #e9ecef !important; color: #adb5bd !important; border-color: #ced4da !important; box-shadow: none !important; opacity: 0.7; }
+button:hover:not(:disabled), .button:hover:not(:disabled), a.buttonCard:hover { 
+  transform: translateY(-2px); 
+  box-shadow: var(--shadow-md); 
+}
 
-.primaryButton { background: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; }
-.primaryButton:hover:not(:disabled) { opacity: 0.9; }
+button:active:not(:disabled), .button:active:not(:disabled), a.buttonCard:active { 
+  transform: translateY(0px); 
+  box-shadow: var(--shadow-xs); 
+}
 
-.secondaryButton { background-color: var(--accent-color); color: var(--text-dark); border: 1px solid var(--accent-dark); }
-.secondaryButton:hover:not(:disabled) { background-color: #e6b300; }
+button:disabled { 
+  cursor: not-allowed; 
+  background-color: var(--background-medium) !important; 
+  color: var(--text-light) !important; 
+  border-color: var(--border-color) !important; 
+  box-shadow: none !important; 
+  opacity: 0.7; 
+}
 
-.nextButton { background-color: var(--secondary-color); color: white; border: 1px solid var(--secondary-color); }
-.nextButton:hover:not(:disabled) { background-color: #0056b3; border-color: #0056b3;}
+.primaryButton { 
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-light) 100%); 
+  color: white; 
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+.primaryButton:hover:not(:disabled) { 
+  opacity: 0.95; 
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.secondaryButton { 
+  background-color: white; 
+  color: var(--primary-color); 
+  border: 1px solid var(--border-color); 
+}
+.secondaryButton:hover:not(:disabled) { 
+  background-color: var(--background-dark); 
+  border-color: var(--text-light);
+}
+
+.nextButton { 
+  background-color: var(--primary-color); 
+  color: white; 
+}
+.nextButton:hover:not(:disabled) { 
+  background-color: var(--primary-light); 
+}
 
 .arrowIcon { font-size: 1.2rem; line-height: 1; transition: transform 0.2s ease; }
-.nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(3px); }
+.nextButton:hover:not(:disabled) .arrowIcon { transform: translateX(4px); }
 
 *:focus-visible {
-  outline: 3px solid var(--secondary-light);
+  outline: 2px solid var(--secondary-light);
   outline-offset: 2px;
   border-radius: var(--border-radius-sm);
-  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
-}
-input:focus-visible {
-  border-color: var(--primary-light) !important;
-}
-a.buttonCard:focus-visible {
-  border-color: var(--primary-color);
 }
 
-/* --- Mobile Navigation Specific Styles --- */
+input:focus-visible, textarea:focus-visible {
+  border-color: var(--secondary-light) !important;
+  box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1) !important;
+}
+
+/* ==========================================================================
+   Micro-Interactions & Animations
+   ========================================================================== */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-1deg); }
+  50% { transform: translateX(5px) rotate(1deg); }
+  75% { transform: translateX(-5px) rotate(-1deg); }
+  100% { transform: translateX(0); }
+}
+
+.shake-animation {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-animation {
+  animation: pulse 0.5s ease-out both;
+  border-color: var(--success-color) !important;
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(10px) scale(0.9); }
+  20% { opacity: 1; transform: translateY(-5px) scale(1.1); }
+  80% { opacity: 1; transform: translateY(-15px) scale(1); }
+  100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
+}
+
+.floating-combo {
+  position: absolute;
+  color: #ff9800;
+  font-weight: 800;
+  font-size: 1.5rem;
+  pointer-events: none;
+  animation: floatUp 1.2s ease-in-out forwards;
+  text-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+  z-index: 100;
+}
+
+/* --- Mobile Navigation --- */
 @media (max-width: 767px) {
+  .logo-tagline {
+    display: none; /* Hide tagline on very small screens to save space */
+  }
 
   .hamburger-button {
-    display: block; /* Show hamburger on mobile */
+    display: block;
   }
 
   .app-nav {
     display: flex;
-    flex-direction: column; /* Stack links vertically */
+    flex-direction: column;
     position: absolute;
-    top: 100%; /* Position below the header */
+    top: 100%;
     left: 0;
     width: 100%;
-    background-color: var(--primary-dark); /* Or a slightly different shade */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    padding: 10px 0; /* Padding for the dropdown container */
-    transform: translateY(-250%); /* Hide it off-screen above (adjust if needed) */
-    transition: transform 0.3s ease-in-out, visibility 0s 0.3s; /* Delay visibility change */
-    visibility: hidden; /* Hide when not open for accessibility */
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 10px 16px;
+    transform: translateY(-150%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s 0.3s;
+    visibility: hidden;
     z-index: 999;
-    max-height: calc(100vh - 60px); /* Example: prevent overly long menu on short screens, 60px is an est. header height */
+    max-height: calc(100vh - 70px);
     overflow-y: auto;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .app-nav.open {
-    transform: translateY(0%); /* Slide it into view */
+    transform: translateY(0%);
+    opacity: 1;
     visibility: visible;
-    transition: transform 0.3s ease-in-out, visibility 0s 0s;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0s 0s;
   }
 
   .app-nav a {
-    padding: 14px 20px; /* Larger tap targets */
+    padding: 14px 16px;
     text-align: left;
     width: 100%;
-    box-sizing: border-box;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Subtle separator */
-    color: #f0f0f0; /* Lighter text for mobile nav items */
-    font-size: 1rem; /* Ensure readable font size */
-  }
-  .app-nav a:last-child {
+    border-radius: 8px;
     border-bottom: none;
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    font-weight: 500;
   }
+  
   .app-nav a:hover,
   .app-nav a.active-link {
-    background-color: var(--primary-color); /* More distinct active/hover for mobile */
-    color: white;
+    background-color: var(--background-medium);
+    color: var(--primary-color);
   }
 }
 
-
-/* --- Desktop and Larger Tablet Overrides --- */
+/* --- Desktop Adjustments --- */
 @media (min-width: 768px) {
   body { font-size: 16px; }
+  
   .app-header {
-    padding: 15px 40px; /* Desktop header padding */
+    padding: 16px 40px;
   }
-  .logo-link {
-    font-size: 1.6rem; /* Larger logo on desktop */
+  
+  .logo-image {
+    height: 38px;
   }
-
+  
+  .logo-title {
+    font-size: 1.4rem;
+  }
+  
   .hamburger-button {
-    display: none; /* Hide hamburger on desktop */
+    display: none;
   }
 
   .app-nav {
-    /* Restore horizontal layout for desktop */
     flex-direction: row;
-    position: static; /* Back to normal flow */
+    position: static;
     width: auto;
     background-color: transparent;
     box-shadow: none;
     padding: 0;
-    transform: none; /* Reset mobile transform */
-    visibility: visible; /* Always visible on desktop */
+    transform: none;
+    opacity: 1;
+    visibility: visible;
     max-height: none;
     overflow-y: visible;
-    gap: 20px; /* Space between desktop nav links */
+    gap: 8px;
+    border: none;
   }
-  .app-nav a {
-    padding: 8px 12px; /* Desktop padding for nav links */
-    border-bottom: none; /* Remove mobile separator */
-    color: #e0e0e0; /* Original desktop link color */
-    font-size: 0.95rem; /* Original desktop font size */
-  }
-  .app-nav a:hover,
-  .app-nav a.active-link {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.15); /* Original desktop hover/active */
-    border-bottom: 2px solid var(--accent-color); /* Optional: Add back underline for desktop active */
-  }
-
+  
   main {
-    padding: 40px;
-    /* Desktop header height approx: 15px*2 (padding) + ~26px (1.6rem logo) + 2px (border) = ~58px. Add buffer. */
-    padding-top: 80px; /* ADJUST THIS based on your ACTUAL DESKTOP header height */
+    padding: 32px 40px;
   }
-  .app-footer { margin-top: 60px; padding: 25px; font-size: 0.9rem; }
+  
+  .app-footer { margin-top: 80px; padding: 40px 20px; font-size: 0.95rem; }
   .loading-page, .loading, .error, .completionMessage { font-size: 1.4rem; }
-  .completionMessage { font-size: 2rem; }
+  .completionMessage { font-size: 2.2rem; }
   .completionSubMessage { font-size: 1.1rem; }
-  button, .button, a.buttonCard { padding: 14px 30px; font-size: 1.05rem; }
+  button, .button, a.buttonCard { padding: 12px 24px; font-size: 1rem; }
   .arrowIcon { font-size: 1.3rem; }
 }
