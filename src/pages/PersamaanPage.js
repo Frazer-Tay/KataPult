@@ -2,6 +2,7 @@
 // CORRECTED: Keyboard navigation dependency for arrow keys
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
+import useTimeTracker from '../hooks/useTimeTracker';
 import styles from './PersamaanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -40,6 +41,7 @@ const LOCAL_STORAGE_KEY = 'kataPultPersamaanState_v4';
 const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
 
 const PersamaanPage = () => {
+  useTimeTracker('Persamaan');
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

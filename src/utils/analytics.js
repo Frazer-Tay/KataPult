@@ -1,40 +1,37 @@
 // src/utils/analytics.js
-import ReactGA from 'react-ga4';
+import posthog from 'posthog-js';
 
-// IMPORTANT: REPLACE WITH YOUR ACTUAL MEASUREMENT ID
-const GA_MEASUREMENT_ID = "G-2HHGEPXFS0"; // <--- YOUR ACTUAL ID HERE
+const POSTHOG_API_KEY = "phc_zpi4smVqjohH5CSHn3azTz49aGJiTU3mboSLT84pGyr4";
+const POSTHOG_HOST = "https://us.i.posthog.com";
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 let isInitialized = false;
 
-export const initGA = () => {
-  // Check if the ID is not the placeholder AND is actually set
-  if (IS_PRODUCTION && GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== "G-XXXXXXXXXX" && GA_MEASUREMENT_ID.startsWith("G-")) {
-    if (!isInitialized) {
-        ReactGA.initialize(GA_MEASUREMENT_ID);
-        isInitialized = true;
-        console.log("Google Analytics Initialized via utility with ID:", GA_MEASUREMENT_ID);
-    }
-  } else if (IS_PRODUCTION) {
-    console.warn(`Google Analytics Measurement ID is invalid or placeholder: [${GA_MEASUREMENT_ID}]. Analytics will not be initialized.`);
-  } else if (!IS_PRODUCTION) {
-    console.log("Google Analytics not initialized in development mode (via utility).");
+export const initAnalytics = () => {
+  if (!isInitialized) {
+    // PostHog handles development vs production well (you can filter by hostname in their UI)
+    posthog.init(POSTHOG_API_KEY, {
+      api_host: POSTHOG_HOST,
+      autocapture: true, // Automatically captures clicks, pageviews, etc.
+      capture_pageview: false // We will trigger pageviews manually for React Router
+    });
+    isInitialized = true;
+    console.log("PostHog Analytics Initialized");
   }
 };
 
 export const trackPageView = (path) => {
-  if (IS_PRODUCTION && isInitialized) {
-    ReactGA.send({ hitType: "pageview", page: path, title: document.title });
-    console.log(`GA Pageview (util): ${path}`);
+  if (isInitialized) {
+    posthog.capture('$pageview', {
+      $current_url: window.location.origin + path
+    });
+    console.log(`PostHog Pageview (util): ${path}`);
   }
 };
 
-export const trackEvent = (category, action, label, value) => {
-  if (IS_PRODUCTION && isInitialized) {
-    const eventData = { category, action };
-    if (label) eventData.label = label;
-    if (value !== undefined && typeof value === 'number') eventData.value = value; // GA4 expects value to be a number
-    ReactGA.event(eventData);
-    console.log(`GA Event (util): Category: ${category}, Action: ${action}, Label: ${label}, Value: ${value}`);
+export const trackEvent = (eventName, properties = {}) => {
+  if (isInitialized) {
+    posthog.capture(eventName, properties);
+    console.log(`PostHog Event (util): ${eventName}`, properties);
   }
 };

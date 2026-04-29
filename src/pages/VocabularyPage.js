@@ -3,11 +3,13 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { vocabularyData } from '../data/vocabulary';
 import { getDueWords, updateWordSRS } from '../utils/srsLogic';
 import { useProgress } from '../contexts/ProgressContext';
+import useTimeTracker from '../hooks/useTimeTracker';
 import styles from './VocabularyPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 const VocabularyPage = () => {
+  useTimeTracker('Vocabulary');
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,6 +1,7 @@
 // src/pages/FlashcardsPage.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { flashcardsData } from '../data/flashcardsData';
+import useTimeTracker from '../hooks/useTimeTracker';
 import styles from './FlashcardsPages.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -16,6 +17,7 @@ const shuffleArray = (array) => {
 };
 
 const FlashcardsPage = () => {
+  useTimeTracker('Flashcards');
   const [allSets, setAllSets] = useState([]);
   const [currentSetIndex, setCurrentIndex] = useState(0);
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);

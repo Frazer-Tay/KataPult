@@ -2,6 +2,7 @@
 // ADDED: Previous/Next navigation buttons for practice revision
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { imbuhanData } from '../data/imbuhan';
+import useTimeTracker from '../hooks/useTimeTracker';
 import styles from './ImbuhanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -10,6 +11,7 @@ const LOCAL_STORAGE_KEY = 'kataPultImbuhanState_v4';
 const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
 
 const ImbuhanPage = () => {
+  useTimeTracker('Imbuhan');
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,10 +1,12 @@
 // src/pages/SuratResmiPage.js
 import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation and useNavigate
+import useTimeTracker from '../hooks/useTimeTracker';
 import styles from './SuratResmiPage.module.css';
 import { suratResmiGuide } from '../data/suratResmiContent'; // Ensure this path is correct
 
 const SuratResmiPage = () => {
+  useTimeTracker('SuratResmi');
   const pageRef = useRef(null);
   const location = useLocation(); // Get current location object
   const navigate = useNavigate(); // For programmatic navigation (updating hash)

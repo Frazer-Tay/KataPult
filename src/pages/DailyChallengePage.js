@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../contexts/ProgressContext';
 import { getDailyChallengeData } from '../utils/dailySeed';
+import useTimeTracker from '../hooks/useTimeTracker';
 import ProgressBar from '../components/ProgressBar';
 import styles from './DailyChallengePage.module.css';
 
 const LIVES_START_COUNT = 3;
 
 const DailyChallengePage = () => {
+  useTimeTracker('DailyChallenge');
   const navigate = useNavigate();
   const { dailyChallengeStatus, completeDailyChallenge } = useProgress();
   
