@@ -17,27 +17,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- START: Google tag (gtag.js) with persistent user_id tracking -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2HHGEPXFS0"></script>
-    <script>
-      // Create or retrieve a persistent user ID
-      let userId = localStorage.getItem("user_id");
-      if (!userId) {
-        userId = crypto.randomUUID();
-        localStorage.setItem("user_id", userId);
-      }
-
-      // Initialize GA4 with the persistent user ID
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-2HHGEPXFS0', {
-        'user_id': userId
-      });
-    </script>
-    <!-- END: Google tag with persistent user_id -->
-
     <title>KataPult - Latihan Bahasa Indonesia I2</title>
   </head>
   <body>
