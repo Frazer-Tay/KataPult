@@ -3,45 +3,126 @@ import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackPageView, trackEvent, initAnalytics } from '../utils/analytics';
 
+const ROUTE_SECTIONS = [
+  { prefix: '/persamaan-latihan', section: 'Persamaan Latihan' },
+  { prefix: '/test/imbuhan', section: 'Imbuhan Test' },
+  { prefix: '/test/persamaan', section: 'Persamaan Test' },
+  { prefix: '/daily-challenge', section: 'Daily Challenge' },
+  { prefix: '/surat-resmi', section: 'Surat Resmi' },
+  { prefix: '/test-setup', section: 'Test Setup' },
+  { prefix: '/vocabulary', section: 'Vocabulary' },
+  { prefix: '/flashcards', section: 'Flashcards' },
+  { prefix: '/persamaan', section: 'Persamaan MCQ' },
+  { prefix: '/karangan', section: 'Karangan' },
+  { prefix: '/imbuhan', section: 'Imbuhan' },
+  { prefix: '/', section: 'Home' }
+];
+
+const getSectionForRoute = (route) => {
+  const match = ROUTE_SECTIONS.find(({ prefix }) => (
+    prefix === '/' ? route === '/' : route.startsWith(prefix)
+  ));
+
+  return match ? match.section : 'Unknown';
+};
+
 const AnalyticsTracker = () => {
   const location = useLocation();
   const sessionStartTimeRef = useRef(Date.now());
+  const sectionVisitRef = useRef(null);
+
+  const flushSectionTime = (reason) => {
+    const currentVisit = sectionVisitRef.current;
+
+    if (!currentVisit) {
+      return;
+    }
+
+    const durationInSeconds = Math.round((Date.now() - currentVisit.startedAt) / 1000);
+
+    if (durationInSeconds >= 1) {
+      trackEvent('Time_Spent_Section', {
+        section: currentVisit.section,
+        route: currentVisit.route,
+        duration_seconds: durationInSeconds,
+        reason
+      });
+    }
+
+    sectionVisitRef.current = {
+      ...currentVisit,
+      startedAt: Date.now()
+    };
+  };
 
   useEffect(() => {
-    initAnalytics(); 
+    initAnalytics();
   }, []);
 
   useEffect(() => {
-    trackPageView(location.pathname + location.search);
+    const route = location.pathname || '/';
+    const routeWithSearch = `${route}${location.search}`;
+    const section = getSectionForRoute(route);
+
+    if (sectionVisitRef.current && sectionVisitRef.current.route !== route) {
+      flushSectionTime('route_change');
+    }
+
+    sectionVisitRef.current = {
+      route,
+      section,
+      startedAt: Date.now()
+    };
+
+    trackPageView(routeWithSearch, { route, section });
+    trackEvent('Section_Visited', { route, section });
   }, [location]);
 
   useEffect(() => {
-    const handleBeforeUnloadOrVisibilityChange = () => {
+    const flushSessionTime = (reason) => {
+      const durationInSeconds = Math.round((Date.now() - sessionStartTimeRef.current) / 1000);
+
+      if (durationInSeconds >= 1) {
+        trackEvent('Total_Session_Time', {
+          duration_seconds: durationInSeconds,
+          route: sectionVisitRef.current?.route || location.pathname || '/',
+          section: sectionVisitRef.current?.section || getSectionForRoute(location.pathname || '/'),
+          reason
+        });
+      }
+
+      sessionStartTimeRef.current = Date.now();
+    };
+
+    const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        const endTime = Date.now();
-        const durationInSeconds = Math.round((endTime - sessionStartTimeRef.current) / 1000);
-        
-        if (durationInSeconds >= 1) {
-          trackEvent('Total_Session_Time', {
-            duration_seconds: durationInSeconds
-          });
-          sessionStartTimeRef.current = Date.now();
-        }
+        flushSectionTime('tab_hidden');
+        flushSessionTime('tab_hidden');
       } else if (document.visibilityState === 'visible') {
         sessionStartTimeRef.current = Date.now();
+        sectionVisitRef.current = {
+          route: location.pathname || '/',
+          section: getSectionForRoute(location.pathname || '/'),
+          startedAt: Date.now()
+        };
       }
     };
 
-    window.addEventListener('visibilitychange', handleBeforeUnloadOrVisibilityChange);
-    window.addEventListener('beforeunload', handleBeforeUnloadOrVisibilityChange);
+    const handleBeforeUnload = () => {
+      flushSectionTime('before_unload');
+      flushSessionTime('before_unload');
+    };
+
+    window.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('visibilitychange', handleBeforeUnloadOrVisibilityChange);
-      window.removeEventListener('beforeunload', handleBeforeUnloadOrVisibilityChange);
+      window.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [location]);
 
-  return null; // This component does not render anything
+  return null;
 };
 
 export default AnalyticsTracker;

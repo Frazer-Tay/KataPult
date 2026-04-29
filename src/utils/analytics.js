@@ -16,7 +16,9 @@ const getAnonymousId = () => {
   anonymousId = localStorage.getItem(storageKey);
 
   if (!anonymousId) {
-    anonymousId = crypto.randomUUID();
+    anonymousId = crypto.randomUUID
+      ? crypto.randomUUID()
+      : `katapult-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     localStorage.setItem(storageKey, anonymousId);
   }
 
@@ -67,13 +69,14 @@ export const initAnalytics = () => {
   return posthog;
 };
 
-export const trackPageView = (path) => {
+export const trackPageView = (path, properties = {}) => {
   initAnalytics();
   posthog.capture('$pageview', {
     $current_url: window.location.href,
-    path
+    path,
+    ...properties
   });
-  directCapture('katapult_pageview', { path });
+  directCapture('katapult_pageview', { path, ...properties });
   console.log(`PostHog Pageview (util): ${path}`);
 };
 
