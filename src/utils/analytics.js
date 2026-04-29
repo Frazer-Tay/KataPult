@@ -3,6 +3,8 @@ import posthog from 'posthog-js';
 
 const POSTHOG_API_KEY = "phc_zpi4smVqjohH5CSHn3azTz49aGJiTU3mboSLT84pGyr4";
 const POSTHOG_HOST = "https://us.i.posthog.com";
+const POSTHOG_DISTINCT_ID_KEY = 'katapult_posthog_distinct_id';
+const LEGACY_USER_ID_KEY = 'user_id';
 
 let isInitialized = false;
 let anonymousId = null;
@@ -12,15 +14,19 @@ const getAnonymousId = () => {
     return anonymousId;
   }
 
-  const storageKey = 'katapult_posthog_distinct_id';
-  anonymousId = localStorage.getItem(storageKey);
+  const existingPostHogId = localStorage.getItem(POSTHOG_DISTINCT_ID_KEY);
+  const legacyUserId = localStorage.getItem(LEGACY_USER_ID_KEY);
+
+  anonymousId = existingPostHogId || legacyUserId;
 
   if (!anonymousId) {
     anonymousId = crypto.randomUUID
       ? crypto.randomUUID()
       : `katapult-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem(storageKey, anonymousId);
   }
+
+  localStorage.setItem(POSTHOG_DISTINCT_ID_KEY, anonymousId);
+  localStorage.setItem(LEGACY_USER_ID_KEY, anonymousId);
 
   return anonymousId;
 };
