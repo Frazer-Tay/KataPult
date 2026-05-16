@@ -1,0 +1,180 @@
+/* src/pages/LandingPage.module.css */
+.landingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+  padding: 40px 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.heroHeader {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 800px;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+
+.heroTitle span {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  font-size: 1.35rem;
+  color: var(--text-medium);
+  line-height: 1.5;
+}
+
+.levelSelectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.levelCard {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.levelCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--secondary-color), var(--primary-light));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.levelCard:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--secondary-light);
+  background: white;
+}
+
+.levelCard:hover::before {
+  opacity: 1;
+}
+
+.levelIcon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(77, 60, 130, 0.1) 100%);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  margin-bottom: 30px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.levelCard:hover .levelIcon {
+  transform: scale(1.15) rotate(5deg);
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.2) 0%, rgba(77, 60, 130, 0.2) 100%);
+  box-shadow: 0 10px 20px rgba(123, 97, 255, 0.15);
+}
+
+.levelTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.levelDesc {
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  margin-bottom: 40px;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+
+.levelCTA {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-light) 100%);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.levelCard:hover .levelCTA {
+  box-shadow: 0 8px 15px rgba(123, 97, 255, 0.3);
+  gap: 12px;
+}
+
+/* Specific Level 1 Styles */
+.level1Card .levelIcon {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+}
+.level1Card:hover .levelIcon {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.15);
+}
+.level1Card::before {
+  background: linear-gradient(90deg, var(--success-light), var(--success-color));
+}
+.level1Card .levelCTA {
+  background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+}
+.level1Card:hover .levelCTA {
+  box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3);
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+  .heroSubtitle {
+    font-size: 1.15rem;
+  }
+  .levelCard {
+    padding: 40px 24px;
+  }
+  .levelSelectionGrid {
+    gap: 30px;
+  }
+}
