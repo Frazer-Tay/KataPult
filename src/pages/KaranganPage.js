@@ -46,7 +46,7 @@ const LOCAL_STORAGE_KEY = 'kataPultKaranganState_v4';
 const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
 
 const KaranganPage = () => {
-  useTimeTracker('Karangan');
+  useTimeTracker('Essay Vocab MCQ');
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -202,7 +202,7 @@ const KaranganPage = () => {
     setSelectedAnswer(selectedOptionDefinition);
     recordLearnerActivity({
       eventType: 'answer_attempt',
-      section: 'Karangan',
+      section: 'Essay Vocab MCQ',
       route: '/karangan',
       itemType: 'definition_mcq',
       correct
@@ -263,10 +263,10 @@ const KaranganPage = () => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCountForDisplay = missedItemsMaster.size;
 
-  if (isLoading) { return <div className="loading">Memuat kata Karangan...</div>; }
+  if (isLoading) { return <div className="loading">Memuat Essay Vocab MCQ...</div>; }
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) {
-    const completionText = isReviewingMistakes ? "✨ Sesi Review Karangan Selesai! ✨" : "✨ Latihan Karangan Selesai! ✨";
+    const completionText = isReviewingMistakes ? "✨ Sesi Review Essay Vocab Selesai! ✨" : "✨ Latihan Essay Vocab MCQ Selesai! ✨";
     const mistakesToShow = finalMistakeCountForDisplay;
     return (
       <div className={styles.container}>
@@ -291,7 +291,7 @@ const KaranganPage = () => {
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
-        <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewingMistakes ? "Review Kesalahan Karangan" : "Kosakata Karangan"} />
+        <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewingMistakes ? "Review Kesalahan Essay Vocab" : "Essay Vocab MCQ"} />
         <div className={styles.card}>
             <h2 className={styles.word}>{currentItemFromMemo.word || '[N/A]'}</h2>
             {currentItemFromMemo.synonyms && currentItemFromMemo.synonyms.length > 0 && (

@@ -60,6 +60,10 @@ const AppContent = () => {
           <div className="nav-profile">
             {currentUser ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="level-tabs" aria-label="Level selector">
+                  <NavLink to="/level1" className={isLevel1 ? 'active-level' : ''} onClick={closeNav}>L1</NavLink>
+                  <NavLink to="/dashboard" className={!isLevel1 && location.pathname !== '/admin' ? 'active-level' : ''} onClick={closeNav}>L2</NavLink>
+                </div>
                 <div className="nav-user-info">
                   <span className="nav-username">{userData?.username || currentUser.displayName}</span>
                   <button onClick={() => logout()} className="logout-btn">Logout</button>
@@ -84,18 +88,17 @@ const AppContent = () => {
                 <NavLink to="/level1/imbuhan-practice" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
                 <NavLink to="/level1/cloze" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Cloze</NavLink>
                 <NavLink to="/level1/writing" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Writing</NavLink>
-                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Switch to Level 2</NavLink>
                 {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
               </>
             ) : (
               <>
                 <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 2 Home</NavLink>
-                <NavLink to="/level1" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 1 Practice</NavLink>
                 <NavLink to="/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
                 <NavLink to="/imbuhan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
                 <NavLink to="/persamaan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan MCQ</NavLink>
                 <NavLink to="/persamaan-latihan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan Latihan</NavLink>
-                <NavLink to="/karangan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Karangan</NavLink>
+                <NavLink to="/karangan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Vocab</NavLink>
+                <NavLink to="/flashcards" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Bank</NavLink>
                 <NavLink to="/surat" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Surat Resmi</NavLink>
                 <NavLink to="/test-setup" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Tes</NavLink>
                 {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}

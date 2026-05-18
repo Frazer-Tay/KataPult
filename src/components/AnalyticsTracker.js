@@ -20,9 +20,9 @@ const ROUTE_SECTIONS = [
   { prefix: '/surat', section: 'Surat Resmi' },
   { prefix: '/test-setup', section: 'Test Setup' },
   { prefix: '/vocabulary', section: 'Vocabulary' },
-  { prefix: '/flashcards', section: 'Flashcards' },
+  { prefix: '/flashcards', section: 'Essay Bank' },
   { prefix: '/persamaan', section: 'Persamaan MCQ' },
-  { prefix: '/karangan', section: 'Karangan' },
+  { prefix: '/karangan', section: 'Essay Vocab MCQ' },
   { prefix: '/imbuhan', section: 'Imbuhan' },
   { prefix: '/', section: 'Home' }
 ];

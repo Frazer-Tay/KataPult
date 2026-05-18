@@ -39,7 +39,6 @@ const HomePage = () => {
         </p>
         <div className={styles.heroActions}>
           <Link to="/test-setup" className={styles.heroPrimaryCTA}>Start Custom Test</Link>
-          <Link to="/level1" className={styles.heroSecondaryCTA}>Level 1 Practice</Link>
           <button onClick={scrollToModules} className={styles.heroSecondaryCTA}>Browse Practice Modes</button>
         </div>
       </section>
@@ -68,7 +67,7 @@ const HomePage = () => {
             <div className={styles.stepNumber}>1</div>
             <div className={styles.stepTextContent}>
               <div className={styles.stepTitle}>Build Vocab</div>
-              <div className={styles.stepDesc}>Start with Vocabulary & Flashcards</div>
+              <div className={styles.stepDesc}>Start with Vocabulary & Essay Bank</div>
             </div>
           </div>
           <div className={styles.pathDivider}></div>
@@ -163,8 +162,8 @@ const HomePage = () => {
             <Link to="/karangan" className={styles.moduleCard}>
               <div className={`${styles.iconBlock} ${styles.iconKarangan}`}>📝</div>
               <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Karangan</span>
-                <span className={styles.moduleDesc}>Enrich your essay vocabulary.</span>
+                <span className={styles.moduleTitle}>Essay Vocab MCQ</span>
+                <span className={styles.moduleDesc}>Match essay words to the right definitions.</span>
               </div>
               <div className={styles.moduleArrow}>→</div>
             </Link>
@@ -172,8 +171,8 @@ const HomePage = () => {
             <Link to="/flashcards" className={styles.moduleCard}>
               <div className={`${styles.iconBlock} ${styles.iconFlashcards}`}>🗂️</div>
               <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Flashcards</span>
-                <span className={styles.moduleDesc}>Review key phrases & essay points.</span>
+                <span className={styles.moduleTitle}>Essay Bank</span>
+                <span className={styles.moduleDesc}>Review topical points, phrases, and model paragraphs.</span>
               </div>
               <div className={styles.moduleArrow}>→</div>
             </Link>

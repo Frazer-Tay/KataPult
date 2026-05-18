@@ -17,7 +17,7 @@ const shuffleArray = (array) => {
 };
 
 const FlashcardsPage = () => {
-  useTimeTracker('Flashcards');
+  useTimeTracker('Essay Bank');
   const [allSets, setAllSets] = useState([]);
   const [currentSetIndex, setCurrentIndex] = useState(0);
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
@@ -47,14 +47,14 @@ const FlashcardsPage = () => {
         setIsDetailsRevealed(false);
         setError(null);
       } else {
-        console.warn("No flashcards data found or data is empty.");
-        setError("Tidak ada data flashcard untuk ditampilkan saat ini.");
+        console.warn("No essay bank data found or data is empty.");
+        setError("Tidak ada konten Essay Bank untuk ditampilkan saat ini.");
         setAllSets([]);
         setCurrentIndex(0);
       }
     } catch (e) {
-      console.error("Error processing flashcards data:", e);
-      setError("Terjadi kesalahan saat memuat data flashcard.");
+      console.error("Error processing essay bank data:", e);
+      setError("Terjadi kesalahan saat memuat konten Essay Bank.");
       setAllSets([]);
       setCurrentIndex(0);
     } finally {
@@ -133,7 +133,7 @@ const FlashcardsPage = () => {
   }, [advanceSet, currentSet, toggleDetails, isLoading]);
 
   if (isLoading) {
-    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat Flashcards...</div>;
+    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat Essay Bank...</div>;
   }
 
   if (error) {
@@ -141,7 +141,7 @@ const FlashcardsPage = () => {
   }
 
   if (!currentSet && !isLoading) {
-    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada data flashcard untuk ditampilkan. Periksa `src/data/flashcardsData.js`.</div>;
+    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada konten Essay Bank untuk ditampilkan. Periksa `src/data/flashcardsData.js`.</div>;
   }
   if (!currentSet) { 
     return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat set berikutnya...</div>;
@@ -298,9 +298,14 @@ const FlashcardsPage = () => {
 
   return (
     <div className={styles.flashcardsContainer} ref={pageRef} tabIndex={-1}>
+      <header className={styles.pageHeader}>
+        <p className={styles.eyebrow}>Level 2 Writing Support</p>
+        <h1 className={styles.pageTitle}>Essay Bank</h1>
+        <p className={styles.pageIntro}>Topical ideas, useful phrases, introductions, conclusions, and model paragraphs for karangan practice.</p>
+      </header>
       <div className={styles.quickNavContainer}>
         <div className={styles.specialSetsNavigation}>
-            <h4 className={styles.specialSetsTitle}>Panduan Esai Cepat:</h4>
+            <h4 className={styles.specialSetsTitle}>Quick Essay Guides:</h4>
             <div className={styles.specialSetsButtonsContainer}>
                 <button 
                     onClick={() => jumpToSetById('essay-openings-closings')} 
@@ -319,14 +324,14 @@ const FlashcardsPage = () => {
 
         {allSets && allSets.length > 0 && (
           <div className={styles.topicDropdownNavigation}>
-            <label htmlFor="topicSelect" className={styles.dropdownLabel}>Lompat ke Topik/Panduan:</label> {/* Updated label */}
+            <label htmlFor="topicSelect" className={styles.dropdownLabel}>Jump to essay topic or guide:</label>
             <select 
                 id="topicSelect"
                 value={currentSet ? currentSet.id : ''} 
                 onChange={handleDropdownChange}
                 className={styles.topicSelectDropdown}
             >
-                <option value="" disabled>Pilih Set Flashcard...</option> {/* More generic placeholder */}
+                <option value="" disabled>Pilih topik atau panduan esai...</option>
                 {allSets.map((set, index) => (
                     <option key={set.id} value={set.id}>
                         {/* Display a more user-friendly title: using title_malay if it exists, otherwise the main title */}
@@ -342,7 +347,7 @@ const FlashcardsPage = () => {
       <ProgressBar 
         current={currentSetIndex + 1} 
         total={allSets.length} 
-        label={currentSet ? (currentSet.id === 'general-phrases' || currentSet.id === 'essay-openings-closings' ? "Panduan Menulis" : "Topik Esai") : "Set Flashcard"} 
+        label={currentSet ? (currentSet.id === 'general-phrases' || currentSet.id === 'essay-openings-closings' ? "Panduan Menulis" : "Topik Esai") : "Essay Bank"} 
       />
       
       {currentSet && currentSet.type === 'phrase-list' && renderPhraseList(currentSet)}
