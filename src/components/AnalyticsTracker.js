@@ -5,10 +5,18 @@ import { trackPageView, trackEvent, initAnalytics } from '../utils/analytics';
 import { recordLearnerActivity } from '../utils/activityTracker';
 
 const ROUTE_SECTIONS = [
+  { prefix: '/level1/vocabulary', section: 'L1 Vocabulary' },
+  { prefix: '/level1/reading', section: 'L1 Reading' },
+  { prefix: '/level1/sentence', section: 'L1 Sentence' },
+  { prefix: '/level1/imbuhan-practice', section: 'L1 Imbuhan' },
+  { prefix: '/level1/cloze', section: 'L1 Cloze' },
+  { prefix: '/level1/writing', section: 'L1 Writing' },
+  { prefix: '/level1', section: 'L1 Dashboard' },
   { prefix: '/persamaan-latihan', section: 'Persamaan Latihan' },
   { prefix: '/test/imbuhan', section: 'Imbuhan Test' },
   { prefix: '/test/persamaan', section: 'Persamaan Test' },
   { prefix: '/daily-challenge', section: 'Daily Challenge' },
+  { prefix: '/admin', section: 'Admin' },
   { prefix: '/surat', section: 'Surat Resmi' },
   { prefix: '/test-setup', section: 'Test Setup' },
   { prefix: '/vocabulary', section: 'Vocabulary' },
@@ -137,10 +145,18 @@ const AnalyticsTracker = () => {
       flushSessionTime('before_unload');
     };
 
+    const heartbeatId = window.setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        flushSectionTime('heartbeat');
+        flushSessionTime('heartbeat');
+      }
+    }, 60000);
+
     window.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
+      window.clearInterval(heartbeatId);
       window.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };

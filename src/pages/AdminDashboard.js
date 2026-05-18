@@ -123,14 +123,15 @@ const AdminDashboard = () => {
   const dashboardStats = useMemo(() => {
     const now = Date.now();
     const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
-    const learnerCount = learners.filter((learner) => learner.role !== 'admin').length || learners.length;
-    const totalSeconds = learners.reduce((sum, learner) => sum + learner.totalSectionSeconds, 0);
-    const activeThisWeek = learners.filter((learner) => (
+    const trackedLearners = learners.filter((learner) => learner.role !== 'admin');
+    const learnerCount = trackedLearners.length;
+    const totalSeconds = trackedLearners.reduce((sum, learner) => sum + learner.totalSectionSeconds, 0);
+    const activeThisWeek = trackedLearners.filter((learner) => (
       now - getTimestampMillis(learner.lastSeenAt) <= sevenDaysMs
     )).length;
     const allSections = new Map();
 
-    learners.forEach((learner) => {
+    trackedLearners.forEach((learner) => {
       Object.values(learner.activity?.sectionTotals || {}).forEach((section) => {
         const key = section.name || 'Unknown';
         const existing = allSections.get(key) || { name: key, seconds: 0, visits: 0 };
