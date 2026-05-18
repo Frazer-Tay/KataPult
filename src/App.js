@@ -23,6 +23,7 @@ import ImbuhanTestPage from './pages/ImbuhanTestPage';
 import PersamaanTestPage from './pages/PersamaanTestPage';
 import DailyChallengePage from './pages/DailyChallengePage';
 import AdminDashboard from './pages/AdminDashboard';
+import FeedbackPage from './pages/FeedbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import { ProgressProvider } from './contexts/ProgressContext';
@@ -56,10 +57,39 @@ const AppContent = () => {
               <span className="logo-tagline">Bahasa Prep Companion</span>
             </div>
           </Link>
-          
+          <button className="hamburger-button" onClick={toggleNav} aria-label="Toggle navigation" aria-expanded={isNavOpen}>
+            ☰
+          </button>
+
+          <nav className={`app-nav ${isNavOpen ? 'open' : ''}`}>
+            {isLevel1 ? (
+              <>
+                <NavLink to="/level1/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
+                <NavLink to="/level1/reading" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Reading</NavLink>
+                <NavLink to="/level1/sentence" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Sentence</NavLink>
+                <NavLink to="/level1/imbuhan-practice" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
+                <NavLink to="/level1/cloze" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Cloze</NavLink>
+                <NavLink to="/level1/writing" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Writing</NavLink>
+                {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
+              </>
+            ) : (
+              <>
+                <NavLink to="/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
+                <NavLink to="/imbuhan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
+                <NavLink to="/persamaan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan MCQ</NavLink>
+                <NavLink to="/persamaan-latihan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan Latihan</NavLink>
+                <NavLink to="/karangan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Vocab</NavLink>
+                <NavLink to="/flashcards" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Bank</NavLink>
+                <NavLink to="/surat" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Surat Resmi</NavLink>
+                <NavLink to="/test-setup" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Tes</NavLink>
+                {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
+              </>
+            )}
+          </nav>
+
           <div className="nav-profile">
             {currentUser ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div className="nav-session">
                 <div className="level-tabs" aria-label="Level selector">
                   <NavLink to="/level1" className={isLevel1 ? 'active-level' : ''} onClick={closeNav}>L1</NavLink>
                   <NavLink to="/dashboard" className={!isLevel1 && location.pathname !== '/admin' ? 'active-level' : ''} onClick={closeNav}>L2</NavLink>
@@ -73,38 +103,6 @@ const AppContent = () => {
               <Link to="/login" className="nav-login-btn">Login</Link>
             )}
           </div>
-
-          <button className="hamburger-button" onClick={toggleNav} aria-label="Toggle navigation" aria-expanded={isNavOpen}>
-            ☰
-          </button>
-
-          <nav className={`app-nav ${isNavOpen ? 'open' : ''}`}>
-            {isLevel1 ? (
-              <>
-                <NavLink to="/level1" end className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 1 Home</NavLink>
-                <NavLink to="/level1/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
-                <NavLink to="/level1/reading" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Reading</NavLink>
-                <NavLink to="/level1/sentence" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Sentence</NavLink>
-                <NavLink to="/level1/imbuhan-practice" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
-                <NavLink to="/level1/cloze" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Cloze</NavLink>
-                <NavLink to="/level1/writing" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Writing</NavLink>
-                {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
-              </>
-            ) : (
-              <>
-                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 2 Home</NavLink>
-                <NavLink to="/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
-                <NavLink to="/imbuhan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
-                <NavLink to="/persamaan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan MCQ</NavLink>
-                <NavLink to="/persamaan-latihan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan Latihan</NavLink>
-                <NavLink to="/karangan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Vocab</NavLink>
-                <NavLink to="/flashcards" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Essay Bank</NavLink>
-                <NavLink to="/surat" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Surat Resmi</NavLink>
-                <NavLink to="/test-setup" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Tes</NavLink>
-                {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
-              </>
-            )}
-          </nav>
         </header>
       )}
       <main className="main-content">
@@ -138,11 +136,18 @@ const AppContent = () => {
           <Route path="/test/imbuhan" element={<ProtectedRoute><ImbuhanTestPage /></ProtectedRoute>} />
           <Route path="/test/persamaan" element={<ProtectedRoute><PersamaanTestPage /></ProtectedRoute>} />
           <Route path="/daily-challenge" element={<ProtectedRoute><DailyChallengePage /></ProtectedRoute>} />
+          <Route path="/feedback" element={<ProtectedRoute><FeedbackPage /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </main>
       <footer className="app-footer">
-        <p>© {new Date().getFullYear()} KataPult. Latih Bahasa Anda!</p>
+        <p>&copy; {new Date().getFullYear()} KataPult. Latih Bahasa Anda!</p>
+        <p className="footer-disclaimer">
+          Content is compiled from publicly available learning references, online resources, user-submitted notes, and internal practice materials. KataPult is provided for revision support only; we make a good-faith effort to keep content accurate and complete, but we do not guarantee that every item is error-free, exhaustive, or endorsed by any examination body or third-party source.
+        </p>
+        {!hideNav && currentUser && (
+          <Link to="/feedback" className="footer-feedback-link">Send feedback or report an issue</Link>
+        )}
       </footer>
     </>
   );

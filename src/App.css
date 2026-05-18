@@ -91,7 +91,8 @@ body {
   -webkit-backdrop-filter: blur(12px);
   padding: 12px 20px;
   display: flex;
-  justify-content: space-between;
+  gap: 18px;
+  justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   position: sticky;
@@ -159,6 +160,9 @@ body {
 .app-nav {
   display: flex;
   gap: 8px;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
 .app-nav a {
@@ -216,6 +220,52 @@ body {
   background: var(--primary-color);
 }
 
+.nav-profile {
+  flex-shrink: 0;
+}
+
+.nav-session {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.nav-user-info {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-username {
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.15;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--error-color);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 0;
+}
+
+.logout-btn:hover {
+  box-shadow: none;
+  text-decoration: underline;
+  transform: none;
+}
+
 main {
   padding: 24px 16px;
   flex-grow: 1;
@@ -230,12 +280,31 @@ main {
 .app-footer {
   text-align: center;
   margin-top: 60px;
-  padding: 30px 20px;
+  padding: 30px 20px 36px;
   color: var(--text-light);
   font-size: 0.85rem;
   border-top: 1px solid var(--border-color);
   background-color: transparent;
   flex-shrink: 0;
+}
+
+.footer-disclaimer {
+  color: var(--text-light);
+  line-height: 1.5;
+  margin: 10px auto;
+  max-width: 850px;
+}
+
+.footer-feedback-link {
+  color: var(--primary-color);
+  display: inline-flex;
+  font-weight: 700;
+  margin-top: 4px;
+  text-decoration: none;
+}
+
+.footer-feedback-link:hover {
+  text-decoration: underline;
 }
 
 .loading-page, .loading, .error, .completionMessage {
@@ -295,6 +364,24 @@ button:disabled {
   border-color: var(--border-color) !important; 
   box-shadow: none !important; 
   opacity: 0.7; 
+}
+
+.logout-btn {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--error-color) !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  padding: 2px 0 !important;
+}
+
+.logout-btn:hover {
+  box-shadow: none !important;
+  text-decoration: underline;
+  transform: none !important;
 }
 
 .primaryButton { 
@@ -392,6 +479,7 @@ input:focus-visible, textarea:focus-visible {
 
   .hamburger-button {
     display: block;
+    margin-left: auto;
   }
 
   .app-nav {
@@ -440,8 +528,6 @@ input:focus-visible, textarea:focus-visible {
   }
 
   .nav-user-info {
-    display: flex;
-    flex-direction: column;
     align-items: flex-end;
     margin-right: 5px;
   }
@@ -457,27 +543,30 @@ input:focus-visible, textarea:focus-visible {
     font-size: 0.75rem;
   }
   
+  .nav-session {
+    gap: 8px;
+  }
+
   .nav-username {
-    font-size: 0.85rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--primary-dark);
+    max-width: 82px;
   }
-  
-  .logout-btn {
-    background: none;
-    border: none;
-    color: var(--error-color);
-    cursor: pointer;
-    font-size: 0.75rem;
-    padding: 2px 0 0 0;
-    box-shadow: none;
-    font-weight: 600;
+}
+
+@media (max-width: 1180px) and (min-width: 768px) {
+  .app-header {
+    flex-wrap: wrap;
   }
-  .logout-btn:hover {
-    transform: none;
-    box-shadow: none;
-    text-decoration: underline;
+
+  .app-nav {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    order: 3;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .nav-profile {
+    margin-left: auto;
   }
 }
 

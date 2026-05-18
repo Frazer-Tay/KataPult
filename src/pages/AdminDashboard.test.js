@@ -8,12 +8,16 @@ jest.mock('../firebase', () => ({
 
 jest.mock('firebase/firestore', () => ({
   collection: jest.fn((db, name) => ({ name })),
+  doc: jest.fn(),
   getDocs: jest.fn(),
   orderBy: jest.fn(),
-  query: jest.fn((collectionRef) => collectionRef)
+  query: jest.fn((collectionRef) => collectionRef),
+  serverTimestamp: jest.fn(() => 'server-time'),
+  updateDoc: jest.fn()
 }));
 
 const makeSnapshot = (docs) => ({
+  docs,
   forEach: (callback) => docs.forEach((doc) => callback(doc))
 });
 
@@ -49,7 +53,8 @@ describe('AdminDashboard', () => {
             }
           })
         }
-      ]));
+      ]))
+      .mockResolvedValueOnce(makeSnapshot([]));
 
     render(<AdminDashboard />);
 

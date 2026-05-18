@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDocs, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import styles from './AdminDashboard.module.css';
 
@@ -71,15 +71,17 @@ const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [feedback, setFeedback] = useState([]);
 
   const loadLearners = useCallback(async () => {
     try {
       setError('');
       setIsLoading(true);
 
-      const [usersSnapshot, activitySnapshot] = await Promise.all([
+      const [usersSnapshot, activitySnapshot, feedbackSnapshot] = await Promise.all([
         getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc'))),
-        getDocs(collection(db, 'learnerActivity'))
+        getDocs(collection(db, 'learnerActivity')),
+        getDocs(query(collection(db, 'feedback'), orderBy('createdAt', 'desc')))
       ]);
 
       const activityByUid = new Map();
@@ -108,6 +110,10 @@ const AdminDashboard = () => {
       });
 
       setLearners(combinedLearners);
+      setFeedback(feedbackSnapshot.docs?.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      })) || []);
     } catch (err) {
       console.error('Failed to load admin dashboard:', err);
       setError('Could not load learner analytics. Check that your account has the admin role and Firestore rules are deployed.');
@@ -181,6 +187,21 @@ const AdminDashboard = () => {
   ), [filteredLearners]);
 
   const maxSectionSeconds = Math.max(...dashboardStats.topSections.map((section) => section.seconds), 1);
+
+  const markFeedbackReviewed = async (feedbackId) => {
+    try {
+      await updateDoc(doc(db, 'feedback', feedbackId), {
+        status: 'reviewed',
+        updatedAt: serverTimestamp()
+      });
+      setFeedback((items) => items.map((item) => (
+        item.id === feedbackId ? { ...item, status: 'reviewed' } : item
+      )));
+    } catch (err) {
+      console.error('Failed to update feedback status:', err);
+      setError('Could not update feedback status. Please try again.');
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -268,56 +289,91 @@ const AdminDashboard = () => {
         ) : sortedLearners.length === 0 ? (
           <div className={styles.empty}>No learners match this search.</div>
         ) : (
-          <div className={styles.tableWrap}>
-            <table className={styles.learnerTable}>
-              <thead>
-                <tr>
-                  <th>Learner</th>
-                  <th>Last seen</th>
-                  <th>Section time</th>
-                  <th>Session time</th>
-                  <th>Attempts</th>
-                  <th>Progress</th>
-                  <th>Top sections</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedLearners.map((learner) => (
-                  <tr key={learner.id}>
-                    <td>
-                      <div className={styles.learnerName}>{learner.username || learner.displayName || 'Unnamed learner'}</div>
-                      <div className={styles.learnerEmail}>{learner.email || 'No email'}</div>
-                      {learner.role === 'admin' && <div className={styles.muted}>Admin</div>}
-                    </td>
-                    <td>{formatDate(learner.lastSeenAt)}</td>
-                    <td>{formatDuration(learner.totalSectionSeconds)}</td>
-                    <td>{formatDuration(learner.totalSessionSeconds)}</td>
-                    <td>
-                      <div>{learner.totalAttempts} attempt{learner.totalAttempts === 1 ? '' : 's'}</div>
-                      <div className={styles.muted}>{formatAccuracy(learner.totalCorrect, learner.totalAttempts)}</div>
-                    </td>
-                    <td>
-                      <div>Level {learner.level || 1}</div>
-                      <div className={styles.muted}>{learner.xp || 0} XP, {learner.xpEarned || 0} tracked XP, {learner.streak || 0} day streak</div>
-                    </td>
-                    <td>
-                      {learner.topSections.length === 0 ? (
-                        <span className={styles.muted}>No activity yet</span>
-                      ) : (
-                        <div className={styles.sectionPills}>
-                          {learner.topSections.map((section) => (
-                            <span className={styles.sectionPill} key={section.name}>
-                              {section.name}: {formatDuration(section.seconds)}
-                              {section.attempts ? `, ${formatAccuracy(section.correct, section.attempts)}` : ''}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className={styles.learnerList}>
+            {sortedLearners.map((learner) => (
+              <article className={styles.learnerCard} key={learner.id}>
+                <div className={styles.learnerIdentity}>
+                  <div className={styles.learnerName}>{learner.username || learner.displayName || 'Unnamed learner'}</div>
+                  <div className={styles.learnerEmail}>{learner.email || 'No email'}</div>
+                  {learner.role === 'admin' && <div className={styles.adminBadge}>Admin</div>}
+                </div>
+                <div className={styles.learnerStats}>
+                  <div>
+                    <span className={styles.statLabel}>Last seen</span>
+                    <strong>{formatDate(learner.lastSeenAt)}</strong>
+                  </div>
+                  <div>
+                    <span className={styles.statLabel}>Section time</span>
+                    <strong>{formatDuration(learner.totalSectionSeconds)}</strong>
+                  </div>
+                  <div>
+                    <span className={styles.statLabel}>Session time</span>
+                    <strong>{formatDuration(learner.totalSessionSeconds)}</strong>
+                  </div>
+                  <div>
+                    <span className={styles.statLabel}>Attempts</span>
+                    <strong>{learner.totalAttempts}</strong>
+                    <span className={styles.muted}>{formatAccuracy(learner.totalCorrect, learner.totalAttempts)}</span>
+                  </div>
+                  <div>
+                    <span className={styles.statLabel}>Progress</span>
+                    <strong>Level {learner.level || 1}</strong>
+                    <span className={styles.muted}>{learner.xp || 0} XP, {learner.xpEarned || 0} tracked XP, {learner.streak || 0} day streak</span>
+                  </div>
+                </div>
+                <div className={styles.learnerSections}>
+                  <span className={styles.statLabel}>Top sections</span>
+                  {learner.topSections.length === 0 ? (
+                    <span className={styles.muted}>No activity yet</span>
+                  ) : (
+                    <div className={styles.sectionPills}>
+                      {learner.topSections.map((section) => (
+                        <span className={styles.sectionPill} key={section.name}>
+                          {section.name}: {formatDuration(section.seconds)}
+                          {section.attempts ? `, ${formatAccuracy(section.correct, section.attempts)}` : ''}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <h2 className={styles.panelTitle}>Feedback</h2>
+        </div>
+        {feedback.length === 0 ? (
+          <div className={styles.empty}>No feedback has been submitted yet.</div>
+        ) : (
+          <div className={styles.feedbackList}>
+            {feedback.slice(0, 8).map((item) => (
+              <article className={styles.feedbackCard} key={item.id}>
+                <div className={styles.feedbackHeader}>
+                  <div>
+                    <div className={styles.feedbackCategory}>{item.category || 'Feedback'}</div>
+                    <div className={styles.muted}>
+                      {item.displayName || item.email || 'Unknown learner'} · {formatDate(item.createdAt)}
+                    </div>
+                  </div>
+                  <span className={item.status === 'reviewed' ? styles.reviewedBadge : styles.openBadge}>
+                    {item.status || 'open'}
+                  </span>
+                </div>
+                <p className={styles.feedbackMessage}>{item.message}</p>
+                <div className={styles.feedbackFooter}>
+                  {item.route && <span className={styles.muted}>{item.route}</span>}
+                  {item.status !== 'reviewed' && (
+                    <button className={styles.reviewButton} onClick={() => markFeedbackReviewed(item.id)}>
+                      Mark reviewed
+                    </button>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
         )}
       </section>

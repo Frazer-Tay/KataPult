@@ -1,0 +1,87 @@
+.container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  max-width: 720px;
+  padding: 28px;
+  width: 100%;
+}
+
+.eyebrow {
+  color: var(--text-medium);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--primary-dark);
+  font-size: 2rem;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  margin: 10px 0 22px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  color: var(--text-dark);
+  font-weight: 800;
+}
+
+.select,
+.textarea {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-dark);
+  font: inherit;
+  padding: 12px;
+  width: 100%;
+}
+
+.textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.helper {
+  color: var(--text-medium);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.success,
+.error {
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+}
+
+.success {
+  background: var(--success-light);
+  color: var(--success-dark);
+}
+
+.error {
+  background: var(--error-light);
+  color: var(--error-dark);
+}
