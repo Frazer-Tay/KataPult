@@ -2,13 +2,14 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackPageView, trackEvent, initAnalytics } from '../utils/analytics';
+import { recordLearnerActivity } from '../utils/activityTracker';
 
 const ROUTE_SECTIONS = [
   { prefix: '/persamaan-latihan', section: 'Persamaan Latihan' },
   { prefix: '/test/imbuhan', section: 'Imbuhan Test' },
   { prefix: '/test/persamaan', section: 'Persamaan Test' },
   { prefix: '/daily-challenge', section: 'Daily Challenge' },
-  { prefix: '/surat-resmi', section: 'Surat Resmi' },
+  { prefix: '/surat', section: 'Surat Resmi' },
   { prefix: '/test-setup', section: 'Test Setup' },
   { prefix: '/vocabulary', section: 'Vocabulary' },
   { prefix: '/flashcards', section: 'Flashcards' },
@@ -47,6 +48,14 @@ const AnalyticsTracker = () => {
         duration_seconds: durationInSeconds,
         reason
       });
+      recordLearnerActivity({
+        eventType: 'section_time',
+        section: currentVisit.section,
+        route: currentVisit.route,
+        durationSeconds: durationInSeconds
+      }).catch((error) => {
+        console.warn('Failed to record section time:', error);
+      });
     }
 
     sectionVisitRef.current = {
@@ -76,6 +85,13 @@ const AnalyticsTracker = () => {
 
     trackPageView(routeWithSearch, { route, section });
     trackEvent('Section_Visited', { route, section });
+    recordLearnerActivity({
+      eventType: 'section_visit',
+      section,
+      route
+    }).catch((error) => {
+      console.warn('Failed to record section visit:', error);
+    });
   }, [location]);
 
   useEffect(() => {
@@ -88,6 +104,14 @@ const AnalyticsTracker = () => {
           route: sectionVisitRef.current?.route || location.pathname || '/',
           section: sectionVisitRef.current?.section || getSectionForRoute(location.pathname || '/'),
           reason
+        });
+        recordLearnerActivity({
+          eventType: 'session_time',
+          section: sectionVisitRef.current?.section || getSectionForRoute(location.pathname || '/'),
+          route: sectionVisitRef.current?.route || location.pathname || '/',
+          durationSeconds: durationInSeconds
+        }).catch((error) => {
+          console.warn('Failed to record session time:', error);
         });
       }
 

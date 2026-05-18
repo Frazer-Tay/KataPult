@@ -329,7 +329,7 @@ const ImbuhanPage = () => {
           <p>{currentItemFromMemo.explanation}</p>
         </div>
       )}
-      <div className={styles.buttonRow}>
+      <div className="action-buttons-container">
         <button
             className="secondaryButton"
             onClick={() => advanceItem('previous')}

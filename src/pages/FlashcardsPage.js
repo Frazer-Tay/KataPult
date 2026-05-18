@@ -350,7 +350,7 @@ const FlashcardsPage = () => {
       {currentSet && currentSet.type === 'essay-model-paragraphs' && renderEssayModelParagraphs(currentSet)}
 
 
-      <div className={styles.navigationButtons}>
+      <div className="action-buttons-container">
         <button className="secondaryButton" onClick={() => advanceSet('previous')} disabled={allSets.length <= 1 || isLoading}>
           <span className="arrowIcon">←</span> Set Sebelumnya
         </button>

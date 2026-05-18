@@ -338,7 +338,7 @@ const PersamaanPage = () => {
                 )}
             </div>
         )}
-        <div className={styles.buttonRow} style={{ marginTop: '20px' }}>
+        <div className="action-buttons-container">
             <button
                 className="secondaryButton"
                 onClick={() => advanceItem('previous')}

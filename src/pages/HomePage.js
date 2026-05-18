@@ -10,7 +10,7 @@ const HomePage = () => {
 
   const dueCount = useMemo(() => {
     try {
-      const filteredData = vocabularyData.filter(item => item.word && item.definition && item.exampleSentence && item.exampleTranslation);
+      const filteredData = vocabularyData.filter(item => item.word && item.definition && item.level === 2);
       return getDueWords(filteredData).dueWords.length;
     } catch {
       return 0;
@@ -177,7 +177,7 @@ const HomePage = () => {
               <div className={styles.moduleArrow}>→</div>
             </Link>
 
-            <Link to="/surat-resmi" className={styles.moduleCard}>
+            <Link to="/surat" className={styles.moduleCard}>
               <div className={`${styles.iconBlock} ${styles.iconSurat}`}>✉️</div>
               <div className={styles.moduleInfo}>
                 <span className={styles.moduleTitle}>Surat Resmi</span>

@@ -217,9 +217,12 @@ const PersamaanTestPage = () => {
     } 
   }, [lives, isTestOver]);
 
+  const hasAwardedXpRef = useRef(false);
+
   useEffect(() => {
-    if (isTestOver && score > 0) {
+    if (isTestOver && score > 0 && !hasAwardedXpRef.current) {
       addXP(score);
+      hasAwardedXpRef.current = true;
     }
   }, [isTestOver, score, addXP]);
 

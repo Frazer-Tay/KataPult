@@ -368,19 +368,18 @@ input:focus-visible, textarea:focus-visible {
     top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     padding: 10px 16px;
     transform: translateY(-150%);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s 0.3s;
     visibility: hidden;
-    z-index: 999;
-    max-height: calc(100vh - 70px);
+    z-index: 1005;
+    height: 100vh;
+    max-height: calc(100vh - 50px);
     overflow-y: auto;
-    border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
   }
 
   .app-nav.open {
@@ -405,6 +404,36 @@ input:focus-visible, textarea:focus-visible {
   .app-nav a.active-link {
     background-color: var(--background-medium);
     color: var(--primary-color);
+  }
+
+  .nav-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 5px;
+  }
+  
+  .nav-username {
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--primary-dark);
+  }
+  
+  .logout-btn {
+    background: none;
+    border: none;
+    color: var(--error-color);
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 2px 0 0 0;
+    box-shadow: none;
+    font-weight: 600;
+  }
+  .logout-btn:hover {
+    transform: none;
+    box-shadow: none;
+    text-decoration: underline;
   }
 }
 
@@ -454,4 +483,20 @@ input:focus-visible, textarea:focus-visible {
   .completionSubMessage { font-size: 1.1rem; }
   button, .button, a.buttonCard { padding: 12px 24px; font-size: 1rem; }
   .arrowIcon { font-size: 1.3rem; }
+}
+
+/* --- Global Action Buttons Container (Fix for mobile overlap) --- */
+.action-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 25px;
+}
+.action-buttons-container button {
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 250px;
 }

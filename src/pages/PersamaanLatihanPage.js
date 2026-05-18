@@ -323,7 +323,7 @@ const PersamaanLatihanPage = () => {
         </div>
       )}
 
-      <div className={styles.navigationButtons}>
+      <div className="action-buttons-container">
         <button
           className="secondaryButton"
           onClick={() => advanceItem('previous')}

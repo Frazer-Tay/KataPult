@@ -92,3 +92,9 @@ export const trackEvent = (eventName, properties = {}) => {
   directCapture(`katapult_${eventName}`, properties);
   console.log(`PostHog Event (util): ${eventName}`, properties);
 };
+
+export const identifyUser = (uid, properties = {}) => {
+  initAnalytics();
+  posthog.identify(uid, properties);
+  console.log(`PostHog Identified User: ${uid}`);
+};

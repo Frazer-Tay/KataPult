@@ -1,0 +1,395 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  color: var(--primary-color, #2c3e50);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Split Screen Layout for Reading Page */
+.splitScreen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .splitScreen {
+    grid-template-columns: 1fr;
+  }
+}
+
+.articlePane {
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.articleTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark, #1e293b);
+  border-bottom: 2px solid var(--primary-color, #3498db);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.paragraph {
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+  color: var(--text-medium, #334155);
+  text-align: justify;
+}
+
+.source {
+  font-size: 0.9rem;
+  color: var(--text-light, #94a3b8);
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.questionsPane {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.questionsTitle {
+  font-size: 1.5rem;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 1rem;
+}
+
+.questionCard {
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.questionText {
+  font-weight: 500;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.answerInput {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+
+.answerInput:focus {
+  outline: none;
+  border-color: var(--primary-color, #3498db);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.feedbackSection {
+  margin-top: 1rem;
+}
+
+.revealButton {
+  background-color: transparent;
+  color: var(--primary-color, #3498db);
+  border: 1px solid var(--primary-color, #3498db);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.revealButton:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.modelAnswer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-left: 4px solid var(--success-color, #2ecc71);
+  border-radius: 4px;
+}
+
+.modelAnswer strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--success-color, #27ae60);
+}
+
+/* Common Layout for other modes */
+.centeredCard {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.targetWord {
+  font-size: 2rem;
+  text-align: center;
+  color: var(--primary-color, #3498db);
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+/* Imbuhan specific */
+.imbuhanSentence {
+  font-size: 1.25rem;
+  line-height: 2;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.blankInput {
+  border: none;
+  border-bottom: 2px solid var(--primary-color, #3498db);
+  background: transparent;
+  font-size: 1.25rem;
+  text-align: center;
+  width: 150px;
+  margin: 0 0.5rem;
+  color: var(--primary-color, #3498db);
+  font-weight: bold;
+}
+
+.blankInput:focus {
+  outline: none;
+  border-bottom-color: var(--secondary-color, #e67e22);
+}
+
+.correctInput {
+  border-bottom-color: var(--success-color, #2ecc71);
+  color: var(--success-color, #2ecc71);
+}
+
+.incorrectInput {
+  border-bottom-color: var(--danger-color, #e74c3c);
+  color: var(--danger-color, #e74c3c);
+}
+
+.explanationBox {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f1f8ff;
+  border-left: 4px solid #0366d6;
+  border-radius: 4px;
+}
+
+.navControls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.navButton {
+  background-color: var(--primary-color, #3498db);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.navButton:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.progressIndicator {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--text-medium, #64748b);
+}
+
+/* Cloze Passage Specific */
+.clozeParagraph {
+  font-size: 1.2rem;
+  line-height: 2.2;
+  text-align: justify;
+}
+
+.wordBank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.wordBadge {
+  background-color: white;
+  border: 2px solid var(--primary-color, #3498db);
+  color: var(--primary-color, #3498db);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.activeWordBadge {
+  background-color: var(--primary-color, #3498db);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.wordBadge.used {
+  background-color: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  transform: scale(1);
+  box-shadow: none;
+}
+
+.clozeBlank {
+  display: inline-block;
+  min-width: 100px;
+  border-bottom: 2px dashed var(--primary-color, #3498db);
+  text-align: center;
+  margin: 0 0.25rem;
+  padding: 0 0.5rem;
+  color: var(--primary-color, #3498db);
+  font-weight: 600;
+  min-height: 1.5em;
+  vertical-align: bottom;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clozeBlank.readyToFill {
+  background-color: rgba(52, 152, 219, 0.1);
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+}
+
+.clozeBlank.filled {
+  border-bottom-style: solid;
+}
+
+.clozeBlank.correct {
+  border-bottom-color: var(--success-color, #2ecc71);
+  color: var(--success-color, #2ecc71);
+}
+
+.clozeBlank.incorrect {
+  border-bottom-color: var(--danger-color, #e74c3c);
+  color: var(--danger-color, #e74c3c);
+  text-decoration: line-through;
+}
+
+/* Writing Simulator Specific */
+.writingArea {
+  width: 100%;
+  min-height: 400px;
+  padding: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+.writingArea:focus {
+  outline: none;
+  border-color: var(--primary-color, #3498db);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.writingToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.wordCounter {
+  font-weight: bold;
+  color: var(--text-medium, #64748b);
+  background-color: #f1f5f9;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+.wordCounter.targetReached {
+  color: var(--success-color, #27ae60);
+  background-color: #e8f8f5;
+}
+
+.checklist {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.checklist h3 {
+  margin-bottom: 1rem;
+  color: var(--text-dark, #1e293b);
+}
+
+.checklistItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.checklistItem input[type="checkbox"] {
+  margin-top: 0.3rem;
+  margin-right: 0.75rem;
+  width: 18px;
+  height: 18px;
+}
+
+.checklistItem label {
+  line-height: 1.4;
+  color: var(--text-medium, #334155);
+}
+
+.checklistItem.checked label {
+  text-decoration: line-through;
+  color: var(--text-light, #94a3b8);
+}

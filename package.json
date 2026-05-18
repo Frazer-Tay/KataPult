@@ -2,11 +2,12 @@
   "name": "bahasa-web-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://frazer-tay.github.io/KataPult",
+  "homepage": ".",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "firebase": "^12.13.0",
     "posthog-js": "^1.372.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -17,11 +18,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env PUBLIC_URL=/KataPult react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "create-admin": "node scripts/createAdminAccount.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "firebase deploy --only hosting,firestore:rules"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "firebase-admin": "^13.10.0",
     "gh-pages": "^6.3.0"
   }
 }

@@ -179,9 +179,12 @@ const ImbuhanTestPage = () => {
     }
   }, [lives, isTestOver]);
 
+  const hasAwardedXpRef = useRef(false);
+
   useEffect(() => {
-    if (isTestOver && score > 0) {
+    if (isTestOver && score > 0 && !hasAwardedXpRef.current) {
       addXP(score);
+      hasAwardedXpRef.current = true;
     }
   }, [isTestOver, score, addXP]);
 
@@ -306,7 +309,7 @@ const ImbuhanTestPage = () => {
             </div>
         )}
 
-      <div className={styles.buttonRow}>
+      <div className="action-buttons-container">
         {!isAnswered && (
           <button className="primaryButton" onClick={checkAnswer} disabled={!userInput.trim()}>
             Periksa

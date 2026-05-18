@@ -219,7 +219,7 @@ const DailyChallengePage = () => {
               <p>{currentItem.explanation}</p>
             </div>
           )}
-          <div className={styles.buttonRow}>
+          <div className="action-buttons-container">
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion}>
               {currentIndex === testItems.length - 1 || lives <= 0 ? "Selesai" : "Lanjut"} <span className="arrowIcon">→</span>
             </button>

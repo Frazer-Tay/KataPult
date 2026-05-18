@@ -8,7 +8,7 @@ import styles from './VocabularyPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
-const VocabularyPage = () => {
+const VocabularyPage = ({ level = 2 }) => {
   useTimeTracker('Vocabulary');
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
@@ -35,8 +35,8 @@ const VocabularyPage = () => {
   useEffect(() => {
     setIsLoading(true); setError(null);
     try {
-      const filteredData = vocabularyData.filter(item => item.word && item.definition && item.exampleSentence && item.exampleTranslation);
-      if (filteredData.length === 0) throw new Error("No valid vocabulary data with examples/translations.");
+      const filteredData = vocabularyData.filter(item => item.word && item.definition && item.level === level);
+      if (filteredData.length === 0) throw new Error(`No valid vocabulary data for level ${level}.`);
       setAllItems(filteredData);
 
       const { dueWords } = getDueWords(filteredData);
@@ -48,7 +48,7 @@ const VocabularyPage = () => {
       setError(err.message || "Gagal memuat data Vocabulary.");
       setAllItems([]); setDisplayItems([]); setIsLoading(false);
     }
-  }, []);
+  }, [level]);
 
   const startNormalMode = () => {
     setViewMode('normal');
@@ -212,7 +212,7 @@ const VocabularyPage = () => {
           </div>
           
           {/* NAVIGATION / ACTION BUTTONS */}
-          <div className={styles.buttonRow} style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center', width: '100%', maxWidth: '500px' }}>
+          <div className="action-buttons-container">
               {viewMode === 'normal' && (
                 <>
                   <button className="secondaryButton" onClick={() => advanceNormalItem('previous')} disabled={currentIndex === 0}>
