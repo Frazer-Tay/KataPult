@@ -58,6 +58,99 @@ const getTopSections = (sectionTotals = {}, limit = 3) => (
     .slice(0, limit)
 );
 
+const getSectionKey = (section = 'unknown') => (
+  section
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '') || 'unknown'
+);
+
+const emptyActivity = () => ({
+  totalSessionSeconds: 0,
+  totalSectionSeconds: 0,
+  totalAttempts: 0,
+  totalCorrect: 0,
+  totalIncorrect: 0,
+  testsCompleted: 0,
+  totalScore: 0,
+  xpEarned: 0,
+  lastSeenAt: null,
+  lastRoute: '',
+  sectionTotals: {}
+});
+
+const buildActivityFromEvents = (eventDocs) => {
+  const activityByUid = new Map();
+
+  eventDocs.forEach((docSnap) => {
+    const event = docSnap.data();
+
+    if (!event.uid) {
+      return;
+    }
+
+    const activity = activityByUid.get(event.uid) || emptyActivity();
+    const sectionName = event.section || 'Unknown';
+    const sectionKey = getSectionKey(sectionName);
+    const section = activity.sectionTotals[sectionKey] || {
+      name: sectionName,
+      seconds: 0,
+      visits: 0,
+      attempts: 0,
+      correct: 0,
+      incorrect: 0
+    };
+    const duration = Number.isFinite(event.durationSeconds) ? Math.max(0, event.durationSeconds) : 0;
+
+    activity.lastSeenAt = getTimestampMillis(event.createdAt) >= getTimestampMillis(activity.lastSeenAt)
+      ? event.createdAt
+      : activity.lastSeenAt;
+    activity.lastRoute = event.route || activity.lastRoute;
+
+    if (event.eventType === 'section_visit') {
+      section.visits += 1;
+      section.lastRoute = event.route || '';
+      section.lastSeenAt = event.createdAt || null;
+    }
+
+    if (event.eventType === 'section_time') {
+      activity.totalSectionSeconds += duration;
+      section.seconds += duration;
+      section.lastRoute = event.route || '';
+      section.lastSeenAt = event.createdAt || null;
+    }
+
+    if (event.eventType === 'session_time') {
+      activity.totalSessionSeconds += duration;
+    }
+
+    if (event.eventType === 'answer_attempt') {
+      activity.totalAttempts += 1;
+      activity.totalCorrect += event.correct ? 1 : 0;
+      activity.totalIncorrect += event.correct ? 0 : 1;
+      section.attempts += 1;
+      section.correct += event.correct ? 1 : 0;
+      section.incorrect += event.correct ? 0 : 1;
+    }
+
+    if (event.eventType === 'test_result') {
+      activity.testsCompleted += event.completed ? 1 : 0;
+      activity.totalScore += Number.isFinite(event.score) ? event.score : 0;
+      section.testsCompleted = (section.testsCompleted || 0) + (event.completed ? 1 : 0);
+      section.score = (section.score || 0) + (Number.isFinite(event.score) ? event.score : 0);
+    }
+
+    if (event.eventType === 'xp_awarded') {
+      activity.xpEarned += Number.isFinite(event.xpAmount) ? event.xpAmount : 0;
+    }
+
+    activity.sectionTotals[sectionKey] = section;
+    activityByUid.set(event.uid, activity);
+  });
+
+  return activityByUid;
+};
+
 const formatAccuracy = (correct = 0, attempts = 0) => {
   if (!attempts) {
     return 'No attempts';
@@ -78,9 +171,10 @@ const AdminDashboard = () => {
       setError('');
       setIsLoading(true);
 
-      const [usersSnapshot, activitySnapshot, feedbackSnapshot] = await Promise.all([
+      const [usersSnapshot, activitySnapshot, eventSnapshot, feedbackSnapshot] = await Promise.all([
         getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc'))),
         getDocs(collection(db, 'learnerActivity')),
+        getDocs(query(collection(db, 'activityEvents'), orderBy('createdAt', 'desc'))),
         getDocs(query(collection(db, 'feedback'), orderBy('createdAt', 'desc')))
       ]);
 
@@ -89,10 +183,12 @@ const AdminDashboard = () => {
         activityByUid.set(docSnap.id, docSnap.data());
       });
 
+      const eventActivityByUid = buildActivityFromEvents(eventSnapshot.docs || []);
+
       const combinedLearners = [];
       usersSnapshot.forEach((docSnap) => {
         const user = docSnap.data();
-        const activity = activityByUid.get(docSnap.id) || {};
+        const activity = eventActivityByUid.get(docSnap.id) || activityByUid.get(docSnap.id) || {};
 
         combinedLearners.push({
           id: docSnap.id,

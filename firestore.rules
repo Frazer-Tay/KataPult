@@ -52,31 +52,62 @@ service cloud.firestore {
       && request.resource.data.level <= resource.data.level + 2;
     }
 
-    function validActivityWrite(userId) {
-      return isOwner(userId)
+    function validActivityWrite() {
+      return false;
+    }
+
+    function validActivityEventCreate() {
+      return signedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.email == request.auth.token.email
+        && request.resource.data.eventType in [
+          'section_visit',
+          'section_time',
+          'session_time',
+          'answer_attempt',
+          'test_result',
+          'xp_awarded'
+        ]
+        && request.resource.data.section is string
+        && request.resource.data.section.size() >= 1
+        && request.resource.data.section.size() <= 80
+        && request.resource.data.route is string
+        && request.resource.data.route.size() <= 200
+        && request.resource.data.durationSeconds is int
+        && request.resource.data.durationSeconds >= 0
+        && request.resource.data.durationSeconds <= 21600
+        && (!('displayName' in request.resource.data)
+          || (request.resource.data.displayName is string
+            && request.resource.data.displayName.size() <= 120))
+        && (!('correct' in request.resource.data)
+          || request.resource.data.correct is bool)
+        && (!('itemType' in request.resource.data)
+          || (request.resource.data.itemType is string
+            && request.resource.data.itemType.size() <= 80))
+        && (!('score' in request.resource.data)
+          || (request.resource.data.score is int
+            && request.resource.data.score >= 0
+            && request.resource.data.score <= 1000))
+        && (!('xpAmount' in request.resource.data)
+          || (request.resource.data.xpAmount is int
+            && request.resource.data.xpAmount >= 0
+            && request.resource.data.xpAmount <= 500))
+        && (!('completed' in request.resource.data)
+          || request.resource.data.completed is bool)
         && request.resource.data.keys().hasOnly([
           'uid',
           'email',
           'displayName',
-          'photoURL',
-          'lastSeenAt',
-          'updatedAt',
-          'lastRoute',
-          'sectionVisitCount',
-          'sectionTotals',
-          'totalSectionSeconds',
-          'sessionFlushCount',
-          'totalSessionSeconds',
-          'totalAttempts',
-          'totalCorrect',
-          'totalIncorrect',
-          'questionTypeTotals',
-          'testsCompleted',
-          'totalScore',
-          'xpEarned',
-          'xpAwardCount'
+          'eventType',
+          'section',
+          'route',
+          'durationSeconds',
+          'correct',
+          'itemType',
+          'score',
+          'xpAmount',
+          'completed',
+          'createdAt'
         ]);
     }
 
@@ -122,8 +153,14 @@ service cloud.firestore {
 
     match /learnerActivity/{userId} {
       allow read: if isOwner(userId) || isAdmin();
-      allow create, update: if validActivityWrite(userId);
+      allow create, update: if validActivityWrite();
       allow delete: if false;
+    }
+
+    match /activityEvents/{eventId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if validActivityEventCreate();
+      allow update, delete: if false;
     }
 
     match /feedback/{feedbackId} {

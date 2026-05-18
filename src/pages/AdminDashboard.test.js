@@ -54,6 +54,7 @@ describe('AdminDashboard', () => {
           })
         }
       ]))
+      .mockResolvedValueOnce(makeSnapshot([]))
       .mockResolvedValueOnce(makeSnapshot([]));
 
     render(<AdminDashboard />);
