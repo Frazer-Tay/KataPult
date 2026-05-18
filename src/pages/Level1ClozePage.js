@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { clozePassageData } from '../data/level1Practice';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './Level1Practice.module.css';
 
 const Level1ClozePage = () => {
@@ -54,6 +55,18 @@ const Level1ClozePage = () => {
   };
 
   const handleCheck = () => {
+    const totalAnswers = Object.keys(clozePassageData.answers).length;
+    const correctAnswers = Object.keys(clozePassageData.answers).filter(
+      key => userAnswers[key] === clozePassageData.answers[key]
+    ).length;
+
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'L1 Cloze',
+      route: '/level1/cloze',
+      itemType: 'l1_cloze',
+      correct: correctAnswers === totalAnswers
+    }).catch((error) => console.warn('Failed to record cloze attempt:', error));
     setIsChecked(true);
   };
 

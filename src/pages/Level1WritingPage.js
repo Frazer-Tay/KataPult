@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { writingData } from '../data/level1Practice';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './Level1Practice.module.css';
 
 const Level1WritingPage = () => {
@@ -35,6 +36,22 @@ const Level1WritingPage = () => {
       ...prev,
       [index]: !prev[index]
     }));
+  };
+
+  const toggleReview = () => {
+    const nextReviewState = !isReviewing;
+
+    if (nextReviewState) {
+      recordLearnerActivity({
+        eventType: 'answer_attempt',
+        section: 'L1 Writing',
+        route: '/level1/writing',
+        itemType: selectedTask === 'letter' ? 'l1_letter' : 'l1_essay',
+        correct: wordCount >= 150
+      }).catch((error) => console.warn('Failed to record writing review:', error));
+    }
+
+    setIsReviewing(nextReviewState);
   };
 
   return (
@@ -91,7 +108,7 @@ const Level1WritingPage = () => {
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
           <button 
             className={styles.navButton} 
-            onClick={() => setIsReviewing(!isReviewing)}
+            onClick={toggleReview}
             style={{ backgroundColor: isReviewing ? '#95a5a6' : '#2ecc71' }}
           >
             {isReviewing ? 'Kembali Menulis' : 'Selesai & Evaluasi Mandiri'}

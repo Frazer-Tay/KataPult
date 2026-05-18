@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { persamaanData } from '../data/persamaan';
 import { useProgress } from '../contexts/ProgressContext';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './PersamaanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -189,6 +190,13 @@ const PersamaanTestPage = () => {
     setSelectedAnswer(selectedOptionString);
     const correct = selectedOptionString.toLowerCase() === correctSynonymForCurrent.toLowerCase();
     setIsCorrect(correct);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Persamaan Test',
+      route: '/test/persamaan',
+      itemType: 'synonym_test',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
 
     if (correct) {
       setCorrectAnswersCount(prev => prev + 1);
@@ -220,8 +228,17 @@ const PersamaanTestPage = () => {
   const hasAwardedXpRef = useRef(false);
 
   useEffect(() => {
-    if (isTestOver && score > 0 && !hasAwardedXpRef.current) {
-      addXP(score);
+    if (isTestOver && !hasAwardedXpRef.current) {
+      recordLearnerActivity({
+        eventType: 'test_result',
+        section: 'Persamaan Test',
+        route: '/test/persamaan',
+        score,
+        completed: true
+      }).catch((error) => console.warn('Failed to record test result:', error));
+      if (score > 0) {
+        addXP(score);
+      }
       hasAwardedXpRef.current = true;
     }
   }, [isTestOver, score, addXP]);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { imbuhanPracticeData } from '../data/level1Practice';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './Level1Practice.module.css';
 
 const Level1ImbuhanPage = () => {
@@ -27,7 +28,16 @@ const Level1ImbuhanPage = () => {
   };
 
   const handleCheck = () => {
-    if (userInput.trim().toLowerCase() === currentItem.answer.toLowerCase()) {
+    const correct = userInput.trim().toLowerCase() === currentItem.answer.toLowerCase();
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'L1 Imbuhan',
+      route: '/level1/imbuhan-practice',
+      itemType: 'l1_imbuhan',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
+
+    if (correct) {
       setStatus('correct');
     } else {
       setStatus('incorrect');

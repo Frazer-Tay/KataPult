@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './PersamaanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -203,6 +204,13 @@ const PersamaanPage = () => {
     const correct = selectedOptionString.toLowerCase() === correctSynonymObject.synonym.toLowerCase();
     setIsCorrect(correct);
     setSelectedAnswer(selectedOptionString);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Persamaan MCQ',
+      route: '/persamaan',
+      itemType: 'synonym_mcq',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
 
     if (correct) {
       setFeedback(`Tepat! "${selectedOptionString}" adalah sinonim yang benar. 👍`);

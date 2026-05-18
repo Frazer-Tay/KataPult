@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { useAuth } from './AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { recordLearnerActivity } from '../utils/activityTracker';
 
 const ProgressContext = createContext();
 
@@ -116,6 +117,13 @@ export const ProgressProvider = ({ children }) => {
     // Sync to Cloud
     if (currentUser) {
       try {
+        recordLearnerActivity({
+          eventType: 'xp_awarded',
+          xpAmount: amount
+        }).catch((e) => {
+          console.warn('Failed to record XP award:', e);
+        });
+
         const updates = { xp: newXp, level: newLevel };
         if (didUpdateStreak) {
           updates.streak = newStreak;
@@ -154,7 +162,26 @@ export const ProgressProvider = ({ children }) => {
     }
     
     if (status === 'completed') {
+      recordLearnerActivity({
+        eventType: 'test_result',
+        section: 'Daily Challenge',
+        route: '/daily-challenge',
+        score: 50,
+        completed: true
+      }).catch((e) => {
+        console.warn('Failed to record daily challenge result:', e);
+      });
       await addXP(50);
+    } else {
+      recordLearnerActivity({
+        eventType: 'test_result',
+        section: 'Daily Challenge',
+        route: '/daily-challenge',
+        score: 0,
+        completed: true
+      }).catch((e) => {
+        console.warn('Failed to record daily challenge result:', e);
+      });
     }
   }, [currentUser, addXP]);
 

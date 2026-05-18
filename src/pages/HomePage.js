@@ -39,6 +39,7 @@ const HomePage = () => {
         </p>
         <div className={styles.heroActions}>
           <Link to="/test-setup" className={styles.heroPrimaryCTA}>Start Custom Test</Link>
+          <Link to="/level1" className={styles.heroSecondaryCTA}>Level 1 Practice</Link>
           <button onClick={scrollToModules} className={styles.heroSecondaryCTA}>Browse Practice Modes</button>
         </div>
       </section>

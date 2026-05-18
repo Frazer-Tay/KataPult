@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { imbuhanData } from '../data/imbuhan';
 import { useProgress } from '../contexts/ProgressContext';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './ImbuhanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -151,6 +152,13 @@ const ImbuhanTestPage = () => {
     const correct = userAnswer === correctAnswer;
 
     setIsCorrect(correct);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Imbuhan Test',
+      route: '/test/imbuhan',
+      itemType: 'imbuhan_test',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
     if (correct) {
       setCorrectAnswersCount(prev => prev + 1);
       
@@ -182,8 +190,17 @@ const ImbuhanTestPage = () => {
   const hasAwardedXpRef = useRef(false);
 
   useEffect(() => {
-    if (isTestOver && score > 0 && !hasAwardedXpRef.current) {
-      addXP(score);
+    if (isTestOver && !hasAwardedXpRef.current) {
+      recordLearnerActivity({
+        eventType: 'test_result',
+        section: 'Imbuhan Test',
+        route: '/test/imbuhan',
+        score,
+        completed: true
+      }).catch((error) => console.warn('Failed to record test result:', error));
+      if (score > 0) {
+        addXP(score);
+      }
       hasAwardedXpRef.current = true;
     }
   }, [isTestOver, score, addXP]);

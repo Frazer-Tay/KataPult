@@ -77,19 +77,20 @@ const AppContent = () => {
           <nav className={`app-nav ${isNavOpen ? 'open' : ''}`}>
             {isLevel1 ? (
               <>
-                <NavLink to="/level1" end className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Dashboard L1</NavLink>
-                <NavLink to="/level1/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocab</NavLink>
+                <NavLink to="/level1" end className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 1 Home</NavLink>
+                <NavLink to="/level1/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
                 <NavLink to="/level1/reading" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Reading</NavLink>
                 <NavLink to="/level1/sentence" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Sentence</NavLink>
                 <NavLink to="/level1/imbuhan-practice" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
                 <NavLink to="/level1/cloze" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Cloze</NavLink>
                 <NavLink to="/level1/writing" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Writing</NavLink>
-                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Back to L2</NavLink>
+                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Switch to Level 2</NavLink>
                 {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Admin</NavLink>}
               </>
             ) : (
               <>
-                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Beranda L2</NavLink>
+                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 2 Home</NavLink>
+                <NavLink to="/level1" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Level 1 Practice</NavLink>
                 <NavLink to="/vocabulary" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Vocabulary</NavLink>
                 <NavLink to="/imbuhan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Imbuhan</NavLink>
                 <NavLink to="/persamaan" className={({ isActive }) => isActive ? "active-link" : ""} onClick={closeNav}>Persamaan MCQ</NavLink>
@@ -104,6 +105,11 @@ const AppContent = () => {
         </header>
       )}
       <main className="main-content">
+        {isLevel1 && (
+          <section className="level-notice" aria-label="Level 1 content notice">
+            Level 1 is a work in progress and is being incrementally updated with relevant exam content.
+          </section>
+        )}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

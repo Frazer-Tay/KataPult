@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../contexts/ProgressContext';
 import { getDailyChallengeData } from '../utils/dailySeed';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import useTimeTracker from '../hooks/useTimeTracker';
 import ProgressBar from '../components/ProgressBar';
 import styles from './DailyChallengePage.module.css';
@@ -52,6 +53,13 @@ const DailyChallengePage = () => {
     
     const correct = option === currentItem.correctAnswer;
     setIsCorrect(correct);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Daily Challenge',
+      route: '/daily-challenge',
+      itemType: currentItem.type,
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
     
     if (!correct) {
       setLives(prev => prev - 1);
@@ -65,6 +73,13 @@ const DailyChallengePage = () => {
     
     const correct = userInput.trim().toLowerCase() === currentItem.correctAnswer.toLowerCase();
     setIsCorrect(correct);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Daily Challenge',
+      route: '/daily-challenge',
+      itemType: currentItem.type,
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
     
     if (!correct) {
       setLives(prev => prev - 1);

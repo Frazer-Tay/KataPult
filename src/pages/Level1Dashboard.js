@@ -27,7 +27,7 @@ const Level1Dashboard = () => {
         </p>
         <div className={styles.heroActions}>
           <button onClick={scrollToModules} className={styles.heroPrimaryCTA}>Start Learning</button>
-          <Link to="/" className={styles.heroSecondaryCTA}>Back to Selection</Link>
+          <Link to="/dashboard" className={styles.heroSecondaryCTA}>Switch to Level 2</Link>
         </div>
       </section>
 

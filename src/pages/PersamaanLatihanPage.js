@@ -1,6 +1,7 @@
 // src/pages/PersamaanLatihanPage.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './PersamaanLatihanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -185,6 +186,13 @@ const PersamaanLatihanPage = () => {
     setSessionScore(prev => prev + scoreIncrement);
     setFeedbackForEachInput(newFeedbacks);
     setRevealedSynonyms(currentItemRef.current.synonyms.map(s => s.synonym));
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Persamaan Latihan',
+      route: '/persamaan-latihan',
+      itemType: 'synonym_recall',
+      correct: scoreIncrement > 0
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
   }, [userInputs, isAnswered]);
 
   const advanceItem = useCallback((direction) => {

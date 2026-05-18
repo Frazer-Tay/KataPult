@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { imbuhanData } from '../data/imbuhan';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './ImbuhanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -200,6 +201,13 @@ const ImbuhanPage = () => {
     const userAnswer = userInput.trim().toLowerCase();
     const correct = correctAnswer && userAnswer === correctAnswer;
     setIsCorrect(correct);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Imbuhan',
+      route: '/imbuhan',
+      itemType: 'imbuhan',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
 
     if (correct) {
       setFeedback('Tepat! Jawaban Benar. 👍');

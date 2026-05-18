@@ -4,6 +4,7 @@ import { vocabularyData } from '../data/vocabulary';
 import { getDueWords, updateWordSRS } from '../utils/srsLogic';
 import { useProgress } from '../contexts/ProgressContext';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './VocabularyPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -94,11 +95,18 @@ const VocabularyPage = ({ level = 2 }) => {
     if (quality >= 1) {
       addXP(5); // 5 XP for getting it right/easy
     }
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: level === 1 ? 'L1 Vocabulary' : 'Vocabulary',
+      route: level === 1 ? '/level1/vocabulary' : '/vocabulary',
+      itemType: 'srs_vocab',
+      correct: quality >= 1
+    }).catch((error) => console.warn('Failed to record SRS rating:', error));
 
     // Move to next word
     setSrsRevealed(false);
     setCurrentIndex(prev => prev + 1);
-  }, [currentItem, addXP]);
+  }, [currentItem, addXP, level]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {

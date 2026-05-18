@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { karanganData } from '../data/karangan';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -199,6 +200,13 @@ const KaranganPage = () => {
     const correct = selectedOptionDefinition.toLowerCase() === currentItemRef.current.definition.toLowerCase();
     setIsCorrect(correct);
     setSelectedAnswer(selectedOptionDefinition);
+    recordLearnerActivity({
+      eventType: 'answer_attempt',
+      section: 'Karangan',
+      route: '/karangan',
+      itemType: 'definition_mcq',
+      correct
+    }).catch((error) => console.warn('Failed to record answer attempt:', error));
     if (correct) {
       setFeedback('Tepat! Definisi Benar. 👍');
       setCorrectStreak(prev => prev + 1);

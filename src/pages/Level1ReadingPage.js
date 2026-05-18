@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { readingData } from '../data/level1Practice';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './Level1Practice.module.css';
 
 const Level1ReadingPage = () => {
@@ -11,6 +12,15 @@ const Level1ReadingPage = () => {
   };
 
   const toggleReveal = (questionId) => {
+    if (!revealedAnswers[questionId]) {
+      recordLearnerActivity({
+        eventType: 'answer_attempt',
+        section: 'L1 Reading',
+        route: '/level1/reading',
+        itemType: 'l1_reading_model_answer',
+        correct: Boolean(userAnswers[questionId]?.trim())
+      }).catch((error) => console.warn('Failed to record reading check:', error));
+    }
     setRevealedAnswers(prev => ({ ...prev, [questionId]: !prev[questionId] }));
   };
 

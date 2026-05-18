@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sentenceConstructionData } from '../data/level1Practice';
+import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './Level1Practice.module.css';
 
 const Level1SentencePage = () => {
@@ -26,6 +27,20 @@ const Level1SentencePage = () => {
     }
   };
 
+  const toggleModel = () => {
+    if (!isRevealed) {
+      recordLearnerActivity({
+        eventType: 'answer_attempt',
+        section: 'L1 Sentence',
+        route: '/level1/sentence',
+        itemType: 'l1_sentence_model',
+        correct: Boolean(userSentence.trim())
+      }).catch((error) => console.warn('Failed to record sentence check:', error));
+    }
+
+    setIsRevealed(!isRevealed);
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -47,7 +62,7 @@ const Level1SentencePage = () => {
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
           <button 
             className={styles.revealButton} 
-            onClick={() => setIsRevealed(!isRevealed)}
+            onClick={toggleModel}
             style={{ padding: '10px 20px', fontSize: '1.1rem' }}
           >
             {isRevealed ? 'Sembunyikan Model' : 'Periksa Model Kalimat'}

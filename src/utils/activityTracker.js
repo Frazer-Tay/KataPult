@@ -16,7 +16,12 @@ export const recordLearnerActivity = async ({
   eventType,
   section,
   route,
-  durationSeconds = 0
+  durationSeconds = 0,
+  correct,
+  itemType,
+  score = 0,
+  xpAmount = 0,
+  completed = false
 }) => {
   const user = auth.currentUser;
 
@@ -28,6 +33,7 @@ export const recordLearnerActivity = async ({
     ? Math.max(0, Math.min(Math.round(durationSeconds), 60 * 60 * 6))
     : 0;
   const sectionKey = getSectionKey(section);
+  const itemTypeKey = getSectionKey(itemType || 'unknown');
   const activityRef = doc(db, 'learnerActivity', user.uid);
 
   const baseUpdate = {
@@ -61,6 +67,30 @@ export const recordLearnerActivity = async ({
     session_time: {
       totalSessionSeconds: increment(safeDuration),
       sessionFlushCount: increment(1)
+    },
+    answer_attempt: {
+      totalAttempts: increment(1),
+      totalCorrect: increment(correct ? 1 : 0),
+      totalIncorrect: increment(correct ? 0 : 1),
+      [`sectionTotals.${sectionKey}.name`]: section || 'Unknown',
+      [`sectionTotals.${sectionKey}.attempts`]: increment(1),
+      [`sectionTotals.${sectionKey}.correct`]: increment(correct ? 1 : 0),
+      [`sectionTotals.${sectionKey}.incorrect`]: increment(correct ? 0 : 1),
+      [`questionTypeTotals.${itemTypeKey}.name`]: itemType || 'Unknown',
+      [`questionTypeTotals.${itemTypeKey}.attempts`]: increment(1),
+      [`questionTypeTotals.${itemTypeKey}.correct`]: increment(correct ? 1 : 0),
+      [`questionTypeTotals.${itemTypeKey}.incorrect`]: increment(correct ? 0 : 1)
+    },
+    test_result: {
+      testsCompleted: increment(completed ? 1 : 0),
+      totalScore: increment(Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0),
+      [`sectionTotals.${sectionKey}.name`]: section || 'Unknown',
+      [`sectionTotals.${sectionKey}.testsCompleted`]: increment(completed ? 1 : 0),
+      [`sectionTotals.${sectionKey}.score`]: increment(Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0)
+    },
+    xp_awarded: {
+      xpEarned: increment(Number.isFinite(xpAmount) ? Math.max(0, Math.round(xpAmount)) : 0),
+      xpAwardCount: increment(1)
     }
   };
 

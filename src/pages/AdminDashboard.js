@@ -50,11 +50,21 @@ const getTopSections = (sectionTotals = {}, limit = 3) => (
     .map((section) => ({
       name: section.name || 'Unknown',
       seconds: section.seconds || 0,
-      visits: section.visits || 0
+      visits: section.visits || 0,
+      attempts: section.attempts || 0,
+      correct: section.correct || 0
     }))
     .sort((a, b) => b.seconds - a.seconds)
     .slice(0, limit)
 );
+
+const formatAccuracy = (correct = 0, attempts = 0) => {
+  if (!attempts) {
+    return 'No attempts';
+  }
+
+  return `${Math.round((correct / attempts) * 100)}%`;
+};
 
 const AdminDashboard = () => {
   const [learners, setLearners] = useState([]);
@@ -88,6 +98,10 @@ const AdminDashboard = () => {
           activity,
           totalSessionSeconds: activity.totalSessionSeconds || 0,
           totalSectionSeconds: activity.totalSectionSeconds || 0,
+          totalAttempts: activity.totalAttempts || 0,
+          totalCorrect: activity.totalCorrect || 0,
+          testsCompleted: activity.testsCompleted || 0,
+          xpEarned: activity.xpEarned || 0,
           lastSeenAt: activity.lastSeenAt || user.createdAt || null,
           topSections: getTopSections(activity.sectionTotals)
         });
@@ -126,6 +140,8 @@ const AdminDashboard = () => {
     const trackedLearners = learners.filter((learner) => learner.role !== 'admin');
     const learnerCount = trackedLearners.length;
     const totalSeconds = trackedLearners.reduce((sum, learner) => sum + learner.totalSectionSeconds, 0);
+    const totalAttempts = trackedLearners.reduce((sum, learner) => sum + learner.totalAttempts, 0);
+    const totalCorrect = trackedLearners.reduce((sum, learner) => sum + learner.totalCorrect, 0);
     const activeThisWeek = trackedLearners.filter((learner) => (
       now - getTimestampMillis(learner.lastSeenAt) <= sevenDaysMs
     )).length;
@@ -134,9 +150,11 @@ const AdminDashboard = () => {
     trackedLearners.forEach((learner) => {
       Object.values(learner.activity?.sectionTotals || {}).forEach((section) => {
         const key = section.name || 'Unknown';
-        const existing = allSections.get(key) || { name: key, seconds: 0, visits: 0 };
+        const existing = allSections.get(key) || { name: key, seconds: 0, visits: 0, attempts: 0, correct: 0 };
         existing.seconds += section.seconds || 0;
         existing.visits += section.visits || 0;
+        existing.attempts += section.attempts || 0;
+        existing.correct += section.correct || 0;
         allSections.set(key, existing);
       });
     });
@@ -149,6 +167,8 @@ const AdminDashboard = () => {
       learnerCount,
       activeThisWeek,
       totalSeconds,
+      totalAttempts,
+      totalCorrect,
       averageSeconds: learnerCount ? totalSeconds / learnerCount : 0,
       topSections
     };
@@ -196,9 +216,9 @@ const AdminDashboard = () => {
           <div className={styles.metricHint}>across all sections</div>
         </div>
         <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Average</div>
-          <div className={styles.metricValue}>{formatDuration(dashboardStats.averageSeconds)}</div>
-          <div className={styles.metricHint}>per learner</div>
+          <div className={styles.metricLabel}>Attempts</div>
+          <div className={styles.metricValue}>{dashboardStats.totalAttempts}</div>
+          <div className={styles.metricHint}>{formatAccuracy(dashboardStats.totalCorrect, dashboardStats.totalAttempts)} accuracy</div>
         </div>
       </section>
 
@@ -214,7 +234,9 @@ const AdminDashboard = () => {
               <div className={styles.sectionRow} key={section.name}>
                 <div>
                   <div className={styles.sectionName}>{section.name}</div>
-                  <div className={styles.sectionVisits}>{section.visits} visit{section.visits === 1 ? '' : 's'}</div>
+                  <div className={styles.sectionVisits}>
+                    {section.visits} visit{section.visits === 1 ? '' : 's'} · {section.attempts || 0} attempt{section.attempts === 1 ? '' : 's'} · {formatAccuracy(section.correct, section.attempts)}
+                  </div>
                 </div>
                 <div className={styles.barTrack} aria-hidden="true">
                   <div
@@ -254,6 +276,7 @@ const AdminDashboard = () => {
                   <th>Last seen</th>
                   <th>Section time</th>
                   <th>Session time</th>
+                  <th>Attempts</th>
                   <th>Progress</th>
                   <th>Top sections</th>
                 </tr>
@@ -270,8 +293,12 @@ const AdminDashboard = () => {
                     <td>{formatDuration(learner.totalSectionSeconds)}</td>
                     <td>{formatDuration(learner.totalSessionSeconds)}</td>
                     <td>
+                      <div>{learner.totalAttempts} attempt{learner.totalAttempts === 1 ? '' : 's'}</div>
+                      <div className={styles.muted}>{formatAccuracy(learner.totalCorrect, learner.totalAttempts)}</div>
+                    </td>
+                    <td>
                       <div>Level {learner.level || 1}</div>
-                      <div className={styles.muted}>{learner.xp || 0} XP, {learner.streak || 0} day streak</div>
+                      <div className={styles.muted}>{learner.xp || 0} XP, {learner.xpEarned || 0} tracked XP, {learner.streak || 0} day streak</div>
                     </td>
                     <td>
                       {learner.topSections.length === 0 ? (
@@ -281,6 +308,7 @@ const AdminDashboard = () => {
                           {learner.topSections.map((section) => (
                             <span className={styles.sectionPill} key={section.name}>
                               {section.name}: {formatDuration(section.seconds)}
+                              {section.attempts ? `, ${formatAccuracy(section.correct, section.attempts)}` : ''}
                             </span>
                           ))}
                         </div>
