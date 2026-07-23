@@ -137,6 +137,18 @@ const AppContent = () => {
                 {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>Admin</NavLink>}
               </div>
             </details>
+            <div className="nav-more-mobile" aria-label={englishAssist ? 'More learning modules' : 'Modul pembelajaran lainnya'}>
+              <span className="nav-more-mobile-heading">{englishAssist ? 'More' : 'Lainnya'}</span>
+              <div className="nav-more-mobile-links">
+                {secondaryLinks.map(([to, label]) => (
+                  <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>
+                    {label}
+                  </NavLink>
+                ))}
+                {isAdmin && <NavLink to="/changelog" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>Changelog</NavLink>}
+                {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>Admin</NavLink>}
+              </div>
+            </div>
           </nav>
 
           <div className="nav-profile">
@@ -235,15 +247,17 @@ const AppContent = () => {
           </Routes>
         </Suspense>
       </main>
-      <footer className="app-footer">
-        <p>&copy; {new Date().getFullYear()} KataPult. Latih Bahasa Anda!</p>
-        <p className="footer-disclaimer">
-          Content is compiled from publicly available learning references, online resources, user-submitted notes, and internal practice materials. KataPult is provided for revision support only; we make a good-faith effort to keep content accurate and complete, but we do not guarantee that every item is error-free, exhaustive, or endorsed by any examination body or third-party source.
-        </p>
-        {!hideNav && currentUser && (
-          <Link to="/feedback" className="footer-feedback-link">Send feedback or report an issue</Link>
-        )}
-      </footer>
+      {!isLandingPage && (
+        <footer className="app-footer">
+          <p>&copy; {new Date().getFullYear()} KataPult. Latih Bahasa Anda!</p>
+          <p className="footer-disclaimer">
+            Content is compiled from publicly available learning references, online resources, user-submitted notes, and internal practice materials. KataPult is provided for revision support only; we make a good-faith effort to keep content accurate and complete, but we do not guarantee that every item is error-free, exhaustive, or endorsed by any examination body or third-party source.
+          </p>
+          {!hideNav && currentUser && (
+            <Link to="/feedback" className="footer-feedback-link">Send feedback or report an issue</Link>
+          )}
+        </footer>
+      )}
     </>
   );
 }

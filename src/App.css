@@ -262,6 +262,10 @@ body {
   min-width: 210px;
 }
 
+.nav-more-mobile {
+  display: none;
+}
+
 .nav-more-menu a {
   border-radius: 8px;
   padding: 10px 12px;
@@ -762,33 +766,30 @@ input:focus-visible, textarea:focus-visible {
     flex-direction: column;
   }
 
-  .nav-more summary {
-    border-top: 1px solid var(--border-color-light);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    margin-top: 8px;
-    padding: 18px 16px 8px;
-    pointer-events: none;
-    text-transform: uppercase;
-  }
-
-  .nav-more summary svg {
+  .nav-more {
     display: none;
   }
 
-  .nav-more-menu {
-    animation: none;
-    border: 0;
-    box-shadow: none;
-    display: flex;
-    min-width: 0;
-    padding: 0;
-    position: static;
+  .nav-more-mobile {
+    border-top: 1px solid var(--border-color-light);
+    display: block;
+    margin-top: 8px;
+    padding-top: 10px;
   }
 
-  .nav-more:not([open]) .nav-more-menu {
+  .nav-more-mobile-heading {
+    color: var(--text-light);
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    padding: 8px 16px 6px;
+    text-transform: uppercase;
+  }
+
+  .nav-more-mobile-links {
     display: flex;
+    flex-direction: column;
   }
 
   .level-tabs {

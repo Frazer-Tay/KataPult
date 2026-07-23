@@ -5,9 +5,21 @@ import styles from './ChangelogPage.module.css';
 
 const releases = [
   {
+    version: 'v0.8.0',
+    date: '24 Juli 2026',
+    current: true,
+    changes: [
+      ['Conversion-focused landing page', 'Mengganti halaman awal dengan proposisi nilai yang lebih jelas, satu CTA utama, navigasi merek, dan hierarki visual yang lebih profesional.'],
+      ['Interactive product proof', 'Menambahkan contoh latihan Persamaan yang dapat dijawab sebelum login, lengkap dengan progress, feedback langsung, dan penjelasan manfaat penyimpanan progres.'],
+      ['Personalized learning entry', 'Menampilkan aksi Continue Learning untuk pengguna yang kembali dan menyederhanakan pemilihan Foundation, Level 1, dan Level 2 untuk pengguna baru.'],
+      ['KataPult learning companion', 'Menambahkan maskot Komodo ringan dengan identitas Indonesia sebagai elemen pendukung merek tanpa menggantikan tampilan produk nyata.'],
+      ['Reliable mobile navigation', 'Menghapus dropdown bertingkat Lainnya pada menu mobile dan menampilkan tautan sekundernya secara langsung agar seluruh modul selalu dapat diakses.'],
+      ['Authentication preserved', 'Tidak mengubah AuthContext, Firebase configuration, Login, Onboarding, atau alur Google Sign-In.']
+    ]
+  },
+  {
     version: 'v0.7.0',
     date: '23 Juli 2026',
-    current: true,
     changes: [
       ['Continue Learning', 'Menambahkan kartu lanjut belajar pada dasbor yang mengingat modul terakhir, posisi soal, persentase progres, dan aktivitas terbaru secara lokal untuk setiap akun.'],
       ['Unified practice experience', 'Memperbarui Vocabulary, Imbuhan, Persamaan, Karangan, Essay Bank, latihan Level 1, Daily Challenge, dan simulator tes dengan action bar, loading state, progress, dan pola interaksi bersama.'],
