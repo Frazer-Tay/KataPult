@@ -30,6 +30,21 @@
   margin-top: 42px;
 }
 
+.continueSection {
+  margin-top: 28px;
+}
+
+.continueCard {
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.09), rgba(0, 196, 204, 0.08));
+  border: 1px solid rgba(123, 97, 255, 0.14);
+  border-radius: calc(var(--border-radius-lg) + 4px);
+  padding: 10px;
+}
+
+.continueCard > a {
+  min-height: 136px;
+}
+
 .sectionHeading {
   align-items: flex-end;
   display: flex;

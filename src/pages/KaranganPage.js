@@ -7,6 +7,7 @@ import { recordLearnerActivity } from '../utils/activityTracker';
 import { useSettings } from '../contexts/SettingsContext';
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 
@@ -264,7 +265,7 @@ const KaranganPage = () => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCountForDisplay = missedItemsMaster.size;
 
-  if (isLoading) { return <div className="loading">{englishAssist ? 'Loading Essay Vocab MCQ...' : 'Memuat Essay Vocab MCQ...'}</div>; }
+  if (isLoading) { return <LoadingState label={englishAssist ? 'Loading Essay Vocab MCQ...' : 'Memuat Essay Vocab MCQ...'} />; }
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) {
     const completionText = isReviewingMistakes
@@ -340,7 +341,7 @@ const KaranganPage = () => {
               {feedback}
             </div>
         )}
-        <div className="action-buttons-container">
+        <PracticeActions>
             <button
                 className="secondaryButton"
                 onClick={() => advanceItem('previous')}
@@ -362,7 +363,7 @@ const KaranganPage = () => {
             >
                 {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? "View Results" : "Lihat Hasil") : (englishAssist ? "Next" : "Lanjut")} <span className="arrowIcon">→</span>
             </button>
-        </div>
+        </PracticeActions>
     </div>
   );
 };

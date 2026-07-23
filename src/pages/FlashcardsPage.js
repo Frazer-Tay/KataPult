@@ -5,6 +5,7 @@ import useTimeTracker from '../hooks/useTimeTracker';
 import { useSettings } from '../contexts/SettingsContext';
 import styles from './FlashcardsPages.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
     if (!Array.isArray(array)) return [];
@@ -135,7 +136,7 @@ const FlashcardsPage = () => {
   }, [advanceSet, currentSet, toggleDetails, isLoading]);
 
   if (isLoading) {
-    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{englishAssist ? 'Loading Essay Bank...' : 'Memuat Essay Bank...'}</div>;
+    return <LoadingState label={englishAssist ? 'Loading Essay Bank...' : 'Memuat Essay Bank...'} />;
   }
 
   if (error) {
@@ -356,7 +357,7 @@ const FlashcardsPage = () => {
       {currentSet && currentSet.type === 'essay-model-paragraphs' && renderEssayModelParagraphs(currentSet)}
 
 
-      <div className="action-buttons-container">
+      <PracticeActions>
         <button className="secondaryButton" onClick={() => advanceSet('previous')} disabled={allSets.length <= 1 || isLoading}>
           <span className="arrowIcon">←</span> {englishAssist ? 'Previous Set' : 'Set Sebelumnya'}
         </button>
@@ -370,7 +371,7 @@ const FlashcardsPage = () => {
         <button className="nextButton" onClick={() => advanceSet('next')} disabled={allSets.length <= 1 || isLoading}>
           {englishAssist ? 'Next Set' : 'Set Berikutnya'} <span className="arrowIcon">→</span>
         </button>
-      </div>
+      </PracticeActions>
     </div>
   );
 };

@@ -56,3 +56,22 @@
 @media (prefers-reduced-motion: reduce) {
     .progressBarFill { transition: none; }
 }
+
+@media (max-width: 600px) {
+    .progressBarContainer {
+        margin-bottom: 18px;
+    }
+
+    .progressLabels {
+        font-size: 0.8rem;
+        margin-bottom: 7px;
+    }
+
+    .progressText small {
+        font-size: 0.64rem;
+    }
+
+    .progressBarBackground {
+        height: 7px;
+    }
+}

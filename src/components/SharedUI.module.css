@@ -148,6 +148,24 @@
   margin-top: 8px;
 }
 
+.cardProgress {
+  background: var(--background-medium);
+  border-radius: 999px;
+  display: block;
+  height: 5px;
+  margin-top: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cardProgress > span {
+  background: currentColor;
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  transition: width 300ms ease;
+}
+
 .moduleArrow {
   color: currentColor;
   flex: 0 0 auto;
@@ -209,6 +227,7 @@
   margin-top: 18px;
   padding: 14px 16px;
   text-align: left;
+  scroll-margin-block: 90px;
 }
 
 .feedbackBanner.success { background: #f0fdf4; border-color: #bbf7d0; border-left-color: var(--success-color); color: #166534; }
@@ -296,6 +315,24 @@
   width: 100%;
 }
 
+.practiceActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 25px;
+  width: 100%;
+}
+
+.practiceActions button,
+.practiceActions a {
+  flex: 1 1 auto;
+  max-width: 250px;
+  min-height: 46px;
+  min-width: 120px;
+}
+
 .loadingMark,
 .loadingLines span {
   animation: shimmer 1.5s ease-in-out infinite;
@@ -350,6 +387,28 @@
 
   .moduleContent {
     padding-right: 8px;
+  }
+
+  .practiceActions {
+    backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(123, 97, 255, 0.14);
+    border-radius: 18px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    box-shadow: var(--shadow-lg);
+    margin-inline: -4px;
+    padding: 10px;
+    position: sticky;
+    z-index: 20;
+  }
+
+  .practiceActions button,
+  .practiceActions a {
+    font-size: 0.92rem;
+    max-width: none;
+    min-height: 48px;
+    min-width: 0;
+    padding-inline: 14px;
   }
 }
 

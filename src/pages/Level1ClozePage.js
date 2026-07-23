@@ -3,6 +3,8 @@ import { clozePassagesData } from '../data/level1Practice';
 import { recordLearnerActivity } from '../utils/activityTracker';
 import { useRandomizedResumableQueue } from '../hooks/useRandomizedResumableQueue';
 import { useSettings } from '../contexts/SettingsContext';
+import ProgressBar from '../components/ProgressBar';
+import { PracticeActions } from '../components/SharedUI';
 import styles from './Level1Practice.module.css';
 
 const Level1ClozePage = () => {
@@ -130,6 +132,7 @@ const Level1ClozePage = () => {
         <h1>{englishAssist ? 'Part IV: Cloze Passage' : 'Bagian IV: Isian Rumpang (Cloze Passage)'}</h1>
         <p>{englishAssist ? 'Complete the passage below. You can ' : 'Lengkapi bacaan di bawah ini. Anda dapat '}<strong>{englishAssist ? 'Drag & Drop' : 'menyeret kata (Drag & Drop)'}</strong>{englishAssist ? ' or ' : ' atau '}<strong>{englishAssist ? 'Tap to Fill' : 'mengetuk kata lalu mengetuk garis kosong (Tap to Fill)'}</strong>.</p>
       </header>
+      <ProgressBar current={currentIndex + 1} total={clozePassagesData.length} label={englishAssist ? 'Cloze passages' : 'Bacaan rumpang'} />
 
       <div className={styles.centeredCard} style={{ maxWidth: '900px' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#1e3a8a' }}>{currentItem.title}</h2>
@@ -154,7 +157,7 @@ const Level1ClozePage = () => {
           {renderText()}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+        <PracticeActions>
           <button
             className={styles.navButton}
             onClick={isChecked ? advanceToNext : handleCheck}
@@ -162,7 +165,7 @@ const Level1ClozePage = () => {
           >
             {isChecked ? (englishAssist ? 'Next' : 'Lanjut') : (englishAssist ? 'Check Answers' : 'Periksa Jawaban')}
           </button>
-        </div>
+        </PracticeActions>
 
         {isChecked && (
           <div className={styles.explanationBox}>

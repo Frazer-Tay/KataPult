@@ -9,6 +9,7 @@ import { saveStateToCloud, loadStateFromCloud } from '../utils/cloudSync';
 import { useSettings } from '../contexts/SettingsContext';
 import styles from './PersamaanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 
@@ -311,7 +312,7 @@ const PersamaanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCountForDisplay = missedItemsMaster.size;
 
-  if (isLoading) { return <div className="loading">{englishAssist ? "Loading synonyms..." : "Memuat sinonim..."}</div>; }
+  if (isLoading) { return <LoadingState label={englishAssist ? "Loading synonyms..." : "Memuat sinonim..."} />; }
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) {
       const completionText = isReviewingMistakes ? (englishAssist ? "✨ Persamaan Review Complete! ✨" : "✨ Sesi Review Persamaan Selesai! ✨") : (englishAssist ? "✨ Persamaan Practice Complete! ✨" : "✨ Latihan Persamaan Selesai! ✨");
@@ -407,7 +408,7 @@ const PersamaanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
                 )}
             </div>
         )}
-        <div className="action-buttons-container">
+        <PracticeActions>
             <button
                 className="secondaryButton"
                 onClick={() => advanceItem('previous')}
@@ -424,7 +425,7 @@ const PersamaanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
             >
                 {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? "See Results" : "Lihat Hasil") : (englishAssist ? "Next" : "Lanjut")} <span className="arrowIcon">→</span>
             </button>
-        </div>
+        </PracticeActions>
     </div>
   );
 };

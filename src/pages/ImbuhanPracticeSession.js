@@ -9,6 +9,7 @@ import { saveStateToCloud, loadStateFromCloud } from '../utils/cloudSync';
 import { useSettings } from '../contexts/SettingsContext';
 import styles from './ImbuhanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 const BASE_LOCAL_STORAGE_KEY = 'kataPultImbuhanState_v4';
@@ -303,7 +304,7 @@ const ImbuhanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCountForDisplay = missedItemsMaster.size;
 
-  if (isLoading) { return <div className="loading">{englishAssist ? "Loading questions..." : "Memuat pertanyaan..."}</div>; }
+  if (isLoading) { return <LoadingState label={englishAssist ? "Loading questions..." : "Memuat pertanyaan..."} />; }
   if (error) { return <div className="error">{error}</div>; }
 
   if (isCompleted) {
@@ -390,7 +391,7 @@ const ImbuhanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
           <p>{currentItemFromMemo.explanation}</p>
         </div>
       )}
-      <div className="action-buttons-container">
+      <PracticeActions>
         <button
             className="secondaryButton"
             onClick={() => advanceItem('previous')}
@@ -414,7 +415,7 @@ const ImbuhanPracticeSession = ({ practiceSet, onBack, sessionTitle }) => {
                 {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? "See Results" : "Lihat Hasil") : (englishAssist ? "Next" : "Lanjut")} <span className="arrowIcon">→</span>
             </button>
         )}
-      </div>
+      </PracticeActions>
     </div>
   );
 };

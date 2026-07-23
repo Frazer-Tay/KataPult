@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../contexts/SettingsContext';
+import UiIcon from '../components/UiIcon';
+import { PageHeader, StatusBadge } from '../components/SharedUI';
 import styles from './TestSetupPage.module.css';
 
 const TestSetupPage = () => {
@@ -21,7 +23,11 @@ const TestSetupPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{englishAssist ? 'Custom Test Setup' : 'Pengaturan Tes Kustom'}</h1>
+      <PageHeader
+        eyebrow={englishAssist ? 'Focused assessment' : 'Penilaian terfokus'}
+        title={englishAssist ? 'Build your practice test' : 'Buat tes latihan Anda'}
+        description={englishAssist ? 'Choose a skill and a comfortable test length. Your answers, score, and pace are tracked during the session.' : 'Pilih keterampilan dan panjang tes yang nyaman. Jawaban, skor, dan kecepatan Anda dilacak selama sesi.'}
+      />
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
           <label htmlFor="moduleSelect" className={styles.label}>{englishAssist ? 'Select Test Module:' : 'Pilih Modul Tes:'}</label>
@@ -52,8 +58,31 @@ const TestSetupPage = () => {
         </div>
         <p className={styles.inputNote}>{englishAssist ? '(Min: 5, Max: 50, Multiples of 5)' : '(Min: 5, Max: 50, Kelipatan: 5)'}</p>
 
+        <div className={styles.quickLengths} aria-label={englishAssist ? 'Quick test lengths' : 'Pilihan cepat panjang tes'}>
+          {[5, 10, 20, 30].map((length) => (
+            <button
+              key={length}
+              type="button"
+              className={`${styles.lengthButton} ${Number(numQuestions) === length ? styles.activeLength : ''}`}
+              onClick={() => setNumQuestions(length)}
+              aria-pressed={Number(numQuestions) === length}
+            >
+              {length}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.testSummary}>
+          <span className={styles.summaryIcon}><UiIcon name={module === 'imbuhan' ? 'link' : 'matching'} size={24} /></span>
+          <span>
+            <strong>{module === 'imbuhan' ? 'Imbuhan' : 'Persamaan'}</strong>
+            <small>{numQuestions} {englishAssist ? 'questions' : 'pertanyaan'}</small>
+          </span>
+          <StatusBadge tone="info">{englishAssist ? 'Ready' : 'Siap'}</StatusBadge>
+        </div>
+
         <button type="submit" className={`primaryButton ${styles.submitButton}`}>
-          {englishAssist ? 'Start Test' : 'Mulai Tes'}
+          {englishAssist ? 'Start test' : 'Mulai tes'} <UiIcon name="arrowRight" size={18} />
         </button>
       </form>
     </div>

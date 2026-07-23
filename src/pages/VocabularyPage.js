@@ -12,7 +12,7 @@ import { useSettings } from '../contexts/SettingsContext';
 import styles from './VocabularyPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 import UiIcon from '../components/UiIcon';
-import { CompletionCard, LoadingState } from '../components/SharedUI';
+import { CompletionCard, LoadingState, PageHeader, PracticeActions, StatusBadge } from '../components/SharedUI';
 
 const shuffleArray = (array) => { if (!Array.isArray(array)) return []; let currentIndex = array.length, randomIndex; while (currentIndex !== 0) { randomIndex = Math.floor(Math.random() * currentIndex); currentIndex--; [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]; } return array; };
 const VocabularyPage = ({ level = 2 }) => {
@@ -157,25 +157,31 @@ const VocabularyPage = ({ level = 2 }) => {
   if (viewMode === 'menu') {
     return (
       <div className={styles.container}>
-        <div className={styles.menuContainer} style={{textAlign: 'center', marginTop: '50px'}}>
-          <h1 style={{color: 'var(--primary-dark)'}}>{englishAssist ? 'Choose Study Mode' : 'Pilih Mode Belajar'}</h1>
-          <p style={{color: 'var(--text-medium)', marginBottom: '40px'}}>{englishAssist ? 'Which method would you like to use today?' : 'Metode apa yang ingin kamu gunakan hari ini?'}</p>
+        <div className={styles.menuContainer}>
+          <PageHeader
+            eyebrow={level === 1 ? 'Level 1 Vocabulary' : 'Level 2 Vocabulary'}
+            title={englishAssist ? 'Choose a study mode' : 'Pilih mode belajar'}
+            description={englishAssist ? 'Use smart review for retention or browse the complete word bank at your own pace.' : 'Gunakan ulasan pintar untuk mengingat atau jelajahi seluruh bank kata sesuai kecepatan Anda.'}
+          />
 
-          <div style={{display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap'}}>
-            <div className={styles.card} style={{cursor: 'pointer', border: '2px solid var(--secondary-color)'}} onClick={startSRSMode}>
-              <h2><UiIcon name="brain" size={24} /> {englishAssist ? 'Smart Review (SRS)' : 'Review Pintar (SRS)'}</h2>
+          <div className={styles.modeGrid}>
+            <button type="button" className={`${styles.modeCard} ${styles.featuredMode}`} onClick={startSRSMode}>
+              <span className={styles.modeIcon}><UiIcon name="brain" size={27} /></span>
+              <h2>{englishAssist ? 'Smart Review (SRS)' : 'Review Pintar (SRS)'}</h2>
               <p>{englishAssist ? 'Spaced repetition system. The app will test words you are about to forget.' : 'Sistem pengulangan berkala. Aplikasi akan menguji kata-kata yang hampir kamu lupakan.'}</p>
               {srsDueCount > 0 ? (
-                <div style={{marginTop: '15px', color: '#d84315', fontWeight: 'bold'}}>{srsDueCount} {englishAssist ? 'words waiting!' : 'kata menunggu!'}</div>
+                <StatusBadge icon="brain" tone="warning">{srsDueCount} {englishAssist ? 'words due' : 'kata menunggu'}</StatusBadge>
               ) : (
-                <div style={{marginTop: '15px', color: 'var(--success-color)', fontWeight: 'bold'}}>{englishAssist ? 'All words reviewed. Start to learn new words!' : 'Semua kata sudah direview. Mulai untuk belajar kata baru!'}</div>
+                <StatusBadge icon="check" tone="success">{englishAssist ? 'Ready for new words' : 'Siap untuk kata baru'}</StatusBadge>
               )}
-            </div>
+            </button>
 
-            <div className={styles.card} style={{cursor: 'pointer'}} onClick={startNormalMode}>
-              <h2><UiIcon name="book" size={24} /> {englishAssist ? 'Read All' : 'Baca Semua'}</h2>
+            <button type="button" className={styles.modeCard} onClick={startNormalMode}>
+              <span className={styles.modeIcon}><UiIcon name="book" size={27} /></span>
+              <h2>{englishAssist ? 'Read All' : 'Baca Semua'}</h2>
               <p>{englishAssist ? `View all ${allItems.length} vocabulary words in order. Good for reference.` : `Lihat semua ${allItems.length} kosakata secara berurutan. Cocok untuk referensi.`}</p>
-            </div>
+              <StatusBadge icon="layers">{allItems.length} {englishAssist ? 'words' : 'kata'}</StatusBadge>
+            </button>
           </div>
         </div>
       </div>
@@ -232,7 +238,7 @@ const VocabularyPage = ({ level = 2 }) => {
           </div>
 
           {/* NAVIGATION / ACTION BUTTONS */}
-          <div className="action-buttons-container">
+          <PracticeActions>
               {viewMode === 'normal' && (
                 <>
                   <button className="nextButton" onClick={() => advanceNormalItem('next')} style={{ width: '100%', maxWidth: '300px' }}>
@@ -254,7 +260,7 @@ const VocabularyPage = ({ level = 2 }) => {
                   </button>
                 </div>
               )}
-          </div>
+          </PracticeActions>
 
           <div style={{marginTop: '30px'}}>
             <button onClick={() => setViewMode('menu')} style={{background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', textDecoration: 'underline'}}>{englishAssist ? 'Back to Menu' : 'Kembali ke Menu'}</button>

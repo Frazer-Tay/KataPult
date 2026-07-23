@@ -7,6 +7,7 @@ import { saveStateToCloud, loadStateFromCloud } from '../utils/cloudSync';
 import { useSettings } from '../contexts/SettingsContext';
 import styles from './PersamaanLatihanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -282,7 +283,7 @@ const PersamaanLatihanPage = () => {
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
 
-  if (isLoading) { return <div className="loading-page">{englishAssist ? "Loading Persamaan Practice..." : "Memuat Latihan Persamaan Kata..."}</div>; }
+  if (isLoading) { return <LoadingState label={englishAssist ? "Loading Persamaan Practice..." : "Memuat Latihan Persamaan Kata..."} />; }
   if (error) { return <div className="error" style={{whiteSpace: 'pre-wrap'}}>{error}</div>; }
 
   if (isCompleted) {
@@ -365,7 +366,7 @@ const PersamaanLatihanPage = () => {
         </div>
       )}
 
-      <div className="action-buttons-container">
+      <PracticeActions>
         <button
           className="secondaryButton"
           onClick={() => advanceItem('previous')}
@@ -382,7 +383,7 @@ const PersamaanLatihanPage = () => {
         >
           {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? 'See Results' : 'Lihat Hasil') : (englishAssist ? 'Next' : 'Lanjut')} <span className="arrowIcon">→</span>
         </button>
-      </div>
+      </PracticeActions>
     </div>
   );
 };

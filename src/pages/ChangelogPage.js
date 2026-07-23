@@ -5,9 +5,20 @@ import styles from './ChangelogPage.module.css';
 
 const releases = [
   {
-    version: 'v0.6.1',
+    version: 'v0.7.0',
     date: '23 Juli 2026',
     current: true,
+    changes: [
+      ['Continue Learning', 'Menambahkan kartu lanjut belajar pada dasbor yang mengingat modul terakhir, posisi soal, persentase progres, dan aktivitas terbaru secara lokal untuk setiap akun.'],
+      ['Unified practice experience', 'Memperbarui Vocabulary, Imbuhan, Persamaan, Karangan, Essay Bank, latihan Level 1, Daily Challenge, dan simulator tes dengan action bar, loading state, progress, dan pola interaksi bersama.'],
+      ['Mobile-first practice shell', 'Menambahkan action bar yang tetap mudah dijangkau, dukungan safe-area, target sentuh lebih besar, input yang aman dari zoom iOS, scroll feedback otomatis, dan tata letak latihan yang lebih ringkas di layar kecil.'],
+      ['Learning hubs and test setup', 'Mendesain ulang pusat Imbuhan dan Persamaan, mode Vocabulary, tabel referensi, pemilih set, serta pengaturan tes agar hierarki dan tindakan utama lebih jelas.'],
+      ['Authentication preserved', 'Tidak mengubah AuthContext, konfigurasi Firebase, ProtectedRoute, Login, atau Onboarding sehingga perbaikan Google Sign-In tetap utuh.']
+    ]
+  },
+  {
+    version: 'v0.6.1',
+    date: '23 Juli 2026',
     changes: [
       ['Admin-only changelog', 'Membatasi halaman dan tautan Changelog hanya untuk administrator. Pengguna biasa tidak lagi melihat tautan tersebut dan akses langsung dilindungi oleh pemeriksaan peran admin.']
     ]

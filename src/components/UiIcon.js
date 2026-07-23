@@ -2,6 +2,7 @@ import React from 'react';
 
 const paths = {
   arrowRight: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
+  arrowLeft: <><path d="M19 12H5" /><path d="m11 18-6-6 6-6" /></>,
   book: <><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></>,
   brain: <><path d="M9.5 4.5A3 3 0 0 0 4 6a3 3 0 0 0 .8 5.8A3 3 0 0 0 7 17a3 3 0 0 0 5 2.2V5a3 3 0 0 0-2.5-.5Z" /><path d="M14.5 4.5A3 3 0 0 1 20 6a3 3 0 0 1-.8 5.8A3 3 0 0 1 17 17a3 3 0 0 1-5 2.2V5a3 3 0 0 1 2.5-.5Z" /><path d="M8 9h4M12 13h4" /></>,
   chat: <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" />,

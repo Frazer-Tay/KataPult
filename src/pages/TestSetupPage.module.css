@@ -4,9 +4,11 @@
     flex-direction: column;
     align-items: center;
     padding: 20px 15px 40px 15px;
-    max-width: 600px;
+    max-width: 760px;
     margin: 30px auto;
-    background-color: var(--background-light);
+    background:
+      radial-gradient(circle at 100% 0, rgba(0, 196, 204, 0.1), transparent 32%),
+      var(--background-light);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border-color-light);
@@ -21,7 +23,7 @@
   
   .form {
     width: 100%;
-    max-width: 400px;
+    max-width: 480px;
     display: flex;
     flex-direction: column;
     gap: 25px; /* Increased gap */
@@ -49,6 +51,7 @@
     box-shadow: var(--shadow-xs);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     font-family: inherit;
+    min-height: 50px;
   }
   
   .selectInput:focus,
@@ -71,6 +74,73 @@
     padding: 12px 25px;
     font-size: 1.1rem;
     width: 100%;
+    min-height: 52px;
+  }
+
+  .quickLengths {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: -16px;
+  }
+
+  .lengthButton {
+    background: white;
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    color: var(--text-medium);
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  .activeLength {
+    background: #f0edff;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+  }
+
+  .testSummary {
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .summaryIcon {
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    color: var(--secondary-color);
+    display: inline-flex;
+    height: 46px;
+    justify-content: center;
+    width: 46px;
+  }
+
+  .testSummary > span:nth-child(2) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .testSummary small {
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 540px) {
+    .container {
+      margin: 4px auto;
+      max-width: 100%;
+      padding: 18px 14px 34px;
+    }
+
+    .quickLengths {
+      gap: 6px;
+    }
   }
   
   @media (min-width: 768px) {

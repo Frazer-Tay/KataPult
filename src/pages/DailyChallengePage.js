@@ -7,7 +7,7 @@ import useTimeTracker from '../hooks/useTimeTracker';
 import { useSettings } from '../contexts/SettingsContext';
 import ProgressBar from '../components/ProgressBar';
 import UiIcon from '../components/UiIcon';
-import { CompletionCard, FeedbackBanner, LoadingState, StatusBadge } from '../components/SharedUI';
+import { CompletionCard, FeedbackBanner, LoadingState, PracticeActions, StatusBadge } from '../components/SharedUI';
 import styles from './DailyChallengePage.module.css';
 
 const LIVES_START_COUNT = 3;
@@ -229,11 +229,11 @@ const DailyChallengePage = () => {
               <p>{currentItem.explanation}</p>
             </div>
           )}
-          <div className="action-buttons-container">
+          <PracticeActions>
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion}>
               {currentIndex === testItems.length - 1 || lives <= 0 ? (englishAssist ? "Finish" : "Selesai") : (englishAssist ? "Next" : "Lanjut")} <UiIcon name="arrowRight" size={18} />
             </button>
-          </div>
+          </PracticeActions>
         </>
       )}
 

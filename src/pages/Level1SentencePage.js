@@ -6,6 +6,8 @@ import { useSettings } from '../contexts/SettingsContext';
 import AudioButton from '../components/AudioButton';
 import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
 import useRandomizedResumableQueue from '../hooks/useRandomizedResumableQueue';
+import ProgressBar from '../components/ProgressBar';
+import { PracticeActions } from '../components/SharedUI';
 import styles from './Level1Practice.module.css';
 
 const Level1SentencePage = () => {
@@ -102,14 +104,12 @@ const Level1SentencePage = () => {
           </div>
         )}
 
-        <div className="action-buttons-container">
-          <div className={styles.progressIndicator}>
-            {englishAssist ? 'Cycle:' : 'Siklus:'} {progressCount} / {sentenceConstructionData.length}
-          </div>
+        <ProgressBar current={progressCount} total={sentenceConstructionData.length} label={englishAssist ? 'Practice cycle' : 'Siklus latihan'} />
+        <PracticeActions>
           <button className={styles.navButton} onClick={handleNext}>
             {englishAssist ? 'Next (Random) →' : 'Selanjutnya (Acak) →'}
           </button>
-        </div>
+        </PracticeActions>
       </div>
     </div>
   );

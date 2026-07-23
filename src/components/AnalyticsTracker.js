@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackPageView, trackEvent, initAnalytics } from '../utils/analytics';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import { useAuth } from '../contexts/AuthContext';
+import { recordLearningVisit } from '../utils/learningProgress';
 
 const ROUTE_SECTIONS = [
   { prefix: '/level1/vocabulary', section: 'L1 Vocabulary' },
@@ -37,6 +39,7 @@ const getSectionForRoute = (route) => {
 
 const AnalyticsTracker = () => {
   const location = useLocation();
+  const { currentUser } = useAuth();
   const sessionStartTimeRef = useRef(Date.now());
   const sectionVisitRef = useRef(null);
 
@@ -100,7 +103,12 @@ const AnalyticsTracker = () => {
     }).catch((error) => {
       console.warn('Failed to record section visit:', error);
     });
-  }, [location]);
+    recordLearningVisit({
+      userId: currentUser?.uid,
+      route,
+      section
+    });
+  }, [currentUser?.uid, location]);
 
   useEffect(() => {
     const flushSessionTime = (reason) => {

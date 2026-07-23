@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import UiIcon from './UiIcon';
 import styles from './SharedUI.module.css';
@@ -13,7 +13,7 @@ export const PageHeader = ({ eyebrow, title, description, assistiveText, actions
   </header>
 );
 
-export const ModuleCard = ({ to, icon, tone = 'violet', title, subtitle, meta, badge }) => (
+export const ModuleCard = ({ to, icon, tone = 'violet', title, subtitle, meta, badge, progress }) => (
   <Link className={`${styles.moduleCard} ${styles[tone] || ''}`} to={to}>
     <span className={styles.moduleIcon}><UiIcon name={icon} size={24} /></span>
     <span className={styles.moduleContent}>
@@ -23,6 +23,11 @@ export const ModuleCard = ({ to, icon, tone = 'violet', title, subtitle, meta, b
       </span>
       {subtitle && <span className={styles.moduleSubtitle}>{subtitle}</span>}
       {meta && <span className={styles.moduleMeta}>{meta}</span>}
+      {typeof progress === 'number' && (
+        <span className={styles.cardProgress} aria-label={`${progress}% complete`}>
+          <span style={{ width: `${Math.min(Math.max(progress, 0), 100)}%` }} />
+        </span>
+      )}
     </span>
     <UiIcon className={styles.moduleArrow} name="arrowRight" size={19} />
   </Link>
@@ -35,16 +40,30 @@ export const StatusBadge = ({ icon, children, tone = 'neutral' }) => (
   </span>
 );
 
-export const FeedbackBanner = ({ status = 'info', title, children }) => (
-  <div className={`${styles.feedbackBanner} ${styles[status] || ''}`} role={status === 'error' ? 'alert' : 'status'}>
-    <span className={styles.feedbackIcon}>
-      <UiIcon name={status === 'success' ? 'check' : status === 'error' ? 'x' : 'star'} size={18} />
-    </span>
-    <span>
-      {title && <strong className={styles.feedbackTitle}>{title}</strong>}
-      {children && <span className={styles.feedbackText}>{children}</span>}
-    </span>
-  </div>
+export const FeedbackBanner = ({ status = 'info', title, children, autoScroll = true }) => {
+  const bannerRef = useRef(null);
+
+  useEffect(() => {
+    if (autoScroll && window.matchMedia('(max-width: 700px)').matches) {
+      window.requestAnimationFrame(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    }
+  }, [autoScroll, children, status, title]);
+
+  return (
+    <div ref={bannerRef} className={`${styles.feedbackBanner} ${styles[status] || ''}`} role={status === 'error' ? 'alert' : 'status'}>
+      <span className={styles.feedbackIcon}>
+        <UiIcon name={status === 'success' ? 'check' : status === 'error' ? 'x' : 'star'} size={18} />
+      </span>
+      <span>
+        {title && <strong className={styles.feedbackTitle}>{title}</strong>}
+        {children && <div className={styles.feedbackText}>{children}</div>}
+      </span>
+    </div>
+  );
+};
+
+export const PracticeActions = ({ children, className = '' }) => (
+  <div className={`${styles.practiceActions} ${className}`.trim()}>{children}</div>
 );
 
 export const CompletionCard = ({ title, description, actions, xp }) => (

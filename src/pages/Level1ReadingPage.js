@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { readingData } from '../data/level1Practice';
 import { useSettings } from '../contexts/SettingsContext';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import ProgressBar from '../components/ProgressBar';
 import styles from './Level1Practice.module.css';
 
 const Level1ReadingPage = () => {
@@ -32,6 +33,7 @@ const Level1ReadingPage = () => {
         <h1>{englishAssist ? 'Part I: Reading Comprehension' : 'Bagian I: Pemahaman Bacaan (Reading Comprehension)'}</h1>
         <p>{englishAssist ? 'Read the article on the left and answer the questions on the right.' : 'Bacalah artikel di sebelah kiri dan jawablah pertanyaan di sebelah kanan.'}</p>
       </header>
+      <ProgressBar current={Object.keys(revealedAnswers).filter((key) => revealedAnswers[key]).length} total={readingData.questions.length} label={englishAssist ? 'Answers reviewed' : 'Jawaban ditinjau'} />
 
       <div className={styles.splitScreen}>
         {/* Left Side: Article */}
