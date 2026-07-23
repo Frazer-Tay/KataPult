@@ -5,9 +5,16 @@ import styles from './ChangelogPage.module.css';
 
 const releases = [
   {
-    version: 'v0.6.0',
+    version: 'v0.6.1',
     date: '23 Juli 2026',
     current: true,
+    changes: [
+      ['Admin-only changelog', 'Membatasi halaman dan tautan Changelog hanya untuk administrator. Pengguna biasa tidak lagi melihat tautan tersebut dan akses langsung dilindungi oleh pemeriksaan peran admin.']
+    ]
+  },
+  {
+    version: 'v0.6.0',
+    date: '23 Juli 2026',
     changes: [
       ['Unified visual system', 'Menambahkan komponen bersama untuk tajuk halaman, kartu modul, badge status, feedback, loading, dan completion agar seluruh aplikasi terasa lebih konsisten.'],
       ['Focused navigation', 'Menyederhanakan header berdasarkan level aktif, menambahkan menu sekunder, progress capsule, profile menu, English Assist switch, serta navigasi mobile yang lebih jelas.'],

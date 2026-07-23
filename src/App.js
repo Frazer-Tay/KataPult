@@ -87,18 +87,16 @@ const AppContent = () => {
           ['/test-setup', englishAssist ? 'Tests' : 'Tes']
         ];
   const secondaryLinks = isFoundation
-    ? [['/changelog', 'Changelog']]
+    ? []
     : isLevel1
       ? [
           ['/level1/vocabulary', 'Vocabulary'],
-          ['/level1/surat', englishAssist ? 'Letter' : 'Surat'],
-          ['/level1/changelog', 'Changelog']
+          ['/level1/surat', englishAssist ? 'Letter' : 'Surat']
         ]
       : [
           ['/persamaan-latihan', englishAssist ? 'Synonym Practice' : 'Persamaan Latihan'],
           ['/flashcards', 'Essay Bank'],
-          ['/surat', englishAssist ? 'Formal Letter' : 'Surat Resmi'],
-          ['/changelog', 'Changelog']
+          ['/surat', englishAssist ? 'Formal Letter' : 'Surat Resmi']
         ];
 
   return (
@@ -135,6 +133,7 @@ const AppContent = () => {
                     {label}
                   </NavLink>
                 ))}
+                {isAdmin && <NavLink to="/changelog" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>Changelog</NavLink>}
                 {isAdmin && <NavLink to="/admin" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={closeNav}>Admin</NavLink>}
               </div>
             </details>
@@ -216,7 +215,7 @@ const AppContent = () => {
             <Route path="/level1/cloze" element={<ProtectedRoute><Level1ClozePage /></ProtectedRoute>} />
             <Route path="/level1/writing" element={<ProtectedRoute><Level1WritingPage /></ProtectedRoute>} />
             <Route path="/level1/surat" element={<ProtectedRoute><Level1SuratPage /></ProtectedRoute>} />
-            <Route path="/level1/changelog" element={<ProtectedRoute><ChangelogPage /></ProtectedRoute>} />
+            <Route path="/level1/changelog" element={<ProtectedRoute requireAdmin><ChangelogPage /></ProtectedRoute>} />
 
             <Route path="/dashboard" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
             <Route path="/vocabulary" element={<ProtectedRoute><VocabularyPage /></ProtectedRoute>} />
@@ -231,7 +230,7 @@ const AppContent = () => {
             <Route path="/test/persamaan" element={<ProtectedRoute><PersamaanTestPage /></ProtectedRoute>} />
             <Route path="/daily-challenge" element={<ProtectedRoute><DailyChallengePage /></ProtectedRoute>} />
             <Route path="/feedback" element={<ProtectedRoute><FeedbackPage /></ProtectedRoute>} />
-            <Route path="/changelog" element={<ProtectedRoute><ChangelogPage /></ProtectedRoute>} />
+            <Route path="/changelog" element={<ProtectedRoute requireAdmin><ChangelogPage /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
           </Routes>
         </Suspense>
