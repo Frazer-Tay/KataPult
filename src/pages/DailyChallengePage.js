@@ -4,7 +4,10 @@ import { useProgress } from '../contexts/ProgressContext';
 import { getDailyChallengeData } from '../utils/dailySeed';
 import { recordLearnerActivity } from '../utils/activityTracker';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { useSettings } from '../contexts/SettingsContext';
 import ProgressBar from '../components/ProgressBar';
+import UiIcon from '../components/UiIcon';
+import { CompletionCard, FeedbackBanner, LoadingState, StatusBadge } from '../components/SharedUI';
 import styles from './DailyChallengePage.module.css';
 
 const LIVES_START_COUNT = 3;
@@ -13,14 +16,15 @@ const DailyChallengePage = () => {
   useTimeTracker('DailyChallenge');
   const navigate = useNavigate();
   const { dailyChallengeStatus, completeDailyChallenge } = useProgress();
-  
+  const { englishAssist } = useSettings();
+
   const [testItems, setTestItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lives, setLives] = useState(LIVES_START_COUNT);
-  
+
   const [userInput, setUserInput] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  
+
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [isTestOver, setIsTestOver] = useState(false);
@@ -50,7 +54,7 @@ const DailyChallengePage = () => {
     if (isAnswered) return;
     setIsAnswered(true);
     setSelectedAnswer(option);
-    
+
     const correct = option === currentItem.correctAnswer;
     setIsCorrect(correct);
     recordLearnerActivity({
@@ -60,7 +64,7 @@ const DailyChallengePage = () => {
       itemType: currentItem.type,
       correct
     }).catch((error) => console.warn('Failed to record answer attempt:', error));
-    
+
     if (!correct) {
       setLives(prev => prev - 1);
     }
@@ -70,7 +74,7 @@ const DailyChallengePage = () => {
   const handleInputCheck = () => {
     if (isAnswered || !userInput.trim()) return;
     setIsAnswered(true);
-    
+
     const correct = userInput.trim().toLowerCase() === currentItem.correctAnswer.toLowerCase();
     setIsCorrect(correct);
     recordLearnerActivity({
@@ -80,7 +84,7 @@ const DailyChallengePage = () => {
       itemType: currentItem.type,
       correct
     }).catch((error) => console.warn('Failed to record answer attempt:', error));
-    
+
     if (!correct) {
       setLives(prev => prev - 1);
     }
@@ -118,53 +122,44 @@ const DailyChallengePage = () => {
     const isWin = dailyChallengeStatus === 'completed' || (isTestOver && lives > 0);
     return (
       <div className={styles.container}>
-        <div className={styles.completedState}>
-          <div className={styles.completedIcon}>{isWin ? '🌟' : '💀'}</div>
-          <h2 className={styles.pageTitle}>
-            {isWin ? "Tantangan Harian Selesai!" : "Tantangan Harian Gagal"}
-          </h2>
-          {isWin ? (
-            <p className={styles.successMessage}>Luar biasa! Anda mendapat +50 XP hari ini.</p>
-          ) : (
-            <p className={styles.failMessage}>Kesempatan habis. Coba lagi besok!</p>
-          )}
-          <p style={{marginBottom: '2rem'}}>Tantangan Harian baru akan tersedia besok.</p>
-          <button className="primaryButton" onClick={() => navigate('/')}>
-            Kembali ke Beranda
-          </button>
-        </div>
+        <CompletionCard
+          title={isWin ? (englishAssist ? 'Daily challenge complete' : 'Tantangan harian selesai') : (englishAssist ? 'Challenge finished' : 'Tantangan berakhir')}
+          description={isWin ? (englishAssist ? 'Excellent work. A new daily challenge will be ready tomorrow.' : 'Kerja bagus. Tantangan harian baru akan tersedia besok.') : (englishAssist ? 'You are out of lives. Rest, review, and try a new challenge tomorrow.' : 'Kesempatan Anda habis. Istirahat, pelajari kembali, dan coba tantangan baru besok.')}
+          xp={isWin ? 50 : undefined}
+          actions={<button className="primaryButton" onClick={() => navigate('/dashboard')}>{englishAssist ? 'Back to dashboard' : 'Kembali ke dasbor'}</button>}
+        />
       </div>
     );
   }
 
   if (!currentItem) {
-    return <div className="loading-page">Memuat Tantangan...</div>;
+    return <LoadingState label={englishAssist ? 'Loading challenge...' : 'Memuat tantangan...'} />;
   }
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.pageTitle}>Tantangan Harian</h2>
-      <ProgressBar current={currentIndex + 1} total={testItems.length} label="Progres" />
-      
+      <h2 className={styles.pageTitle}>{englishAssist ? 'Daily Challenge' : 'Tantangan Harian'}</h2>
+      <ProgressBar current={currentIndex + 1} total={testItems.length} label={englishAssist ? 'Progress' : 'Progres'} />
+
       <div className={styles.gameStats}>
-        <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + (lives < LIVES_START_COUNT ? '💔'.repeat(LIVES_START_COUNT - lives) : '')}</span>
-        <span className={styles.statItem}>Pertanyaan: {currentIndex + 1} / {testItems.length}</span>
+        <StatusBadge tone={lives === 1 ? 'warning' : 'success'}>{englishAssist ? 'Lives' : 'Nyawa'}: {lives}/{LIVES_START_COUNT}</StatusBadge>
+        <StatusBadge tone="info">{englishAssist ? 'Question' : 'Pertanyaan'}: {currentIndex + 1}/{testItems.length}</StatusBadge>
       </div>
 
       <div className={styles.questionCard}>
         <span className={styles.questionType}>
-          Tipe: {currentItem.type === 'vocab' ? 'Kosakata' : currentItem.type === 'imbuhan' ? 'Imbuhan' : 'Persamaan Kata'}
+          {englishAssist ? 'Type:' : 'Tipe:'} {currentItem.type === 'vocab' ? (englishAssist ? 'Vocabulary' : 'Kosakata') : currentItem.type === 'imbuhan' ? (englishAssist ? 'Affixes' : 'Imbuhan') : (englishAssist ? 'Synonyms' : 'Persamaan Kata')}
         </span>
         <p className={styles.questionText}>{currentItem.question}</p>
-        
+
         {currentItem.example && (
           <p className={styles.exampleText}>"{currentItem.example}"</p>
         )}
-        
+
         {currentItem.sentence && (
           <p className={styles.exampleText} dangerouslySetInnerHTML={{ __html: currentItem.sentence.replace(/___|\[____\]|\[_____\]|\[______\]/g, `[____]`) }} />
         )}
-        
+
         {currentItem.hint && !isAnswered && (
           <p style={{fontSize: '0.9rem', color: 'var(--secondary-text-color)'}}>Hint: {currentItem.hint}</p>
         )}
@@ -177,7 +172,7 @@ const DailyChallengePage = () => {
             ref={inputRef}
             type="text"
             className={`${styles.input} ${isAnswered ? (isCorrect ? styles.inputCorrect : styles.inputIncorrect) : ''}`}
-            placeholder="Ketik jawaban Anda..."
+            placeholder={englishAssist ? "Type your answer..." : "Ketik jawaban Anda..."}
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             onKeyDown={handleInputKeyDown}
@@ -187,7 +182,7 @@ const DailyChallengePage = () => {
           />
           {!isAnswered && (
              <button className="primaryButton" onClick={handleInputCheck} disabled={!userInput.trim()} style={{marginTop: '1rem'}}>
-               Periksa
+               {englishAssist ? 'Check' : 'Periksa'}
              </button>
           )}
         </div>
@@ -209,10 +204,10 @@ const DailyChallengePage = () => {
               }
             }
             return (
-              <button 
-                key={idx} 
-                className={btnClass} 
-                onClick={() => handleMCQClick(opt)} 
+              <button
+                key={idx}
+                className={btnClass}
+                onClick={() => handleMCQClick(opt)}
                 disabled={isAnswered}
               >
                 {opt}
@@ -225,18 +220,18 @@ const DailyChallengePage = () => {
       {/* Feedback & Next */}
       {isAnswered && (
         <>
-          <div className={`${styles.feedback} ${isCorrect ? styles.correctFeedback : styles.incorrectFeedback}`}>
-            {isCorrect ? "Benar! 👍" : `Salah. Jawaban yang benar: ${currentItem.correctAnswer}`}
-          </div>
+          <FeedbackBanner status={isCorrect ? 'success' : 'error'} title={isCorrect ? (englishAssist ? 'Correct' : 'Benar') : (englishAssist ? 'Not quite' : 'Belum tepat')}>
+            {!isCorrect && (englishAssist ? `The correct answer is ${currentItem.correctAnswer}.` : `Jawaban yang benar adalah ${currentItem.correctAnswer}.`)}
+          </FeedbackBanner>
           {currentItem.explanation && (
             <div className={styles.explanationBox}>
-              <p className={styles.explanationTitle}>Penjelasan:</p>
+              <p className={styles.explanationTitle}>{englishAssist ? 'Explanation:' : 'Penjelasan:'}</p>
               <p>{currentItem.explanation}</p>
             </div>
           )}
           <div className="action-buttons-container">
             <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion}>
-              {currentIndex === testItems.length - 1 || lives <= 0 ? "Selesai" : "Lanjut"} <span className="arrowIcon">→</span>
+              {currentIndex === testItems.length - 1 || lives <= 0 ? (englishAssist ? "Finish" : "Selesai") : (englishAssist ? "Next" : "Lanjut")} <UiIcon name="arrowRight" size={18} />
             </button>
           </div>
         </>

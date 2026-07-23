@@ -1,12 +1,18 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { useProgress } from '../contexts/ProgressContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useSettings } from '../contexts/SettingsContext';
 import { getDueWords } from '../utils/srsLogic';
 import { vocabularyData } from '../data/vocabulary';
-import styles from './HomePage.module.css';
+import { ModuleCard, PageHeader, StatusBadge } from '../components/SharedUI';
+import styles from './Dashboard.module.css';
 
 const HomePage = () => {
+  const { userData } = useAuth();
   const { xp, streak, level, dailyChallengeStatus } = useProgress();
+  const { englishAssist } = useSettings();
+
+  const displayName = userData?.displayName || 'User';
 
   const dueCount = useMemo(() => {
     try {
@@ -17,197 +23,51 @@ const HomePage = () => {
     }
   }, []);
 
-  const scrollToModules = (e) => {
-    e.preventDefault();
-    const modulesSection = document.getElementById('modules');
-    if (modulesSection) {
-      modulesSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <div className={styles.container}>
-      
-      {/* Hero Section */}
-      <section className={styles.heroSection}>
-        <div className={styles.heroProgressBadge}>
-           🔥 Streak: {streak} Day{streak !== 1 && 's'} | ⭐ Level {level} ({xp} XP)
+    <div className={styles.dashboard}>
+      <section className={styles.hero}>
+        <div className={styles.heroStats}>
+          <StatusBadge icon="flame" tone="warning">{streak} {englishAssist ? `day${streak === 1 ? '' : 's'}` : 'hari'}</StatusBadge>
+          <StatusBadge icon="star" tone="info">{xp} XP · Level {level}</StatusBadge>
+          {dueCount > 0 && <StatusBadge icon="brain" tone="success">{dueCount} {englishAssist ? 'reviews due' : 'ulasan tersedia'}</StatusBadge>}
         </div>
-        <h1 className={styles.heroTitle}>Build <span style={{color: 'var(--primary-color)'}}>Bahasa Indonesia</span> 🇮🇩 confidence, one focused drill at a time.</h1>
-        <p className={styles.heroSubtitle}>
-          Master Indonesian vocabulary, affixes, synonyms, and formal writing with targeted practice modes.
-        </p>
-        <div className={styles.heroActions}>
-          <Link to="/test-setup" className={styles.heroPrimaryCTA}>Start Custom Test</Link>
-          <button onClick={scrollToModules} className={styles.heroSecondaryCTA}>Browse Practice Modes</button>
+        <PageHeader
+          eyebrow={englishAssist ? `Welcome back, ${displayName}` : `Selamat datang, ${displayName}`}
+          title={englishAssist ? 'Build confident Indonesian, one focused drill at a time.' : 'Bangun kepercayaan diri berbahasa, satu latihan setiap saat.'}
+          description={englishAssist ? 'Continue with a recommended review or choose the skill you want to strengthen today.' : 'Lanjutkan ulasan yang disarankan atau pilih keterampilan yang ingin Anda perkuat hari ini.'}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
+          <h2>{englishAssist ? 'Recommended next' : 'Rekomendasi berikutnya'}</h2>
+          <p>{englishAssist ? 'Based on useful daily practice' : 'Berdasarkan latihan harian yang bermanfaat'}</p>
+        </div>
+        <div className={styles.featuredGrid}>
+          <ModuleCard to="/vocabulary" icon="brain" tone="violet" title={englishAssist ? 'Smart vocabulary review' : 'Ulasan kosakata pintar'} subtitle={dueCount > 0 ? `${dueCount} ${englishAssist ? 'words are ready to review' : 'kata siap ditinjau'}` : (englishAssist ? 'Start a new spaced-repetition set' : 'Mulai set pengulangan baru')} badge={dueCount > 0 ? 'Due' : 'SRS'} />
+          <ModuleCard to="/daily-challenge" icon="trophy" tone="orange" title={englishAssist ? 'Daily challenge' : 'Tantangan harian'} subtitle={dailyChallengeStatus === 'completed' ? (englishAssist ? 'Completed today—practice again anytime' : 'Selesai hari ini—latihan lagi kapan saja') : (englishAssist ? 'A short mixed-skills session' : 'Sesi singkat dengan berbagai keterampilan')} badge={dailyChallengeStatus === 'completed' ? 'Done' : 'Daily'} />
+          <ModuleCard to="/test-setup" icon="clipboard" tone="red" title={englishAssist ? 'Custom test' : 'Tes khusus'} subtitle={englishAssist ? 'Set the topics, length, and pace' : 'Atur topik, panjang, dan kecepatan'} />
         </div>
       </section>
 
-      {/* Value Cards */}
-      <section className={styles.valueSection}>
-        <div className={styles.valueCard}>
-          <span className={styles.valueIcon}>🎯</span>
-          <span className={styles.valueText}>Focused drills</span>
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
+          <h2>{englishAssist ? 'Practice by skill' : 'Latihan berdasarkan keterampilan'}</h2>
+          <p>{englishAssist ? 'Level 2 learning modules' : 'Modul pembelajaran Level 2'}</p>
         </div>
-        <div className={styles.valueCard}>
-          <span className={styles.valueIcon}>✍️</span>
-          <span className={styles.valueText}>Writing-ready phrases</span>
-        </div>
-        <div className={styles.valueCard}>
-          <span className={styles.valueIcon}>⏱️</span>
-          <span className={styles.valueText}>Custom test mode</span>
-        </div>
-      </section>
-
-      {/* Recommended Path */}
-      <section className={styles.pathSection}>
-        <h2 className={styles.sectionHeading}>Recommended Path</h2>
-        <div className={styles.pathSteps}>
-          <div className={styles.pathStep}>
-            <div className={styles.stepNumber}>1</div>
-            <div className={styles.stepTextContent}>
-              <div className={styles.stepTitle}>Build Vocab</div>
-              <div className={styles.stepDesc}>Start with Vocabulary & Essay Bank</div>
-            </div>
-          </div>
-          <div className={styles.pathDivider}></div>
-          <div className={styles.pathStep}>
-            <div className={styles.stepNumber}>2</div>
-            <div className={styles.stepTextContent}>
-              <div className={styles.stepTitle}>Form Words</div>
-              <div className={styles.stepDesc}>Practise Imbuhan & Persamaan</div>
-            </div>
-          </div>
-          <div className={styles.pathDivider}></div>
-          <div className={styles.pathStep}>
-            <div className={styles.stepNumber}>3</div>
-            <div className={styles.stepTextContent}>
-              <div className={styles.stepTitle}>Test Yourself</div>
-              <div className={styles.stepDesc}>Take a Custom Test under pressure</div>
-            </div>
-          </div>
+        <div className={styles.moduleGrid}>
+          <ModuleCard to="/vocabulary" icon="book" tone="violet" title="Vocabulary" subtitle={englishAssist ? 'Learn and retain essential words' : 'Pelajari dan ingat kosakata penting'} />
+          <ModuleCard to="/imbuhan" icon="link" tone="green" title={englishAssist ? 'Affixes' : 'Imbuhan'} subtitle={englishAssist ? 'Understand Indonesian word formation' : 'Pahami pembentukan kata bahasa Indonesia'} />
+          <ModuleCard to="/persamaan" icon="matching" tone="cyan" title={englishAssist ? 'Synonym MCQ' : 'Persamaan MCQ'} subtitle={englishAssist ? 'Recognize equivalent words quickly' : 'Kenali kata-kata yang setara dengan cepat'} />
+          <ModuleCard to="/persamaan-latihan" icon="pen" tone="blue" title={englishAssist ? 'Synonym practice' : 'Persamaan latihan'} subtitle={englishAssist ? 'Recall synonyms without answer choices' : 'Ingat sinonim tanpa pilihan jawaban'} />
+          <ModuleCard to="/karangan" icon="sentence" tone="orange" title="Essay Vocab" subtitle={englishAssist ? 'Build formal writing vocabulary' : 'Bangun kosakata penulisan formal'} />
+          <ModuleCard to="/flashcards" icon="layers" tone="pink" title="Essay Bank" subtitle={englishAssist ? 'Study themes, phrases, and examples' : 'Pelajari tema, frasa, dan contoh'} />
+          <ModuleCard to="/surat" icon="pen" tone="violet" title={englishAssist ? 'Formal letters' : 'Surat resmi'} subtitle={englishAssist ? 'Learn structure and appropriate language' : 'Pelajari struktur dan bahasa yang tepat'} />
+          <ModuleCard to="/test-setup" icon="clipboard" tone="red" title={englishAssist ? 'Test simulator' : 'Simulasi tes'} subtitle={englishAssist ? 'Practise under focused conditions' : 'Berlatih dalam kondisi yang terfokus'} />
         </div>
       </section>
 
-      {/* Module Groups */}
-      <section id="modules" className={styles.modulesSection}>
-        
-        {/* Daily Challenge Group */}
-        <div className={styles.moduleGroup}>
-          <h3 className={styles.groupHeading}>Daily Challenge ⚔️</h3>
-          <div className={styles.moduleGrid} style={{ gridTemplateColumns: '1fr' }}>
-            <Link to="/daily-challenge" className={`${styles.moduleCard} ${dailyChallengeStatus !== 'available' ? styles.disabledCard : ''}`} style={dailyChallengeStatus === 'available' ? { border: '2px solid #ff9f43', backgroundColor: 'rgba(255,159,67,0.05)' } : { pointerEvents: 'none', opacity: 0.7 }}>
-              <div className={`${styles.iconBlock}`} style={{ backgroundColor: '#ff9f43' }}>🏆</div>
-              <div className={styles.moduleInfo}>
-                <h4 className={styles.moduleTitle}>
-                  {dailyChallengeStatus === 'available' ? "Mainkan Tantangan Hari Ini!" : "Selesai untuk hari ini!"}
-                </h4>
-                <p className={styles.moduleDesc}>
-                  {dailyChallengeStatus === 'available' 
-                    ? "Tes campuran 10 pertanyaan. Hadiah: 50 XP. Kesempatan: 3 Nyawa." 
-                    : "Kembali besok untuk tantangan baru."}
-                </p>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        <div className={styles.moduleGroup}>
-          <h3 className={styles.groupHeading}>Practice</h3>
-          <div className={styles.moduleGrid}>
-            <Link to="/vocabulary" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconVocab}`}>📚</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>
-                    Vocabulary 
-                    {dueCount > 0 && <span className={styles.srsBadge}>{dueCount} Review</span>}
-                </span>
-                <span className={styles.moduleDesc}>Learn new words with examples.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/imbuhan" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconImbuhan}`}>🔗</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Imbuhan</span>
-                <span className={styles.moduleDesc}>Master word formation & affixes.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/persamaan" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconPersamaan}`}>🔄</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Persamaan MCQ</span>
-                <span className={styles.moduleDesc}>Test your synonym knowledge.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/persamaan-latihan" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconPersamaanLat}`}>✍️</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Persamaan Latihan</span>
-                <span className={styles.moduleDesc}>Practise synonyms by filling in blanks.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-          </div>
-        </div>
-
-        <div className={styles.moduleGroup}>
-          <h3 className={styles.groupHeading}>Writing Support</h3>
-          <div className={styles.moduleGrid}>
-            <Link to="/karangan" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconKarangan}`}>📝</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Essay Vocab MCQ</span>
-                <span className={styles.moduleDesc}>Match essay words to the right definitions.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/flashcards" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconFlashcards}`}>🗂️</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Essay Bank</span>
-                <span className={styles.moduleDesc}>Review topical points, phrases, and model paragraphs.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/surat" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconSurat}`}>✉️</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Surat Resmi</span>
-                <span className={styles.moduleDesc}>Learn formal letter structures.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-          </div>
-        </div>
-
-        <div className={styles.moduleGroup}>
-          <h3 className={styles.groupHeading}>Assessment</h3>
-          <div className={styles.moduleGrid}>
-            <Link to="/test-setup" className={`${styles.moduleCard} ${styles.moduleCardTest}`}>
-              <div className={`${styles.iconBlock} ${styles.iconTest}`}>⏱️</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Custom Test</span>
-                <span className={styles.moduleDesc}>Challenge yourself with a custom setup.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-          </div>
-        </div>
-
-      </section>
-
-      {/* Motivational Footer */}
-      <footer className={styles.motivationalFooter}>
-        <p>Short daily practice beats last-minute cramming.</p>
-      </footer>
+      <p className={styles.footerNote}>{englishAssist ? 'Short daily practice beats last-minute cramming.' : 'Latihan harian singkat lebih baik daripada belajar mendadak.'}</p>
     </div>
   );
 };

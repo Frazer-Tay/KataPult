@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import './index.css'; // Default CRA styles
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { SettingsProvider } from './contexts/SettingsContext';
 import './App.css'; // Load our main application styles LAST
 
 // Fallback component for Error Boundary
@@ -43,7 +44,9 @@ root.render(
           window.location.assign('/'); // Navigate home to reset
         }}
     >
+      <SettingsProvider>
         <App />
+      </SettingsProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );

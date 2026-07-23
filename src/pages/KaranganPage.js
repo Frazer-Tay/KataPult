@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { karanganData } from '../data/karangan';
 import useTimeTracker from '../hooks/useTimeTracker';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import { useSettings } from '../contexts/SettingsContext';
 import styles from './KaranganPage.module.css';
 import ProgressBar from '../components/ProgressBar';
 
@@ -47,6 +48,7 @@ const getRandomThreshold = () => Math.floor(Math.random() * 4) + 2;
 
 const KaranganPage = () => {
   useTimeTracker('Essay Vocab MCQ');
+  const { englishAssist } = useSettings();
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -208,11 +210,11 @@ const KaranganPage = () => {
       correct
     }).catch((error) => console.warn('Failed to record answer attempt:', error));
     if (correct) {
-      setFeedback('Tepat! Definisi Benar. 👍');
+      setFeedback(englishAssist ? 'Correct! Definition is right. 👍' : 'Tepat! Definisi Benar. 👍');
       setCorrectStreak(prev => prev + 1);
       setRetestQueue(prevQ => prevQ.filter(id => id !== currentItemRef.current.id));
     } else {
-      setFeedback(`Kurang Tepat. Definisi yang benar untuk "${currentItemRef.current.word}" adalah: "${currentItemRef.current.definition}"`);
+      setFeedback(englishAssist ? `Incorrect. The correct definition for "${currentItemRef.current.word}" is: "${currentItemRef.current.definition}"` : `Kurang Tepat. Definisi yang benar untuk "${currentItemRef.current.word}" adalah: "${currentItemRef.current.definition}"`);
       setCorrectStreak(0);
       setRetestThreshold(getRandomThreshold());
       if (!isReviewingMistakes) {
@@ -222,11 +224,11 @@ const KaranganPage = () => {
         }
       }
     }
-  }, [isAnswered, isReviewingMistakes, retestQueue]);
+  }, [isAnswered, isReviewingMistakes, retestQueue, englishAssist]);
 
    useEffect(() => {
     const handlePageKeyDown = (event) => {
-        if (isCompletedRef.current) return; // Use ref here
+        if (isCompletedRef.current) return;
         if (!isAnswered && ['1', '2', '3'].includes(event.key)) {
             const optionIndex = parseInt(event.key, 10) - 1;
             if (options[optionIndex] && optionButtonRefs.current[optionIndex]?.current) {
@@ -250,7 +252,6 @@ const KaranganPage = () => {
     const pageElement = pageRef.current;
     if (pageElement) { pageElement.addEventListener('keydown', handlePageKeyDown); }
     return () => { if (pageElement) pageElement.removeEventListener('keydown', handlePageKeyDown); };
-  // CRITICAL FIX: Added currentIndex and totalItemsInSet to dependency array
   }, [options, checkAnswer, advanceItem, isAnswered, isCorrect, currentIndex, totalItemsInSet]);
 
   const handleOptionKeyDown = (event, option) => {
@@ -263,46 +264,48 @@ const KaranganPage = () => {
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
   const finalMistakeCountForDisplay = missedItemsMaster.size;
 
-  if (isLoading) { return <div className="loading">Memuat Essay Vocab MCQ...</div>; }
+  if (isLoading) { return <div className="loading">{englishAssist ? 'Loading Essay Vocab MCQ...' : 'Memuat Essay Vocab MCQ...'}</div>; }
   if (error) { return <div className="error">{error}</div>; }
   if (isCompleted) {
-    const completionText = isReviewingMistakes ? "✨ Sesi Review Essay Vocab Selesai! ✨" : "✨ Latihan Essay Vocab MCQ Selesai! ✨";
+    const completionText = isReviewingMistakes
+      ? (englishAssist ? "✨ Essay Vocab Review Session Complete! ✨" : "✨ Sesi Review Essay Vocab Selesai! ✨")
+      : (englishAssist ? "✨ Essay Vocab MCQ Practice Complete! ✨" : "✨ Latihan Essay Vocab MCQ Selesai! ✨");
     const mistakesToShow = finalMistakeCountForDisplay;
     return (
       <div className={styles.container}>
         <p className="completionMessage">{completionText}</p>
         {!isReviewingMistakes && mistakesToShow > 0 && (
-          <p className="completionSubMessage">Anda memiliki {mistakesToShow} item yang salah pada putaran awal.</p>
+          <p className="completionSubMessage">{englishAssist ? `You had ${mistakesToShow} incorrect items in the first round.` : `Anda memiliki ${mistakesToShow} item yang salah pada putaran awal.`}</p>
         )}
         <div className={styles.completionActions}>
           {finalMistakeCountForDisplay > 0 && !isReviewingMistakes && (
             <button className="secondaryButton" onClick={handleReviewMistakes}>
-              🔁 Ulangi Kesalahan ({finalMistakeCountForDisplay})
+              🔁 {englishAssist ? `Review Mistakes (${finalMistakeCountForDisplay})` : `Ulangi Kesalahan (${finalMistakeCountForDisplay})`}
             </button>
           )}
           <button className="primaryButton" onClick={handleReshuffleAll}>
-            {isReviewingMistakes ? 'Mulai Lagi Semua' : 'Ulangi Semua'}
+            {isReviewingMistakes ? (englishAssist ? 'Start All Over' : 'Mulai Lagi Semua') : (englishAssist ? 'Retry All' : 'Ulangi Semua')}
           </button>
         </div>
       </div>
     );
   }
-  if (!currentItemFromMemo) { return <div className="loading">Memuat kata berikutnya...</div>; }
+  if (!currentItemFromMemo) { return <div className="loading">{englishAssist ? 'Loading next word...' : 'Memuat kata berikutnya...'}</div>; }
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
-        <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewingMistakes ? "Review Kesalahan Essay Vocab" : "Essay Vocab MCQ"} />
+        <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={isReviewingMistakes ? (englishAssist ? "Review Essay Vocab Mistakes" : "Review Kesalahan Essay Vocab") : "Essay Vocab MCQ"} />
         <div className={styles.card}>
             <h2 className={styles.word}>{currentItemFromMemo.word || '[N/A]'}</h2>
             {currentItemFromMemo.synonyms && currentItemFromMemo.synonyms.length > 0 && (
                 <div className={styles.synonymSection}>
-                    <p className={styles.synonymLabel}>Persamaan Kata:</p>
+                    <p className={styles.synonymLabel}>{englishAssist ? 'Synonyms:' : 'Persamaan Kata:'}</p>
                     <p className={styles.synonymText}>{currentItemFromMemo.synonyms.join(', ')}</p>
                 </div>
             )}
         </div>
         <div className={styles.optionsContainer} role="radiogroup" aria-labelledby="instruction-karangan">
-            <p className={styles.instruction} id="instruction-karangan">Pilih definisi yang paling tepat (Gunakan tombol 1, 2, 3):</p>
+            <p className={styles.instruction} id="instruction-karangan">{englishAssist ? 'Choose the most appropriate definition (Use keys 1, 2, 3):' : 'Pilih definisi yang paling tepat (Gunakan tombol 1, 2, 3):'}</p>
             {options.map((option, index) => {
               const isCorrectOption = currentItemFromMemo?.definition?.toLowerCase() === option.toLowerCase();
               let buttonClassName = styles.optionButton;
@@ -342,22 +345,22 @@ const KaranganPage = () => {
                 className="secondaryButton"
                 onClick={() => advanceItem('previous')}
                 disabled={currentIndex === 0 || isLoading}
-                aria-label="Pertanyaan Sebelumnya"
+                aria-label={englishAssist ? "Previous Question" : "Pertanyaan Sebelumnya"}
             >
-                <span className="arrowIcon">←</span> Sebelumnya
+                <span className="arrowIcon">←</span> {englishAssist ? 'Previous' : 'Sebelumnya'}
             </button>
             {!isAnswered && options.length > 0 && (
                  <button className="primaryButton" onClick={() => {if(selectedAnswer) checkAnswer(selectedAnswer)}} disabled={!selectedAnswer}>
-                    Periksa
+                    {englishAssist ? 'Check' : 'Periksa'}
                 </button>
             )}
              <button
                 className="nextButton"
                 onClick={() => advanceItem('next')}
                 disabled={isLoading || (currentIndex >= totalItemsInSet -1 && isCompletedRef.current)}
-                aria-label="Pertanyaan Berikutnya"
+                aria-label={englishAssist ? "Next Question" : "Pertanyaan Berikutnya"}
             >
-                {currentIndex >= totalItemsInSet - 1 ? "Lihat Hasil" : "Lanjut"} <span className="arrowIcon">→</span>
+                {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? "View Results" : "Lihat Hasil") : (englishAssist ? "Next" : "Lanjut")} <span className="arrowIcon">→</span>
             </button>
         </div>
     </div>

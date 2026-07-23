@@ -1,0 +1,142 @@
+.container {
+  margin: 0 auto;
+  max-width: 860px;
+  width: 100%;
+}
+
+.timeline {
+  position: relative;
+}
+
+.timeline::before {
+  background: linear-gradient(var(--secondary-light), var(--border-color));
+  bottom: 30px;
+  content: '';
+  left: 18px;
+  position: absolute;
+  top: 18px;
+  width: 2px;
+}
+
+.release {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 38px 1fr;
+  margin-bottom: 22px;
+  position: relative;
+}
+
+.releaseMarker {
+  align-items: center;
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  color: var(--text-light);
+  display: flex;
+  height: 38px;
+  justify-content: center;
+  position: relative;
+  width: 38px;
+  z-index: 1;
+}
+
+.current .releaseMarker {
+  background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+  border-color: white;
+  box-shadow: 0 0 0 4px rgba(123, 97, 255, 0.12);
+  color: white;
+}
+
+.releaseCard {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xs);
+  padding: clamp(20px, 4vw, 30px);
+}
+
+.current .releaseCard {
+  border-color: rgba(123, 97, 255, 0.28);
+  box-shadow: var(--shadow-md);
+}
+
+.releaseHeader {
+  align-items: center;
+  border-bottom: 1px solid var(--border-color-light);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+}
+
+.releaseHeader h2 {
+  color: var(--primary-dark);
+  font-size: 1.35rem;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.releaseHeader time {
+  color: var(--text-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.changeList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.changeList li {
+  align-items: flex-start;
+  color: var(--success-dark);
+  display: flex;
+  gap: 10px;
+}
+
+.changeList li > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.changeList strong,
+.changeList span span {
+  display: block;
+}
+
+.changeList strong {
+  color: var(--text-dark);
+  font-size: 0.92rem;
+  margin-bottom: 3px;
+}
+
+.changeList span span {
+  color: var(--text-medium);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 560px) {
+  .timeline::before {
+    left: 13px;
+  }
+
+  .release {
+    gap: 12px;
+    grid-template-columns: 28px 1fr;
+  }
+
+  .releaseMarker {
+    height: 28px;
+    width: 28px;
+  }
+
+  .releaseMarker svg {
+    height: 13px;
+    width: 13px;
+  }
+}

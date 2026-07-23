@@ -1,17 +1,19 @@
 // src/pages/TestSetupPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../contexts/SettingsContext';
 import styles from './TestSetupPage.module.css';
 
 const TestSetupPage = () => {
   const [module, setModule] = useState('imbuhan');
   const [numQuestions, setNumQuestions] = useState(10);
   const navigate = useNavigate();
+  const { englishAssist } = useSettings();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!module || numQuestions < 5) {
-      alert("Silakan pilih modul dan minimal 5 pertanyaan.");
+      alert(englishAssist ? "Please select a module and at least 5 questions." : "Silakan pilih modul dan minimal 5 pertanyaan.");
       return;
     }
     navigate(`/test/${module}`, { state: { numQuestions: parseInt(numQuestions, 10) } });
@@ -19,10 +21,10 @@ const TestSetupPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Pengaturan Tes Kustom</h1>
+      <h1 className={styles.title}>{englishAssist ? 'Custom Test Setup' : 'Pengaturan Tes Kustom'}</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
-          <label htmlFor="moduleSelect" className={styles.label}>Pilih Modul Tes:</label>
+          <label htmlFor="moduleSelect" className={styles.label}>{englishAssist ? 'Select Test Module:' : 'Pilih Modul Tes:'}</label>
           <select
             id="moduleSelect"
             value={module}
@@ -31,12 +33,12 @@ const TestSetupPage = () => {
           >
             <option value="imbuhan">Imbuhan (Affixes)</option>
             <option value="persamaan">Persamaan (Synonyms)</option> {/* <-- ENABLED */}
-            <option value="karangan" disabled>Karangan Vocab - Segera Hadir</option>
+            <option value="karangan" disabled>{englishAssist ? 'Karangan Vocab - Coming Soon' : 'Karangan Vocab - Segera Hadir'}</option>
           </select>
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="numQuestions" className={styles.label}>Jumlah Pertanyaan:</label>
+          <label htmlFor="numQuestions" className={styles.label}>{englishAssist ? 'Number of Questions:' : 'Jumlah Pertanyaan:'}</label>
           <input
             type="number"
             id="numQuestions"
@@ -48,10 +50,10 @@ const TestSetupPage = () => {
             className={styles.numberInput}
           />
         </div>
-        <p className={styles.inputNote}>(Min: 5, Max: 50, Kelipatan: 5)</p>
+        <p className={styles.inputNote}>{englishAssist ? '(Min: 5, Max: 50, Multiples of 5)' : '(Min: 5, Max: 50, Kelipatan: 5)'}</p>
 
         <button type="submit" className={`primaryButton ${styles.submitButton}`}>
-          Mulai Tes
+          {englishAssist ? 'Start Test' : 'Mulai Tes'}
         </button>
       </form>
     </div>

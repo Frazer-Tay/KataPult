@@ -1,15 +1,17 @@
 // src/pages/SuratResmiPage.js
 import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation and useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { useSettings } from '../contexts/SettingsContext';
 import styles from './SuratResmiPage.module.css';
-import { suratResmiGuide } from '../data/suratResmiContent'; // Ensure this path is correct
+import { suratResmiGuide } from '../data/suratResmiContent';
 
 const SuratResmiPage = () => {
   useTimeTracker('SuratResmi');
+  const { englishAssist } = useSettings();
   const pageRef = useRef(null);
-  const location = useLocation(); // Get current location object
-  const navigate = useNavigate(); // For programmatic navigation (updating hash)
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // This effect handles the actual scrolling once the hash is set
@@ -106,8 +108,8 @@ const SuratResmiPage = () => {
   if (!suratResmiGuide || !suratResmiGuide.sections) {
     return (
       <div className={styles.container} ref={pageRef} tabIndex={-1}>
-        <h1 className={styles.mainTitle}>Panduan Surat Resmi</h1>
-        <p className={styles.intro}>Konten panduan tidak dapat dimuat. Mohon periksa file data `suratResmiContent.js`.</p>
+        <h1 className={styles.mainTitle}>{englishAssist ? 'Formal Letter Guide' : 'Panduan Surat Resmi'}</h1>
+        <p className={styles.intro}>{englishAssist ? 'Guide content could not be loaded. Please check the `suratResmiContent.js` data file.' : 'Konten panduan tidak dapat dimuat. Mohon periksa file data `suratResmiContent.js`.'}</p>
       </div>
     );
   }
@@ -124,7 +126,7 @@ const SuratResmiPage = () => {
 
       {suratResmiGuide.tableOfContents && suratResmiGuide.tableOfContents.length > 0 && (
         <nav className={styles.toc}>
-          <h2>Daftar Isi</h2>
+          <h2>{englishAssist ? 'Table of Contents' : 'Daftar Isi'}</h2>
           <ul>
             {suratResmiGuide.tableOfContents.map(item => {
               const sectionId = generateSectionId(item.id);

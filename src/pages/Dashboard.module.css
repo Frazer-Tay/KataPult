@@ -1,0 +1,151 @@
+.dashboard {
+  margin: 0 auto;
+  max-width: 960px;
+  width: 100%;
+}
+
+.hero {
+  background:
+    radial-gradient(circle at 100% 0, rgba(0, 196, 204, 0.14), transparent 36%),
+    radial-gradient(circle at 0 100%, rgba(123, 97, 255, 0.13), transparent 40%),
+    rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(123, 97, 255, 0.12);
+  border-radius: var(--border-radius-xl);
+  margin: 6px 0 34px;
+  overflow: hidden;
+  padding: clamp(28px, 6vw, 56px) clamp(22px, 6vw, 60px);
+  position: relative;
+}
+
+.heroStats {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.section {
+  margin-top: 42px;
+}
+
+.sectionHeading {
+  align-items: flex-end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sectionHeading h2 {
+  color: var(--primary-dark);
+  font-size: 1.35rem;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.sectionHeading p {
+  color: var(--text-light);
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.moduleGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.featuredGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.path {
+  align-items: center;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xs);
+  display: grid;
+  gap: 0;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  padding: 20px 24px;
+}
+
+.pathStep {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.pathNumber {
+  align-items: center;
+  background: #f0edff;
+  border-radius: 12px;
+  color: var(--secondary-color);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.86rem;
+  font-weight: 800;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.pathStep strong,
+.pathStep small {
+  display: block;
+}
+
+.pathStep strong {
+  color: var(--text-dark);
+  font-size: 0.86rem;
+}
+
+.pathStep small {
+  color: var(--text-light);
+  font-size: 0.72rem;
+  margin-top: 2px;
+}
+
+.pathLine {
+  background: var(--border-color);
+  height: 1px;
+  margin: 0 18px;
+  width: 32px;
+}
+
+.footerNote {
+  color: var(--text-light);
+  font-size: 0.86rem;
+  margin: 46px 0 12px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .moduleGrid,
+  .featuredGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .path {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .pathLine {
+    height: 18px;
+    margin: 4px 0 4px 17px;
+    width: 1px;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+}

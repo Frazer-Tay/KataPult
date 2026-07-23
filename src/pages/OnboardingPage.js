@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './LandingPage.module.css';
 
 const OnboardingPage = () => {
-  const { currentUser, completeOnboarding } = useAuth();
+  const { currentUser, isNewUser, completeOnboarding } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
@@ -12,19 +12,23 @@ const OnboardingPage = () => {
 
   // If there's no user, or they somehow got here without logging in, redirect them
   if (!currentUser) {
-    navigate('/login', { replace: true });
-    return null;
+    return <Navigate to="/login" replace />;
+  }
+
+  // If the user is already fully onboarded, redirect them to dashboard
+  if (!isNewUser) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmedUsername = username.trim();
-    
+
     if (trimmedUsername.length < 3) {
       setError('Username must be at least 3 characters long.');
       return;
     }
-    
+
     if (trimmedUsername.length > 20) {
       setError('Username must be 20 characters or less.');
       return;
@@ -33,10 +37,10 @@ const OnboardingPage = () => {
     try {
       setError('');
       setIsLoading(true);
-      
+
       // Save the username to Firestore
       await completeOnboarding(trimmedUsername);
-      
+
       // Success! Send them to the dashboard
       navigate('/dashboard', { replace: true });
     } catch (err) {
@@ -49,13 +53,13 @@ const OnboardingPage = () => {
   return (
     <div className={styles.container} style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className={styles.heroContent} style={{ padding: '3rem', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.1)', maxWidth: '500px', width: '100%' }}>
-        
+
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
           {currentUser.photoURL && (
-            <img 
-              src={currentUser.photoURL} 
-              alt="Profile" 
-              style={{ width: '80px', height: '80px', borderRadius: '50%', border: '3px solid var(--primary-color)' }} 
+            <img
+              src={currentUser.photoURL}
+              alt="Profile"
+              style={{ width: '80px', height: '80px', borderRadius: '50%', border: '3px solid var(--primary-color)' }}
             />
           )}
         </div>
@@ -85,10 +89,10 @@ const OnboardingPage = () => {
               color: 'var(--primary-color)'
             }}
           />
-          
-          <button 
+
+          <button
             type="submit"
-            className={styles.primaryButton} 
+            className={styles.primaryButton}
             disabled={isLoading}
             style={{ width: '100%', marginTop: '1rem' }}
           >

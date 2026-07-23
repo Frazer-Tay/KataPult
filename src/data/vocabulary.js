@@ -22032,5 +22032,95 @@ export const vocabularyData = [
     "exampleTranslation": "",
     "level": 1,
     "category": "I1 Karangan"
+  },
+  {
+    "id": 2450,
+    "word": "memastikan",
+    "definition": "to ensure",
+    "exampleSentence": "Pemerintah harus memastikan bahwa semua warga mendapat akses air bersih.",
+    "exampleTranslation": "The government must ensure that all citizens get access to clean water.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2451,
+    "word": "meluas",
+    "definition": "to spread / to expand",
+    "exampleSentence": "Berita tentang kejadian penting itu dengan cepat meluas ke seluruh desa.",
+    "exampleTranslation": "The news about the important incident quickly spread throughout the village.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2452,
+    "word": "dicabut",
+    "definition": "revoked / pulled out",
+    "exampleSentence": "Izin usaha dari perusahaan tersebut dicabut karena melanggar peraturan pemerintah.",
+    "exampleTranslation": "The business license of the company was revoked for violating government regulations.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2453,
+    "word": "beredar",
+    "definition": "to circulate",
+    "exampleSentence": "Banyak informasi palsu yang beredar di media sosial pada akhir-akhir ini.",
+    "exampleTranslation": "A lot of fake information is circulating on social media lately.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2454,
+    "word": "berdasarkan",
+    "definition": "based on",
+    "exampleSentence": "Keputusan yang sulit ini dibuat berdasarkan bukti-bukti yang ditemukan di lapangan.",
+    "exampleTranslation": "This difficult decision was made based on the evidence found in the field.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2455,
+    "word": "mencapai",
+    "definition": "to reach",
+    "exampleSentence": "Suhu udara di kota itu bisa mencapai tiga puluh lima derajat Celcius saat siang.",
+    "exampleTranslation": "The air temperature in that city can reach thirty-five degrees Celsius during the day.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2456,
+    "word": "diduga",
+    "definition": "allegedly / suspected",
+    "exampleSentence": "Pria yang diduga sebagai pelaku pencurian itu telah ditangkap oleh pihak polisi.",
+    "exampleTranslation": "The man suspected as the perpetrator of the theft has been arrested by the police.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2457,
+    "word": "mengawasi",
+    "definition": "to supervise / to monitor",
+    "exampleSentence": "Orang tua harus selalu mengawasi anak-anak mereka saat sedang bermain di luar.",
+    "exampleTranslation": "Parents must always supervise their children when playing outside.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2458,
+    "word": "syarat",
+    "definition": "requirement / condition",
+    "exampleSentence": "Memiliki kartu identitas adalah salah satu syarat utama untuk mendaftar program ini.",
+    "exampleTranslation": "Having an identity card is one of the main requirements to register for this program.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
+  },
+  {
+    "id": 2459,
+    "word": "mencari",
+    "definition": "to look for",
+    "exampleSentence": "Banyak orang pindah ke kota besar untuk mencari pekerjaan yang jauh lebih baik.",
+    "exampleTranslation": "Many people move to big cities to look for much better jobs.",
+    "level": 1,
+    "category": "Cloze Passage Vocabulary"
   }
 ];
