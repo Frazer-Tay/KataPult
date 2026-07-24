@@ -5,9 +5,18 @@ import styles from './ChangelogPage.module.css';
 
 const releases = [
   {
-    version: 'v0.8.0',
+    version: 'v0.8.1',
     date: '24 Juli 2026',
     current: true,
+    changes: [
+      ['Broader-appeal brand companion', 'Mengganti maskot Komodo dengan ilustrasi roket kertas abstrak yang selaras dengan identitas KataPult, tanpa wajah atau karakter hewan.'],
+      ['Lightweight landing asset', 'Mengoptimalkan ilustrasi transparan untuk tampilan tajam di desktop dan mobile tanpa mengganggu preview produk atau CTA utama.'],
+      ['Authentication preserved', 'Perubahan visual ini tidak mengubah AuthContext, Firebase configuration, Login, Onboarding, atau alur Google Sign-In.']
+    ]
+  },
+  {
+    version: 'v0.8.0',
+    date: '24 Juli 2026',
     changes: [
       ['Conversion-focused landing page', 'Mengganti halaman awal dengan proposisi nilai yang lebih jelas, satu CTA utama, navigasi merek, dan hierarki visual yang lebih profesional.'],
       ['Interactive product proof', 'Menambahkan contoh latihan Persamaan yang dapat dijawab sebelum login, lengkap dengan progress, feedback langsung, dan penjelasan manfaat penyimpanan progres.'],

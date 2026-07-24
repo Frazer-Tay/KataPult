@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import useLearningProgress from '../hooks/useLearningProgress';
 import UiIcon from '../components/UiIcon';
 import appLogo from '../assets/images/app-logo.png';
-import komodoMascot from '../assets/images/katapult-komodo.webp';
+import paperRocketCompanion from '../assets/images/katapult-paper-rocket.webp';
 import styles from './LandingPage.module.css';
 
 const tracks = [
@@ -143,8 +143,8 @@ const LandingPage = () => {
               </div>
             </div>
             <div className={styles.mascotWrap}>
-              <img src={komodoMascot} alt="KataPult Komodo learning companion" />
-              <span>Small steps. Real progress.</span>
+              <img src={paperRocketCompanion} alt="KataPult paper rocket learning companion" />
+              <span>Learn. Launch. Keep moving.</span>
             </div>
           </div>
         </section>
