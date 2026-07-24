@@ -2,8 +2,12 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { persamaanData } from '../data/persamaan';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import { useAuth } from '../contexts/AuthContext';
+import { saveStateToCloud, loadStateFromCloud } from '../utils/cloudSync';
+import { useSettings } from '../contexts/SettingsContext';
 import styles from './PersamaanLatihanPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -20,22 +24,25 @@ const LOCAL_STORAGE_KEY = 'kataPultPersamaanLatihanState_v1';
 const NUM_INPUT_FIELDS = 3;
 
 const PersamaanLatihanPage = () => {
+  const { currentUser } = useAuth();
+  const { englishAssist } = useSettings();
+  const isInitializedRef = useRef(false);
   const [allItems, setAllItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   const initialUserInputs = useMemo(() => Array(NUM_INPUT_FIELDS).fill(''), []);
   const [userInputs, setUserInputs] = useState(initialUserInputs);
   const [feedbackForEachInput, setFeedbackForEachInput] = useState(Array(NUM_INPUT_FIELDS).fill(null));
-  
+
   const [isAnswered, setIsAnswered] = useState(false);
   const [sessionScore, setSessionScore] = useState(0);
   const [revealedSynonyms, setRevealedSynonyms] = useState([]);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const inputRefs = useRef([]); 
+  const inputRefs = useRef([]);
   const pageRef = useRef(null);
   const isCompletedRef = useRef(false);
   const currentItemRef = useRef(null);
@@ -69,7 +76,7 @@ const PersamaanLatihanPage = () => {
         if (inputRefs.current[0] && inputRefs.current[0].current) {
             inputRefs.current[0].current.focus();
         }
-      }, 50); 
+      }, 50);
     }
   }, [initialUserInputs]);
 
@@ -97,32 +104,57 @@ const PersamaanLatihanPage = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true); setError(null);
-    try {
-      const filteredData = persamaanData.filter(item => item.word && Array.isArray(item.synonyms) && item.synonyms.length > 0 && item.example_sentence_target);
-      if (filteredData.length === 0) throw new Error("No valid Persamaan data for Latihan mode. Check data source.");
-      setAllItems(filteredData);
+    const initPage = async () => {
+      setIsLoading(true); setError(null);
+      try {
+        const filteredData = persamaanData.filter(item => item.word && Array.isArray(item.synonyms) && item.synonyms.length > 0 && item.example_sentence_target);
+        if (filteredData.length === 0) throw new Error("No valid Persamaan data for Latihan mode. Check data source.");
+        setAllItems(filteredData);
 
-      const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedStateJSON) {
-        const savedState = JSON.parse(savedStateJSON);
-        if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItemIds) && typeof savedState.score === 'number') {
-          const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
-          const validSavedDisplayItems = savedState.displayItemIds.map(id => currentAllItemsMap.get(id)).filter(Boolean);
+        let savedStateJSON = null;
+        let source = 'none';
 
-          if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
-            setDisplayItems(validSavedDisplayItems);
-            setCurrentIndex(savedState.currentIndex);
-            setSessionScore(savedState.score);
+        if (currentUser && !isInitializedRef.current) {
+           const cloudState = await loadStateFromCloud(currentUser.uid, LOCAL_STORAGE_KEY);
+           if (cloudState) {
+               savedStateJSON = JSON.stringify(cloudState);
+               source = 'cloud';
+           }
+        }
+
+        if (!savedStateJSON) {
+           savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+           if (savedStateJSON) source = 'local';
+        }
+
+        if (savedStateJSON) {
+          const savedState = JSON.parse(savedStateJSON);
+          if (savedState && typeof savedState.currentIndex === 'number' && Array.isArray(savedState.displayItemIds) && typeof savedState.score === 'number') {
+            const currentAllItemsMap = new Map(filteredData.map(item => [item.id, item]));
+            const validSavedDisplayItems = savedState.displayItemIds.map(id => currentAllItemsMap.get(id)).filter(Boolean);
+
+            if(validSavedDisplayItems.length > 0 && savedState.currentIndex < validSavedDisplayItems.length) {
+              setDisplayItems(validSavedDisplayItems);
+              setCurrentIndex(savedState.currentIndex);
+              setSessionScore(savedState.score);
+
+              if (source === 'cloud') {
+                 localStorage.setItem(LOCAL_STORAGE_KEY, savedStateJSON);
+              } else if (source === 'local' && currentUser) {
+                 saveStateToCloud(currentUser.uid, LOCAL_STORAGE_KEY, savedState);
+              }
+            } else { loadData(filteredData); }
           } else { loadData(filteredData); }
         } else { loadData(filteredData); }
-      } else { loadData(filteredData); }
-    } catch (err) {
-      console.error("Error initializing Persamaan Latihan page:", err);
-      setError(err.message || "Gagal memuat data Persamaan Latihan.");
-      setAllItems([]); setDisplayItems([]);
-    } finally { setIsLoading(false); }
-  }, [loadData]);
+        isInitializedRef.current = true;
+      } catch (err) {
+        console.error("Error initializing Persamaan Latihan page:", err);
+        setError(err.message || "Gagal memuat data Persamaan Latihan.");
+        setAllItems([]); setDisplayItems([]);
+      } finally { setIsLoading(false); }
+    };
+    initPage();
+  }, [loadData, currentUser]);
 
   useEffect(() => {
     if (!isLoading && currentItem) {
@@ -135,7 +167,7 @@ const PersamaanLatihanPage = () => {
 
   useEffect(() => {
     if (isLoading || error || !displayItems || displayItems.length === 0) return;
-    
+
     if (isCompletedRef.current) {
       if (localStorage.getItem(LOCAL_STORAGE_KEY)) {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -143,14 +175,17 @@ const PersamaanLatihanPage = () => {
       return;
     }
     try {
-      const stateToSave = { 
-        currentIndex: currentIndex, 
+      const stateToSave = {
+        currentIndex: currentIndex,
         displayItemIds: displayItems.map(item => item.id),
         score: sessionScore
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+      if (currentUser) {
+         saveStateToCloud(currentUser.uid, LOCAL_STORAGE_KEY, stateToSave);
+      }
     } catch (err) { console.error("Failed to save Persamaan Latihan state:", err); }
-  }, [currentIndex, displayItems, sessionScore, isLoading, error]);
+  }, [currentIndex, displayItems, sessionScore, isLoading, error, currentUser]);
 
 
   const handleInputChange = (index, value) => {
@@ -214,7 +249,7 @@ const PersamaanLatihanPage = () => {
             checkAnswer();
             event.preventDefault();
         }
-        return; 
+        return;
       }
 
       if (event.key === 'Enter') {
@@ -248,32 +283,32 @@ const PersamaanLatihanPage = () => {
 
   const isCompleted = currentIndex >= totalItemsInSet && totalItemsInSet > 0 && !isLoading;
 
-  if (isLoading) { return <div className="loading-page">Memuat Latihan Persamaan Kata...</div>; }
+  if (isLoading) { return <LoadingState label={englishAssist ? "Loading Persamaan Practice..." : "Memuat Latihan Persamaan Kata..."} />; }
   if (error) { return <div className="error" style={{whiteSpace: 'pre-wrap'}}>{error}</div>; }
 
   if (isCompleted) {
     return (
       <div className={styles.container} ref={pageRef} tabIndex={-1}>
-        <p className="completionMessage">✨ Latihan Persamaan Kata Selesai! ✨</p>
-        <p className="completionSubMessage">Skor Anda: {sessionScore} poin</p>
+        <p className="completionMessage">{englishAssist ? "✨ Persamaan Practice Complete! ✨" : "✨ Latihan Persamaan Kata Selesai! ✨"}</p>
+        <p className="completionSubMessage">{englishAssist ? "Your Score:" : "Skor Anda:"} {sessionScore} {englishAssist ? "points" : "poin"}</p>
         <div className="completionActions">
           <button className="primaryButton" onClick={handleReshuffleAll} autoFocus>
-            Ulangi Semua
+            {englishAssist ? "Restart All" : "Ulangi Semua"}
           </button>
         </div>
       </div>
     );
   }
 
-  if (!currentItem) { return <div className="loading">Memuat kata berikutnya... Pastikan data `persamaanData.js` valid dan ada isinya.</div>; }
+  if (!currentItem) { return <div className="loading">{englishAssist ? "Loading next word..." : "Memuat kata berikutnya..."}</div>; }
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
-      <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label="Latihan Persamaan Kata" />
-      
+      <ProgressBar current={currentIndex + 1} total={totalItemsInSet} label={englishAssist ? "Persamaan Practice" : "Latihan Persamaan Kata"} />
+
       <div className={styles.questionCard}>
         {/* MODIFIED INSTRUCTION HERE */}
-        <p className={styles.instruction}>Tuliskan sinonim untuk kata berikut (Anda bisa memasukkan hingga {NUM_INPUT_FIELDS}):</p>
+        <p className={styles.instruction}>{englishAssist ? `Write synonyms for the following word (you can enter up to ${NUM_INPUT_FIELDS}):` : `Tuliskan sinonim untuk kata berikut (Anda bisa memasukkan hingga ${NUM_INPUT_FIELDS}):`}</p>
         <h2 className={styles.targetWord}>{currentItem.word}</h2>
         {currentItem.example_sentence_target && (
             <p className={styles.exampleSentence}>"{currentItem.example_sentence_target}"</p>
@@ -288,7 +323,7 @@ const PersamaanLatihanPage = () => {
               type="text"
               value={input}
               onChange={(e) => handleInputChange(index, e.target.value)}
-              placeholder={`Sinonim ${index + 1}`}
+              placeholder={englishAssist ? `Synonym ${index + 1}` : `Sinonim ${index + 1}`}
               className={`${styles.synonymInput} ${
                 isAnswered && feedbackForEachInput[index] === 'correct' ? styles.correctInput : ''
               } ${
@@ -302,7 +337,7 @@ const PersamaanLatihanPage = () => {
               <span className={`${styles.inputFeedback} ${
                 feedbackForEachInput[index] === 'correct' ? styles.correctFeedbackText : styles.incorrectFeedbackText
               }`}>
-                {feedbackForEachInput[index] === 'correct' ? '✓ Tepat' : '✗ Kurang Tepat'}
+                {feedbackForEachInput[index] === 'correct' ? (englishAssist ? '✓ Correct' : '✓ Tepat') : (englishAssist ? '✗ Incorrect' : '✗ Kurang Tepat')}
               </span>
             )}
           </div>
@@ -310,19 +345,19 @@ const PersamaanLatihanPage = () => {
       </div>
 
       {!isAnswered && (
-        <button 
-            className="primaryButton" 
-            onClick={checkAnswer} 
+        <button
+            className="primaryButton"
+            onClick={checkAnswer}
             disabled={userInputs.every(input => input.trim() === '')}
             style={{marginTop: '20px'}}
         >
-          Periksa Jawaban
+          {englishAssist ? 'Check Answer' : 'Periksa Jawaban'}
         </button>
       )}
 
       {isAnswered && revealedSynonyms.length > 0 && (
         <div className={styles.revealedAnswersCard}>
-          <h3 className={styles.revealedTitle}>Pilihan Sinonim yang Benar:</h3>
+          <h3 className={styles.revealedTitle}>{englishAssist ? 'Correct Synonym Options:' : 'Pilihan Sinonim yang Benar:'}</h3>
           <ul className={styles.synonymList}>
             {revealedSynonyms.map((syn, idx) => (
               <li key={idx} className={styles.synonymListItem}>{syn}</li>
@@ -331,14 +366,14 @@ const PersamaanLatihanPage = () => {
         </div>
       )}
 
-      <div className="action-buttons-container">
+      <PracticeActions>
         <button
           className="secondaryButton"
           onClick={() => advanceItem('previous')}
           disabled={currentIndex === 0 || isLoading}
           aria-label="Kata Sebelumnya"
         >
-          <span className="arrowIcon">←</span> Sebelumnya
+          <span className="arrowIcon">←</span> {englishAssist ? 'Previous' : 'Sebelumnya'}
         </button>
         <button
           className="nextButton"
@@ -346,9 +381,9 @@ const PersamaanLatihanPage = () => {
           disabled={isLoading || (currentIndex >= totalItemsInSet - 1 && isCompletedRef.current) || !isAnswered}
           aria-label="Kata Berikutnya"
         >
-          {currentIndex >= totalItemsInSet - 1 ? "Lihat Hasil" : "Lanjut"} <span className="arrowIcon">→</span>
+          {currentIndex >= totalItemsInSet - 1 ? (englishAssist ? 'See Results' : 'Lihat Hasil') : (englishAssist ? 'Next' : 'Lanjut')} <span className="arrowIcon">→</span>
         </button>
-      </div>
+      </PracticeActions>
     </div>
   );
 };

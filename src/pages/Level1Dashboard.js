@@ -1,125 +1,47 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useProgress } from '../contexts/ProgressContext';
-import styles from './HomePage.module.css';
+import { useSettings } from '../contexts/SettingsContext';
+import { ModuleCard, PageHeader, StatusBadge } from '../components/SharedUI';
+import styles from './Dashboard.module.css';
 
 const Level1Dashboard = () => {
   const { xp, streak, level } = useProgress();
-
-  const scrollToModules = (e) => {
-    e.preventDefault();
-    const modulesSection = document.getElementById('modules');
-    if (modulesSection) {
-      modulesSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const { englishAssist } = useSettings();
 
   return (
-    <div className={styles.container}>
-      {/* Hero Section */}
-      <section className={styles.heroSection}>
-        <div className={styles.heroProgressBadge}>
-           🔥 Streak: {streak} Day{streak !== 1 && 's'} | ⭐ Level {level} ({xp} XP)
+    <div className={styles.dashboard}>
+      <section className={styles.hero}>
+        <div className={styles.heroStats}>
+          <StatusBadge icon="flame" tone="warning">{streak} {englishAssist ? `day${streak === 1 ? '' : 's'}` : 'hari'}</StatusBadge>
+          <StatusBadge icon="star" tone="info">{xp} XP · Level {level}</StatusBadge>
         </div>
-        <h1 className={styles.heroTitle}>Build <span style={{color: 'var(--primary-color)'}}>Bahasa Indonesia</span> 🇮🇩 fundamentals.</h1>
-        <p className={styles.heroSubtitle}>
-          Master foundational vocabulary and basic sentence structures for Indonesia Level 1.
-        </p>
-        <div className={styles.heroActions}>
-          <button onClick={scrollToModules} className={styles.heroPrimaryCTA}>Start Learning</button>
+        <PageHeader eyebrow="Indonesia Level 1" title={englishAssist ? 'Strengthen the foundations that make every sentence work.' : 'Perkuat dasar-dasar yang membuat setiap kalimat berfungsi.'} description={englishAssist ? 'Follow the exam path or choose a focused warm-up before you begin.' : 'Ikuti jalur ujian atau pilih pemanasan terfokus sebelum memulai.'} />
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}><h2>{englishAssist ? 'Your learning path' : 'Jalur belajar Anda'}</h2></div>
+        <div className={styles.path}>
+          <div className={styles.pathStep}><span className={styles.pathNumber}>1</span><span><strong>{englishAssist ? 'Build vocabulary' : 'Bangun kosakata'}</strong><small>{englishAssist ? 'Learn the core words' : 'Pelajari kata-kata inti'}</small></span></div>
+          <span className={styles.pathLine} />
+          <div className={styles.pathStep}><span className={styles.pathNumber}>2</span><span><strong>{englishAssist ? 'Apply grammar' : 'Terapkan tata bahasa'}</strong><small>{englishAssist ? 'Form accurate sentences' : 'Bentuk kalimat yang tepat'}</small></span></div>
+          <span className={styles.pathLine} />
+          <div className={styles.pathStep}><span className={styles.pathNumber}>3</span><span><strong>{englishAssist ? 'Practise the exam' : 'Latihan ujian'}</strong><small>{englishAssist ? 'Read, complete, and write' : 'Membaca, melengkapi, menulis'}</small></span></div>
         </div>
       </section>
 
-      {/* Recommended Path */}
-      <section className={styles.pathSection}>
-        <h2 className={styles.sectionHeading}>Your Path to Mastery</h2>
-        <div className={styles.pathSteps}>
-          <div className={styles.pathStep}>
-            <div className={styles.stepNumber}>1</div>
-            <div className={styles.stepTextContent}>
-              <div className={styles.stepTitle}>Build Core Vocab</div>
-              <div className={styles.stepDesc}>Learn essential everyday words</div>
-            </div>
-          </div>
-          <div className={styles.pathDivider}></div>
-          <div className={styles.pathStep}>
-            <div className={styles.stepNumber}>2</div>
-            <div className={styles.stepTextContent}>
-              <div className={styles.stepTitle}>Practice Context</div>
-              <div className={styles.stepDesc}>Understand how words are used</div>
-            </div>
-          </div>
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}><h2>{englishAssist ? 'Exam modules' : 'Modul ujian'}</h2><p>{englishAssist ? 'Choose a focused practice area' : 'Pilih area latihan terfokus'}</p></div>
+        <div className={styles.moduleGrid}>
+          <ModuleCard to="/level1/reading" icon="book" tone="green" title={englishAssist ? 'Part I: Reading' : 'Bagian I: Membaca'} subtitle={englishAssist ? 'Reading comprehension and short responses' : 'Pemahaman bacaan dan jawaban singkat'} />
+          <ModuleCard to="/level1/sentence" icon="sentence" tone="violet" title={englishAssist ? 'Part II: Sentences' : 'Bagian II: Kalimat'} subtitle={englishAssist ? 'Build clear and accurate sentences' : 'Susun kalimat yang jelas dan tepat'} />
+          <ModuleCard to="/level1/imbuhan-practice" icon="link" tone="orange" title={englishAssist ? 'Part III: Affixes' : 'Bagian III: Imbuhan'} subtitle={englishAssist ? 'Complete words with the correct affixes' : 'Lengkapi kata dengan imbuhan yang tepat'} />
+          <ModuleCard to="/level1/cloze" icon="puzzle" tone="blue" title={englishAssist ? 'Part IV: Cloze' : 'Bagian IV: Rumpang'} subtitle={englishAssist ? 'Use context to complete a passage' : 'Gunakan konteks untuk melengkapi bacaan'} />
+          <ModuleCard to="/level1/writing" icon="pen" tone="red" title={englishAssist ? 'Part V & VI: Writing' : 'Bagian V & VI: Menulis'} subtitle={englishAssist ? 'Formal letters and longer essays' : 'Surat resmi dan karangan panjang'} />
+          <ModuleCard to="/level1/vocabulary" icon="brain" tone="cyan" title={englishAssist ? 'Core vocabulary' : 'Kosakata inti'} subtitle={englishAssist ? 'A quick warm-up before exam practice' : 'Pemanasan cepat sebelum latihan ujian'} badge="Warm-up" />
         </div>
       </section>
 
-      {/* Module Groups */}
-      <section id="modules" className={styles.modulesSection}>
-        <div className={styles.moduleGroup}>
-          <h3 className={styles.groupHeading}>Simulasi Ujian (Exam Simulation)</h3>
-          <div className={styles.moduleGrid}>
-            
-            <Link to="/level1/reading" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconReading}`} style={{backgroundColor: '#16a085'}}>📖</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Bagian I: Reading</span>
-                <span className={styles.moduleDesc}>Pemahaman bacaan dan esai pendek.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/level1/sentence" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconSentence}`} style={{backgroundColor: '#8e44ad'}}>✍️</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Bagian II: Kalimat</span>
-                <span className={styles.moduleDesc}>Latihan konstruksi kalimat.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/level1/imbuhan-practice" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconImbuhan}`} style={{backgroundColor: '#e67e22'}}>🔗</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Bagian III: Imbuhan</span>
-                <span className={styles.moduleDesc}>Melengkapi kalimat dengan imbuhan.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/level1/cloze" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconCloze}`} style={{backgroundColor: '#2980b9'}}>🧩</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Bagian IV: Cloze</span>
-                <span className={styles.moduleDesc}>Isian rumpang dengan kata pilihan.</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/level1/writing" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconWriting}`} style={{backgroundColor: '#e74c3c'}}>📝</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Bagian V & VI: Menulis</span>
-                <span className={styles.moduleDesc}>Surat resmi dan karangan (200 kata).</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-            <Link to="/level1/vocabulary" className={styles.moduleCard}>
-              <div className={`${styles.iconBlock} ${styles.iconVocab}`}>📚</div>
-              <div className={styles.moduleInfo}>
-                <span className={styles.moduleTitle}>Core Vocabulary</span>
-                <span className={styles.moduleDesc}>Hafalan kata dasar (Warm-up).</span>
-              </div>
-              <div className={styles.moduleArrow}>→</div>
-            </Link>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Motivational Footer */}
-      <footer className={styles.motivationalFooter}>
-        <p>A solid foundation is the key to fluency.</p>
-      </footer>
+      <p className={styles.footerNote}>{englishAssist ? 'A strong foundation makes fluency possible.' : 'Dasar yang kuat membuka jalan menuju kefasihan.'}</p>
     </div>
   );
 };

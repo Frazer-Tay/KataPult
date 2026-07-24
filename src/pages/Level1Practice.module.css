@@ -24,8 +24,41 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 0.5rem 0;
+  }
+
   .splitScreen {
     grid-template-columns: 1fr;
+  }
+
+  .articlePane,
+  .questionCard,
+  .centeredCard {
+    border-radius: var(--border-radius-md);
+    padding: 1.2rem;
+  }
+
+  .paragraph,
+  .clozeParagraph {
+    text-align: left;
+  }
+
+  .wordBank {
+    padding: 1rem;
+  }
+
+  .wordBadge {
+    align-items: center;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.55rem 0.9rem;
+  }
+
+  .clozeBlank {
+    line-height: 1.8;
+    min-height: 40px;
+    min-width: 88px;
   }
 }
 

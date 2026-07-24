@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { readingData } from '../data/level1Practice';
+import { useSettings } from '../contexts/SettingsContext';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import ProgressBar from '../components/ProgressBar';
 import styles from './Level1Practice.module.css';
 
 const Level1ReadingPage = () => {
+  const { englishAssist } = useSettings();
   const [userAnswers, setUserAnswers] = useState({});
   const [revealedAnswers, setRevealedAnswers] = useState({});
 
@@ -27,9 +30,10 @@ const Level1ReadingPage = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Bagian I: Pemahaman Bacaan (Reading Comprehension)</h1>
-        <p>Bacalah artikel di sebelah kiri dan jawablah pertanyaan di sebelah kanan.</p>
+        <h1>{englishAssist ? 'Part I: Reading Comprehension' : 'Bagian I: Pemahaman Bacaan (Reading Comprehension)'}</h1>
+        <p>{englishAssist ? 'Read the article on the left and answer the questions on the right.' : 'Bacalah artikel di sebelah kiri dan jawablah pertanyaan di sebelah kanan.'}</p>
       </header>
+      <ProgressBar current={Object.keys(revealedAnswers).filter((key) => revealedAnswers[key]).length} total={readingData.questions.length} label={englishAssist ? 'Answers reviewed' : 'Jawaban ditinjau'} />
 
       <div className={styles.splitScreen}>
         {/* Left Side: Article */}
@@ -45,30 +49,30 @@ const Level1ReadingPage = () => {
 
         {/* Right Side: Questions */}
         <div className={styles.questionsPane}>
-          <h2 className={styles.questionsTitle}>Pertanyaan (20%)</h2>
+          <h2 className={styles.questionsTitle}>{englishAssist ? 'Questions (20%)' : 'Pertanyaan (20%)'}</h2>
           <div className={styles.questionsList}>
             {readingData.questions.map((q) => (
               <div key={q.id} className={styles.questionCard}>
                 <p className={styles.questionText}><strong>{q.id}.</strong> {q.question}</p>
                 <textarea
                   className={styles.answerInput}
-                  placeholder="Ketik jawaban Anda di sini..."
+                  placeholder={englishAssist ? "Type your answer here..." : "Ketik jawaban Anda di sini..."}
                   value={userAnswers[q.id] || ''}
                   onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                   rows={4}
                 />
-                
+
                 <div className={styles.feedbackSection}>
-                  <button 
-                    className={styles.revealButton} 
+                  <button
+                    className={styles.revealButton}
                     onClick={() => toggleReveal(q.id)}
                   >
-                    {revealedAnswers[q.id] ? 'Sembunyikan Model Jawaban' : 'Lihat Model Jawaban'}
+                    {revealedAnswers[q.id] ? (englishAssist ? 'Hide Model Answer' : 'Sembunyikan Model Jawaban') : (englishAssist ? 'View Model Answer' : 'Lihat Model Jawaban')}
                   </button>
-                  
+
                   {revealedAnswers[q.id] && (
                     <div className={styles.modelAnswer}>
-                      <strong>Model Jawaban:</strong>
+                      <strong>{englishAssist ? 'Model Answer:' : 'Model Jawaban:'}</strong>
                       <p>{q.modelAnswer}</p>
                     </div>
                   )}

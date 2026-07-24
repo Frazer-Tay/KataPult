@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import { clozePassageData } from '../data/level1Practice';
+import React, { useState, useEffect } from 'react';
+import { clozePassagesData } from '../data/level1Practice';
 import { recordLearnerActivity } from '../utils/activityTracker';
+import { useRandomizedResumableQueue } from '../hooks/useRandomizedResumableQueue';
+import { useSettings } from '../contexts/SettingsContext';
+import ProgressBar from '../components/ProgressBar';
+import { PracticeActions } from '../components/SharedUI';
 import styles from './Level1Practice.module.css';
 
 const Level1ClozePage = () => {
+  const { englishAssist } = useSettings();
+  const { currentIndex, advanceToNext } = useRandomizedResumableQueue('l1_cloze_queue', clozePassagesData);
+  const currentItem = clozePassagesData[currentIndex] || clozePassagesData[0];
+
   const [userAnswers, setUserAnswers] = useState({});
   const [isChecked, setIsChecked] = useState(false);
   const [activeWord, setActiveWord] = useState(null);
-  
+
+  useEffect(() => {
+    setUserAnswers({});
+    setIsChecked(false);
+    setActiveWord(null);
+  }, [currentIndex]);
+
   const handleDrop = (e, index) => {
     e.preventDefault();
     const word = e.dataTransfer.getData("word");
@@ -26,7 +40,7 @@ const Level1ClozePage = () => {
   const handleWordClick = (word) => {
     // If word is already used, do nothing
     if (Object.values(userAnswers).includes(word)) return;
-    
+
     // Toggle active word
     setActiveWord(prev => prev === word ? null : word);
   };
@@ -55,9 +69,9 @@ const Level1ClozePage = () => {
   };
 
   const handleCheck = () => {
-    const totalAnswers = Object.keys(clozePassageData.answers).length;
-    const correctAnswers = Object.keys(clozePassageData.answers).filter(
-      key => userAnswers[key] === clozePassageData.answers[key]
+    const totalAnswers = Object.keys(currentItem.answers).length;
+    const correctAnswers = Object.keys(currentItem.answers).filter(
+      key => userAnswers[key] === currentItem.answers[key]
     ).length;
 
     recordLearnerActivity({
@@ -74,28 +88,28 @@ const Level1ClozePage = () => {
   const usedWords = Object.values(userAnswers);
 
   const renderText = () => {
-    return clozePassageData.text.map((part, i) => {
+    return currentItem.text.map((part, i) => {
       // If it's a blank marker like "[1]"
       const blankMatch = part.match(/^\[(\d+)\]$/);
       if (blankMatch) {
         const index = parseInt(blankMatch[1]);
         const currentAnswer = userAnswers[index];
-        
+
         let statusClass = '';
         if (isChecked && currentAnswer) {
-          statusClass = currentAnswer === clozePassageData.answers[index] 
-            ? styles.correct 
+          statusClass = currentAnswer === currentItem.answers[index]
+            ? styles.correct
             : styles.incorrect;
         }
 
         return (
-          <span 
+          <span
             key={i}
             className={`${styles.clozeBlank} ${currentAnswer ? styles.filled : ''} ${statusClass} ${activeWord && !currentAnswer ? styles.readyToFill : ''}`}
             onDrop={(e) => handleDrop(e, index)}
             onDragOver={handleDragOver}
             onClick={() => handleBlankClick(index)}
-            title={currentAnswer ? "Klik untuk menghapus" : activeWord ? "Klik untuk memasukkan kata" : "Seret kata ke sini atau pilih kata lalu klik"}
+            title={currentAnswer ? (englishAssist ? "Click to remove" : "Klik untuk menghapus") : activeWord ? (englishAssist ? "Click to fill word" : "Klik untuk memasukkan kata") : (englishAssist ? "Drag word here or click a word then click here" : "Seret kata ke sini atau pilih kata lalu klik")}
           >
             {currentAnswer || index}
           </span>
@@ -115,16 +129,18 @@ const Level1ClozePage = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Bagian IV: Isian Rumpang (Cloze Passage)</h1>
-        <p>Lengkapi bacaan di bawah ini. Anda dapat <strong>menyeret kata (Drag & Drop)</strong> atau <strong>mengetuk kata lalu mengetuk garis kosong (Tap to Fill)</strong>.</p>
+        <h1>{englishAssist ? 'Part IV: Cloze Passage' : 'Bagian IV: Isian Rumpang (Cloze Passage)'}</h1>
+        <p>{englishAssist ? 'Complete the passage below. You can ' : 'Lengkapi bacaan di bawah ini. Anda dapat '}<strong>{englishAssist ? 'Drag & Drop' : 'menyeret kata (Drag & Drop)'}</strong>{englishAssist ? ' or ' : ' atau '}<strong>{englishAssist ? 'Tap to Fill' : 'mengetuk kata lalu mengetuk garis kosong (Tap to Fill)'}</strong>.</p>
       </header>
+      <ProgressBar current={currentIndex + 1} total={clozePassagesData.length} label={englishAssist ? 'Cloze passages' : 'Bacaan rumpang'} />
 
       <div className={styles.centeredCard} style={{ maxWidth: '900px' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#1e3a8a' }}>{currentItem.title}</h2>
         <div className={styles.wordBank}>
-          {clozePassageData.wordBank.map((word, index) => {
+          {currentItem.wordBank.map((word, index) => {
             const isUsed = usedWords.includes(word);
             return (
-              <div 
+              <div
                 key={index}
                 className={`${styles.wordBadge} ${isUsed ? styles.used : ''} ${activeWord === word ? styles.activeWordBadge : ''}`}
                 draggable={!isUsed}
@@ -141,19 +157,20 @@ const Level1ClozePage = () => {
           {renderText()}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-          <button 
-            className={styles.navButton} 
-            onClick={handleCheck}
+        <PracticeActions>
+          <button
+            className={styles.navButton}
+            onClick={isChecked ? advanceToNext : handleCheck}
+            disabled={Object.keys(userAnswers).length === 0 && !isChecked}
           >
-            Periksa Jawaban
+            {isChecked ? (englishAssist ? 'Next' : 'Lanjut') : (englishAssist ? 'Check Answers' : 'Periksa Jawaban')}
           </button>
-        </div>
+        </PracticeActions>
 
         {isChecked && (
           <div className={styles.explanationBox}>
-            <p><strong>Hasil:</strong> Anda telah menjawab {Object.keys(userAnswers).filter(key => userAnswers[key] === clozePassageData.answers[key]).length} dari {Object.keys(clozePassageData.answers).length} dengan benar.</p>
-            <p>Jawaban yang salah dicoret merah. Silakan klik jawaban tersebut untuk menghapusnya dan mencoba lagi.</p>
+            <p><strong>{englishAssist ? 'Result:' : 'Hasil:'}</strong> {englishAssist ? 'You answered ' : 'Anda telah menjawab '}{Object.keys(userAnswers).filter(key => userAnswers[key] === currentItem.answers[key]).length} {englishAssist ? 'out of ' : 'dari '}{Object.keys(currentItem.answers).length} {englishAssist ? 'correctly.' : 'dengan benar.'}</p>
+            <p>{englishAssist ? 'Incorrect answers are crossed out in red. Please click the answer to remove it and try again.' : 'Jawaban yang salah dicoret merah. Silakan klik jawaban tersebut untuk menghapusnya dan mencoba lagi.'}</p>
           </div>
         )}
       </div>

@@ -6,6 +6,7 @@ import { useProgress } from '../contexts/ProgressContext';
 import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './PersamaanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions, StatusBadge } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -251,7 +252,7 @@ const PersamaanTestPage = () => {
     return "Pemula Bersemangat 🌱"; 
   };
 
-  if (isLoading) { return <div className="loading-page">Menyiapkan Tes Persamaan...</div>; }
+  if (isLoading) { return <LoadingState label="Menyiapkan Tes Persamaan..." />; }
   
   if (isTestOver) {
     const accuracy = testItems.length > 0 ? ((correctAnswersCount / testItems.length) * 100).toFixed(1) : 0;
@@ -271,13 +272,13 @@ const PersamaanTestPage = () => {
     );
   }
 
-  if (!currentItem || !correctSynonymForCurrent) { return <div className="loading">Memuat pertanyaan berikutnya...</div>; }
+  if (!currentItem || !correctSynonymForCurrent) { return <LoadingState label="Memuat pertanyaan berikutnya..." />; }
 
   return (
     <div className={styles.container} ref={pageRef} tabIndex={-1}>
       <ProgressBar current={currentIndex + 1} total={testItems.length} label="Progres Tes Persamaan" />
       <div className={styles.gameStats}>
-        <span className={styles.statItem}>Skor: {score}</span>
+        <StatusBadge icon="star" tone="info">{score} poin</StatusBadge>
         <span className={styles.statItemTimer}>⏳ {timeLeft}s</span>
         <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + (lives < LIVES_START_COUNT ? '💔'.repeat(LIVES_START_COUNT - lives) : '')}</span>
         {streak >=2 && <span className={`${styles.statItem} ${styles.streakIndicator}`}>🔥 Streak x{streak}!</span>}
@@ -326,11 +327,13 @@ const PersamaanTestPage = () => {
         </div>
       )}
       {isAnswered && (
-          <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion} style={{marginTop: '20px'}}>
+        <PracticeActions>
+          <button className="nextButton" ref={nextButtonRef} onClick={loadNextQuestion}>
             {currentIndex === testItems.length - 1 || lives <= 0 ? "Lihat Hasil" : "Pertanyaan Berikutnya"}
             <span className="arrowIcon">→</span>
           </button>
-        )}
+        </PracticeActions>
+      )}
     </div>
   );
 };

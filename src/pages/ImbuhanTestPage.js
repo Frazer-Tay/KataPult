@@ -6,6 +6,7 @@ import { useProgress } from '../contexts/ProgressContext';
 import { recordLearnerActivity } from '../utils/activityTracker';
 import styles from './ImbuhanTestPage.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions, StatusBadge } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
   if (!Array.isArray(array)) return [];
@@ -254,15 +255,15 @@ const ImbuhanTestPage = () => {
   }
 
   if (!currentItem) {
-    return <div className="loading">Memuat pertanyaan berikutnya...</div>;
+    return <LoadingState label="Memuat pertanyaan berikutnya..." />;
   }
 
   return (
     <div className={styles.container}>
       <ProgressBar current={currentIndex + 1} total={testItems.length} label="Progres Tes" />
       <div className={styles.gameStats}>
-        <span className={styles.statItem}>Skor: {score}</span>
-        <span className={styles.statItem}>Sisa Waktu: {timeLeft}s</span>
+        <StatusBadge icon="star" tone="info">{score} poin</StatusBadge>
+        <StatusBadge icon="clipboard">{timeLeft}s</StatusBadge>
         <span className={styles.statItem}>Nyawa: {'❤️'.repeat(lives) + (lives < LIVES_START_COUNT ? '💔'.repeat(LIVES_START_COUNT - lives) : '')}</span>
         {streak >= 2 && <span className={styles.statItem} style={{color: '#ff9800', fontWeight: 'bold'}}>🔥 Streak x{streak}!</span>}
       </div>
@@ -326,7 +327,7 @@ const ImbuhanTestPage = () => {
             </div>
         )}
 
-      <div className="action-buttons-container">
+      <PracticeActions>
         {!isAnswered && (
           <button className="primaryButton" onClick={checkAnswer} disabled={!userInput.trim()}>
             Periksa
@@ -338,7 +339,7 @@ const ImbuhanTestPage = () => {
             <span className="arrowIcon">→</span>
           </button>
         )}
-      </div>
+      </PracticeActions>
     </div>
   );
 };

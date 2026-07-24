@@ -2,8 +2,10 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { flashcardsData } from '../data/flashcardsData';
 import useTimeTracker from '../hooks/useTimeTracker';
+import { useSettings } from '../contexts/SettingsContext';
 import styles from './FlashcardsPages.module.css';
 import ProgressBar from '../components/ProgressBar';
+import { LoadingState, PracticeActions } from '../components/SharedUI';
 
 const shuffleArray = (array) => {
     if (!Array.isArray(array)) return [];
@@ -18,6 +20,7 @@ const shuffleArray = (array) => {
 
 const FlashcardsPage = () => {
   useTimeTracker('Essay Bank');
+  const { englishAssist } = useSettings();
   const [allSets, setAllSets] = useState([]);
   const [currentSetIndex, setCurrentIndex] = useState(0);
   const [isDetailsRevealed, setIsDetailsRevealed] = useState(false);
@@ -37,24 +40,24 @@ const FlashcardsPage = () => {
 
         if (essayOpeningsClosingsSet) specialSets.push(essayOpeningsClosingsSet);
         if (generalPhrasesSet) specialSets.push(generalPhrasesSet);
-        
+
         const topicSets = flashcardsData.filter(set => !specialSetIds.includes(set.id));
-        
+
         const finalSetOrder = [...specialSets, ...shuffleArray(topicSets)];
-        
+
         setAllSets(finalSetOrder);
         setCurrentIndex(0);
         setIsDetailsRevealed(false);
         setError(null);
       } else {
         console.warn("No essay bank data found or data is empty.");
-        setError("Tidak ada konten Essay Bank untuk ditampilkan saat ini.");
+        setError(englishAssist ? "No Essay Bank content to display at the moment." : "Tidak ada konten Essay Bank untuk ditampilkan saat ini.");
         setAllSets([]);
         setCurrentIndex(0);
       }
     } catch (e) {
       console.error("Error processing essay bank data:", e);
-      setError("Terjadi kesalahan saat memuat konten Essay Bank.");
+      setError(englishAssist ? "An error occurred while loading Essay Bank content." : "Terjadi kesalahan saat memuat konten Essay Bank.");
       setAllSets([]);
       setCurrentIndex(0);
     } finally {
@@ -73,7 +76,7 @@ const FlashcardsPage = () => {
     const index = allSets.findIndex(s => s.id === setId);
     if (index !== -1) {
       setCurrentIndex(index);
-      setIsDetailsRevealed(false); 
+      setIsDetailsRevealed(false);
     } else {
       console.warn(`Set with ID "${setId}" not found.`);
     }
@@ -97,10 +100,10 @@ const FlashcardsPage = () => {
     let nextIdx = currentSetIndex;
     if (direction === 'next') {
       nextIdx = (currentSetIndex + 1);
-      if (nextIdx >= allSets.length) nextIdx = 0; 
+      if (nextIdx >= allSets.length) nextIdx = 0;
     } else if (direction === 'previous') {
       nextIdx = (currentSetIndex - 1);
-      if (nextIdx < 0) nextIdx = allSets.length - 1; 
+      if (nextIdx < 0) nextIdx = allSets.length - 1;
     }
     setCurrentIndex(nextIdx);
     setIsDetailsRevealed(false);
@@ -133,7 +136,7 @@ const FlashcardsPage = () => {
   }, [advanceSet, currentSet, toggleDetails, isLoading]);
 
   if (isLoading) {
-    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat Essay Bank...</div>;
+    return <LoadingState label={englishAssist ? 'Loading Essay Bank...' : 'Memuat Essay Bank...'} />;
   }
 
   if (error) {
@@ -141,10 +144,10 @@ const FlashcardsPage = () => {
   }
 
   if (!currentSet && !isLoading) {
-    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Tidak ada konten Essay Bank untuk ditampilkan. Periksa `src/data/flashcardsData.js`.</div>;
+    return <div className={styles.flashcardsContainer} style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{englishAssist ? 'No Essay Bank content to display. Check `src/data/flashcardsData.js`.' : 'Tidak ada konten Essay Bank untuk ditampilkan. Periksa `src/data/flashcardsData.js`.'}</div>;
   }
-  if (!currentSet) { 
-    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>Memuat set berikutnya...</div>;
+  if (!currentSet) {
+    return <div className="loading" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem'}}>{englishAssist ? 'Loading next set...' : 'Memuat set berikutnya...'}</div>;
   }
 
   const renderPhraseList = (set) => (
@@ -175,7 +178,7 @@ const FlashcardsPage = () => {
                             <div key={`${set.id}-model-${secIdx}-${modelIdx}`} className={styles.modelParagraphItem}>
                                 {model.malay_title && <h5 className={styles.modelItemTitle}>{model.malay_title}</h5>}
                                 <p className={styles.modelParagraphMalay} dangerouslySetInnerHTML={{ __html: model.malay.replace(/\[(.*?)\]/g, '<strong>[$1]</strong>') }} />
-                                
+
                                 {model.english_title && <h5 className={`${styles.modelItemTitle} ${styles.englishTranslationBlock}`}><em>({model.english_title})</em></h5>}
                                 {model.english && <p className={`${styles.modelParagraphEnglish} ${styles.englishTranslationBlock}`} dangerouslySetInnerHTML={{ __html: `<em>${model.english.replace(/\[(.*?)\]/g, '[$1]')}</em>` }} />}
                             </div>
@@ -206,7 +209,7 @@ const FlashcardsPage = () => {
 
         {set.introduction_prompt_malay && (
             <div className={styles.essayPromptSection}>
-                <h3 className={styles.promptTitle}>Arahan Pendahuluan:</h3>
+                <h3 className={styles.promptTitle}>{englishAssist ? 'Introduction Prompt:' : 'Arahan Pendahuluan:'}</h3>
                 <p className={styles.promptTextMalay}>{set.introduction_prompt_malay}</p>
                 {set.introduction_prompt_english && <p className={styles.promptTextEnglish}><em>({set.introduction_prompt_english})</em></p>}
             </div>
@@ -220,7 +223,7 @@ const FlashcardsPage = () => {
                             {pIdx + 1}. {point.title_malay}
                             {point.title_english && <em className={styles.pointTitleEnglish}> ({point.title_english})</em>}
                         </h4>
-                    
+
                         {point.examples && point.examples.length > 0 && (
                             <div className={styles.examplesList}>
                                 <ul>
@@ -236,11 +239,11 @@ const FlashcardsPage = () => {
 
                         {point.challenge_rebuttal && (
                             <div className={styles.challengeRebuttalSection}>
-                                <h5 className={styles.challengeTitle}>Namun/Kendala:</h5>
+                                <h5 className={styles.challengeTitle}>{englishAssist ? 'Challenge/Constraint:' : 'Namun/Kendala:'}</h5>
                                 <p className={styles.challengeTextMalay}>{point.challenge_rebuttal.challenge_malay}</p>
                                 {point.challenge_rebuttal.challenge_english && <p className={styles.challengeTextEnglish}><em>({point.challenge_rebuttal.challenge_english})</em></p>}
-                                
-                                <h5 className={styles.rebuttalTitle}>Solusi/Penguatan:</h5>
+
+                                <h5 className={styles.rebuttalTitle}>{englishAssist ? 'Solution/Rebuttal:' : 'Solusi/Penguatan:'}</h5>
                                 <p className={styles.rebuttalTextMalay}>{point.challenge_rebuttal.rebuttal_malay}</p>
                                 {point.challenge_rebuttal.rebuttal_english && <p className={styles.rebuttalTextEnglish}><em>({point.challenge_rebuttal.rebuttal_english})</em></p>}
                             </div>
@@ -250,7 +253,7 @@ const FlashcardsPage = () => {
 
                 {set.key_phrases && set.key_phrases.length > 0 && (
                     <div className={styles.keyVocabularySection}>
-                        <h3 className={styles.sectionSubTitle}>Frasa Kunci:</h3>
+                        <h3 className={styles.sectionSubTitle}>{englishAssist ? 'Key Phrases:' : 'Frasa Kunci:'}</h3>
                         <ul className={styles.vocabularyList}>
                             {set.key_phrases.map((phrase, kIdx) => (
                             <li key={`${set.id}-keyphrase-${kIdx}`}>
@@ -261,9 +264,9 @@ const FlashcardsPage = () => {
                     </div>
                 )}
 
-                {set.linking_phrases_malay && set.linking_phrases_malay.length > 0 && ( 
+                {set.linking_phrases_malay && set.linking_phrases_malay.length > 0 && (
                     <div className={styles.linkingPhrasesSection}>
-                        <h3 className={styles.sectionSubTitle}>Frasa Penghubung Berguna:</h3>
+                        <h3 className={styles.sectionSubTitle}>{englishAssist ? 'Useful Linking Phrases:' : 'Frasa Penghubung Berguna:'}</h3>
                         <div className={styles.linkingPair}>
                             <div>
                                 <strong>Bahasa Indonesia:</strong>
@@ -278,19 +281,19 @@ const FlashcardsPage = () => {
                         </div>
                     </div>
                 )}
-                
-                {set.conclusion_prompt_malay && ( 
+
+                {set.conclusion_prompt_malay && (
                     <div className={styles.essayPromptSection} style={{marginTop: '20px'}}>
-                        <h3 className={styles.promptTitle}>Arahan Kesimpulan:</h3>
+                        <h3 className={styles.promptTitle}>{englishAssist ? 'Conclusion Prompt:' : 'Arahan Kesimpulan:'}</h3>
                         <p className={styles.promptTextMalay}>{set.conclusion_prompt_malay}</p>
                         {set.conclusion_prompt_english && <p className={styles.promptTextEnglish}><em>({set.conclusion_prompt_english})</em></p>}
                     </div>
                 )}
             </div>
         ) : (
-            currentSet.type === 'topic-essay-points' && 
+            currentSet.type === 'topic-essay-points' &&
             <div className={styles.clickToReveal}>
-                <p>(Klik "Lihat Detail" atau tekan Spasi/Enter untuk membuka poin-poin esai)</p>
+                <p>{englishAssist ? '(Click "View Details" or press Space/Enter to reveal essay points)' : '(Klik "Lihat Detail" atau tekan Spasi/Enter untuk membuka poin-poin esai)'}</p>
             </div>
         )}
     </div>
@@ -301,41 +304,40 @@ const FlashcardsPage = () => {
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>Level 2 Writing Support</p>
         <h1 className={styles.pageTitle}>Essay Bank</h1>
-        <p className={styles.pageIntro}>Topical ideas, useful phrases, introductions, conclusions, and model paragraphs for karangan practice.</p>
+        <p className={styles.pageIntro}>{englishAssist ? 'Topical ideas, useful phrases, introductions, conclusions, and model paragraphs for karangan practice.' : 'Ide topik, frasa berguna, pendahuluan, kesimpulan, dan contoh paragraf untuk latihan karangan.'}</p>
       </header>
       <div className={styles.quickNavContainer}>
         <div className={styles.specialSetsNavigation}>
-            <h4 className={styles.specialSetsTitle}>Quick Essay Guides:</h4>
+            <h4 className={styles.specialSetsTitle}>{englishAssist ? 'Quick Essay Guides:' : 'Panduan Cepat Esai:'}</h4>
             <div className={styles.specialSetsButtonsContainer}>
-                <button 
-                    onClick={() => jumpToSetById('essay-openings-closings')} 
+                <button
+                    onClick={() => jumpToSetById('essay-openings-closings')}
                     className={`button ${styles.specialSetButton} ${currentSet && currentSet.id === 'essay-openings-closings' ? styles.activeSpecialSetButton : ''}`}
                 >
-                    Pendahuluan & Kesimpulan
+                    {englishAssist ? 'Intro & Conclusion' : 'Pendahuluan & Kesimpulan'}
                 </button>
-                <button 
-                    onClick={() => jumpToSetById('general-phrases')} 
+                <button
+                    onClick={() => jumpToSetById('general-phrases')}
                     className={`button ${styles.specialSetButton} ${currentSet && currentSet.id === 'general-phrases' ? styles.activeSpecialSetButton : ''}`}
                 >
-                    Frasa Umum Esai
+                    {englishAssist ? 'General Essay Phrases' : 'Frasa Umum Esai'}
                 </button>
             </div>
         </div>
 
         {allSets && allSets.length > 0 && (
           <div className={styles.topicDropdownNavigation}>
-            <label htmlFor="topicSelect" className={styles.dropdownLabel}>Jump to essay topic or guide:</label>
-            <select 
+            <label htmlFor="topicSelect" className={styles.dropdownLabel}>{englishAssist ? 'Jump to essay topic or guide:' : 'Pilih topik atau panduan esai:'}</label>
+            <select
                 id="topicSelect"
-                value={currentSet ? currentSet.id : ''} 
+                value={currentSet ? currentSet.id : ''}
                 onChange={handleDropdownChange}
                 className={styles.topicSelectDropdown}
             >
-                <option value="" disabled>Pilih topik atau panduan esai...</option>
+                <option value="" disabled>{englishAssist ? 'Select essay topic or guide...' : 'Pilih topik atau panduan esai...'}</option>
                 {allSets.map((set, index) => (
                     <option key={set.id} value={set.id}>
-                        {/* Display a more user-friendly title: using title_malay if it exists, otherwise the main title */}
-                        {index + 1}. {set.title_malay || set.title || "Judul Tidak Diketahui"} 
+                        {index + 1}. {set.title_malay || set.title || (englishAssist ? "Unknown Title" : "Judul Tidak Diketahui")}
                     </option>
                 ))}
             </select>
@@ -344,32 +346,32 @@ const FlashcardsPage = () => {
       </div>
       <hr className={styles.sectionSeparator} />
 
-      <ProgressBar 
-        current={currentSetIndex + 1} 
-        total={allSets.length} 
-        label={currentSet ? (currentSet.id === 'general-phrases' || currentSet.id === 'essay-openings-closings' ? "Panduan Menulis" : "Topik Esai") : "Essay Bank"} 
+      <ProgressBar
+        current={currentSetIndex + 1}
+        total={allSets.length}
+        label={currentSet ? (currentSet.id === 'general-phrases' || currentSet.id === 'essay-openings-closings' ? (englishAssist ? "Writing Guide" : "Panduan Menulis") : (englishAssist ? "Essay Topic" : "Topik Esai")) : "Essay Bank"}
       />
-      
+
       {currentSet && currentSet.type === 'phrase-list' && renderPhraseList(currentSet)}
       {currentSet && currentSet.type === 'topic-essay-points' && renderTopicEssayPoints(currentSet)}
       {currentSet && currentSet.type === 'essay-model-paragraphs' && renderEssayModelParagraphs(currentSet)}
 
 
-      <div className="action-buttons-container">
+      <PracticeActions>
         <button className="secondaryButton" onClick={() => advanceSet('previous')} disabled={allSets.length <= 1 || isLoading}>
-          <span className="arrowIcon">←</span> Set Sebelumnya
+          <span className="arrowIcon">←</span> {englishAssist ? 'Previous Set' : 'Set Sebelumnya'}
         </button>
-        
+
         {currentSet && currentSet.type === 'topic-essay-points' && (
           <button className="primaryButton" onClick={toggleDetails} disabled={isLoading}>
-            {isDetailsRevealed ? 'Sembunyikan Detail' : 'Lihat Detail'}
+            {isDetailsRevealed ? (englishAssist ? 'Hide Details' : 'Sembunyikan Detail') : (englishAssist ? 'View Details' : 'Lihat Detail')}
           </button>
         )}
 
         <button className="nextButton" onClick={() => advanceSet('next')} disabled={allSets.length <= 1 || isLoading}>
-          Set Berikutnya <span className="arrowIcon">→</span>
+          {englishAssist ? 'Next Set' : 'Set Berikutnya'} <span className="arrowIcon">→</span>
         </button>
-      </div>
+      </PracticeActions>
     </div>
   );
 };
